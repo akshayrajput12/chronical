@@ -142,24 +142,6 @@ const BusinessHubSection = () => {
 
   return (
     <section className="bg-white py-20 px-4 md:px-20 relative overflow-hidden" ref={ref}>
-      {/* Left-side arrow decoration */}
-      <motion.div
-        className="absolute top-1/2 left-0 -translate-y-1/2 -z-10"
-        initial={{ opacity: 0, x: -50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 1, delay: 0.5 }}
-      >
-        <motion.div
-          className="w-16 h-16 text-[#a5cd39]"
-          whileHover={{ scale: 1.2 }}
-          transition={{ duration: 0.3 }}
-        >
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10 6L4 12L10 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M4 12H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </motion.div>
-      </motion.div>
 
       <motion.div
         className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 md:gap-20 items-start"

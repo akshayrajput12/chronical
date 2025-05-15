@@ -63,50 +63,53 @@ const ImageScrollGrid: React.FC<ImageScrollGridProps> = ({ className }) => {
       // Duplicate the images to create a seamless loop
       if (!column1Ref.current || !column2Ref.current || !column3Ref.current) return;
 
-      // Column 1 - Top to Bottom
+      // Column 1 - Bottom to Top (like middle grid)
       const column1 = column1Ref.current;
       const column1Height = column1.scrollHeight / 2;
-      let column1Position = 0;
+      let column1Position = column1Height;
 
       // Column 2 - Bottom to Top
       const column2 = column2Ref.current;
       const column2Height = column2.scrollHeight / 2;
       let column2Position = column2Height;
 
-      // Column 3 - Top to Bottom
+      // Column 3 - Bottom to Top (like middle grid)
       const column3 = column3Ref.current;
       const column3Height = column3.scrollHeight / 2;
-      let column3Position = 0;
+      let column3Position = column3Height;
 
-      // Animation speeds (pixels per frame)
-      const column1Speed = 0.4;
-      const column2Speed = 0.5;
-      const column3Speed = 0.45;
+      // Animation speeds (pixels per frame) - adjusted for smoother continuous looping
+      const column1Speed = 0.5;
+      const column2Speed = 0.6;
+      const column3Speed = 0.5;
 
       // Animation loop
       let animationFrameId: number;
 
       const animate = () => {
-        // Column 1 - Top to Bottom
-        column1Position += column1Speed;
-        if (column1Position >= column1Height) {
-          column1Position = 0;
+        // Column 1 - Bottom to Top (continuous loop)
+        column1Position -= column1Speed;
+        if (column1Position <= 0) {
+          // Reset position seamlessly
+          column1Position = column1Height;
         }
-        column1.style.transform = `translateY(${column1Position}px)`;
+        column1.style.transform = `translateY(-${column1Position}px)`;
 
         // Column 2 - Bottom to Top
         column2Position -= column2Speed;
         if (column2Position <= 0) {
+          // Reset position seamlessly
           column2Position = column2Height;
         }
         column2.style.transform = `translateY(-${column2Position}px)`;
 
-        // Column 3 - Top to Bottom
-        column3Position += column3Speed;
-        if (column3Position >= column3Height) {
-          column3Position = 0;
+        // Column 3 - Bottom to Top (continuous loop)
+        column3Position -= column3Speed;
+        if (column3Position <= 0) {
+          // Reset position seamlessly
+          column3Position = column3Height;
         }
-        column3.style.transform = `translateY(${column3Position}px)`;
+        column3.style.transform = `translateY(-${column3Position}px)`;
 
         animationFrameId = requestAnimationFrame(animate);
       };

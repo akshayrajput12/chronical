@@ -6,6 +6,7 @@ import WhySection from './components/why-section'
 import KeyBenefits from './components/key-benefits'
 import SetupProcess from './components/setup-process'
 import NewCompany from './components/new-company'
+import EssentialSupport from './components/essential-support'
 
 function page() {
   return (
@@ -17,6 +18,7 @@ function page() {
       <KeyBenefits />
       <SetupProcess />
       <NewCompany />
+      <EssentialSupport />
     </div>
   )
 }

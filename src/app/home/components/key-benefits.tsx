@@ -70,7 +70,7 @@ const KeyBenefits = () => {
 
   useEffect(() => {
     const element = ref.current;
-    
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -126,15 +126,6 @@ const KeyBenefits = () => {
         damping: 20,
         duration: 0.8
       }
-    },
-    hover: {
-      scale: 1.1,
-      boxShadow: "0px 0px 8px rgba(255,255,255,0.6)",
-      transition: {
-        type: "spring",
-        stiffness: 400,
-        damping: 10
-      }
     }
   };
 
@@ -180,12 +171,10 @@ const KeyBenefits = () => {
               key={index}
               className="flex flex-col items-center text-center"
               variants={itemVariants}
-              whileHover={{ y: -5, transition: { duration: 0.2 } }}
             >
               <motion.div
                 className="w-20 h-20 rounded-full border-2 border-white flex items-center justify-center mb-4 text-white"
                 variants={iconVariants}
-                whileHover="hover"
               >
                 {benefit.icon}
               </motion.div>

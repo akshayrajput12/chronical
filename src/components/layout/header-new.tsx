@@ -46,6 +46,42 @@ const NavItem = ({
   );
 };
 
+const mobileMenuVariants = {
+  closed: {
+    x: "100%",
+    opacity: 0,
+    transition: {
+      duration: 0.3,
+      staggerChildren: 0.1,
+      staggerDirection: -1
+    }
+  },
+  open: {
+    x: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.3,
+      staggerChildren: 0.1,
+      delayChildren: 0.2
+    }
+  }
+};
+
+const menuItemVariants = {
+  closed: {
+    x: 50,
+    opacity: 0
+  },
+  open: {
+    x: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.4,
+      ease: "easeOut"
+    }
+  }
+};
+
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -330,33 +366,197 @@ const Header = () => {
       </AnimatePresence>
 
       {/* Mobile Navigation - Slide from right */}
-      <div
-        className={cn(
-          "fixed top-0 right-0 h-full w-[300px] bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out",
-          isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
-        )}
-      >
-        <div className="h-full overflow-y-auto">
-          <div className="flex justify-between items-center p-4 border-b border-gray-200">
-            <Logo />
-            <button
-              className="text-[#2C2C2C]"
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/50 z-40 lg:hidden backdrop-blur-sm"
               onClick={() => setIsMobileMenuOpen(false)}
-              aria-label="Close menu"
+            />
+            <motion.div
+              className="fixed top-0 right-0 h-full w-[300px] bg-white shadow-lg z-50 overflow-hidden"
+              variants={mobileMenuVariants}
+              initial="closed"
+              animate="open"
+              exit="closed"
             >
-              <X className="w-6 h-6" />
-            </button>
-          </div>
-        </div>
-      </div>
+              <div className="h-full overflow-y-auto">
+                <div className="flex justify-between items-center p-4 border-b border-gray-200">
+                  <Logo />
+                  <motion.button
+                    className="text-[#2C2C2C] p-2 hover:bg-gray-100 rounded-full"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    <X className="w-6 h-6" />
+                  </motion.button>
+                </div>
 
-      {/* Overlay when mobile menu is open */}
-      {isMobileMenuOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-          onClick={() => setIsMobileMenuOpen(false)}
-        />
-      )}
+                <div className="p-4">
+                  <nav className="space-y-6">
+                    {/* Primary Navigation */}
+                    <motion.div variants={menuItemVariants}>
+                      <div className="mb-2 text-sm font-semibold text-gray-400">MAIN MENU</div>
+                      <div className="space-y-2">
+                        <MobileNavItem
+                          href="/expo"
+                          label="EXPO"
+                          isActive={activeLink === "/expo"}
+                          onClick={() => {
+                            setActiveLink("/expo");
+                            setIsMobileMenuOpen(false);
+                          }}
+                        />
+                        <MobileNavItem
+                          href="/congress"
+                          label="CONGRESS"
+                          isActive={activeLink === "/congress"}
+                          onClick={() => {
+                            setActiveLink("/congress");
+                            setIsMobileMenuOpen(false);
+                          }}
+                        />
+                        <MobileNavItem
+                          href="/kiosk"
+                          label="KIOSK"
+                          isActive={activeLink === "/kiosk"}
+                          onClick={() => {
+                            setActiveLink("/kiosk");
+                            setIsMobileMenuOpen(false);
+                          }}
+                        />
+                      </div>
+                    </motion.div>
+
+                    {/* Exhibition Stands Section */}
+                    <motion.div variants={menuItemVariants}>
+                      <div className="mb-2 text-sm font-semibold text-gray-400">EXHIBITION STANDS</div>
+                      <div className="space-y-2">
+                        <MobileNavItem
+                          href="/custom-stands"
+                          label="CUSTOM STANDS"
+                          isActive={activeLink === "/custom-stands"}
+                          onClick={() => {
+                            setActiveLink("/custom-stands");
+                            setIsMobileMenuOpen(false);
+                          }}
+                        />
+                        <MobileNavItem
+                          href="/double-deck-stands"
+                          label="DOUBLE DECK STANDS"
+                          isActive={activeLink === "/double-deck-stands"}
+                          onClick={() => {
+                            setActiveLink("/double-deck-stands");
+                            setIsMobileMenuOpen(false);
+                          }}
+                        />
+                        <MobileNavItem
+                          href="/expo-pavilion-stands"
+                          label="EXPO PAVILION STANDS"
+                          isActive={activeLink === "/expo-pavilion-stands"}
+                          onClick={() => {
+                            setActiveLink("/expo-pavilion-stands");
+                            setIsMobileMenuOpen(false);
+                          }}
+                        />
+                      </div>
+                    </motion.div>
+
+                    {/* Secondary Navigation */}
+                    <motion.div variants={menuItemVariants}>
+                      <div className="mb-2 text-sm font-semibold text-gray-400">MORE</div>
+                      <div className="space-y-2">
+                        <MobileNavItem
+                          href="/trade-shows"
+                          label="TOP TRADE SHOWS"
+                          isActive={activeLink === "/trade-shows"}
+                          onClick={() => {
+                            setActiveLink("/trade-shows");
+                            setIsMobileMenuOpen(false);
+                          }}
+                        />
+                        <MobileNavItem
+                          href="/expo-locations"
+                          label="TOP EXPO LOCATIONS"
+                          isActive={activeLink === "/expo-locations"}
+                          onClick={() => {
+                            setActiveLink("/expo-locations");
+                            setIsMobileMenuOpen(false);
+                          }}
+                        />
+                        <MobileNavItem
+                          href="/portfolio"
+                          label="PORTFOLIO"
+                          isActive={activeLink === "/portfolio"}
+                          onClick={() => {
+                            setActiveLink("/portfolio");
+                            setIsMobileMenuOpen(false);
+                          }}
+                        />
+                      </div>
+                    </motion.div>
+
+                    {/* Contact Links */}
+                    <motion.div variants={menuItemVariants}>
+                      <div className="mb-2 text-sm font-semibold text-gray-400">CONTACT & SUPPORT</div>
+                      <div className="space-y-2">
+                        <MobileNavItem
+                          href="/about"
+                          label="ABOUT US"
+                          isActive={activeLink === "/about"}
+                          onClick={() => {
+                            setActiveLink("/about");
+                            setIsMobileMenuOpen(false);
+                          }}
+                        />
+                        <MobileNavItem
+                          href="/support"
+                          label="SUPPORT"
+                          isActive={activeLink === "/support"}
+                          onClick={() => {
+                            setActiveLink("/support");
+                            setIsMobileMenuOpen(false);
+                          }}
+                        />
+                        <MobileNavItem
+                          href="/blog"
+                          label="BLOG"
+                          isActive={activeLink === "/blog"}
+                          onClick={() => {
+                            setActiveLink("/blog");
+                            setIsMobileMenuOpen(false);
+                          }}
+                        />
+                        <MobileNavItem
+                          href="/contact"
+                          label="CONTACT US"
+                          isActive={activeLink === "/contact"}
+                          onClick={() => {
+                            setActiveLink("/contact");
+                            setIsMobileMenuOpen(false);
+                          }}
+                        />
+                      </div>
+                    </motion.div>
+
+                    {/* WhatsApp Button */}
+                    <motion.div variants={menuItemVariants} className="pt-4">
+                      <button className="w-full bg-[#a5cd39] text-white py-3 px-4 rounded-md font-medium flex items-center justify-center space-x-2 hover:bg-[#95b934] transition-colors">
+                        <MessageSquare className="w-5 h-5" />
+                        <span>CHAT ON WHATSAPP</span>
+                      </button>
+                    </motion.div>
+                  </nav>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* Sticky WhatsApp Button for Mobile */}
       <div className="lg:hidden fixed bottom-4 right-4 z-50">
@@ -367,5 +567,33 @@ const Header = () => {
     </>
   );
 };
+
+// Mobile Navigation Item Component
+const MobileNavItem = ({
+  href,
+  label,
+  isActive,
+  onClick
+}: {
+  href: string;
+  label: string;
+  isActive?: boolean;
+  onClick?: () => void;
+}) => (
+  <motion.div whileHover={{ x: 4 }} whileTap={{ scale: 0.98 }}>
+    <Link
+      href={href}
+      className={cn(
+        "block py-2 px-3 rounded-md transition-colors",
+        isActive
+          ? "bg-[#a5cd39]/10 text-[#a5cd39]"
+          : "text-[#2C2C2C] hover:bg-gray-50"
+      )}
+      onClick={onClick}
+    >
+      {label}
+    </Link>
+  </motion.div>
+);
 
 export default Header;
