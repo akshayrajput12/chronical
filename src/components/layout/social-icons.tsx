@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Facebook, Instagram, MessageCircle, Linkedin, Twitter } from "lucide-react";
+import { Facebook, Instagram, MessageCircle, Linkedin, LucideIcon } from "lucide-react";
 
 interface SocialIconsProps {
   className?: string;
@@ -80,7 +80,7 @@ const SocialIcon: React.FC<SocialIconProps> = ({
     >
       <div className="w-10 h-10 rounded-full border border-gray-600 flex items-center justify-center transition-all duration-300 group-hover:border-[#a5cd39] group-hover:bg-[#a5cd39] group-hover:scale-110">
         <div className="transition-all duration-300 group-hover:scale-110" style={{ color: iconColor }}>
-          {React.cloneElement(children as React.ReactElement, {
+          {React.cloneElement(children as React.ReactElement<React.ComponentProps<LucideIcon>>, {
             size: iconSize,
             className: "transition-all duration-300 group-hover:text-white"
           })}

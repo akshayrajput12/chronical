@@ -4,11 +4,6 @@ import Image from "next/image";
 import React, { useEffect, useRef } from "react";
 import { motion, useInView, useAnimation } from "framer-motion";
 
-const skylineImage = {
-  src: "/images/home.jpg", // Using the existing image - replace with actual skyline image if available
-  alt: "Dubai Skyline",
-};
-
 const WhySection = () => {
   const controls = useAnimation();
   const ref = useRef(null);

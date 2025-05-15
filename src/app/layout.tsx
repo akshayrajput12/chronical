@@ -19,10 +19,7 @@ export const metadata: Metadata = {
   title: "Chronicle Exhibits - Professional Exhibition Stand Builders",
   description: "Chronicle Exhibits specializes in custom exhibition stands, congress services, and expo solutions across the Middle East and beyond.",
   icons: {
-    icon: [
-      { url: '/logo.png' },
-      { url: '/favicon.ico' }
-    ],
+    icon: "/icon.png",
     apple: { url: '/logo.png' },
     shortcut: { url: '/logo.png' }
   },

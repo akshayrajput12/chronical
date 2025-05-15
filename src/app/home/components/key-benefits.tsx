@@ -66,27 +66,26 @@ const benefits = [
 
 const KeyBenefits = () => {
   const controls = useAnimation();
-  const ref = useRef<HTMLElement>(null);
-  const [isInView, setIsInView] = React.useState(false);
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!ref.current) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsInView(entry.isIntersecting);
+    const element = ref.current;
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
         if (entry.isIntersecting) {
           controls.start("visible");
         }
-      },
-      { threshold: 0.1 }
-    );
+      });
+    }, { threshold: 0.2 });
 
-    observer.observe(ref.current);
+    if (element) {
+      observer.observe(element);
+    }
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
+      if (element) {
+        observer.unobserve(element);
       }
     };
   }, [controls]);
@@ -181,8 +180,6 @@ const KeyBenefits = () => {
               key={index}
               className="flex flex-col items-center text-center"
               variants={itemVariants}
-              initial="hidden"
-              animate="visible"
               whileHover={{ y: -5, transition: { duration: 0.2 } }}
             >
               <motion.div
@@ -194,9 +191,7 @@ const KeyBenefits = () => {
               </motion.div>
               <motion.p
                 className="text-white text-sm font-medium max-w-[120px]"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 + (index * 0.1) }}
+                variants={itemVariants}
               >
                 {benefit.title}
               </motion.p>

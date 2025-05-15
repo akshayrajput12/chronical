@@ -2,31 +2,31 @@
 
 import React, { useEffect, useRef } from "react";
 import { motion, useAnimation, Variants } from "framer-motion";
-import ImageScrollGrid from "./ImageScrollGrid";
+import ImageScrollGrid from "./image-scroll-grid";
 
 const NewCompany = () => {
   const controls = useAnimation();
-  const ref = useRef<HTMLElement>(null);
-  const [inView, setInView] = React.useState(false);
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!ref.current) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setInView(entry.isIntersecting);
+    const element = ref.current;
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
         if (entry.isIntersecting) {
+          element?.classList.add('animate-in');
           controls.start("visible");
         }
-      },
-      { threshold: 0.1 }
-    );
+      });
+    }, { threshold: 0.2 });
 
-    observer.observe(ref.current);
+    if (element) {
+      observer.observe(element);
+    }
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
+      if (element) {
+        observer.unobserve(element);
       }
     };
   }, [controls]);

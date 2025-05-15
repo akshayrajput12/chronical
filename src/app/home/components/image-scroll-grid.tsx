@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React from 'react';
 import Image from "next/image";
-import { motion, useAnimation } from "framer-motion";
 
 interface ImageScrollGridProps {
   className?: string;
@@ -10,9 +9,9 @@ interface ImageScrollGridProps {
 
 const ImageScrollGrid: React.FC<ImageScrollGridProps> = ({ className }) => {
   // References for the three columns
-  const column1Ref = useRef<HTMLDivElement>(null);
-  const column2Ref = useRef<HTMLDivElement>(null);
-  const column3Ref = useRef<HTMLDivElement>(null);
+  const column1Ref = React.useRef<HTMLDivElement>(null);
+  const column2Ref = React.useRef<HTMLDivElement>(null);
+  const column3Ref = React.useRef<HTMLDivElement>(null);
 
   // Business-themed images from Unsplash - expanded collection
   const column1Images = [
@@ -58,7 +57,7 @@ const ImageScrollGrid: React.FC<ImageScrollGridProps> = ({ className }) => {
   ];
 
   // Animation setup
-  useEffect(() => {
+  React.useEffect(() => {
     // Function to create the scrolling animation
     const animateScroll = () => {
       // Duplicate the images to create a seamless loop

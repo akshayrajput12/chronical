@@ -97,7 +97,7 @@ const DynamicCell = () => {
             className="text-[#444] text-lg"
             variants={itemVariants}
           >
-            Dubai's future economy and global trade gateway.
+            Dubai is the future economy and global trade gateway.
           </motion.p>
         </div>
       </motion.div>

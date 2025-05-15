@@ -46,30 +46,6 @@ const NavItem = ({
   );
 };
 
-// Mobile Navigation Item
-const MobileNavItem = ({
-  href,
-  label,
-  isActive,
-  onClick
-}: {
-  href: string;
-  label: string;
-  isActive?: boolean;
-  onClick?: () => void;
-}) => (
-  <Link
-    href={href}
-    className={cn(
-      "text-[#2C2C2C] uppercase font-medium block py-2 hover:text-[#a5cd39] transition-colors",
-      isActive && "text-[#a5cd39]"
-    )}
-    onClick={onClick}
-  >
-    {label}
-  </Link>
-);
-
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
