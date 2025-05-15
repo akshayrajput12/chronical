@@ -10,11 +10,6 @@ import Logo from "./logo";
 const Footer = () => {
   return (
     <footer className="bg-[#2C2C2C] text-white">
-      {/* Top Footer with Wave Pattern */}
-      <div className="w-full h-8 bg-[#a5cd39]">
-        <div className="w-full h-full bg-[url('/wave-pattern.svg')] bg-repeat-x"></div>
-      </div>
-
       {/* Main Footer Content */}
       <div className="container mx-auto px-4 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
@@ -93,7 +88,7 @@ const Footer = () => {
             <div className="mt-6">
               <Button
                 variant="outline"
-                className="group relative overflow-hidden border-[#a5cd39] text-white hover:text-white w-full justify-center py-6"
+                className="group relative overflow-hidden border-[#a5cd39] text-black hover:text-white w-full justify-center py-6"
               >
                 <span className="absolute inset-0 w-full h-full transition-all duration-300 ease-out transform translate-x-full bg-[#a5cd39] group-hover:translate-x-0"></span>
                 <span className="relative flex items-center justify-center gap-2">
@@ -109,7 +104,7 @@ const Footer = () => {
         <div className="mt-12 flex justify-center">
           <Button
             variant="outline"
-            className="group relative overflow-hidden border-[#a5cd39] text-[#a5cd39] hover:text-white px-8 py-4"
+            className="group relative overflow-hidden border-[#a5cd39] text-black hover:text-white px-8 py-4"
           >
             <span className="absolute inset-0 w-0 bg-[#a5cd39] transition-all duration-300 ease-out group-hover:w-full"></span>
             <span className="relative flex items-center justify-center gap-2">

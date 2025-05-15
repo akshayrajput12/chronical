@@ -31,68 +31,63 @@ const data = {
 
 const AnimatedNumber = ({ value }: { value: number }) => {
   const [count, setCount] = useState(0);
-  const ref = useRef<number>(0);
   const countRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(countRef, { once: false, amount: 0.3 });
-  const [hasAnimated, setHasAnimated] = useState(false);
+  const isInView = useInView(countRef, { 
+    once: true,
+    amount: 0.5,
+  });
+  const frameRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
-    if (isInView && !hasAnimated) {
-      setHasAnimated(true);
-      ref.current = 0;
-      setCount(0);
+    if (!isInView) return;
 
-      const duration = 2000; // Longer duration for more dramatic effect
-      const stepTime = 20;
-      const totalSteps = duration / stepTime;
+    const startTime = Date.now();
+    const duration = 2000; // 2 seconds duration
 
-      // Use easeOutQuad easing function for a more natural counting effect
-      const easeOutQuad = (t: number) => t * (2 - t);
+    const animate = () => {
+      const now = Date.now();
+      const progress = Math.min((now - startTime) / duration, 1);
+      
+      // Improved easing function
+      const easing = (t: number) => t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+      const easedProgress = easing(progress);
+      
+      setCount(Math.floor(value * easedProgress));
 
-      let step = 0;
-      const interval = setInterval(() => {
-        step++;
-        const progress = step / totalSteps;
-        const easedProgress = easeOutQuad(progress);
-        const nextValue = Math.min(value * easedProgress, value);
+      if (progress < 1) {
+        frameRef.current = requestAnimationFrame(animate);
+      }
+    };
 
-        ref.current = nextValue;
-        setCount(Math.floor(nextValue));
+    frameRef.current = requestAnimationFrame(animate);
 
-        if (step >= totalSteps) {
-          ref.current = value;
-          setCount(value);
-          clearInterval(interval);
-        }
-      }, stepTime);
+    return () => {
+      if (frameRef.current) {
+        cancelAnimationFrame(frameRef.current);
+      }
+    };
+  }, [isInView, value]);
 
-      return () => clearInterval(interval);
+  const formatNumber = (num: number) => {
+    if (num >= 1000000) {
+      return (
+        <div ref={countRef} className="inline-flex items-baseline">
+          <span>{(count / 1000000).toFixed(1)}</span>
+          <span className="text-3xl ml-1">M</span>
+        </div>
+      );
+    } else if (num >= 1000) {
+      return (
+        <div ref={countRef} className="inline-flex items-baseline">
+          <span>{Math.floor(count / 1000)}</span>
+          <span className="text-3xl ml-1">K</span>
+        </div>
+      );
     }
-  }, [isInView, value, hasAnimated]);
-
-  // Reset animation when scrolling back into view
-  useEffect(() => {
-    if (!isInView) {
-      setHasAnimated(false);
-    }
-  }, [isInView]);
-
-  // Format the number differently based on its value
-  if (value >= 1000000) {
-    // For 2M+ format
-    return (
-      <div ref={countRef} className="inline-block">
-        {(count / 1000000).toFixed(1)}
-        <span className="text-3xl align-top ml-1">M</span>
-      </div>
-    );
-  } else if (value >= 1000) {
-    // For 2,000+ format
-    return <div ref={countRef}>{count.toLocaleString()}</div>;
-  } else {
-    // For 40+ format
     return <div ref={countRef}>{count}</div>;
-  }
+  };
+
+  return formatNumber(value);
 };
 
 const BusinessHubSection = () => {
