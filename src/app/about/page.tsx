@@ -1,6 +1,6 @@
 import React from 'react'
-import AboutUsMain from './components/AboutUsMain'
-import AboutUsDescription from './components/AboutUsDescription'
+import AboutUsMain from './components/about-us-main'
+import AboutUsDescription from './components/about-us-description'
 
 function AboutPage() {
   return (
