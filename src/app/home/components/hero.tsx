@@ -2,31 +2,65 @@
 import React, { useState, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
+import { getHeroSection } from "@/services/hero.service";
+import { HeroSection as HeroSectionType } from "@/types/hero";
 
-const data = {
-  videoSrc: "/videos/hero-background.mp4",
+// Static video path
+const staticVideoPath = "/videos/hero-background.mp4";
+
+// Default data in case the database fetch fails
+const defaultData: HeroSectionType = {
+  id: "default",
   heading: "Launch, Grow and Thrive in the Free Zone",
   subheading: "for Business Game Changers",
-  description:
-    "Welcome to Chronicle Exhibits - a connected, collaborative world-class exhibition stand builder for pioneering entrepreneurs, startups and multinationals, in the heart of Dubai’s central business district."
+  description: "Welcome to Chronicle Exhibits - a connected, collaborative world-class exhibition stand builder for pioneering entrepreneurs, startups and multinationals, in the heart of Dubai’s central business district.",
+  cta_primary_text: "GET STARTED",
+  cta_primary_url: "#",
+  cta_secondary_text: "LEARN MORE",
+  cta_secondary_url: "#",
+  typing_texts: [
+    { id: "1", text: "Exhibition Stands", display_order: 1 },
+    { id: "2", text: "Congress Services", display_order: 2 },
+    { id: "3", text: "Kiosk Solutions", display_order: 3 },
+    { id: "4", text: "Custom Designs", display_order: 4 },
+    { id: "5", text: "Event Management", display_order: 5 }
+  ]
 };
 
-// Typing animation text options
-const typingTexts = [
-  "Exhibition Stands",
-  "Congress Services",
-  "Kiosk Solutions",
-  "Custom Designs",
-  "Event Management"
-];
-
 const HeroSection: React.FC = () => {
+  // State for hero data
+  const [heroData, setHeroData] = useState<HeroSectionType>(defaultData);
+  const [loading, setLoading] = useState(true);
   const [typingIndex, setTypingIndex] = useState(0);
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
 
+  // Fetch hero data from the database
+  useEffect(() => {
+    const fetchHeroData = async () => {
+      setLoading(true);
+      try {
+        const data = await getHeroSection();
+        if (data) {
+          setHeroData(data);
+        }
+      } catch (error) {
+        console.error('Error fetching hero data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHeroData();
+  }, []);
+
+  // Get typing texts from hero data
+  const typingTexts = heroData.typing_texts.map(item => item.text);
+
   // Typing animation effect
   useEffect(() => {
+    if (typingTexts.length === 0) return;
+
     const currentText = typingTexts[typingIndex];
 
     const timeout = setTimeout(() => {
@@ -48,10 +82,19 @@ const HeroSection: React.FC = () => {
     }, isDeleting ? 50 : 100);
 
     return () => clearTimeout(timeout);
-  }, [displayText, isDeleting, typingIndex]);
+  }, [displayText, isDeleting, typingIndex, typingTexts]);
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-gray-900">
+        <div className="animate-spin h-12 w-12 border-4 border-[#a5cd39] border-t-transparent rounded-full"></div>
+      </div>
+    );
+  }
 
   return (
-    <section className="relative w-full h-screen overflow-hidden">
+    <section id="hero" className="relative w-full h-screen overflow-hidden">
       {/* Background Video */}
       <motion.video
         initial={{ scale: 1.1 }}
@@ -63,7 +106,7 @@ const HeroSection: React.FC = () => {
         playsInline
         className="absolute top-0 left-0 w-full h-full object-cover"
       >
-        <source src={data.videoSrc} type="video/mp4" />
+        <source src={staticVideoPath} type="video/mp4" />
         Your browser does not support the video tag.
       </motion.video>
 
@@ -140,7 +183,7 @@ const HeroSection: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.5 }}
           >
-            {data.subheading}
+            {heroData.subheading}
           </motion.h2>
 
           <motion.div
@@ -161,7 +204,7 @@ const HeroSection: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1 }}
           >
-            {data.description}
+            {heroData.description}
           </motion.p>
 
           <motion.div
@@ -170,21 +213,23 @@ const HeroSection: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.2 }}
           >
-            <motion.button
+            <motion.a
+              href={heroData.cta_primary_url}
               className="px-8 py-3 bg-[#a5cd39] text-white font-medium rounded-md hover:bg-[#94b933] transition-colors"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Get Started
-            </motion.button>
+              {heroData.cta_primary_text}
+            </motion.a>
 
-            <motion.button
+            <motion.a
+              href={heroData.cta_secondary_url}
               className="px-8 py-3 border border-white text-white font-medium rounded-md hover:bg-white/10 transition-colors"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Learn More
-            </motion.button>
+              {heroData.cta_secondary_text}
+            </motion.a>
           </motion.div>
         </motion.div>
       </div>
@@ -198,8 +243,8 @@ const HeroSection: React.FC = () => {
       >
         <motion.button
           onClick={() => {
-            const nextSection = document.getElementById("next-section");
-            if (nextSection) nextSection.scrollIntoView({ behavior: "smooth" });
+            const businessSection = document.getElementById("business-hub");
+            if (businessSection) businessSection.scrollIntoView({ behavior: "smooth" });
           }}
           className="p-3 rounded-full bg-white/20 hover:bg-white/40 transition duration-300"
           whileHover={{ scale: 1.2 }}
