@@ -3,17 +3,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { 
-  Eye, 
+import {
+  Eye,
   ArrowRight,
   LayoutDashboard,
-  MessageSquare,
   BarChart3,
-  Briefcase,
-
-  Layers,
   Lightbulb,
-  ListChecks,
   Building,
   Instagram,
   FileText
@@ -59,14 +54,6 @@ const HomePage = () => {
       status: 'Active'
     },
     {
-      id: 'dynamic-cell',
-      title: 'Dynamic Cell',
-      description: 'Dynamic cell section with heading and description',
-      icon: <Layers size={24} className="text-purple-500" />,
-      lastUpdated: '3 days ago',
-      status: 'Active'
-    },
-    {
       id: 'why-section',
       title: 'Why Section',
       description: 'Why choose us section with image',
@@ -75,35 +62,11 @@ const HomePage = () => {
       status: 'Active'
     },
     {
-      id: 'key-benefits',
-      title: 'Key Benefits',
-      description: 'Key benefits with icons and descriptions',
-      icon: <Briefcase size={24} className="text-indigo-500" />,
-      lastUpdated: '2 weeks ago',
-      status: 'Active'
-    },
-    {
-      id: 'setup-process',
-      title: 'Setup Process',
-      description: 'Step-by-step setup process guide',
-      icon: <ListChecks size={24} className="text-red-500" />,
-      lastUpdated: '2 weeks ago',
-      status: 'Active'
-    },
-    {
       id: 'new-company',
       title: 'New Company',
       description: 'New company formation information',
       icon: <Building size={24} className="text-cyan-500" />,
       lastUpdated: '3 weeks ago',
-      status: 'Active'
-    },
-    {
-      id: 'essential-support',
-      title: 'Essential Support',
-      description: 'Support services information',
-      icon: <MessageSquare size={24} className="text-emerald-500" />,
-      lastUpdated: '1 month ago',
       status: 'Active'
     },
     {
@@ -138,7 +101,7 @@ const HomePage = () => {
           <p className="text-gray-500 mt-1">Manage all sections of the home page</p>
         </div>
         <div className="flex gap-2">
-          <Link 
+          <Link
             href="/"
             target="_blank"
             className="inline-flex items-center gap-1 px-4 py-2 bg-white border border-gray-200 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
@@ -153,7 +116,7 @@ const HomePage = () => {
       <motion.div variants={itemVariants}>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {sections.map((section) => (
-            <Link 
+            <Link
               key={section.id}
               href={`/admin/pages/home/${section.id}`}
               className="group bg-white rounded-lg shadow-sm border border-gray-100 p-6 transition-all hover:shadow-md"

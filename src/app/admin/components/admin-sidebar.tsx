@@ -189,34 +189,14 @@ const AdminSidebar = () => {
                     isActive={pathname === '/admin/pages/home/business'}
                   />
                   <SubNavItem
-                    href="/admin/pages/home/dynamic-cell"
-                    label="Dynamic Cell"
-                    isActive={pathname === '/admin/pages/home/dynamic-cell'}
-                  />
-                  <SubNavItem
                     href="/admin/pages/home/why-section"
                     label="Why Section"
                     isActive={pathname === '/admin/pages/home/why-section'}
                   />
                   <SubNavItem
-                    href="/admin/pages/home/key-benefits"
-                    label="Key Benefits"
-                    isActive={pathname === '/admin/pages/home/key-benefits'}
-                  />
-                  <SubNavItem
-                    href="/admin/pages/home/setup-process"
-                    label="Setup Process"
-                    isActive={pathname === '/admin/pages/home/setup-process'}
-                  />
-                  <SubNavItem
                     href="/admin/pages/home/new-company"
                     label="New Company"
                     isActive={pathname === '/admin/pages/home/new-company'}
-                  />
-                  <SubNavItem
-                    href="/admin/pages/home/essential-support"
-                    label="Essential Support"
-                    isActive={pathname === '/admin/pages/home/essential-support'}
                   />
                   <SubNavItem
                     href="/admin/pages/home/instagram-feed"
