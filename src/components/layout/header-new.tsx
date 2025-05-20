@@ -1,93 +1,24 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext, useContext } from "react";
 import Link from "next/link";
-import { Menu, X, MessageSquare } from "lucide-react";
+import { Menu, X, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Logo from "./logo";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Desktop Navigation Item
-const NavItem = ({
-  href,
-  label,
-  isActive,
-  onClick
-}: {
-  href: string;
-  label: string;
-  isActive?: boolean;
-  onClick?: () => void;
-}) => {
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  return (
-    <Link
-      href={href}
-      className={cn(
-        "uppercase font-medium transition-colors py-2 px-1",
-        isScrolled
-          ? "text-[#2C2C2C] hover:text-[#a5cd39]"
-          : "text-white hover:text-[#a5cd39]",
-        isActive && "border-b-2 border-[#a5cd39]"
-      )}
-      onClick={onClick}
-    >
-      {label}
-    </Link>
-  );
-};
-
-const mobileMenuVariants = {
-  closed: {
-    x: "100%",
-    opacity: 0,
-    transition: {
-      duration: 0.3,
-      staggerChildren: 0.1,
-      staggerDirection: -1
-    }
-  },
-  open: {
-    x: 0,
-    opacity: 1,
-    transition: {
-      duration: 0.3,
-      staggerChildren: 0.1,
-      delayChildren: 0.2
-    }
-  }
-};
-
-const menuItemVariants = {
-  closed: {
-    x: 50,
-    opacity: 0
-  },
-  open: {
-    x: 0,
-    opacity: 1,
-    transition: {
-      duration: 0.4,
-      ease: "easeOut"
-    }
-  }
-};
+// Create a context to share header state
+const HeaderContext = createContext<{ isScrolled: boolean }>({ isScrolled: false });
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [showExhibitionDropdown, setShowExhibitionDropdown] = useState(false);
+  // const [showExhibitionDropdown, setShowExhibitionDropdown] = useState(false); // Not currently used
   const [activeLink, setActiveLink] = useState("");
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+  const [showEventsSubMenu, setShowEventsSubMenu] = useState(false);
+
+  // Context value is provided directly to the provider
 
   // Handle scroll effect for sticky header
   useEffect(() => {
@@ -95,6 +26,7 @@ const Header = () => {
       setIsScrolled(window.scrollY > 50);
     };
     window.addEventListener("scroll", handleScroll);
+    handleScroll(); // Check initial scroll position
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -103,16 +35,21 @@ const Header = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  // Toggle exhibition dropdown
-  const toggleExhibitionDropdown = () => {
-    setShowExhibitionDropdown(!showExhibitionDropdown);
+  // Toggle exhibition dropdown (not currently used)
+  // const toggleExhibitionDropdown = () => {
+  //   setShowExhibitionDropdown(!showExhibitionDropdown);
+  // };
+
+  // Toggle events submenu
+  const toggleEventsSubMenu = () => {
+    setShowEventsSubMenu(!showEventsSubMenu);
   };
-  
+
   // Toggle header visibility
   const toggleHeaderVisibility = () => {
     setIsHeaderVisible(!isHeaderVisible);
   };
-  
+
   // Show header again when user scrolls to top
   useEffect(() => {
     if (window.scrollY < 50) {
@@ -120,9 +57,28 @@ const Header = () => {
     }
   }, [isScrolled]);
 
+  // Header show button
+  const HeaderShowButton = () => {
+    if (!isHeaderVisible) {
+      return (
+        <motion.button
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          className="fixed top-4 right-4 z-50 bg-[#a5cd39] text-white rounded-full p-2 shadow-lg"
+          onClick={toggleHeaderVisibility}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+        >
+          <Menu className="w-5 h-5" />
+        </motion.button>
+      );
+    }
+    return null;
+  };
+
   return (
-    <>
-      {/* Header */}
+    <HeaderContext.Provider value={{ isScrolled }}>
       <AnimatePresence>
         {isHeaderVisible && (
           <motion.header
@@ -140,7 +96,7 @@ const Header = () => {
             {!isScrolled && (
               <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-transparent pointer-events-none"></div>
             )}
-            
+
             {/* Close button - only visible when scrolled */}
             {isScrolled && (
               <motion.button
@@ -156,419 +112,588 @@ const Header = () => {
             )}
 
             {/* Upper Header */}
-            <div>
-              <div className="container mx-auto px-4 relative z-10">
-                <div className="flex items-center justify-between py-3">
-                  {/* Left Logo */}
-                  <div className="flex-shrink-0">
-                    <Logo />
-                  </div>
+            <div className="w-full bg-[#222222]">
+              <div className="container mx-auto flex items-center justify-between py-2">
+                {/* Left Main Navigation Tabs */}
+                <div className="hidden lg:flex items-center">
+                  <TabItem
+                    href="/"
+                    label="EXPO"
+                    isActive={activeLink === "/events" || showEventsSubMenu}
+                    onClick={() => {
+                      setActiveLink("/events");
+                      toggleEventsSubMenu();
+                    }}
+                    className="bg-[#222222] hover:bg-[#333333]"
+                    activeClassName="bg-[#a5cd39] text-white"
+                  />
+                  <TabItem
+                    href="/"
+                    label="CONGRESS"
+                    isActive={activeLink === "/free-zone"}
+                    onClick={() => {
+                      setActiveLink("/free-zone");
+                      setShowEventsSubMenu(false);
+                    }}
+                    className="bg-[#222222] hover:bg-[#333333]"
+                    activeClassName="bg-[#a5cd39] text-white"
+                  />
+                  <TabItem
+                    href="/"
+                    label="KIOSK"
+                    isActive={activeLink === "/real-estate"}
+                    onClick={() => {
+                      setActiveLink("/real-estate");
+                      setShowEventsSubMenu(false);
+                    }}
+                    className="bg-[#222222] hover:bg-[#333333]"
+                    activeClassName="bg-[#a5cd39] text-white"
+                  />
+                </div>
 
-                  {/* Center Navigation: EXPO, CONGRESS, KIOSK */}
-                  <div className="hidden lg:flex items-center space-x-6 ml-10">
-                    <NavItem
-                      href="/expo"
-                      label="EXPO"
-                      isActive={activeLink === "/expo"}
-                      onClick={() => setActiveLink("/expo")}
-                    />
-                    <NavItem
-                      href="/congress"
-                      label="CONGRESS"
-                      isActive={activeLink === "/congress"}
-                      onClick={() => setActiveLink("/congress")}
-                    />
-                    <NavItem
-                      href="/kiosk"
-                      label="KIOSK"
-                      isActive={activeLink === "/kiosk"}
-                      onClick={() => setActiveLink("/kiosk")}
-                    />
-                  </div>
-
-                  {/* Right Navigation */}
-                  <div className="hidden lg:flex items-center space-x-5">
-                    <NavItem
-                      href="/about"
-                      label="ABOUT US"
-                      isActive={activeLink === "/about"}
-                      onClick={() => setActiveLink("/about")}
-                    />
-                    <NavItem
-                      href="/support"
-                      label="SUPPORT"
-                      isActive={activeLink === "/support"}
-                      onClick={() => setActiveLink("/support")}
-                    />
-                    <NavItem
-                      href="/blog"
-                      label="BLOG"
-                      isActive={activeLink === "/blog"}
-                      onClick={() => setActiveLink("/blog")}
-                    />
-                    <NavItem
-                      href="/contact"
-                      label="CONTACT US"
-                      isActive={activeLink === "/contact"}
-                      onClick={() => setActiveLink("/contact")}
-                    />
-                    <div className="ml-2 px-3 py-1 border border-[#a5cd39] rounded">
-                      <button className="text-[#a5cd39] uppercase font-medium flex items-center">
-                        <MessageSquare className="w-4 h-4 mr-2" />
-                        WHATSAPP
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Mobile Menu Button */}
-                  <button
-                    className="lg:hidden text-white"
-                    onClick={toggleMobileMenu}
-                    aria-label="Toggle menu"
+                {/* Right Navigation */}
+                <div className="hidden lg:flex items-center space-x-5">
+                  <NavItem
+                    href="/about"
+                    label="ABOUT US"
+                    isActive={activeLink === "/about"}
+                    onClick={() => setActiveLink("/about")}
+                  />
+                  <NavItem
+                    href="/support"
+                    label="SUPPORT"
+                    isActive={activeLink === "/support"}
+                    onClick={() => setActiveLink("/support")}
+                  />
+                  <NavItem
+                    href="/blog"
+                    label="BLOG"
+                    isActive={activeLink === "/blog"}
+                    onClick={() => setActiveLink("/blog")}
+                  />
+                  <NavItem
+                    href="/contact"
+                    label="CONTACT US"
+                    isActive={activeLink === "/contact"}
+                    onClick={() => setActiveLink("/contact")}
+                  />
+                  <Link
+                    href="https://wa.me/yournumberhere"
+                    className="bg-transparent border border-[#a5cd39] text-[#a5cd39] hover:bg-[#a5cd39] hover:text-white transition-colors duration-300 rounded px-4 py-2 flex items-center space-x-2"
                   >
-                    {isMobileMenuOpen ? (
-                      <X className="w-6 h-6" />
-                    ) : (
-                      <Menu className="w-6 h-6" />
-                    )}
-                  </button>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                    </svg>
+                    <span className="text-sm font-medium">WHATSAPP</span>
+                  </Link>
+                </div>
+
+                {/* Mobile Menu Button */}
+                <div className="flex items-center justify-between w-full lg:hidden">
+                  <div className="bg-[#222222] px-4 py-3 flex-1 flex items-center">
+                    <Logo />
+                    <button
+                      className="text-white ml-auto"
+                      onClick={toggleMobileMenu}
+                      aria-label="Toggle menu"
+                    >
+                      {isMobileMenuOpen ? (
+                        <X className="w-6 h-6" />
+                      ) : (
+                        <Menu className="w-6 h-6" />
+                      )}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Lower Header */}
-            <div className="hidden lg:block">
-              <div className="container mx-auto px-4 relative z-10">
-                <div className="flex items-center justify-center py-2">
-                  {/* Lower Desktop Navigation */}
-                  <nav className="flex items-center space-x-6">
-                    {/* Exhibition Stands with Dropdown */}
-                    <div className="relative group">
-                      <button
-                        className={cn(
-                          "uppercase font-medium transition-colors py-2 px-1",
-                          isScrolled
-                            ? "text-[#2C2C2C] hover:text-[#a5cd39]"
-                            : "text-white hover:text-[#a5cd39]",
-                          activeLink === "/exhibition-stands" && "border-b-2 border-[#a5cd39]"
-                        )}
-                        onClick={() => {
-                          toggleExhibitionDropdown();
-                          setActiveLink("/exhibition-stands");
-                        }}
-                        onMouseEnter={() => setShowExhibitionDropdown(true)}
-                        onMouseLeave={() => setShowExhibitionDropdown(false)}
-                      >
-                        EXHIBITION STANDS
-                      </button>
+            {/* Events Lower Header - Only visible when Events tab is active */}
+            {showEventsSubMenu && (
+              <div className={cn(
+                "hidden lg:block transition-all duration-300",
+                isScrolled ? "bg-white shadow-md" : "bg-transparent"
+              )}>
+                <div className="container mx-auto px-4 relative z-10">
+                  <div className="flex flex-col">
+                    {/* Events Sub-Navigation */}
+                    <nav className="flex items-center w-full">
+                      <div className="flex-shrink-0 mr-8">
+                        <Logo />
+                      </div>
+                      <div className="flex items-center justify-between flex-1">
+                        <div className="flex items-center">
+                          {/* Visit Us with Horizontal Dropdown */}
+                          <div className="relative group">
+                            <SubNavItem
+                              href="/visit-us"
+                              label="VISIT US"
+                              subLabel="Hotels, dining and amenities"
+                              isActive={activeLink === "/visit-us"}
+                              onClick={() => setActiveLink("/visit-us")}
+                            />
 
-                      {/* Exhibition Dropdown */}
-                      <div
-                        className={cn(
-                          "absolute top-full left-0 mt-1 shadow-lg py-3 px-4 z-50 min-w-max opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200",
-                          isScrolled
-                            ? "bg-white/95 backdrop-blur-sm"
-                            : "bg-black/70 backdrop-blur-md",
-                          showExhibitionDropdown && "opacity-100 visible"
-                        )}
-                        onMouseEnter={() => setShowExhibitionDropdown(true)}
-                        onMouseLeave={() => setShowExhibitionDropdown(false)}
-                      >
-                        <div className="flex items-center whitespace-nowrap">
-                          <Link
-                            href="/custom-stands"
-                            className={cn(
-                              "transition-colors",
-                              isScrolled
-                                ? "text-[#2C2C2C] hover:text-[#a5cd39]"
-                                : "text-white hover:text-[#a5cd39]"
-                            )}
-                          >
-                            CUSTOM STANDS
-                          </Link>
-                          <span className={cn("mx-2", isScrolled ? "text-gray-400" : "text-gray-500")}>—</span>
-                          <Link
-                            href="/double-deck-stands"
-                            className={cn(
-                              "transition-colors",
-                              isScrolled
-                                ? "text-[#2C2C2C] hover:text-[#a5cd39]"
-                                : "text-white hover:text-[#a5cd39]"
-                            )}
-                          >
-                            DOUBLE DECK STANDS
-                          </Link>
-                          <span className={cn("mx-2", isScrolled ? "text-gray-400" : "text-gray-500")}>—</span>
-                          <Link
-                            href="/expo-pavilion-stands"
-                            className={cn(
-                              "transition-colors",
-                              isScrolled
-                                ? "text-[#2C2C2C] hover:text-[#a5cd39]"
-                                : "text-white hover:text-[#a5cd39]"
-                            )}
-                          >
-                            EXPO PAVILION STANDS
-                          </Link>
+                            {/* Horizontal Dropdown Menu - Only visible on hover */}
+                            <div className={cn(
+                              "absolute left-0 top-full w-[600px] py-3 transition-all duration-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible z-50",
+                              isScrolled && "bg-white shadow-md"
+                            )}>
+                              <div className="flex space-x-8 px-4">
+                                <Link
+                                  href="/restaurants-retail"
+                                  className={cn(
+                                    "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
+                                    isScrolled ? "text-gray-700" : "text-white"
+                                  )}
+                                >
+                                  RESTAURANTS AND RETAIL
+                                </Link>
+                                <Link
+                                  href="/getting-here"
+                                  className={cn(
+                                    "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
+                                    isScrolled ? "text-gray-700" : "text-white"
+                                  )}
+                                >
+                                  GETTING HERE
+                                </Link>
+                                <Link
+                                  href="/hotels"
+                                  className={cn(
+                                    "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
+                                    isScrolled ? "text-gray-700" : "text-white"
+                                  )}
+                                >
+                                  HOTELS
+                                </Link>
+                                <Link
+                                  href="/neighbourhood-guide"
+                                  className={cn(
+                                    "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
+                                    isScrolled ? "text-gray-700" : "text-white"
+                                  )}
+                                >
+                                  NEIGHBOURHOOD GUIDE
+                                </Link>
+                              </div>
+                            </div>
+                          </div>
+                          <div className={cn("h-12 w-px mx-4", isScrolled ? "bg-gray-300" : "bg-white/40")}></div>
+                          <SubNavItem
+                            href="/whats-on"
+                            label="WHAT'S ON"
+                            subLabel="Upcoming exhibitions and events"
+                            isActive={activeLink === "/whats-on"}
+                            onClick={() => setActiveLink("/whats-on")}
+                          />
+                          <div className={cn("h-12 w-px mx-4", isScrolled ? "bg-gray-300" : "bg-white/40")}></div>
+                          <div className="relative group">
+                            <SubNavItem
+                              href="/experience-dubai"
+                              label="EXPERIENCE DUBAI"
+                              subLabel="The best Dubai has to offer"
+                              isActive={activeLink === "/experience-dubai"}
+                              onClick={() => setActiveLink("/experience-dubai")}
+                            />
+
+                            {/* Horizontal Dropdown Menu - Only visible on hover */}
+                            <div className={cn(
+                              "absolute left-0 top-full w-[600px] py-3 transition-all duration-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible z-50",
+                              isScrolled && "bg-white shadow-md"
+                            )}>
+                              <div className="flex space-x-8 px-4">
+                                <Link
+                                  href="/plan-your-trip"
+                                  className={cn(
+                                    "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
+                                    isScrolled ? "text-gray-700" : "text-white"
+                                  )}
+                                >
+                                  PLAN YOUR TRIP
+                                </Link>
+                                <Link
+                                  href="/experience-dubai"
+                                  className={cn(
+                                    "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
+                                    isScrolled ? "text-gray-700" : "text-white"
+                                  )}
+                                >
+                                  EXPERIENCE DUBAI
+                                </Link>
+                              </div>
+                            </div>
+                          </div>
+                          <div className={cn("h-12 w-px mx-4", isScrolled ? "bg-gray-300" : "bg-white/40")}></div>
+                          <div className="relative group">
+                            <SubNavItem
+                              href="/organise-event"
+                              label="ORGANISE AN EVENT"
+                              subLabel="Turnkey solutions for your events"
+                              isActive={activeLink === "/organise-event"}
+                              onClick={() => setActiveLink("/organise-event")}
+                            />
+
+                            {/* Horizontal Dropdown Menu - Only visible on hover */}
+                            <div className={cn(
+                              "absolute left-0 top-full w-[600px] py-3 transition-all duration-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible z-50",
+                              isScrolled && "bg-white shadow-md"
+                            )}>
+                              <div className="flex space-x-8 px-4">
+                                <Link
+                                  href="/venues"
+                                  className={cn(
+                                    "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
+                                    isScrolled ? "text-gray-700" : "text-white"
+                                  )}
+                                >
+                                  VENUES
+                                </Link>
+                                <Link
+                                  href="/venue-services"
+                                  className={cn(
+                                    "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
+                                    isScrolled ? "text-gray-700" : "text-white"
+                                  )}
+                                >
+                                  VENUE SERVICES
+                                </Link>
+                                <Link
+                                  href="/venue-explorer"
+                                  className={cn(
+                                    "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
+                                    isScrolled ? "text-gray-700" : "text-white"
+                                  )}
+                                >
+                                  VENUE EXPLORER
+                                </Link>
+                                <Link
+                                  href="/event-enquiry"
+                                  className={cn(
+                                    "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
+                                    isScrolled ? "text-gray-700" : "text-white"
+                                  )}
+                                >
+                                  EVENT ENQUIRY
+                                </Link>
+                              </div>
+                            </div>
+                          </div>
+                          <div className={cn("h-12 w-px mx-4", isScrolled ? "bg-gray-300" : "bg-white/40")}></div>
+                          <SubNavItem
+                            href="/exhibit"
+                            label="EXHIBIT AT AN EVENT"
+                            subLabel="Be part of our leading events"
+                            isActive={activeLink === "/exhibit"}
+                            onClick={() => setActiveLink("/exhibit")}
+                          />
                         </div>
                       </div>
+                    </nav>
+
+
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Mobile Navigation - Slide from right */}
+            <div
+              className={cn(
+                "fixed top-0 right-0 h-full w-[300px] bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out",
+                isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
+              )}
+            >
+              <div className="h-full overflow-y-auto">
+                <div className="flex justify-between items-center p-4 border-b border-gray-200 bg-[#222222]">
+                  <Logo />
+                  <button
+                    className="text-white"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    aria-label="Close menu"
+                  >
+                    <X className="w-6 h-6" />
+                  </button>
+                </div>
+
+                <div className="p-4">
+                  <nav className="flex flex-col">
+                    {/* Main Navigation Tabs */}
+                    <div className="flex flex-col space-y-3 mb-4 pb-4 border-b border-gray-200">
+                      <h3 className="text-[#a5cd39] uppercase text-sm font-semibold mb-2">Main Sections</h3>
+
+                      {/* Events with submenu */}
+                      <div className="relative">
+                        <Link
+                          href="/"
+                          className={cn(
+                            "text-[#2C2C2C] uppercase font-medium w-full text-left py-2 block",
+                            activeLink === "/events" && "text-[#a5cd39]"
+                          )}
+                          onClick={() => {
+                            toggleEventsSubMenu();
+                            setActiveLink("/events");
+                          }}
+                        >
+                          EXPO
+                        </Link>
+                        {showEventsSubMenu && (
+                          <div className="pl-4 mt-2 space-y-3">
+                            <MobileNavItem
+                              href="/visit-us"
+                              label="VISIT US"
+                              isActive={activeLink === "/visit-us"}
+                              onClick={() => {
+                                setActiveLink("/visit-us");
+                                setIsMobileMenuOpen(false);
+                              }}
+                            />
+                            <MobileNavItem
+                              href="/whats-on"
+                              label="WHAT'S ON"
+                              isActive={activeLink === "/whats-on"}
+                              onClick={() => {
+                                setActiveLink("/whats-on");
+                                setIsMobileMenuOpen(false);
+                              }}
+                            />
+                            <MobileNavItem
+                              href="/experience-dubai"
+                              label="EXPERIENCE DUBAI"
+                              isActive={activeLink === "/experience-dubai"}
+                              onClick={() => {
+                                setActiveLink("/experience-dubai");
+                                setIsMobileMenuOpen(false);
+                              }}
+                            />
+                            <MobileNavItem
+                              href="/organise-event"
+                              label="ORGANISE AN EVENT"
+                              isActive={activeLink === "/organise-event"}
+                              onClick={() => {
+                                setActiveLink("/organise-event");
+                                setIsMobileMenuOpen(false);
+                              }}
+                            />
+                            <MobileNavItem
+                              href="/exhibit"
+                              label="EXHIBIT AT AN EVENT"
+                              isActive={activeLink === "/exhibit"}
+                              onClick={() => {
+                                setActiveLink("/exhibit");
+                                setIsMobileMenuOpen(false);
+                              }}
+                            />
+                          </div>
+                        )}
+                      </div>
+
+                      <MobileNavItem
+                        href="/"
+                        label="CONGRESS"
+                        isActive={activeLink === "/free-zone"}
+                        onClick={() => {
+                          setActiveLink("/free-zone");
+                          setIsMobileMenuOpen(false);
+                        }}
+                      />
+                      <MobileNavItem
+                        href="/"
+                        label="KIOSK"
+                        isActive={activeLink === "/real-estate"}
+                        onClick={() => {
+                          setActiveLink("/real-estate");
+                          setIsMobileMenuOpen(false);
+                        }}
+                      />
                     </div>
 
-                    <div className={cn("self-center", isScrolled ? "text-gray-400" : "text-gray-500")}>|</div>
+                    {/* Secondary Navigation */}
+                    <div className="flex flex-col space-y-3">
+                      <h3 className="text-[#a5cd39] uppercase text-sm font-semibold mb-2">Information</h3>
 
-                    <NavItem
-                      href="/trade-shows"
-                      label="TOP TRADE SHOWS"
-                      isActive={activeLink === "/trade-shows"}
-                      onClick={() => setActiveLink("/trade-shows")}
-                    />
-
-                    <div className={cn("self-center", isScrolled ? "text-gray-400" : "text-gray-500")}>|</div>
-
-                    <NavItem
-                      href="/expo-locations"
-                      label="TOP EXPO LOCATIONS"
-                      isActive={activeLink === "/expo-locations"}
-                      onClick={() => setActiveLink("/expo-locations")}
-                    />
-
-                    <div className={cn("self-center", isScrolled ? "text-gray-400" : "text-gray-500")}>|</div>
-
-                    <NavItem
-                      href="/portfolio"
-                      label="PORTFOLIO"
-                      isActive={activeLink === "/portfolio"}
-                      onClick={() => setActiveLink("/portfolio")}
-                    />
+                      <MobileNavItem
+                        href="/about"
+                        label="ABOUT US"
+                        isActive={activeLink === "/about"}
+                        onClick={() => {
+                          setActiveLink("/about");
+                          setIsMobileMenuOpen(false);
+                        }}
+                      />
+                      <MobileNavItem
+                        href="/industry-insights"
+                        label="INDUSTRY INSIGHTS"
+                        isActive={activeLink === "/industry-insights"}
+                        onClick={() => {
+                          setActiveLink("/industry-insights");
+                          setIsMobileMenuOpen(false);
+                        }}
+                      />
+                      <MobileNavItem
+                        href="/news"
+                        label="NEWS"
+                        isActive={activeLink === "/news"}
+                        onClick={() => {
+                          setActiveLink("/news");
+                          setIsMobileMenuOpen(false);
+                        }}
+                      />
+                      <MobileNavItem
+                        href="/contact"
+                        label="CONTACT US"
+                        isActive={activeLink === "/contact"}
+                        onClick={() => {
+                          setActiveLink("/contact");
+                          setIsMobileMenuOpen(false);
+                        }}
+                      />
+                      <MobileNavItem
+                        href="/ar"
+                        label="عربي"
+                        isActive={activeLink === "/ar"}
+                        onClick={() => {
+                          setActiveLink("/ar");
+                          setIsMobileMenuOpen(false);
+                        }}
+                      />
+                    </div>
                   </nav>
                 </div>
               </div>
+            </div>
+
+            {/* Overlay when mobile menu is open */}
+            {isMobileMenuOpen && (
+              <div
+                className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+                onClick={() => setIsMobileMenuOpen(false)}
+              />
+            )}
+
+            {/* Sticky Search Button for Mobile */}
+            <div className="lg:hidden fixed bottom-4 right-4 z-50">
+              <button className="bg-[#333333] text-white p-3 rounded-full shadow-lg">
+                <Search className="w-6 h-6" />
+              </button>
             </div>
           </motion.header>
         )}
       </AnimatePresence>
-
-      {/* Show header button when header is hidden */}
-      <AnimatePresence>
-        {!isHeaderVisible && (
-          <motion.button
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="fixed top-4 right-4 z-50 bg-[#a5cd39] text-white rounded-full p-2 shadow-lg"
-            onClick={toggleHeaderVisibility}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            <Menu className="w-5 h-5" />
-          </motion.button>
-        )}
-      </AnimatePresence>
-
-      {/* Mobile Navigation - Slide from right */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/50 z-40 lg:hidden backdrop-blur-sm"
-              onClick={() => setIsMobileMenuOpen(false)}
-            />
-            <motion.div
-              className="fixed top-0 right-0 h-full w-[300px] bg-white shadow-lg z-50 overflow-hidden"
-              variants={mobileMenuVariants}
-              initial="closed"
-              animate="open"
-              exit="closed"
-            >
-              <div className="h-full overflow-y-auto">
-                <div className="flex justify-between items-center p-4 border-b border-gray-200">
-                  <Logo />
-                  <motion.button
-                    className="text-[#2C2C2C] p-2 hover:bg-gray-100 rounded-full"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <X className="w-6 h-6" />
-                  </motion.button>
-                </div>
-
-                <div className="p-4">
-                  <nav className="space-y-6">
-                    {/* Primary Navigation */}
-                    <motion.div variants={menuItemVariants}>
-                      <div className="mb-2 text-sm font-semibold text-gray-400">MAIN MENU</div>
-                      <div className="space-y-2">
-                        <MobileNavItem
-                          href="/expo"
-                          label="EXPO"
-                          isActive={activeLink === "/expo"}
-                          onClick={() => {
-                            setActiveLink("/expo");
-                            setIsMobileMenuOpen(false);
-                          }}
-                        />
-                        <MobileNavItem
-                          href="/congress"
-                          label="CONGRESS"
-                          isActive={activeLink === "/congress"}
-                          onClick={() => {
-                            setActiveLink("/congress");
-                            setIsMobileMenuOpen(false);
-                          }}
-                        />
-                        <MobileNavItem
-                          href="/kiosk"
-                          label="KIOSK"
-                          isActive={activeLink === "/kiosk"}
-                          onClick={() => {
-                            setActiveLink("/kiosk");
-                            setIsMobileMenuOpen(false);
-                          }}
-                        />
-                      </div>
-                    </motion.div>
-
-                    {/* Exhibition Stands Section */}
-                    <motion.div variants={menuItemVariants}>
-                      <div className="mb-2 text-sm font-semibold text-gray-400">EXHIBITION STANDS</div>
-                      <div className="space-y-2">
-                        <MobileNavItem
-                          href="/custom-stands"
-                          label="CUSTOM STANDS"
-                          isActive={activeLink === "/custom-stands"}
-                          onClick={() => {
-                            setActiveLink("/custom-stands");
-                            setIsMobileMenuOpen(false);
-                          }}
-                        />
-                        <MobileNavItem
-                          href="/double-deck-stands"
-                          label="DOUBLE DECK STANDS"
-                          isActive={activeLink === "/double-deck-stands"}
-                          onClick={() => {
-                            setActiveLink("/double-deck-stands");
-                            setIsMobileMenuOpen(false);
-                          }}
-                        />
-                        <MobileNavItem
-                          href="/expo-pavilion-stands"
-                          label="EXPO PAVILION STANDS"
-                          isActive={activeLink === "/expo-pavilion-stands"}
-                          onClick={() => {
-                            setActiveLink("/expo-pavilion-stands");
-                            setIsMobileMenuOpen(false);
-                          }}
-                        />
-                      </div>
-                    </motion.div>
-
-                    {/* Secondary Navigation */}
-                    <motion.div variants={menuItemVariants}>
-                      <div className="mb-2 text-sm font-semibold text-gray-400">MORE</div>
-                      <div className="space-y-2">
-                        <MobileNavItem
-                          href="/trade-shows"
-                          label="TOP TRADE SHOWS"
-                          isActive={activeLink === "/trade-shows"}
-                          onClick={() => {
-                            setActiveLink("/trade-shows");
-                            setIsMobileMenuOpen(false);
-                          }}
-                        />
-                        <MobileNavItem
-                          href="/expo-locations"
-                          label="TOP EXPO LOCATIONS"
-                          isActive={activeLink === "/expo-locations"}
-                          onClick={() => {
-                            setActiveLink("/expo-locations");
-                            setIsMobileMenuOpen(false);
-                          }}
-                        />
-                        <MobileNavItem
-                          href="/portfolio"
-                          label="PORTFOLIO"
-                          isActive={activeLink === "/portfolio"}
-                          onClick={() => {
-                            setActiveLink("/portfolio");
-                            setIsMobileMenuOpen(false);
-                          }}
-                        />
-                      </div>
-                    </motion.div>
-
-                    {/* Contact Links */}
-                    <motion.div variants={menuItemVariants}>
-                      <div className="mb-2 text-sm font-semibold text-gray-400">CONTACT & SUPPORT</div>
-                      <div className="space-y-2">
-                        <MobileNavItem
-                          href="/about"
-                          label="ABOUT US"
-                          isActive={activeLink === "/about"}
-                          onClick={() => {
-                            setActiveLink("/about");
-                            setIsMobileMenuOpen(false);
-                          }}
-                        />
-                        <MobileNavItem
-                          href="/support"
-                          label="SUPPORT"
-                          isActive={activeLink === "/support"}
-                          onClick={() => {
-                            setActiveLink("/support");
-                            setIsMobileMenuOpen(false);
-                          }}
-                        />
-                        <MobileNavItem
-                          href="/blog"
-                          label="BLOG"
-                          isActive={activeLink === "/blog"}
-                          onClick={() => {
-                            setActiveLink("/blog");
-                            setIsMobileMenuOpen(false);
-                          }}
-                        />
-                        <MobileNavItem
-                          href="/contact"
-                          label="CONTACT US"
-                          isActive={activeLink === "/contact"}
-                          onClick={() => {
-                            setActiveLink("/contact");
-                            setIsMobileMenuOpen(false);
-                          }}
-                        />
-                      </div>
-                    </motion.div>
-
-                    {/* WhatsApp Button */}
-                    <motion.div variants={menuItemVariants} className="pt-4">
-                      <button className="w-full bg-[#a5cd39] text-white py-3 px-4 rounded-md font-medium flex items-center justify-center space-x-2 hover:bg-[#95b934] transition-colors">
-                        <MessageSquare className="w-5 h-5" />
-                        <span>CHAT ON WHATSAPP</span>
-                      </button>
-                    </motion.div>
-                  </nav>
-                </div>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
-
-      {/* Sticky WhatsApp Button for Mobile */}
-      <div className="lg:hidden fixed bottom-4 right-4 z-50">
-        <button className="bg-[#a5cd39] text-white p-3 rounded-full shadow-lg">
-          <MessageSquare className="w-6 h-6" />
-        </button>
-      </div>
-    </>
+      <HeaderShowButton />
+    </HeaderContext.Provider>
   );
 };
 
-// Mobile Navigation Item Component
+// Main Tab Item Component
+const TabItem = ({
+  href,
+  label,
+  isActive,
+  onClick,
+  className,
+  activeClassName
+}: {
+  href?: string;
+  label: string;
+  isActive?: boolean;
+  onClick?: () => void;
+  className?: string;
+  activeClassName?: string;
+}) => {
+  if (href) {
+    return (
+      <Link
+        href={href}
+        className={cn(
+          "uppercase font-medium transition-colors py-3 px-6 text-white text-sm tracking-wide",
+          className,
+          isActive && (activeClassName || className)
+        )}
+        onClick={onClick}
+      >
+        {label}
+      </Link>
+    );
+  }
+
+  return (
+    <button
+      className={cn(
+        "uppercase font-medium transition-colors py-3 px-6 text-white text-sm tracking-wide",
+        className,
+        isActive && (activeClassName || className)
+      )}
+      onClick={onClick}
+    >
+      {label}
+    </button>
+  );
+};
+
+// Desktop Navigation Item
+const NavItem = ({
+  href,
+  label,
+  isActive,
+  onClick
+}: {
+  href: string;
+  label: string;
+  isActive?: boolean;
+  onClick?: () => void;
+}) => {
+  return (
+    <Link
+      href={href}
+      className={cn(
+        "uppercase font-medium transition-colors py-2 px-3 text-sm",
+        "text-white hover:text-[#a5cd39]",
+        isActive && "text-[#a5cd39]"
+      )}
+      onClick={onClick}
+    >
+      {label}
+    </Link>
+  );
+};
+
+// Sub Navigation Item with Label and Description
+const SubNavItem = ({
+  href,
+  label,
+  subLabel,
+  isActive,
+  onClick
+}: {
+  href: string;
+  label: string;
+  subLabel: string;
+  isActive?: boolean;
+  onClick?: () => void;
+}) => {
+  const { isScrolled } = useContext(HeaderContext);
+
+  return (
+    <Link
+      href={href}
+      className={cn(
+        "flex flex-col transition-colors text-center px-2",
+        isActive
+          ? "text-[#a5cd39]"
+          : isScrolled ? "text-[#2C2C2C] hover:text-[#a5cd39]" : "text-white hover:text-[#a5cd39]"
+      )}
+      onClick={onClick}
+    >
+      <span className="uppercase font-medium text-sm">{label}</span>
+      <span className={cn(
+        "text-xs mt-1 max-w-[150px] text-center",
+        isScrolled ? "text-gray-500" : "text-white/80"
+      )}>{subLabel}</span>
+    </Link>
+  );
+};
+
+// Mobile Navigation Item
 const MobileNavItem = ({
   href,
   label,
@@ -580,20 +705,16 @@ const MobileNavItem = ({
   isActive?: boolean;
   onClick?: () => void;
 }) => (
-  <motion.div whileHover={{ x: 4 }} whileTap={{ scale: 0.98 }}>
-    <Link
-      href={href}
-      className={cn(
-        "block py-2 px-3 rounded-md transition-colors",
-        isActive
-          ? "bg-[#a5cd39]/10 text-[#a5cd39]"
-          : "text-[#2C2C2C] hover:bg-gray-50"
-      )}
-      onClick={onClick}
-    >
-      {label}
-    </Link>
-  </motion.div>
+  <Link
+    href={href}
+    className={cn(
+      "text-[#2C2C2C] uppercase font-medium block py-2 hover:text-[#a5cd39] transition-colors",
+      isActive && "text-[#a5cd39]"
+    )}
+    onClick={onClick}
+  >
+    {label}
+  </Link>
 );
 
 export default Header;
