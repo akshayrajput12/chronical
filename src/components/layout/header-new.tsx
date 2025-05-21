@@ -169,11 +169,11 @@ const Header = () => {
                                         activeClassName="bg-[#a5cd39] text-white"
                                     />
                                     <TabItem
-                                        href="/"
+                                        href="/kiosk"
                                         label="KIOSK"
-                                        isActive={activeLink === "/real-estate"}
+                                        isActive={activeLink === "/kiosk"}
                                         onClick={() => {
-                                            setActiveLink("/real-estate");
+                                            setActiveLink("/kiosk");
                                             setShowEventsSubMenu(false);
                                         }}
                                         className="bg-[#222222] hover:bg-[#333333]"
@@ -696,16 +696,13 @@ const Header = () => {
                                                 }}
                                             />
                                             <MobileNavItem
-                                                href="/"
+                                                href="/kiosk"
                                                 label="KIOSK"
                                                 isActive={
-                                                    activeLink ===
-                                                    "/real-estate"
+                                                    activeLink === "/kiosk"
                                                 }
                                                 onClick={() => {
-                                                    setActiveLink(
-                                                        "/real-estate",
-                                                    );
+                                                    setActiveLink("/kiosk");
                                                     setIsMobileMenuOpen(false);
                                                 }}
                                             />
