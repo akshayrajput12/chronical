@@ -2,53 +2,49 @@
 
 import React from "react";
 import Link from "next/link";
-import { Download, ChevronRight, Phone, Mail, MapPin, MessageSquare } from "lucide-react";
+import { Download, ChevronRight, MessageSquare, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SocialIcons from "./social-icons";
-import Logo from "./logo";
+import { motion } from "framer-motion";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#2C2C2C] text-white">
-      {/* Main Footer Content */}
-      <div className="container mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-          {/* Column 1: About Us */}
-          <div className="space-y-6">
-            <div className="mb-8">
-              <Logo />
-            </div>
-            <p className="text-gray-300 leading-relaxed">
-              Chronicle Exhibits specializes in custom exhibition stands, congress services, and expo solutions across the Middle East and beyond.
-            </p>
-            <div className="pt-4">
-              <SocialIcons iconColor="#a5cd39" />
-            </div>
-          </div>
-
-          {/* Column 2: Quick Links */}
-          <div>
-            <h3 className="text-lg font-semibold uppercase mb-6 relative">
-              <span className="relative z-10">Services</span>
-              <span className="absolute bottom-0 left-0 w-12 h-1 bg-[#a5cd39]"></span>
+    <footer className="bg-[#2C2C2C] text-white py-10">
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6 max-w-6xl mx-auto">
+          {/* Column 1: Services */}
+          <motion.div
+            className="px-2"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            viewport={{ once: true }}
+          >
+            <h3 className="text-base font-semibold uppercase mb-3 relative flex items-center group">
+              <span className="relative z-10 group-hover:text-[#a5cd39] transition-colors duration-300">Services</span>
+              <span className="absolute bottom-0 left-0 w-6 h-0.5 bg-[#a5cd39] group-hover:w-full transition-all duration-300"></span>
             </h3>
-            <ul className="space-y-3">
+            <ul className="space-y-1.5 text-sm">
               <FooterLink href="/expo-services" label="Expo Services" />
               <FooterLink href="/congress-services" label="Congress Services" />
               <FooterLink href="/kiosk-services" label="Kiosk Services" />
               <FooterLink href="/custom-stands" label="Custom Stands" />
-              <FooterLink href="/double-deck-stands" label="Double Deck Stands" />
-              <FooterLink href="/expo-pavilion-stands" label="Expo Pavilion Stands" />
             </ul>
-          </div>
+          </motion.div>
 
-          {/* Column 3: Locations */}
-          <div>
-            <h3 className="text-lg font-semibold uppercase mb-6 relative">
-              <span className="relative z-10">Locations</span>
-              <span className="absolute bottom-0 left-0 w-12 h-1 bg-[#a5cd39]"></span>
+          {/* Column 2: Locations */}
+          <motion.div
+            className="px-2"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            <h3 className="text-base font-semibold uppercase mb-3 relative flex items-center group">
+              <span className="relative z-10 group-hover:text-[#a5cd39] transition-colors duration-300">Locations</span>
+              <span className="absolute bottom-0 left-0 w-6 h-0.5 bg-[#a5cd39] group-hover:w-full transition-all duration-300"></span>
             </h3>
-            <ul className="space-y-3 grid grid-cols-2 gap-x-4">
+            <ul className="space-y-1.5 text-sm">
               <FooterLink href="/saudi-arabia" label="Saudi Arabia" />
               <FooterLink href="/abu-dhabi" label="Abu Dhabi" />
               <FooterLink href="/qatar" label="Qatar" />
@@ -56,77 +52,91 @@ const Footer = () => {
               <FooterLink href="/kuwait" label="Kuwait" />
               <FooterLink href="/jordan" label="Jordan" />
             </ul>
-          </div>
+          </motion.div>
 
-          {/* Column 4: Contact & Profile */}
-          <div className="space-y-6">
-            <h3 className="text-lg font-semibold uppercase mb-6 relative">
-              <span className="relative z-10">Contact Us</span>
-              <span className="absolute bottom-0 left-0 w-12 h-1 bg-[#a5cd39]"></span>
+          {/* Column 3: Resources */}
+          <motion.div
+            className="px-2"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            viewport={{ once: true }}
+          >
+            <h3 className="text-base font-semibold uppercase mb-3 relative flex items-center group">
+              <span className="relative z-10 group-hover:text-[#a5cd39] transition-colors duration-300">Resources</span>
+              <span className="absolute bottom-0 left-0 w-6 h-0.5 bg-[#a5cd39] group-hover:w-full transition-all duration-300"></span>
             </h3>
+            <ul className="space-y-1.5 text-sm">
+              <FooterLink href="/about-us" label="About Us" />
+              <FooterLink href="/support" label="Support" />
+              <FooterLink href="/blog" label="Blog" />
+              <FooterLink href="/contact-us" label="Contact Us" />
+            </ul>
+          </motion.div>
 
-            {/* Contact Info */}
-            <div className="space-y-4">
-              <ContactItem
-                icon={<Phone className="w-5 h-5 text-[#a5cd39]" />}
-                label="+971 554974645"
+          {/* Column 4: Call Us */}
+          <motion.div
+            className="flex flex-col px-2"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            viewport={{ once: true }}
+          >
+            <div className="border border-gray-600 hover:border-[#a5cd39] rounded-md p-3 mb-3 text-center transition-all duration-300 hover:shadow-[0_0_10px_rgba(165,205,57,0.3)] group">
+              <h3 className="text-sm font-medium mb-1.5 group-hover:text-[#a5cd39] transition-colors duration-300">CALL US</h3>
+              <a
                 href="tel:+971554974645"
-              />
-              <ContactItem
-                icon={<Mail className="w-5 h-5 text-[#a5cd39]" />}
-                label="info@chronicleexhibits.com"
-                href="mailto:info@chronicleexhibits.com"
-              />
-              <ContactItem
-                icon={<MapPin className="w-5 h-5 text-[#a5cd39]" />}
-                label="Dubai, United Arab Emirates"
-                href="#"
-              />
+                className="text-center block text-[#a5cd39] text-sm font-medium hover:underline group-hover:scale-105 transition-transform duration-300"
+              >
+                +971 554 974 645
+              </a>
             </div>
 
-            {/* Download Profile */}
-            <div className="mt-6">
+            <div className="mb-3">
               <Button
                 variant="outline"
-                className="group relative overflow-hidden border-[#a5cd39] text-black hover:text-white w-full justify-center py-6"
+                className="border-gray-600 text-white hover:bg-[#a5cd39] hover:text-black hover:border-[#a5cd39] w-full h-9 text-sm transition-all duration-300 group relative overflow-hidden"
               >
-                <span className="absolute inset-0 w-full h-full transition-all duration-300 ease-out transform translate-x-full bg-[#a5cd39] group-hover:translate-x-0"></span>
-                <span className="relative flex items-center justify-center gap-2">
-                  <Download className="w-5 h-5" />
-                  DOWNLOAD COMPANY PROFILE
+                <span className="flex items-center text-black justify-center gap-1.5 relative z-10 group-hover:translate-x-1 transition-transform duration-300 group-hover:text-black">
+                  <MessageSquare className="w-3.5  h-3.5 group-hover:animate-pulse group-hover:text-black" />
+                  CHAT WITH US
+                </span>
+                <span className="absolute inset-0 bg-[#a5cd39] transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300 z-0"></span>
+              </Button>
+            </div>
+
+            <div className="flex justify-center">
+              <SocialIcons iconColor="#a5cd39" iconSize={16} />
+            </div>
+          </motion.div>
+
+          {/* Column 5: Download Profile */}
+          <motion.div
+            className="px-2 flex flex-col h-full lg:col-span-2"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+            viewport={{ once: true }}
+          >
+            <div className="border border-gray-600 hover:border-[#a5cd39] rounded-md p-4 text-center transition-all duration-300 hover:shadow-[0_0_15px_rgba(165,205,57,0.3)] flex flex-col h-full justify-between">
+              <div>
+                <h3 className="text-sm mb-0.5 font-medium">DOWNLOAD OUR</h3>
+                <h3 className="text-lg font-bold mb-3 text-[#a5cd39]">COMPANY PROFILE</h3>
+                <p className="text-xs text-gray-400 mb-4">Get detailed information about our services, portfolio, and expertise in exhibition stand design. Our company profile includes our history, mission, values, and showcase of our best work.</p>
+              </div>
+
+              <Button
+                variant="outline"
+                className="border-[#a5cd39] bg-[#a5cd39] text-black hover:bg-transparent hover:text-[#a5cd39] w-full h-10 text-sm transition-all duration-300 group relative overflow-hidden"
+              >
+                <span className="flex items-center justify-center gap-1.5 relative z-10 group-hover:translate-x-1 transition-transform duration-300">
+                  <Download className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-y-1" />
+                  DOWNLOAD NOW
+                  <ArrowRight className="w-0 h-3.5 opacity-0 group-hover:w-3.5 group-hover:opacity-100 transition-all duration-300" />
                 </span>
               </Button>
             </div>
-          </div>
-        </div>
-
-        {/* WhatsApp Button */}
-        <div className="mt-12 flex justify-center">
-          <Button
-            variant="outline"
-            className="group relative overflow-hidden border-[#a5cd39] text-black hover:text-white px-8 py-4"
-          >
-            <span className="absolute inset-0 w-0 bg-[#a5cd39] transition-all duration-300 ease-out group-hover:w-full"></span>
-            <span className="relative flex items-center justify-center gap-2">
-              <MessageSquare className="w-5 h-5" />
-              CHAT WITH US ON WHATSAPP
-            </span>
-          </Button>
-        </div>
-
-        {/* Bottom Footer */}
-        <div className="mt-16 pt-8 border-t border-gray-700 flex flex-col md:flex-row justify-between items-center">
-          <div className="text-sm text-gray-400 mb-4 md:mb-0">
-            © {new Date().getFullYear()} Chronicle Exhibits. All rights reserved.
-          </div>
-          <div className="flex space-x-6">
-            <Link href="/privacy-policy" className="text-sm text-gray-400 hover:text-[#a5cd39] transition-colors">
-              Privacy Policy
-            </Link>
-            <Link href="/terms-of-service" className="text-sm text-gray-400 hover:text-[#a5cd39] transition-colors">
-              Terms of Service
-            </Link>
-          </div>
+          </motion.div>
         </div>
       </div>
     </footer>
@@ -134,27 +144,15 @@ const Footer = () => {
 };
 
 const FooterLink = ({ href, label }: { href: string; label: string }) => (
-  <li className="group">
+  <li>
     <Link
       href={href}
-      className="text-gray-300 hover:text-[#a5cd39] transition-all duration-300 flex items-center group-hover:translate-x-2"
+      className="text-gray-300 hover:text-[#a5cd39] transition-colors flex items-center group"
     >
-      <ChevronRight className="w-4 h-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300 text-[#a5cd39]" />
-      <span>{label}</span>
+      <ChevronRight className="w-3.5 h-3.5 mr-1 text-[#a5cd39] transform group-hover:translate-x-1 transition-transform duration-300" />
+      <span className="group-hover:translate-x-1 transition-transform duration-300">{label}</span>
     </Link>
   </li>
-);
-
-const ContactItem = ({ icon, label, href }: { icon: React.ReactNode; label: string; href: string }) => (
-  <a
-    href={href}
-    className="flex items-center space-x-3 text-gray-300 hover:text-[#a5cd39] transition-all duration-300 group"
-  >
-    <div className="flex-shrink-0 w-10 h-10 rounded-full bg-[#3a3a3a] flex items-center justify-center group-hover:bg-[#a5cd39]/20 transition-all duration-300">
-      {icon}
-    </div>
-    <span className="group-hover:translate-x-1 transition-transform duration-300">{label}</span>
-  </a>
 );
 
 export default Footer;

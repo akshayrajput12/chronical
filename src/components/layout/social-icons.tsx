@@ -78,11 +78,15 @@ const SocialIcon: React.FC<SocialIconProps> = ({
       className="group relative overflow-hidden"
       aria-label={label}
     >
-      <div className="w-10 h-10 rounded-full border border-gray-600 flex items-center justify-center transition-all duration-300 group-hover:border-[#a5cd39] group-hover:bg-[#a5cd39] group-hover:scale-110">
-        <div className="transition-all duration-300 group-hover:scale-110" style={{ color: iconColor }}>
+      <div className="w-10 h-10 rounded-full border border-gray-600 flex items-center justify-center transition-all duration-300 group-hover:border-[#a5cd39] group-hover:bg-[#a5cd39] group-hover:scale-110 group-hover:shadow-[0_0_10px_rgba(165,205,57,0.5)] relative">
+        {/* Ripple effect on hover */}
+        <span className="absolute inset-0 rounded-full bg-[#a5cd39] opacity-0 scale-0 group-hover:scale-100 group-hover:opacity-30 transition-all duration-700"></span>
+
+        {/* Icon */}
+        <div className="transition-all duration-300 group-hover:scale-110 relative z-10" style={{ color: iconColor }}>
           {React.cloneElement(children as React.ReactElement<React.ComponentProps<LucideIcon>>, {
             size: iconSize,
-            className: "transition-all duration-300 group-hover:text-white"
+            className: "transition-all duration-300 group-hover:text-white group-hover:rotate-[360deg]"
           })}
         </div>
       </div>
