@@ -151,7 +151,6 @@ const FeatureCard = ({ title, description, image, index }: FeatureCardProps) => 
       variants={itemVariants}
       initial="hidden"
       animate={controls}
-      whileHover={{ y: -3 }}
       transition={{ duration: 0.3 }}
     >
       {/* Image */}

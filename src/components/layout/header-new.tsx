@@ -25,7 +25,6 @@ const Header = () => {
     const [activeLink, setActiveLink] = useState("");
     const [isHeaderVisible, setIsHeaderVisible] = useState(true);
     const [showEventsSubMenu, setShowEventsSubMenu] = useState(true);
-    const [isLowerHeaderSticky, setIsLowerHeaderSticky] = useState(false);
     const lowerHeaderRef = useRef<HTMLDivElement>(null);
 
     // Context value is provided directly to the provider

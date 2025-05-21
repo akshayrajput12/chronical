@@ -11,10 +11,10 @@ const Footer = () => {
   return (
     <footer className="bg-[#2C2C2C] text-white py-10">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 max-w-7xl mx-auto md:pr-0">
           {/* Column 1: Services */}
           <motion.div
-            className="px-2"
+            className="px-2 md:col-span-2"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
@@ -34,7 +34,7 @@ const Footer = () => {
 
           {/* Column 2: Locations */}
           <motion.div
-            className="px-2"
+            className="px-2 md:col-span-2"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -56,7 +56,7 @@ const Footer = () => {
 
           {/* Column 3: Resources */}
           <motion.div
-            className="px-2"
+            className="px-2 md:col-span-2"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
@@ -76,7 +76,7 @@ const Footer = () => {
 
           {/* Column 4: Call Us */}
           <motion.div
-            className="flex flex-col px-2"
+            className="flex flex-col px-2 md:col-span-2"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
@@ -112,13 +112,13 @@ const Footer = () => {
 
           {/* Column 5: Download Profile */}
           <motion.div
-            className="px-2 flex flex-col h-full lg:col-span-2"
+            className="px-2 flex flex-col h-full md:col-span-4 md:pr-0"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.5 }}
             viewport={{ once: true }}
           >
-            <div className="border border-gray-600 hover:border-[#a5cd39] rounded-md p-4 text-center transition-all duration-300 hover:shadow-[0_0_15px_rgba(165,205,57,0.3)] flex flex-col h-full justify-between">
+            <div className="border border-gray-600 hover:border-[#a5cd39] rounded-md p-4 text-center transition-all duration-300 hover:shadow-[0_0_15px_rgba(165,205,57,0.3)] flex flex-col h-full justify-between mr-0">
               <div>
                 <h3 className="text-sm mb-0.5 font-medium">DOWNLOAD OUR</h3>
                 <h3 className="text-lg font-bold mb-3 text-[#a5cd39]">COMPANY PROFILE</h3>
