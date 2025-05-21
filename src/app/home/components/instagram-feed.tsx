@@ -2,7 +2,6 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 import Image from 'next/image';
-import { motion, useAnimation, useInView } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Camera } from 'lucide-react';
 import { InstagramFeedService } from '@/services/instagram-feed.service';
 import { InstagramFeedSection, InstagramPost as InstagramPostType } from '@/types/instagram-feed';
@@ -16,10 +15,6 @@ interface InstagramCardProps {
     subcaption?: string | null;
     tag?: string | null;
     redirect_url?: string | null;
-  };
-  variants: {
-    hidden: { y: number; opacity: number };
-    visible: { y: number; opacity: number; transition: { duration: number } };
   };
 }
 
@@ -56,9 +51,7 @@ const defaultInstagramPosts = [
 ];
 
 const InstagramFeed = () => {
-  const controls = useAnimation();
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: false, amount: 0.2 });
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // State for Instagram feed data
@@ -92,32 +85,6 @@ const InstagramFeed = () => {
 
     fetchData();
   }, []);
-
-  useEffect(() => {
-    if (isInView) {
-      controls.start('visible');
-    }
-  }, [controls, isInView]);
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.3,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { duration: 0.5 },
-    },
-  };
 
   // Scroll functions for mobile carousel
   const scrollLeft = () => {
@@ -165,25 +132,15 @@ const InstagramFeed = () => {
   return (
     <section className="py-16 bg-gray-100" ref={ref} id="instagram-feed">
       <div className="container mx-auto px-4">
-        <motion.div
-          className="text-center mb-10"
-          initial={{ opacity: 0, y: 20 }}
-          animate={controls}
-          variants={itemVariants}
-        >
+        <div className="text-center mb-10">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
             {title} <span className="text-[#a5cd39]">{instagramHandle}</span> {subtitle}
           </h2>
           <div className="w-16 h-[2px] bg-gray-300 mx-auto mt-4"></div>
-        </motion.div>
+        </div>
 
         {/* Desktop View - Grid */}
-        <motion.div
-          className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto"
-          variants={containerVariants}
-          initial="hidden"
-          animate={controls}
-        >
+        <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto">
           {displayPosts.map((post) => (
             <InstagramCard
               key={post.id}
@@ -191,19 +148,15 @@ const InstagramFeed = () => {
                 ...post,
                 image: post.image_url
               }}
-              variants={itemVariants}
             />
           ))}
-        </motion.div>
+        </div>
 
         {/* Mobile View - Carousel */}
         <div className="relative md:hidden">
-          <motion.div
+          <div
             className="flex overflow-x-auto scrollbar-hide snap-x snap-mandatory"
             ref={scrollRef}
-            variants={containerVariants}
-            initial="hidden"
-            animate={controls}
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             <div className="flex gap-4 pb-4">
@@ -214,12 +167,11 @@ const InstagramFeed = () => {
                       ...post,
                       image: post.image_url
                     }}
-                    variants={itemVariants}
                   />
                 </div>
               ))}
             </div>
-          </motion.div>
+          </div>
 
           {/* Navigation Arrows */}
           <button
@@ -243,15 +195,11 @@ const InstagramFeed = () => {
 };
 
 // Instagram Card Component
-const InstagramCard = ({ post, variants }: InstagramCardProps) => {
+const InstagramCard = ({ post }: InstagramCardProps) => {
   const hasRedirectUrl = post.redirect_url && post.redirect_url.trim() !== '';
 
   const cardContent = (
-    <motion.div
-      className="relative overflow-hidden rounded-md shadow-md group h-[240px]"
-      variants={variants}
-      whileHover={{ y: -5, transition: { duration: 0.2 } }}
-    >
+    <div className="relative overflow-hidden rounded-md shadow-md group h-[240px] hover:-translate-y-1 transition-transform duration-200">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/70 z-10"></div>
 
       <Image
@@ -277,7 +225,7 @@ const InstagramCard = ({ post, variants }: InstagramCardProps) => {
           <Camera size={20} />
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 
   // Wrap with link if redirect URL exists
