@@ -1,28 +1,45 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Toaster } from '@/components/ui/sonner';
 import AdminSidebar from './components/admin-sidebar';
-import { useAuth } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
+import { createClient } from '@/lib/supabase/client';
 
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { isLoaded, isSignedIn } = useAuth();
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter();
+  const supabase = createClient();
 
-  // Redirect to login page if not authenticated
+  // Check authentication status
   useEffect(() => {
-    if (isLoaded && !isSignedIn) {
-      router.push('/login');
-    }
-  }, [isLoaded, isSignedIn, router]);
+    const checkAuth = async () => {
+      try {
+        const { data: { user }, error } = await supabase.auth.getUser();
+
+        if (error || !user) {
+          router.push('/login');
+        } else {
+          setIsAuthenticated(true);
+        }
+      } catch (error) {
+        console.error('Error checking auth status:', error);
+        router.push('/login');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, [router, supabase.auth]);
 
   // Show loading state while checking authentication
-  if (!isLoaded || !isSignedIn) {
+  if (isLoading || !isAuthenticated) {
     return (
       <div className="flex h-screen items-center justify-center bg-gray-100">
         <div className="text-center">

@@ -1,17 +1,15 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import Image from "next/image";
-import { motion } from "framer-motion";
-import { createClient } from "@/lib/supabase/client";
-import { Eye, EyeOff } from "lucide-react";
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
+import { createClient } from '@/lib/supabase/client';
+import { Eye, EyeOff } from 'lucide-react';
 
-export default function SignUpPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+export default function UpdatePasswordPage() {
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -19,20 +17,63 @@ export default function SignUpPage() {
   const [message, setMessage] = useState<string | null>(null);
   const router = useRouter();
 
-  // Create Supabase client
   const supabase = createClient();
 
-  // Check if user is already logged in
+  // Check if user is authenticated with a recovery token
   useEffect(() => {
     const checkSession = async () => {
       const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        router.push("/admin");
+
+      // If no user or no recovery token, redirect to login
+      if (!user) {
+        router.push('/login');
       }
     };
 
     checkSession();
   }, [router, supabase.auth]);
+
+  const handleUpdatePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    // Validate passwords match
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      setLoading(false);
+      return;
+    }
+
+    // Validate password strength
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters long');
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const { error } = await supabase.auth.updateUser({
+        password,
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      setMessage('Password updated successfully. Redirecting to login...');
+
+      // Redirect to login after 3 seconds
+      setTimeout(() => {
+        router.push('/login');
+      }, 3000);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'An error occurred while updating your password';
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Animation variants
   const containerVariants = {
@@ -55,55 +96,9 @@ export default function SignUpPage() {
     },
   };
 
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-    setMessage(null);
-
-    // Validate passwords match
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      setLoading(false);
-      return;
-    }
-
-    // Validate password strength
-    if (password.length < 8) {
-      setError("Password must be at least 8 characters long");
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const {  error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
-        }
-      });
-
-      if (error) {
-        throw error;
-      }
-
-      // Show success message
-      setMessage("Registration successful! Please check your email to verify your account.");
-      setEmail("");
-      setPassword("");
-      setConfirmPassword("");
-    } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : "An error occurred during signup";
-      setError(errorMessage);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      {/* Left side - Signup Form */}
+      {/* Left side - Update Password Form */}
       <div className="w-full md:w-1/2 flex items-center justify-center p-8 md:p-16 bg-white">
         <motion.div
           className="max-w-md w-full"
@@ -120,21 +115,21 @@ export default function SignUpPage() {
               className="mx-auto mb-6"
             />
             <h2 className="text-3xl font-bold text-gray-900">
-              Create Your Account
+              Update Your Password
             </h2>
             <p className="mt-2 text-gray-600">
-              Sign up to access the Chronicle Exhibits admin panel
+              Create a new secure password for your account
             </p>
           </motion.div>
 
           <motion.form
             className="space-y-6"
-            onSubmit={handleSignUp}
+            onSubmit={handleUpdatePassword}
             variants={itemVariants}
           >
             {error && (
               <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-md text-sm text-red-700">
-                <p className="font-medium">Registration Error</p>
+                <p className="font-medium">Error</p>
                 <p>{error}</p>
               </div>
             )}
@@ -148,25 +143,8 @@ export default function SignUpPage() {
 
             <div className="space-y-4">
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                  Email address
-                </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#a5cd39] focus:border-[#a5cd39] transition-all duration-200"
-                  placeholder="Enter your email"
-                />
-              </div>
-
-              <div>
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                  Password
+                  New Password
                 </label>
                 <div className="relative">
                   <input
@@ -178,7 +156,7 @@ export default function SignUpPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#a5cd39] focus:border-[#a5cd39] transition-all duration-200"
-                    placeholder="Create a password"
+                    placeholder="Enter new password"
                   />
                   <button
                     type="button"
@@ -193,7 +171,7 @@ export default function SignUpPage() {
 
               <div>
                 <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
-                  Confirm Password
+                  Confirm New Password
                 </label>
                 <div className="relative">
                   <input
@@ -205,7 +183,7 @@ export default function SignUpPage() {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     className="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#a5cd39] focus:border-[#a5cd39] transition-all duration-200"
-                    placeholder="Confirm your password"
+                    placeholder="Confirm new password"
                   />
                   <button
                     type="button"
@@ -230,19 +208,10 @@ export default function SignUpPage() {
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    Creating account...
+                    Updating password...
                   </div>
-                ) : "Create Account"}
+                ) : "Update Password"}
               </button>
-            </div>
-
-            <div className="text-center mt-6">
-              <p className="text-sm text-gray-600">
-                Already have an account?{" "}
-                <Link href="/login" className="font-medium text-[#a5cd39] hover:text-[#94b933] transition-colors">
-                  Sign in
-                </Link>
-              </p>
             </div>
           </motion.form>
         </motion.div>
@@ -259,30 +228,36 @@ export default function SignUpPage() {
             transition={{ delay: 0.5, duration: 0.7 }}
             className="max-w-md text-center"
           >
-            <h2 className="text-3xl font-bold mb-6">Join Chronicle Exhibits</h2>
+            <h2 className="text-3xl font-bold mb-6">Almost Done!</h2>
             <p className="text-lg mb-8">
-              Create an account to manage your business content and settings.
+              Create a strong password to secure your account.
             </p>
             <div className="bg-white/20 backdrop-blur-sm p-6 rounded-lg">
-              <h3 className="font-semibold text-xl mb-3">Why Sign Up?</h3>
+              <h3 className="font-semibold text-xl mb-3">Password Tips</h3>
               <ul className="text-left space-y-2">
                 <li className="flex items-start">
                   <svg className="h-5 w-5 text-white mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
-                  <span>Access to powerful admin tools</span>
+                  <span>Use at least 8 characters</span>
                 </li>
                 <li className="flex items-start">
                   <svg className="h-5 w-5 text-white mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
-                  <span>Manage your business content easily</span>
+                  <span>Include uppercase and lowercase letters</span>
                 </li>
                 <li className="flex items-start">
                   <svg className="h-5 w-5 text-white mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
-                  <span>Secure and reliable authentication</span>
+                  <span>Add numbers and special characters</span>
+                </li>
+                <li className="flex items-start">
+                  <svg className="h-5 w-5 text-white mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Avoid using personal information</span>
                 </li>
               </ul>
             </div>

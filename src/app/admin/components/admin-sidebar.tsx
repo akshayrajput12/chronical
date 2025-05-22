@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     Home,
@@ -20,8 +19,9 @@ import {
     LogOut,
     User,
 } from "lucide-react";
-import { useAuth, useUser, SignOutButton } from "@clerk/nextjs";
+import { createClient } from "@/lib/supabase/client";
 import Logo from "@/components/layout/logo";
+import { User as SupabaseUser } from "@supabase/supabase-js";
 
 interface NavItemProps {
     href: string;
@@ -92,18 +92,38 @@ const SubNavItem: React.FC<SubNavItemProps> = ({ href, label, isActive }) => {
 
 const AdminSidebar = () => {
     const pathname = usePathname();
-    const { isSignedIn } = useAuth();
-    const { user } = useUser();
+    const router = useRouter();
+    const supabase = createClient();
+    const [user, setUser] = useState<SupabaseUser | null>(null);
+    const [isSignedIn, setIsSignedIn] = useState(false);
     const [openSections, setOpenSections] = useState<Record<string, boolean>>({
         home: pathname.includes("/admin/pages/home"),
         about: pathname.includes("/admin/pages/about"),
     });
+
+    // Fetch user data
+    useEffect(() => {
+        const fetchUser = async () => {
+            const { data: { user }, error } = await supabase.auth.getUser();
+            if (user && !error) {
+                setUser(user);
+                setIsSignedIn(true);
+            }
+        };
+
+        fetchUser();
+    }, [supabase.auth]);
 
     const toggleSection = (section: string) => {
         setOpenSections(prev => ({
             ...prev,
             [section]: !prev[section],
         }));
+    };
+
+    const handleLogout = async () => {
+        await supabase.auth.signOut();
+        router.push('/login');
     };
 
     return (
@@ -118,28 +138,17 @@ const AdminSidebar = () => {
                 <div className="p-4 border-b border-sidebar-border">
                     <div className="flex items-center space-x-3">
                         <div className="w-10 h-10 rounded-full bg-sidebar-accent/20 flex items-center justify-center">
-                            {user.imageUrl ? (
-                                <Image
-                                    src={user.imageUrl}
-                                    alt={user.fullName || "User"}
-                                    width={40}
-                                    height={40}
-                                    className="rounded-full"
-                                    priority
-                                />
-                            ) : (
-                                <User
-                                    size={20}
-                                    className="text-sidebar-accent-foreground"
-                                />
-                            )}
+                            <User
+                                size={20}
+                                className="text-sidebar-accent-foreground"
+                            />
                         </div>
                         <div className="flex-1 min-w-0">
                             <p className="text-sm font-medium truncate">
-                                {user.fullName || user.username || "Admin User"}
+                                Admin User
                             </p>
                             <p className="text-xs text-sidebar-foreground/60 truncate">
-                                {user.primaryEmailAddress?.emailAddress || ""}
+                                {user.email || ""}
                             </p>
                         </div>
                     </div>
@@ -340,14 +349,15 @@ const AdminSidebar = () => {
                     </p>
                 </div>
 
-                <SignOutButton redirectUrl="/login">
-                    <button className="flex items-center justify-between w-full px-4 py-3 rounded-md transition-colors text-sidebar-foreground hover:bg-sidebar-accent/10">
-                        <div className="flex items-center gap-3">
-                            <LogOut size={18} />
-                            <span>Logout</span>
-                        </div>
-                    </button>
-                </SignOutButton>
+                <button
+                    onClick={handleLogout}
+                    className="flex items-center justify-between w-full px-4 py-3 rounded-md transition-colors text-sidebar-foreground hover:bg-sidebar-accent/10"
+                >
+                    <div className="flex items-center gap-3">
+                        <LogOut size={18} />
+                        <span>Logout</span>
+                    </div>
+                </button>
             </nav>
         </div>
     );
