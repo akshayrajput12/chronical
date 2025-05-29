@@ -190,6 +190,12 @@ const Header = () => {
                                         onClick={() => setActiveLink("/about")}
                                     />
                                     <NavItem
+                                        href="/portfolio"
+                                        label="PORTFOLIO"
+                                        isActive={activeLink === "/portfolio"}
+                                        onClick={() => setActiveLink("/portfolio")}
+                                    />
+                                    <NavItem
                                         href="/support"
                                         label="SUPPORT"
                                         isActive={activeLink === "/support"}
@@ -539,6 +545,28 @@ const Header = () => {
                                                                 )
                                                             }
                                                         />
+                                                        <div
+                                                            className={cn(
+                                                                "h-12 w-px mx-4",
+                                                                isScrolled
+                                                                    ? "bg-gray-300"
+                                                                    : "bg-white/40",
+                                                            )}
+                                                        ></div>
+                                                        <SubNavItem
+                                                            href="/contact-us"
+                                                            label="CONTACT US"
+                                                            subLabel="Get in touch with our team"
+                                                            isActive={
+                                                                activeLink ===
+                                                                "/contact-us"
+                                                            }
+                                                            onClick={() =>
+                                                                setActiveLink(
+                                                                    "/contact-us",
+                                                                )
+                                                            }
+                                                        />
                                                     </div>
                                                 </div>
                                             </nav>
@@ -726,6 +754,17 @@ const Header = () => {
                                                 }}
                                             />
                                             <MobileNavItem
+                                                href="/portfolio"
+                                                label="PORTFOLIO"
+                                                isActive={
+                                                    activeLink === "/portfolio"
+                                                }
+                                                onClick={() => {
+                                                    setActiveLink("/portfolio");
+                                                    setIsMobileMenuOpen(false);
+                                                }}
+                                            />
+                                            <MobileNavItem
                                                 href="/industry-insights"
                                                 label="INDUSTRY INSIGHTS"
                                                 isActive={
@@ -740,24 +779,24 @@ const Header = () => {
                                                 }}
                                             />
                                             <MobileNavItem
-                                                href="/news"
-                                                label="NEWS"
+                                                href="/blog"
+                                                label="BLOG"
                                                 isActive={
-                                                    activeLink === "/news"
+                                                    activeLink === "/blog"
                                                 }
                                                 onClick={() => {
-                                                    setActiveLink("/news");
+                                                    setActiveLink("/blog");
                                                     setIsMobileMenuOpen(false);
                                                 }}
                                             />
                                             <MobileNavItem
-                                                href="/contact"
+                                                href="/contact-us"
                                                 label="CONTACT US"
                                                 isActive={
-                                                    activeLink === "/contact"
+                                                    activeLink === "/contact-us"
                                                 }
                                                 onClick={() => {
-                                                    setActiveLink("/contact");
+                                                    setActiveLink("/contact-us");
                                                     setIsMobileMenuOpen(false);
                                                 }}
                                             />

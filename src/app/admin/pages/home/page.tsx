@@ -11,7 +11,8 @@ import {
   Lightbulb,
   Building,
   Instagram,
-  FileText
+  FileText,
+  Briefcase
 } from 'lucide-react';
 
 const HomePage = () => {
@@ -67,6 +68,14 @@ const HomePage = () => {
       description: 'New company formation information',
       icon: <Building size={24} className="text-cyan-500" />,
       lastUpdated: '3 weeks ago',
+      status: 'Active'
+    },
+    {
+      id: 'essential-support',
+      title: 'Essential Support',
+      description: 'Essential support services section',
+      icon: <Briefcase size={24} className="text-purple-500" />,
+      lastUpdated: 'Recently updated',
       status: 'Active'
     },
     {

@@ -227,6 +227,14 @@ const AdminSidebar = () => {
                                         }
                                     />
                                     <SubNavItem
+                                        href="/admin/pages/home/essential-support"
+                                        label="Essential Support"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/home/essential-support"
+                                        }
+                                    />
+                                    <SubNavItem
                                         href="/admin/pages/home/instagram-feed"
                                         label="Instagram Feed"
                                         isActive={
