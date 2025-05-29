@@ -189,32 +189,51 @@ const EventsGallery = () => {
                   viewport={{ once: true }}
                 >
                   <div
-                    className="bg-white block relative cursor-pointer transition-all duration-500 group pt-12 pb-16 mx-1"
+                    className="w-80 bg-white rounded-md overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-lg mx-auto"
                     onClick={() => handleEventClick(event.id)}
+                    style={{
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                      fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+                      height: '500px'
+                    }}
                   >
-                    {/* Green accent bar */}
-                    <div className="h-2 bg-green-500 w-full absolute top-0 left-0"></div>
+                    {/* Card Header */}
+                    <div className="relative p-6 pb-8" style={{ minHeight: '200px' }}>
+                      {/* Green accent bar */}
+                      <div
+                        className="absolute top-0 left-0 w-16 h-1"
+                        style={{ backgroundColor: '#22c55e' }}
+                      ></div>
 
-                    {/* Content */}
-                    <div className="px-6 mb-8">
-                      <p className="text-xs text-gray-500 uppercase tracking-wider font-medium mb-6">
+                      {/* Date */}
+                      <div
+                        className="text-xs text-gray-700 uppercase mb-6 mt-4 font-medium"
+                        style={{ letterSpacing: '1px' }}
+                      >
                         {event.dateRange}
-                      </p>
-                      <h3 className="text-xl font-bold text-gray-900 mb-6 leading-tight">
+                      </div>
+
+                      {/* Title */}
+                      <h2 className="text-2xl font-normal text-gray-900 mb-6 leading-tight" style={{ fontFamily: 'serif' }}>
                         {event.title}
-                      </h3>
-                      <p className="text-xs text-gray-600 uppercase tracking-wider font-medium">
+                      </h2>
+
+                      {/* Category */}
+                      <p
+                        className="text-xs text-gray-700 uppercase font-medium"
+                        style={{ letterSpacing: '1px' }}
+                      >
                         {event.category}
                       </p>
                     </div>
 
                     {/* Image */}
-                    <div className="relative h-64 overflow-hidden">
+                    <div className="relative flex-1 overflow-hidden" style={{ height: '300px' }}>
                       <Image
                         src={event.image}
                         alt={event.title}
                         fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
                       />
                     </div>
                   </div>

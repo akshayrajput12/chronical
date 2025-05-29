@@ -8,6 +8,7 @@ import React, {
     useRef,
 } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, X, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Logo from "./logo";
@@ -19,6 +20,7 @@ const HeaderContext = createContext<{ isScrolled: boolean }>({
 });
 
 const Header = () => {
+    const pathname = usePathname();
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     // const [showExhibitionDropdown, setShowExhibitionDropdown] = useState(false); // Not currently used
@@ -26,6 +28,11 @@ const Header = () => {
     const [isHeaderVisible, setIsHeaderVisible] = useState(true);
     const [showEventsSubMenu, setShowEventsSubMenu] = useState(true);
     const lowerHeaderRef = useRef<HTMLDivElement>(null);
+
+    // Check if current page is portfolio page or blog detail page
+    const isPortfolioPage = pathname?.startsWith('/portfolio');
+    const isBlogDetailPage = pathname?.startsWith('/blog/') && pathname !== '/blog';
+    const isSpecialPage = isPortfolioPage || isBlogDetailPage;
 
     // Context value is provided directly to the provider
 
@@ -38,7 +45,7 @@ const Header = () => {
             if (lowerHeaderRef.current) {
                 const sticky = lowerHeaderRef.current.offsetTop;
 
-                if (window.pageYOffset > sticky + 20) {
+                if (window.scrollY > sticky + 20) {
                     lowerHeaderRef.current.style.position = "fixed";
                     lowerHeaderRef.current.style.top = "0";
                     lowerHeaderRef.current.style.left = "0";
@@ -116,16 +123,16 @@ const Header = () => {
                         transition={{ duration: 0.3 }}
                         className={cn(
                             "w-full z-50 transition-all duration-300",
-                            isScrolled
+                            isScrolled || isSpecialPage
                                 ? "bg-white shadow-md text-[#2C2C2C]"
                                 : "bg-transparent text-white",
                         )}
                     >
-                        {!isScrolled && (
+                        {!isScrolled && !isSpecialPage && (
                             <div className="absolute inset-0 bg-black/10 to-transparent pointer-events-none z-[60]"></div>
                         )}
-                        {/* Close button - only visible when scrolled */}
-                        {isScrolled && (
+                        {/* Close button - only visible when scrolled or on special pages */}
+                        {(isScrolled || isSpecialPage) && (
                             <motion.button
                                 initial={{ opacity: 0, scale: 0.8 }}
                                 animate={{ opacity: 1, scale: 1 }}
@@ -264,7 +271,7 @@ const Header = () => {
                                 <div
                                     className={cn(
                                         "hidden relative py-3 lg:block transition-all duration-300 w-full",
-                                        isScrolled
+                                        isScrolled || isSpecialPage
                                             ? "bg-white shadow-md"
                                             : "bg-transparent",
                                     )}
@@ -275,7 +282,7 @@ const Header = () => {
                                             <nav className="flex items-center w-full">
                                                 <div className="flex-shrink-0 mr-8">
                                                     <Logo
-                                                        isScrolled={isScrolled}
+                                                        isScrolled={isScrolled || isSpecialPage}
                                                     />
                                                 </div>
                                                 <div className="flex items-center justify-between flex-1">
@@ -301,7 +308,7 @@ const Header = () => {
                                                             <div
                                                                 className={cn(
                                                                     "absolute left-0 top-full w-[600px] py-3 transition-all duration-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible z-50",
-                                                                    isScrolled &&
+                                                                    (isScrolled || isSpecialPage) &&
                                                                         "bg-white shadow-md",
                                                                 )}
                                                             >
@@ -310,7 +317,7 @@ const Header = () => {
                                                                         href="/restaurants-retail"
                                                                         className={cn(
                                                                             "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
-                                                                            isScrolled
+                                                                            isScrolled || isSpecialPage
                                                                                 ? "text-gray-700"
                                                                                 : "text-white",
                                                                         )}
@@ -323,7 +330,7 @@ const Header = () => {
                                                                         href="/getting-here"
                                                                         className={cn(
                                                                             "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
-                                                                            isScrolled
+                                                                            isScrolled || isSpecialPage
                                                                                 ? "text-gray-700"
                                                                                 : "text-white",
                                                                         )}
@@ -335,7 +342,7 @@ const Header = () => {
                                                                         href="/hotels"
                                                                         className={cn(
                                                                             "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
-                                                                            isScrolled
+                                                                            isScrolled || isSpecialPage
                                                                                 ? "text-gray-700"
                                                                                 : "text-white",
                                                                         )}
@@ -346,7 +353,7 @@ const Header = () => {
                                                                         href="/neighbourhood-guide"
                                                                         className={cn(
                                                                             "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
-                                                                            isScrolled
+                                                                            isScrolled || isSpecialPage
                                                                                 ? "text-gray-700"
                                                                                 : "text-white",
                                                                         )}
@@ -360,7 +367,7 @@ const Header = () => {
                                                         <div
                                                             className={cn(
                                                                 "h-12 w-px mx-4",
-                                                                isScrolled
+                                                                isScrolled || isSpecialPage
                                                                     ? "bg-gray-300"
                                                                     : "bg-white/40",
                                                             )}
@@ -382,7 +389,7 @@ const Header = () => {
                                                         <div
                                                             className={cn(
                                                                 "h-12 w-px mx-4",
-                                                                isScrolled
+                                                                isScrolled || isSpecialPage
                                                                     ? "bg-gray-300"
                                                                     : "bg-white/40",
                                                             )}
@@ -407,7 +414,7 @@ const Header = () => {
                                                             <div
                                                                 className={cn(
                                                                     "absolute left-0 top-full w-[600px] py-3 transition-all duration-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible z-50",
-                                                                    isScrolled &&
+                                                                    (isScrolled || isSpecialPage) &&
                                                                         "bg-white shadow-md",
                                                                 )}
                                                             >
@@ -416,7 +423,7 @@ const Header = () => {
                                                                         href="/plan-your-trip"
                                                                         className={cn(
                                                                             "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
-                                                                            isScrolled
+                                                                            isScrolled || isSpecialPage
                                                                                 ? "text-gray-700"
                                                                                 : "text-white",
                                                                         )}
@@ -429,7 +436,7 @@ const Header = () => {
                                                                         href="/experience-dubai"
                                                                         className={cn(
                                                                             "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
-                                                                            isScrolled
+                                                                            isScrolled || isSpecialPage
                                                                                 ? "text-gray-700"
                                                                                 : "text-white",
                                                                         )}
@@ -443,7 +450,7 @@ const Header = () => {
                                                         <div
                                                             className={cn(
                                                                 "h-12 w-px mx-4",
-                                                                isScrolled
+                                                                isScrolled || isSpecialPage
                                                                     ? "bg-gray-300"
                                                                     : "bg-white/40",
                                                             )}
@@ -468,7 +475,7 @@ const Header = () => {
                                                             <div
                                                                 className={cn(
                                                                     "absolute left-0 top-full w-[600px] py-3 transition-all duration-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible z-50",
-                                                                    isScrolled &&
+                                                                    (isScrolled || isSpecialPage) &&
                                                                         "bg-white shadow-md",
                                                                 )}
                                                             >
@@ -477,7 +484,7 @@ const Header = () => {
                                                                         href="/venues"
                                                                         className={cn(
                                                                             "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
-                                                                            isScrolled
+                                                                            isScrolled || isSpecialPage
                                                                                 ? "text-gray-700"
                                                                                 : "text-white",
                                                                         )}
@@ -488,7 +495,7 @@ const Header = () => {
                                                                         href="/venue-services"
                                                                         className={cn(
                                                                             "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
-                                                                            isScrolled
+                                                                            isScrolled || isSpecialPage
                                                                                 ? "text-gray-700"
                                                                                 : "text-white",
                                                                         )}
@@ -500,7 +507,7 @@ const Header = () => {
                                                                         href="/venue-explorer"
                                                                         className={cn(
                                                                             "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
-                                                                            isScrolled
+                                                                            isScrolled || isSpecialPage
                                                                                 ? "text-gray-700"
                                                                                 : "text-white",
                                                                         )}
@@ -512,7 +519,7 @@ const Header = () => {
                                                                         href="/event-enquiry"
                                                                         className={cn(
                                                                             "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
-                                                                            isScrolled
+                                                                            isScrolled || isSpecialPage
                                                                                 ? "text-gray-700"
                                                                                 : "text-white",
                                                                         )}
@@ -526,7 +533,7 @@ const Header = () => {
                                                         <div
                                                             className={cn(
                                                                 "h-12 w-px mx-4",
-                                                                isScrolled
+                                                                isScrolled || isSpecialPage
                                                                     ? "bg-gray-300"
                                                                     : "bg-white/40",
                                                             )}
@@ -548,7 +555,7 @@ const Header = () => {
                                                         <div
                                                             className={cn(
                                                                 "h-12 w-px mx-4",
-                                                                isScrolled
+                                                                isScrolled || isSpecialPage
                                                                     ? "bg-gray-300"
                                                                     : "bg-white/40",
                                                             )}
@@ -587,7 +594,7 @@ const Header = () => {
                         >
                             <div className="h-full overflow-y-auto">
                                 <div className="flex justify-between items-center p-4 border-b border-gray-200 bg-[#222222]">
-                                    <Logo isScrolled={isScrolled} />
+                                    <Logo isScrolled={isScrolled || isSpecialPage} />
                                     <button
                                         className="text-white"
                                         onClick={() =>
@@ -925,6 +932,10 @@ const SubNavItem = ({
     onClick?: () => void;
 }) => {
     const { isScrolled } = useContext(HeaderContext);
+    const pathname = usePathname();
+    const isPortfolioPage = pathname?.startsWith('/portfolio');
+    const isBlogDetailPage = pathname?.startsWith('/blog/') && pathname !== '/blog';
+    const isSpecialPage = isPortfolioPage || isBlogDetailPage;
 
     return (
         <Link
@@ -933,7 +944,7 @@ const SubNavItem = ({
                 "flex flex-col transition-colors text-center px-2",
                 isActive
                     ? "text-[#a5cd39]"
-                    : isScrolled
+                    : isScrolled || isSpecialPage
                     ? "text-[#2C2C2C] hover:text-[#a5cd39]"
                     : "text-white hover:text-[#a5cd39]",
             )}
@@ -943,7 +954,7 @@ const SubNavItem = ({
             <span
                 className={cn(
                     "text-xs mt-1 max-w-[150px] text-center",
-                    isScrolled ? "text-gray-500" : "text-white/80",
+                    isScrolled || isSpecialPage ? "text-gray-500" : "text-white/80",
                 )}
             >
                 {subLabel}
