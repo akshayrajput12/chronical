@@ -7,7 +7,7 @@ import { ChevronDown} from "lucide-react";
 
 const EventsHero = () => {
   return (
-    <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">
+    <section className="relative h-[70vh] w-full flex items-center justify-center overflow-hidden">
       {/* Background Image - Dubai World Trade Centre themed */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -15,6 +15,9 @@ const EventsHero = () => {
           backgroundImage: "url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')"
         }}
       />
+
+      {/* Dark Overlay */}
+      <div className="absolute inset-0 bg-black/40 z-5"></div>
       {/* Main Content */}
       <div className="relative z-10 text-center text-white w-full">
         <motion.h1

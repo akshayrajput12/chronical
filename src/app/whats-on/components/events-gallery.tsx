@@ -66,12 +66,18 @@ const EventsGallery = () => {
   const nextSlide = () => {
     if (currentIndex < events.length - 3) {
       setCurrentIndex((prev) => prev + 1);
+    } else {
+      // Loop back to beginning for infinite scroll
+      setCurrentIndex(0);
     }
   };
 
   const prevSlide = () => {
     if (currentIndex > 0) {
       setCurrentIndex((prev) => prev - 1);
+    } else {
+      // Loop to end for infinite scroll
+      setCurrentIndex(Math.max(0, events.length - 3));
     }
   };
 
@@ -83,7 +89,7 @@ const EventsGallery = () => {
 
   return (
     <section className="py-16" style={{ backgroundColor: 'rgb(248, 248, 248)' }}>
-      <div className="w-full px-24 md:px-32 lg:px-48">
+      <div className="w-full px-8 md:px-12 lg:px-16">
         {/* Header */}
         <motion.div
           className="flex items-center justify-between mb-8"
@@ -133,7 +139,7 @@ const EventsGallery = () => {
 
         {/* Events Carousel Container */}
         {events.length > 0 ? (
-          <div className="relative overflow-hidden">
+          <div className="relative overflow-hidden mx-24">
             {/* Navigation Buttons */}
             {events.length > 3 && (
               <>
@@ -141,12 +147,7 @@ const EventsGallery = () => {
                   variant="ghost"
                   size="icon"
                   onClick={prevSlide}
-                  disabled={currentIndex === 0}
-                  className={`absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white shadow-lg rounded-full w-12 h-12 transition-all duration-300 ${
-                    currentIndex === 0
-                      ? 'text-gray-300 cursor-not-allowed'
-                      : 'text-gray-600 hover:text-gray-900'
-                  }`}
+                  className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-gray-100/80 hover:bg-gray-200/80 shadow-lg rounded-full w-12 h-12 transition-all duration-300 text-gray-500 hover:text-gray-600"
                 >
                   <ChevronLeft className="w-5 h-5" />
                 </Button>
@@ -155,12 +156,7 @@ const EventsGallery = () => {
                   variant="ghost"
                   size="icon"
                   onClick={nextSlide}
-                  disabled={currentIndex >= events.length - 3}
-                  className={`absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white shadow-lg rounded-full w-12 h-12 transition-all duration-300 ${
-                    currentIndex >= events.length - 3
-                      ? 'text-gray-300 cursor-not-allowed'
-                      : 'text-gray-600 hover:text-gray-900'
-                  }`}
+                  className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-gray-100/80 hover:bg-gray-200/80 shadow-lg rounded-full w-12 h-12 transition-all duration-300 text-gray-500 hover:text-gray-600"
                 >
                   <ChevronRight className="w-5 h-5" />
                 </Button>
@@ -168,10 +164,11 @@ const EventsGallery = () => {
             )}
 
           {/* Events Cards Container with Smooth Sliding */}
-          <div className="mx-12">
+          <div className="mx-12 overflow-hidden">
             <motion.div
-              className="flex gap-6"
-              animate={{ x: -currentIndex * 33.333 + "%" }}
+              className="flex gap-0"
+              style={{ width: `${events.length * (100/3)}%` }}
+              animate={{ x: -currentIndex * (100/3) + "%" }}
               transition={{
                 type: "spring",
                 stiffness: 300,
@@ -182,39 +179,51 @@ const EventsGallery = () => {
               {events.map((event, index) => (
                 <motion.div
                   key={event.id}
-                  className="flex-none w-full md:w-1/2 lg:w-1/3 px-1"
+                  className="flex-none"
+                  style={{ width: `${100/events.length}%` }}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                   viewport={{ once: true }}
                 >
                   <div
-                    className="w-80 bg-white rounded-md overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-lg mx-auto"
+                    className="bg-white cursor-pointer"
                     onClick={() => handleEventClick(event.id)}
                     style={{
-                      boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                      fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-                      height: '500px'
+                      width: '85%',
+                      display: 'inline-block',
+                      border: '0px',
+                      marginTop: '0px',
+                      marginBottom: '68px',
+                      backgroundColor: 'rgb(255, 255, 255)',
+                      transition: '0.5s',
+                      position: 'relative',
+                      cursor: 'pointer',
+                      marginRight: '2px',
+                      marginLeft: '2px',
+                      paddingTop: '50px',
+                      fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
                     }}
                   >
+                    {/* Green accent bar - positioned at very top of card */}
+                    <div
+                      className="absolute top-0 left-0 w-16 h-1"
+                      style={{ backgroundColor: '#22c55e', zIndex: 10 }}
+                    ></div>
+
                     {/* Card Header */}
-                    <div className="relative p-6 pb-8" style={{ minHeight: '200px' }}>
-                      {/* Green accent bar */}
-                      <div
-                        className="absolute top-0 left-0 w-16 h-1"
-                        style={{ backgroundColor: '#22c55e' }}
-                      ></div>
+                    <div className="relative px-8 pb-10" style={{ minHeight: '200px' }}>
 
                       {/* Date */}
                       <div
-                        className="text-xs text-gray-700 uppercase mb-6 mt-4 font-medium"
+                        className="text-xs text-gray-700 uppercase mb-5 mt-4 font-medium"
                         style={{ letterSpacing: '1px' }}
                       >
                         {event.dateRange}
                       </div>
 
                       {/* Title */}
-                      <h2 className="text-2xl font-normal text-gray-900 mb-6 leading-tight" style={{ fontFamily: 'serif' }}>
+                      <h2 className="text-xl font-normal text-gray-900 mb-5 leading-tight" style={{ fontFamily: 'serif' }}>
                         {event.title}
                       </h2>
 
