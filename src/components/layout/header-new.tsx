@@ -538,20 +538,67 @@ const Header = () => {
                                                                     : "bg-white/40",
                                                             )}
                                                         ></div>
-                                                        <SubNavItem
-                                                            href="/exhibit"
-                                                            label="EXHIBIT AT AN EVENT"
-                                                            subLabel="Be part of our leading events"
-                                                            isActive={
-                                                                activeLink ===
-                                                                "/exhibit"
-                                                            }
-                                                            onClick={() =>
-                                                                setActiveLink(
-                                                                    "/exhibit",
-                                                                )
-                                                            }
-                                                        />
+                                                        <div className="relative group">
+                                                            <SubNavItem
+                                                                href="/exhibit"
+                                                                label="EXHIBIT AT AN EVENT"
+                                                                subLabel="Be part of our leading events"
+                                                                isActive={
+                                                                    activeLink ===
+                                                                    "/exhibit"
+                                                                }
+                                                                onClick={() =>
+                                                                    setActiveLink(
+                                                                        "/exhibit",
+                                                                    )
+                                                                }
+                                                            />
+
+                                                            {/* Vertical Dropdown Menu - Only visible on hover */}
+                                                            <div
+                                                                className={cn(
+                                                                    "absolute left-0 top-full w-auto min-w-[300px] py-3 transition-all duration-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible z-50",
+                                                                    (isScrolled || isSpecialPage) &&
+                                                                        "bg-white shadow-md",
+                                                                )}
+                                                            >
+                                                                <div className="flex flex-col gap-y-1 px-4">
+                                                                    <Link
+                                                                        href="/customexhibitionstands"
+                                                                        className={cn(
+                                                                            "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2 whitespace-nowrap",
+                                                                            isScrolled || isSpecialPage
+                                                                                ? "text-gray-700"
+                                                                                : "text-white",
+                                                                        )}
+                                                                    >
+                                                                        CUSTOM EXHIBITION STANDS
+                                                                    </Link>
+                                                                    <Link
+                                                                        href="/doubledeckerexhibitionstands"
+                                                                        className={cn(
+                                                                            "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2 whitespace-nowrap",
+                                                                            isScrolled || isSpecialPage
+                                                                                ? "text-gray-700"
+                                                                                : "text-white",
+                                                                        )}
+                                                                    >
+                                                                        DOUBLE DECKER EXHIBITION STANDS
+                                                                    </Link>
+                                                                    <Link
+                                                                        href="/countrypavilionexpoboothsolutions"
+                                                                        className={cn(
+                                                                            "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2 whitespace-nowrap",
+                                                                            isScrolled || isSpecialPage
+                                                                                ? "text-gray-700"
+                                                                                : "text-white",
+                                                                        )}
+                                                                    >
+                                                                        COUNTRY PAVILION EXPO BOOTH SOLUTIONS
+                                                                    </Link>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                         <div
                                                             className={cn(
                                                                 "h-12 w-px mx-4",
@@ -699,22 +746,74 @@ const Header = () => {
                                                                 );
                                                             }}
                                                         />
-                                                        <MobileNavItem
-                                                            href="/exhibit"
-                                                            label="EXHIBIT AT AN EVENT"
-                                                            isActive={
-                                                                activeLink ===
-                                                                "/exhibit"
-                                                            }
-                                                            onClick={() => {
-                                                                setActiveLink(
-                                                                    "/exhibit",
-                                                                );
-                                                                setIsMobileMenuOpen(
-                                                                    false,
-                                                                );
-                                                            }}
-                                                        />
+                                                        <div>
+                                                            <MobileNavItem
+                                                                href="/exhibit"
+                                                                label="EXHIBIT AT AN EVENT"
+                                                                isActive={
+                                                                    activeLink ===
+                                                                    "/exhibit"
+                                                                }
+                                                                onClick={() => {
+                                                                    setActiveLink(
+                                                                        "/exhibit",
+                                                                    );
+                                                                    setIsMobileMenuOpen(
+                                                                        false,
+                                                                    );
+                                                                }}
+                                                            />
+                                                            <div className="pl-4 mt-2 space-y-2">
+                                                                <MobileNavItem
+                                                                    href="/customexhibitionstands"
+                                                                    label="CUSTOM EXHIBITION STANDS"
+                                                                    isActive={
+                                                                        activeLink ===
+                                                                        "/customexhibitionstands"
+                                                                    }
+                                                                    onClick={() => {
+                                                                        setActiveLink(
+                                                                            "/customexhibitionstands",
+                                                                        );
+                                                                        setIsMobileMenuOpen(
+                                                                            false,
+                                                                        );
+                                                                    }}
+                                                                />
+                                                                <MobileNavItem
+                                                                    href="/doubledeckerexhibitionstands"
+                                                                    label="DOUBLE DECKER EXHIBITION STANDS"
+                                                                    isActive={
+                                                                        activeLink ===
+                                                                        "/doubledeckerexhibitionstands"
+                                                                    }
+                                                                    onClick={() => {
+                                                                        setActiveLink(
+                                                                            "/doubledeckerexhibitionstands",
+                                                                        );
+                                                                        setIsMobileMenuOpen(
+                                                                            false,
+                                                                        );
+                                                                    }}
+                                                                />
+                                                                <MobileNavItem
+                                                                    href="/countrypavilionexpoboothsolutions"
+                                                                    label="COUNTRY PAVILION EXPO BOOTH SOLUTIONS"
+                                                                    isActive={
+                                                                        activeLink ===
+                                                                        "/countrypavilionexpoboothsolutions"
+                                                                    }
+                                                                    onClick={() => {
+                                                                        setActiveLink(
+                                                                            "/countrypavilionexpoboothsolutions",
+                                                                        );
+                                                                        setIsMobileMenuOpen(
+                                                                            false,
+                                                                        );
+                                                                    }}
+                                                                />
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 )}
                                             </div>
