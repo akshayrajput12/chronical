@@ -165,11 +165,11 @@ const Header = () => {
                                         activeClassName="bg-[#a5cd39] text-white"
                                     />
                                     <TabItem
-                                        href="/"
+                                        href="/conference"
                                         label="CONFERENCE"
-                                        isActive={activeLink === "/free-zone"}
+                                        isActive={activeLink === "/conference"}
                                         onClick={() => {
-                                            setActiveLink("/free-zone");
+                                            setActiveLink("/conference");
                                             setShowEventsSubMenu(false);
                                         }}
                                         className="bg-[#222222] hover:bg-[#333333]"
@@ -720,13 +720,13 @@ const Header = () => {
                                             </div>
 
                                             <MobileNavItem
-                                                href="/"
-                                                label="CONGRESS"
+                                                href="/conference"
+                                                label="CONFERENCE"
                                                 isActive={
-                                                    activeLink === "/free-zone"
+                                                    activeLink === "/conference"
                                                 }
                                                 onClick={() => {
-                                                    setActiveLink("/free-zone");
+                                                    setActiveLink("/conference");
                                                     setIsMobileMenuOpen(false);
                                                 }}
                                             />
