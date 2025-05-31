@@ -34,8 +34,8 @@ const CountryPavilionHero = () => {
                 COUNTRY PAVILION EXPO BOOTH DESIGN IN UAE
               </h1>
               <p className="text-base sm:text-lg md:text-xl lg:text-2xl max-w-4xl mx-auto leading-relaxed">
-                Chronicle Exhibition Organizing LLC masters the art of designing for country pavilion expo booth. Let your brand shine at 
-                international events by using our unique country pavilion exhibition stands. Explore stunning designs that show your country's 
+                Chronicle Exhibition Organizing LLC masters the art of designing for country pavilion expo booth. Let your brand shine at
+                international events by using our unique country pavilion exhibition stands. Explore stunning designs that show your country&apos;s
                 uniqueness with a stunning and memorable manner.
               </p>
             </motion.div>

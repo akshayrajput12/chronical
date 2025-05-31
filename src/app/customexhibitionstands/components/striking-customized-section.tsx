@@ -48,7 +48,7 @@ const StrikingCustomizedSection = () => {
 
                 <div className="space-y-4 text-gray-700">
                   <p className="text-base leading-relaxed text-justify">
-                    Interactive displays and eye-catching designs will help you communicate your company's message effectively and
+                    Interactive displays and eye-catching designs will help you communicate your company&apos;s message effectively and
                     convincingly. From materials and colors, to dimensions, shapes and design, your display is completely tailored to your
                     brand and business which allows you to present your services and products in the most effective and appealing manner
                     possible.
@@ -58,7 +58,7 @@ const StrikingCustomizedSection = () => {
                     You can use our custom exhibit stands for various branding and exhibit needs, such as portable fitting rooms, entry
                     spaces, custom workspaces, and pop-up stores. The distinctive stand designed by Chronicle creates an
                     unforgettable impression on the people who visit your stand. As more than 50% of business decision makers would
-                    like sales representatives to visit their business following the event, you'll need a stand to showcase your product in the
+                    like sales representatives to visit their business following the event, you&apos;ll need a stand to showcase your product in the
                     best way possible. Our stand is distinct and appealing design which is sure to draw attention.
                   </p>
                 </div>

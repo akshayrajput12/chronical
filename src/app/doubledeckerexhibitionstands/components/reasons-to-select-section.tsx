@@ -30,8 +30,8 @@ const ReasonsToSelectSection = () => {
             viewport={{ once: true }}
           >
             <p className="text-base leading-relaxed text-justify">
-              Chronicle Exhibition Organizing LLC stands in the forefront of custom Double Decker exhibition stand design to match your 
-              brand's identity. Our expert team of builders and designers will ensure smooth execution, transforming your ideas into an 
+              Chronicle Exhibition Organizing LLC stands in the forefront of custom Double Decker exhibition stand design to match your
+              brand&apos;s identity. Our expert team of builders and designers will ensure smooth execution, transforming your ideas into an
               exhibition reality.
             </p>
 
@@ -48,7 +48,7 @@ const ReasonsToSelectSection = () => {
             </p>
 
             <p className="text-base leading-relaxed text-justify">
-              Whether it's a trade show or corporate event, Double Storey Exhibition Stands in Dubai is here to help. Contact us today to 
+              Whether it&apos;s a trade show or corporate event, Double Storey Exhibition Stands in Dubai is here to help. Contact us today to
               discuss your requirements and elevate your exhibition presence with our exceptional double-decker stands.
             </p>
           </motion.div>

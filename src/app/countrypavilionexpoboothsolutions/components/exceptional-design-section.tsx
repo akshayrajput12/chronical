@@ -26,7 +26,7 @@ const ExceptionalDesignSection = () => {
 
                   <div className="space-y-4 text-gray-700">
                     <p className="text-base leading-relaxed text-justify">
-                      <span className="text-[#a5cd39] font-medium">Country Pavilion Expo Booth</span> reflects a particular nation's
+                      <span className="text-[#a5cd39] font-medium">Country Pavilion Expo Booth</span> reflects a particular nation&apos;s
                       culture, religion & way of living. It is a chain of small
                       exhibition stands where you can display your products with
                       the member exhibitors of your country. Explore companies
@@ -36,7 +36,7 @@ const ExceptionalDesignSection = () => {
 
                     <p className="text-base leading-relaxed text-justify">
                       Pavilion booths are highly beneficial for promoting brands &
-                      products. Let's <span className="text-[#a5cd39] font-medium">quickly look into its pros</span> →
+                      products. Let&apos;s <span className="text-[#a5cd39] font-medium">quickly look into its pros</span> →
                     </p>
 
                     <ul className="space-y-3 ml-6">
@@ -99,7 +99,7 @@ const ExceptionalDesignSection = () => {
               viewport={{ once: true }}
             >
               <p className="text-base leading-relaxed text-justify text-gray-700">
-                Ready to showcase your country's excellence on the world stage? Contact us today to discuss your requirements and see how
+                Ready to showcase your country&apos;s excellence on the world stage? Contact us today to discuss your requirements and see how
                 we can help you make a lasting impact with our country pavilion exhibition stands in Dubai.
               </p>
             </motion.div>

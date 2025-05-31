@@ -2,6 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 const EffectiveCommunicationSection = () => {
   return (
@@ -22,9 +23,9 @@ const EffectiveCommunicationSection = () => {
               </h2>
 
               <p className="text-base leading-relaxed text-justify">
-                An exhibition booth makes you look different from other exhibitors & passes on the relevant brand message to the 
-                clients. We understand the importance of standing out. That's why we ensure your stand grabs attention and effectively 
-                communicates your message. From innovative layouts to bold graphics, we use the latest technology to create 
+                An exhibition booth makes you look different from other exhibitors & passes on the relevant brand message to the
+                clients. We understand the importance of standing out. That&apos;s why we ensure your stand grabs attention and effectively
+                communicates your message. From innovative layouts to bold graphics, we use the latest technology to create
                 unforgettable experiences.
               </p>
 
@@ -35,7 +36,7 @@ const EffectiveCommunicationSection = () => {
               </p>
 
               <p className="text-base leading-relaxed text-justify">
-                Whether it's a trade show or corporate event, Double Storey Exhibition Stands in Dubai is here to help. Contact us today to 
+                Whether it&apos;s a trade show or corporate event, Double Storey Exhibition Stands in Dubai is here to help. Contact us today to
                 discuss your requirements and elevate your exhibition presence with our exceptional double-decker stands.
               </p>
             </motion.div>
@@ -53,10 +54,12 @@ const EffectiveCommunicationSection = () => {
 
               {/* Image Container */}
               <div className="relative h-64 sm:h-80 md:h-96 lg:h-[400px] overflow-hidden z-10">
-                <img
+                <Image
                   src="https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
                   alt="Exhibition Communication"
-                  className="w-full h-full object-cover"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
                 />
               </div>
             </motion.div>

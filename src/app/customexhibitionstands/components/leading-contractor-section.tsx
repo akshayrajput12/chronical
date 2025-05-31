@@ -28,7 +28,7 @@ const LeadingContractorSection = () => {
 
               <p className="text-base leading-relaxed text-justify">
                 At Custom Exhibition Stands, we recognize the uniqueness of every brand and commit ourselves to transforming your vision
-                into reality. Whether you're gearing up for a trade show, conference, or any other event, our team actively collaborate with
+                into reality. Whether you&apos;re gearing up for a trade show, conference, or any other event, our team actively collaborate with
                 you to conceive and construct tailor-made exhibition stands that mirror your brand identity and objectives.
               </p>
             </div>
