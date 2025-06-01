@@ -73,7 +73,7 @@ const BlogDetailPage = ({ params }: BlogDetailPageProps) => {
     }
 
     return (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-white mt-16 md:mt-20 lg:mt-24">
             <BlogDetailHero
                 title={blogPost.title}
                 subtitle={blogPost.subtitle}

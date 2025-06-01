@@ -202,9 +202,10 @@ export default function EventDetailPage() {
       </section>
 
       {/* Main Content Section */}
-      <section className="py-12 bg-gray-50">
-        <div className="w-full px-24 md:px-32 lg:px-48">
-          <div className="flex flex-col lg:flex-row gap-12 items-start">
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="flex flex-col lg:flex-row gap-12 items-start">
             {/* Left Column - Event Logo (30%) */}
             <motion.div
               className="w-full lg:w-[30%]"
@@ -243,13 +244,15 @@ export default function EventDetailPage() {
                 </p>
               </div>
             </motion.div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Action Buttons Section */}
-      <section className="py-8 bg-gray-100">
-        <div className="w-full px-24 md:px-32 lg:px-48">
+      <section className="py-16 bg-gray-100">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
           <motion.div
             className="flex flex-col md:flex-row items-center justify-between gap-6"
             initial={{ opacity: 0, y: 20 }}
@@ -304,12 +307,14 @@ export default function EventDetailPage() {
               </div>
             </div>
           </motion.div>
+          </div>
         </div>
       </section>
 
       {/* Other Events Section */}
       <section className="py-16 bg-gray-100">
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
           <motion.h2
             className="text-2xl font-medium text-center text-gray-700 mb-12"
             initial={{ opacity: 0, y: 30 }}
@@ -375,6 +380,7 @@ export default function EventDetailPage() {
                 ))}
               </div>
             </div>
+          </div>
           </div>
         </div>
       </section>

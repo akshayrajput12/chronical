@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 function PortfolioPage() {
   return (
-    <div className="flex flex-col relative">
+    <div className="flex flex-col relative mt-16 md:mt-20 lg:mt-24">
       <PortfolioGallery />
       <BoothRequirements />
     </div>
