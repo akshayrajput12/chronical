@@ -194,20 +194,6 @@ const HeroSection: React.FC = () => {
                         {heroData.subheading}
                     </motion.h2>
 
-                    <motion.div
-                        className="text-xl sm:text-2xl font-medium text-[#a5cd39] h-12 mb-6"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.8, delay: 0.8 }}
-                    >
-                        <span className="inline-block">
-                            Specialists in&nbsp;
-                        </span>
-                        <span className="inline-block border-r-2 border-[#a5cd39] pr-1 animate-pulse">
-                            {displayText}
-                        </span>
-                    </motion.div>
-
                     <motion.p
                         className="text-base sm:text-lg font-medium pt-2"
                         initial={{ opacity: 0, y: 20 }}

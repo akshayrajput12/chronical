@@ -152,8 +152,23 @@ const Header = () => {
                                 {/* Left Main Navigation Tabs */}
                                 <div className="hidden lg:flex items-center">
                                     <TabItem
+                                        href="/conference"
+                                        label="CONFERENCE"
+                                        isActive={activeLink === "/conference"}
+                                        onClick={() => {
+                                            setActiveLink("/conference");
+                                            setShowEventsSubMenu(false);
+                                        }}
+                                        className={cn(
+                                            "bg-[#222222]",
+                                            activeLink !== "/conference" &&
+                                                "hover:bg-[#333333]",
+                                        )}
+                                        activeClassName="bg-[#a5cd39] text-white"
+                                    />
+                                    <TabItem
                                         href="/"
-                                        label="EXPO"
+                                        label="EXPO BOOTH"
                                         isActive={
                                             activeLink === "/events" ||
                                             showEventsSubMenu
@@ -162,20 +177,15 @@ const Header = () => {
                                             setActiveLink("/events");
                                             toggleEventsSubMenu();
                                         }}
-                                        className="bg-[#222222] hover:bg-[#333333]"
+                                        className={cn(
+                                            "bg-[#222222]",
+                                            activeLink !== "/events" ||
+                                                (!showEventsSubMenu &&
+                                                    "hover:bg-[#333333]"),
+                                        )}
                                         activeClassName="bg-[#a5cd39] text-white"
                                     />
-                                    <TabItem
-                                        href="/conference"
-                                        label="CONFERENCE"
-                                        isActive={activeLink === "/conference"}
-                                        onClick={() => {
-                                            setActiveLink("/conference");
-                                            setShowEventsSubMenu(false);
-                                        }}
-                                        className="bg-[#222222] hover:bg-[#333333]"
-                                        activeClassName="bg-[#a5cd39] text-white"
-                                    />
+
                                     <TabItem
                                         href="/kiosk"
                                         label="KIOSK"
@@ -184,7 +194,11 @@ const Header = () => {
                                             setActiveLink("/kiosk");
                                             setShowEventsSubMenu(false);
                                         }}
-                                        className="bg-[#222222] hover:bg-[#333333]"
+                                        className={cn(
+                                            "bg-[#222222]",
+                                            activeLink !== "/kiosk" &&
+                                                "hover:bg-[#333333]",
+                                        )}
                                         activeClassName="bg-[#a5cd39] text-white"
                                     />
                                 </div>
@@ -196,14 +210,6 @@ const Header = () => {
                                         label="ABOUT US"
                                         isActive={activeLink === "/about"}
                                         onClick={() => setActiveLink("/about")}
-                                    />
-                                    <NavItem
-                                        href="/portfolio"
-                                        label="PORTFOLIO"
-                                        isActive={activeLink === "/portfolio"}
-                                        onClick={() =>
-                                            setActiveLink("/portfolio")
-                                        }
                                     />
                                     <NavItem
                                         href="/support"
@@ -220,7 +226,7 @@ const Header = () => {
                                         onClick={() => setActiveLink("/blog")}
                                     />
                                     <NavItem
-                                        href="/contact"
+                                        href="/contact-us"
                                         label="CONTACT US"
                                         isActive={activeLink === "/contact"}
                                         onClick={() =>
@@ -282,7 +288,7 @@ const Header = () => {
                                     <div className="container mx-auto px-4 relative z-10">
                                         <div className="flex flex-col">
                                             {/* Events Sub-Navigation */}
-                                            <nav className="flex items-center w-full">
+                                            <nav className="flex items-start w-full">
                                                 <div className="flex-shrink-0 mr-8">
                                                     <Logo
                                                         isScrolled={
@@ -291,13 +297,13 @@ const Header = () => {
                                                         }
                                                     />
                                                 </div>
-                                                <div className="flex items-center justify-between flex-1">
+                                                <div className="flex items-start justify-center flex-1">
                                                     <div className="flex items-center">
                                                         {/* Visit Us with Horizontal Dropdown */}
                                                         <div className="relative group">
                                                             <SubNavItem
                                                                 href="/visit-us"
-                                                                label="VISIT US"
+                                                                label="EXHIBITION STANDS"
                                                                 subLabel="Hotels, dining and amenities"
                                                                 isActive={
                                                                     activeLink ===
@@ -330,9 +336,8 @@ const Header = () => {
                                                                                 : "text-white",
                                                                         )}
                                                                     >
-                                                                        RESTAURANTS
-                                                                        AND
-                                                                        RETAIL
+                                                                        CUSTOM
+                                                                        STANDS
                                                                     </Link>
                                                                     <Link
                                                                         href="/getting-here"
@@ -344,8 +349,9 @@ const Header = () => {
                                                                                 : "text-white",
                                                                         )}
                                                                     >
-                                                                        GETTING
-                                                                        HERE
+                                                                        DOUBLE
+                                                                        DECKER
+                                                                        STANDS
                                                                     </Link>
                                                                     <Link
                                                                         href="/hotels"
@@ -357,20 +363,9 @@ const Header = () => {
                                                                                 : "text-white",
                                                                         )}
                                                                     >
-                                                                        HOTELS
-                                                                    </Link>
-                                                                    <Link
-                                                                        href="/neighbourhood-guide"
-                                                                        className={cn(
-                                                                            "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
-                                                                            isScrolled ||
-                                                                                isSpecialPage
-                                                                                ? "text-gray-700"
-                                                                                : "text-white",
-                                                                        )}
-                                                                    >
-                                                                        NEIGHBOURHOOD
-                                                                        GUIDE
+                                                                        EXPO
+                                                                        PAVILION
+                                                                        STANDS
                                                                     </Link>
                                                                 </div>
                                                             </div>
@@ -381,12 +376,12 @@ const Header = () => {
                                                                 isScrolled ||
                                                                     isSpecialPage
                                                                     ? "bg-gray-300"
-                                                                    : "bg-white/40",
+                                                                    : "bg-gray-300",
                                                             )}
                                                         ></div>
                                                         <SubNavItem
                                                             href="/whats-on"
-                                                            label="WHAT'S ON"
+                                                            label="TOP EXHIBITIONS"
                                                             subLabel="Upcoming exhibitions and events"
                                                             isActive={
                                                                 activeLink ===
@@ -404,13 +399,13 @@ const Header = () => {
                                                                 isScrolled ||
                                                                     isSpecialPage
                                                                     ? "bg-gray-300"
-                                                                    : "bg-white/40",
+                                                                    : "bg-gray-300",
                                                             )}
                                                         ></div>
                                                         <div className="relative group">
                                                             <SubNavItem
                                                                 href="/experience-dubai"
-                                                                label="EXPERIENCE DUBAI"
+                                                                label="TOP EXPO LOCATIONS"
                                                                 subLabel="The best Dubai has to offer"
                                                                 isActive={
                                                                     activeLink ===
@@ -422,46 +417,6 @@ const Header = () => {
                                                                     )
                                                                 }
                                                             />
-
-                                                            {/* Horizontal Dropdown Menu - Only visible on hover */}
-                                                            <div
-                                                                className={cn(
-                                                                    "absolute left-0 top-full w-[600px] py-3 transition-all duration-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible z-50",
-                                                                    (isScrolled ||
-                                                                        isSpecialPage) &&
-                                                                        "bg-white shadow-md",
-                                                                )}
-                                                            >
-                                                                <div className="flex space-x-8 px-4">
-                                                                    <Link
-                                                                        href="/plan-your-trip"
-                                                                        className={cn(
-                                                                            "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
-                                                                            isScrolled ||
-                                                                                isSpecialPage
-                                                                                ? "text-gray-700"
-                                                                                : "text-white",
-                                                                        )}
-                                                                    >
-                                                                        PLAN
-                                                                        YOUR
-                                                                        TRIP
-                                                                    </Link>
-                                                                    <Link
-                                                                        href="/experience-dubai"
-                                                                        className={cn(
-                                                                            "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
-                                                                            isScrolled ||
-                                                                                isSpecialPage
-                                                                                ? "text-gray-700"
-                                                                                : "text-white",
-                                                                        )}
-                                                                    >
-                                                                        EXPERIENCE
-                                                                        DUBAI
-                                                                    </Link>
-                                                                </div>
-                                                            </div>
                                                         </div>
                                                         <div
                                                             className={cn(
@@ -469,13 +424,13 @@ const Header = () => {
                                                                 isScrolled ||
                                                                     isSpecialPage
                                                                     ? "bg-gray-300"
-                                                                    : "bg-white/40",
+                                                                    : "bg-gray-300",
                                                             )}
                                                         ></div>
                                                         <div className="relative group">
                                                             <SubNavItem
                                                                 href="/organise-event"
-                                                                label="ORGANISE AN EVENT"
+                                                                label="PORTFOLIO"
                                                                 subLabel="Turnkey solutions for your events"
                                                                 isActive={
                                                                     activeLink ===
@@ -487,177 +442,7 @@ const Header = () => {
                                                                     )
                                                                 }
                                                             />
-
-                                                            {/* Horizontal Dropdown Menu - Only visible on hover */}
-                                                            <div
-                                                                className={cn(
-                                                                    "absolute left-0 top-full w-[600px] py-3 transition-all duration-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible z-50",
-                                                                    (isScrolled ||
-                                                                        isSpecialPage) &&
-                                                                        "bg-white shadow-md",
-                                                                )}
-                                                            >
-                                                                <div className="flex space-x-8 px-4">
-                                                                    <Link
-                                                                        href="/venues"
-                                                                        className={cn(
-                                                                            "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
-                                                                            isScrolled ||
-                                                                                isSpecialPage
-                                                                                ? "text-gray-700"
-                                                                                : "text-white",
-                                                                        )}
-                                                                    >
-                                                                        VENUES
-                                                                    </Link>
-                                                                    <Link
-                                                                        href="/venue-services"
-                                                                        className={cn(
-                                                                            "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
-                                                                            isScrolled ||
-                                                                                isSpecialPage
-                                                                                ? "text-gray-700"
-                                                                                : "text-white",
-                                                                        )}
-                                                                    >
-                                                                        VENUE
-                                                                        SERVICES
-                                                                    </Link>
-                                                                    <Link
-                                                                        href="/venue-explorer"
-                                                                        className={cn(
-                                                                            "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
-                                                                            isScrolled ||
-                                                                                isSpecialPage
-                                                                                ? "text-gray-700"
-                                                                                : "text-white",
-                                                                        )}
-                                                                    >
-                                                                        VENUE
-                                                                        EXPLORER
-                                                                    </Link>
-                                                                    <Link
-                                                                        href="/event-enquiry"
-                                                                        className={cn(
-                                                                            "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
-                                                                            isScrolled ||
-                                                                                isSpecialPage
-                                                                                ? "text-gray-700"
-                                                                                : "text-white",
-                                                                        )}
-                                                                    >
-                                                                        EVENT
-                                                                        ENQUIRY
-                                                                    </Link>
-                                                                </div>
-                                                            </div>
                                                         </div>
-                                                        <div
-                                                            className={cn(
-                                                                "h-12 w-px mx-4",
-                                                                isScrolled ||
-                                                                    isSpecialPage
-                                                                    ? "bg-gray-300"
-                                                                    : "bg-white/40",
-                                                            )}
-                                                        ></div>
-                                                        <div className="relative group">
-                                                            <SubNavItem
-                                                                href="/exhibit"
-                                                                label="EXHIBIT AT AN EVENT"
-                                                                subLabel="Be part of our leading events"
-                                                                isActive={
-                                                                    activeLink ===
-                                                                    "/exhibit"
-                                                                }
-                                                                onClick={() =>
-                                                                    setActiveLink(
-                                                                        "/exhibit",
-                                                                    )
-                                                                }
-                                                            />
-
-                                                            {/* Vertical Dropdown Menu - Only visible on hover */}
-                                                            <div
-                                                                className={cn(
-                                                                    "absolute left-0 top-full w-auto min-w-[300px] py-3 transition-all duration-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible z-50",
-                                                                    (isScrolled ||
-                                                                        isSpecialPage) &&
-                                                                        "bg-white shadow-md",
-                                                                )}
-                                                            >
-                                                                <div className="flex flex-col gap-y-1 px-4">
-                                                                    <Link
-                                                                        href="/customexhibitionstands"
-                                                                        className={cn(
-                                                                            "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2 whitespace-nowrap",
-                                                                            isScrolled ||
-                                                                                isSpecialPage
-                                                                                ? "text-gray-700"
-                                                                                : "text-white",
-                                                                        )}
-                                                                    >
-                                                                        CUSTOM
-                                                                        EXHIBITION
-                                                                        STANDS
-                                                                    </Link>
-                                                                    <Link
-                                                                        href="/doubledeckerexhibitionstands"
-                                                                        className={cn(
-                                                                            "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2 whitespace-nowrap",
-                                                                            isScrolled ||
-                                                                                isSpecialPage
-                                                                                ? "text-gray-700"
-                                                                                : "text-white",
-                                                                        )}
-                                                                    >
-                                                                        DOUBLE
-                                                                        DECKER
-                                                                        EXHIBITION
-                                                                        STANDS
-                                                                    </Link>
-                                                                    <Link
-                                                                        href="/countrypavilionexpoboothsolutions"
-                                                                        className={cn(
-                                                                            "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2 whitespace-nowrap",
-                                                                            isScrolled ||
-                                                                                isSpecialPage
-                                                                                ? "text-gray-700"
-                                                                                : "text-white",
-                                                                        )}
-                                                                    >
-                                                                        COUNTRY
-                                                                        PAVILION
-                                                                        EXPO
-                                                                        BOOTH
-                                                                        SOLUTIONS
-                                                                    </Link>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div
-                                                            className={cn(
-                                                                "h-12 w-px mx-4",
-                                                                isScrolled ||
-                                                                    isSpecialPage
-                                                                    ? "bg-gray-300"
-                                                                    : "bg-white/40",
-                                                            )}
-                                                        ></div>
-                                                        <SubNavItem
-                                                            href="/contact-us"
-                                                            label="CONTACT US"
-                                                            subLabel="Get in touch with our team"
-                                                            isActive={
-                                                                activeLink ===
-                                                                "/contact-us"
-                                                            }
-                                                            onClick={() =>
-                                                                setActiveLink(
-                                                                    "/contact-us",
-                                                                )
-                                                            }
-                                                        />
                                                     </div>
                                                 </div>
                                             </nav>
@@ -1007,7 +792,7 @@ const TabItem = ({
             <Link
                 href={href}
                 className={cn(
-                    "uppercase font-semibold transition-colors py-3 px-6 text-white text-sm tracking-wide",
+                    "uppercase font-semibold transition-colors p-4 px-3 text-white text-sm tracking-wide",
                     className,
                     isActive && (activeClassName || className),
                 )}
@@ -1048,7 +833,7 @@ const NavItem = ({
         <Link
             href={href}
             className={cn(
-                "uppercase font-light transition-colors py-6 px-3 text-[12px]",
+                "uppercase font-medium transition-colors px-3 text-[12px]",
                 "text-white hover:text-[#a5cd39]",
                 isActive && "text-[#a5cd39]",
             )}
