@@ -1,5 +1,4 @@
 ### Chronicles UAE WebSite 
-
 * install peacock, prettier and eslint for formatting and linting
 
 
