@@ -112,17 +112,17 @@ const HeroSection: React.FC = () => {
                 loop
                 muted
                 playsInline
-                className="absolute top-0 left-0 w-full h-full object-cover"
+                className="absolute top-0 left-0 w-full h-4/5 object-cover"
             >
                 <source src={staticVideoPath} type="video/mp4" />
                 Your browser does not support the video tag.
             </motion.video>
 
             {/* Greyish Overlay */}
-            <div className="absolute top-0 left-0 w-full h-full bg-[#1a1a1a]/60 z-10" />
+            <div className="absolute top-0 left-0 w-full h-4/5 bg-[#1a1a1a]/60 z-10" />
 
             {/* Content */}
-            <div className="relative z-20 flex items-center justify-center h-full px-4 text-center text-white pt-16 md:pt-20">
+            <div className="relative z-20 flex items-center justify-center h-4/5 px-4 text-center text-white pt-16 md:pt-20">
                 <motion.div
                     className="max-w-6xl mx-auto"
                     initial={{ opacity: 0, y: 20 }}
@@ -131,7 +131,7 @@ const HeroSection: React.FC = () => {
                 >
                     <div className="overflow-hidden mb-6">
                         <motion.h1
-                            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold whitespace-normal md:whitespace-nowrap leading-tight tracking-tight"
+                            className="text-3xl sm:text-4xl md:text-5xl font-bold whitespace-normal md:whitespace-nowrap leading-tight tracking-tight"
                             initial={{ y: 100, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{
@@ -186,7 +186,7 @@ const HeroSection: React.FC = () => {
                     </div>
 
                     <motion.h2
-                        className="text-xl sm:text-2xl md:text-3xl font-semibold mb-6"
+                        className="text-xl sm:text-2xl font-semibold mb-6"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 1.5 }}
@@ -195,7 +195,7 @@ const HeroSection: React.FC = () => {
                     </motion.h2>
 
                     <motion.div
-                        className="text-xl sm:text-2xl md:text-3xl font-medium text-[#a5cd39] h-12 mb-6"
+                        className="text-xl sm:text-2xl font-medium text-[#a5cd39] h-12 mb-6"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.8, delay: 0.8 }}
@@ -209,7 +209,7 @@ const HeroSection: React.FC = () => {
                     </motion.div>
 
                     <motion.p
-                        className="text-base sm:text-lg md:text-xl font-medium pt-2"
+                        className="text-base sm:text-lg font-medium pt-2"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 1 }}

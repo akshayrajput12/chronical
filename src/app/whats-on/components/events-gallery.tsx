@@ -9,264 +9,367 @@ import Image from "next/image";
 import { getAllEvents, Event } from "../data/events";
 
 const EventsGallery = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedFilter, setSelectedFilter] = useState("All");
-  const router = useRouter();
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [selectedFilter, setSelectedFilter] = useState("All");
+    const [cardsToShow, setCardsToShow] = useState(3);
+    const [cardWidth, setCardWidth] = useState(320);
+    const router = useRouter();
 
-  // Get all events from centralized data
-  const allEvents: Event[] = getAllEvents();
+    // Get all events from centralized data
+    const allEvents: Event[] = getAllEvents();
 
-  // Filter options based on event dates
-  const filterOptions = [
-    "All",
-    "May 2025",
-    "June 2025",
-    "July 2025",
-    "August 2025",
-    "September 2025",
-    "October 2025",
-    "November 2025",
-    "December 2025",
-    "January 2026",
-    "February 2026"
-  ];
+    // Handle responsive cards display and card width - Always show 3 cards
+    React.useEffect(() => {
+        const handleResize = () => {
+            setCardsToShow(3); // Always show 3 cards
 
-  // Filter events based on selected month
-  const getFilteredEvents = () => {
-    if (selectedFilter === "All") {
-      return allEvents;
-    }
+            // Calculate card width to fit 3 cards with gaps
+            const containerPadding =
+                window.innerWidth < 640
+                    ? 16
+                    : window.innerWidth < 1024
+                    ? 32
+                    : 64;
+            const totalGaps = 2 * 16; // 2 gaps between 3 cards (16px each)
+            const availableWidth =
+                window.innerWidth - containerPadding * 2 - totalGaps;
+            const calculatedCardWidth = Math.floor(availableWidth / 3);
 
-    return allEvents.filter(event => {
-      const eventDate = event.dateRange.toLowerCase();
-      const filterMonth = selectedFilter.toLowerCase();
+            // Set minimum and maximum card widths
+            const minCardWidth = 250;
+            const maxCardWidth = 350;
 
-      if (filterMonth.includes("may")) return eventDate.includes("may");
-      if (filterMonth.includes("june") || filterMonth.includes("jun")) return eventDate.includes("jun");
-      if (filterMonth.includes("july") || filterMonth.includes("jul")) return eventDate.includes("jul");
-      if (filterMonth.includes("august") || filterMonth.includes("aug")) return eventDate.includes("aug");
-      if (filterMonth.includes("september") || filterMonth.includes("sep")) return eventDate.includes("sep");
-      if (filterMonth.includes("october") || filterMonth.includes("oct")) return eventDate.includes("oct");
-      if (filterMonth.includes("november") || filterMonth.includes("nov")) return eventDate.includes("nov");
-      if (filterMonth.includes("december") || filterMonth.includes("dec")) return eventDate.includes("dec");
-      if (filterMonth.includes("january") || filterMonth.includes("jan")) return eventDate.includes("jan");
-      if (filterMonth.includes("february") || filterMonth.includes("feb")) return eventDate.includes("feb");
+            setCardWidth(
+                Math.max(
+                    minCardWidth,
+                    Math.min(maxCardWidth, calculatedCardWidth),
+                ),
+            );
+        };
 
-      return false;
-    });
-  };
+        handleResize();
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
-  const events = getFilteredEvents();
+    // Filter options based on event dates
+    const filterOptions = [
+        "All",
+        "May 2025",
+        "June 2025",
+        "July 2025",
+        "August 2025",
+        "September 2025",
+        "October 2025",
+        "November 2025",
+        "December 2025",
+        "January 2026",
+        "February 2026",
+    ];
 
-  // Reset carousel index when filter changes
-  React.useEffect(() => {
-    setCurrentIndex(0);
-  }, [selectedFilter]);
+    // Filter events based on selected month
+    const getFilteredEvents = () => {
+        if (selectedFilter === "All") {
+            return allEvents;
+        }
 
-  const nextSlide = () => {
-    if (currentIndex < events.length - 3) {
-      setCurrentIndex((prev) => prev + 1);
-    }
-  };
+        return allEvents.filter(event => {
+            const eventDate = event.dateRange.toLowerCase();
+            const filterMonth = selectedFilter.toLowerCase();
 
-  const prevSlide = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex((prev) => prev - 1);
-    }
-  };
+            if (filterMonth.includes("may")) return eventDate.includes("may");
+            if (filterMonth.includes("june") || filterMonth.includes("jun"))
+                return eventDate.includes("jun");
+            if (filterMonth.includes("july") || filterMonth.includes("jul"))
+                return eventDate.includes("jul");
+            if (filterMonth.includes("august") || filterMonth.includes("aug"))
+                return eventDate.includes("aug");
+            if (
+                filterMonth.includes("september") ||
+                filterMonth.includes("sep")
+            )
+                return eventDate.includes("sep");
+            if (filterMonth.includes("october") || filterMonth.includes("oct"))
+                return eventDate.includes("oct");
+            if (filterMonth.includes("november") || filterMonth.includes("nov"))
+                return eventDate.includes("nov");
+            if (filterMonth.includes("december") || filterMonth.includes("dec"))
+                return eventDate.includes("dec");
+            if (filterMonth.includes("january") || filterMonth.includes("jan"))
+                return eventDate.includes("jan");
+            if (filterMonth.includes("february") || filterMonth.includes("feb"))
+                return eventDate.includes("feb");
 
-  const handleEventClick = (eventId: string) => {
-    router.push(`/whats-on/${eventId}`);
-  };
+            return false;
+        });
+    };
 
+    const events = getFilteredEvents();
 
+    // Reset carousel index when filter changes
+    React.useEffect(() => {
+        setCurrentIndex(0);
+    }, [selectedFilter]);
 
-  return (
-    <section className="py-16" style={{ backgroundColor: 'rgb(248, 248, 248)' }}>
-      <div className="w-full px-24 md:px-32 lg:px-48">
-        {/* Header */}
-        <motion.div
-          className="flex items-center justify-between mb-8"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
+    // Calculate max index (similar to your script)
+    const maxIndex = Math.max(0, events.length - cardsToShow);
+
+    const nextSlide = () => {
+        if (currentIndex < maxIndex) {
+            setCurrentIndex(prev => prev + 1);
+        } else {
+            // Loop back to beginning for infinite scroll
+            setCurrentIndex(0);
+        }
+    };
+
+    const prevSlide = () => {
+        if (currentIndex > 0) {
+            setCurrentIndex(prev => prev - 1);
+        } else {
+            // Loop to end for infinite scroll
+            setCurrentIndex(maxIndex);
+        }
+    };
+
+    const handleEventClick = (eventId: string) => {
+        router.push(`/whats-on/${eventId}`);
+    };
+
+    return (
+        <section
+            className="py-12 sm:py-16 lg:py-20"
+            style={{ backgroundColor: "rgb(248, 248, 248)" }}
         >
-          <div className="text-center flex-1">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2 font-serif">
-              Explore DWTC Events
-            </h2>
-          </div>
-          <Button
-            variant="ghost"
-            className="hidden md:flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-all duration-300 text-sm font-medium"
-          >
-            VIEW ALL
-            <ArrowRight className="w-4 h-4" />
-          </Button>
-        </motion.div>
-
-        {/* Filter Tabs */}
-        <motion.div
-          className="mb-12"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          viewport={{ once: true }}
-        >
-          <div className="flex flex-wrap gap-2 justify-center">
-            {filterOptions.map((filter) => (
-              <button
-                key={filter}
-                onClick={() => setSelectedFilter(filter)}
-                className={`px-4 py-2 text-sm font-medium transition-all duration-300 ${
-                  selectedFilter === filter
-                    ? 'bg-black text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200'
-                }`}
-              >
-                {filter}
-              </button>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Events Carousel Container */}
-        {events.length > 0 ? (
-          <div className="relative overflow-hidden">
-            {/* Navigation Buttons */}
-            {events.length > 3 && (
-              <>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={prevSlide}
-                  disabled={currentIndex === 0}
-                  className={`absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white shadow-lg rounded-full w-12 h-12 transition-all duration-300 ${
-                    currentIndex === 0
-                      ? 'text-gray-300 cursor-not-allowed'
-                      : 'text-gray-600 hover:text-gray-900'
-                  }`}
-                >
-                  <ChevronLeft className="w-5 h-5" />
-                </Button>
-
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={nextSlide}
-                  disabled={currentIndex >= events.length - 3}
-                  className={`absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white shadow-lg rounded-full w-12 h-12 transition-all duration-300 ${
-                    currentIndex >= events.length - 3
-                      ? 'text-gray-300 cursor-not-allowed'
-                      : 'text-gray-600 hover:text-gray-900'
-                  }`}
-                >
-                  <ChevronRight className="w-5 h-5" />
-                </Button>
-              </>
-            )}
-
-          {/* Events Cards Container with Smooth Sliding */}
-          <div className="mx-12">
-            <motion.div
-              className="flex gap-6"
-              animate={{ x: -currentIndex * 33.333 + "%" }}
-              transition={{
-                type: "spring",
-                stiffness: 300,
-                damping: 30,
-                duration: 0.8
-              }}
-            >
-              {events.map((event, index) => (
+            <div className="w-full px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
+                {/* Header */}
                 <motion.div
-                  key={event.id}
-                  className="flex-none w-full md:w-1/2 lg:w-1/3 px-1"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  viewport={{ once: true }}
+                    className="flex flex-col sm:flex-row items-center justify-between mb-8 sm:mb-10 lg:mb-12"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                    viewport={{ once: true }}
                 >
-                  <div
-                    className="w-80 bg-white rounded-md overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-lg mx-auto"
-                    onClick={() => handleEventClick(event.id)}
-                    style={{
-                      boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                      fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-                      height: '500px'
-                    }}
-                  >
-                    {/* Card Header */}
-                    <div className="relative p-6 pb-8" style={{ minHeight: '200px' }}>
-                      {/* Green accent bar */}
-                      <div
-                        className="absolute top-0 left-0 w-16 h-1"
-                        style={{ backgroundColor: '#22c55e' }}
-                      ></div>
-
-                      {/* Date */}
-                      <div
-                        className="text-xs text-gray-700 uppercase mb-6 mt-4 font-medium"
-                        style={{ letterSpacing: '1px' }}
-                      >
-                        {event.dateRange}
-                      </div>
-
-                      {/* Title */}
-                      <h2 className="text-2xl font-normal text-gray-900 mb-6 leading-tight" style={{ fontFamily: 'serif' }}>
-                        {event.title}
-                      </h2>
-
-                      {/* Category */}
-                      <p
-                        className="text-xs text-gray-700 uppercase font-medium"
-                        style={{ letterSpacing: '1px' }}
-                      >
-                        {event.category}
-                      </p>
+                    <div className="text-center sm:text-left flex-1 mb-4 sm:mb-0">
+                        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-2 font-serif">
+                            Explore DWTC Events
+                        </h2>
                     </div>
-
-                    {/* Image */}
-                    <div className="relative flex-1 overflow-hidden" style={{ height: '300px' }}>
-                      <Image
-                        src={event.image}
-                        alt={event.title}
-                        fill
-                        className="object-cover transition-transform duration-300 group-hover:scale-105"
-                      />
-                    </div>
-                  </div>
+                    <Button
+                        variant="ghost"
+                        className="hidden lg:flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-all duration-300 text-sm font-medium"
+                    >
+                        VIEW ALL
+                        <ArrowRight className="w-4 h-4" />
+                    </Button>
                 </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </div>
-        ) : (
-          <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">No events found for {selectedFilter}</p>
-          </div>
-        )}
 
-        {/* Mobile View All Button */}
-        <motion.div
-          className="flex md:hidden justify-center mt-8"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          viewport={{ once: true }}
-        >
-          <Button
-            variant="ghost"
-            className="text-gray-600 hover:text-gray-900 transition-all duration-300"
-          >
-            VIEW ALL EVENTS
-            <ArrowRight className="w-4 h-4 ml-2" />
-          </Button>
-        </motion.div>
-      </div>
-    </section>
-  );
+                {/* Filter Tabs */}
+                <motion.div
+                    className="mb-8 sm:mb-10 lg:mb-12"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                    viewport={{ once: true }}
+                >
+                    <div className="flex flex-wrap gap-1 sm:gap-2 justify-center">
+                        {filterOptions.map(filter => (
+                            <button
+                                key={filter}
+                                onClick={() => setSelectedFilter(filter)}
+                                className={`px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-all duration-300 rounded ${
+                                    selectedFilter === filter
+                                        ? "bg-black text-white"
+                                        : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
+                                }`}
+                            >
+                                {filter}
+                            </button>
+                        ))}
+                    </div>
+                </motion.div>
+
+                {/* Events Carousel Container */}
+                {events.length > 0 ? (
+                    <div className="relative mx-2 sm:mx-4 md:mx-8 lg:mx-12 xl:mx-16">
+                        {/* Visible area for exactly 3 cards */}
+                        <div
+                            className="overflow-hidden"
+                            style={{
+                                width: `${3 * cardWidth + 2 * 16}px`, // 3 cards + 2 gaps
+                                margin: "0 auto", // Center the container
+                            }}
+                        >
+                            {/* Navigation Buttons */}
+                            {events.length > cardsToShow && (
+                                <>
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        onClick={prevSlide}
+                                        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-gray-100/80 hover:bg-gray-200/80 shadow-lg rounded-full w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 transition-all duration-300 text-gray-500 hover:text-gray-600"
+                                    >
+                                        <ChevronLeft className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />
+                                    </Button>
+
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        onClick={nextSlide}
+                                        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-gray-100/80 hover:bg-gray-200/80 shadow-lg rounded-full w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 transition-all duration-300 text-gray-500 hover:text-gray-600"
+                                    >
+                                        <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />
+                                    </Button>
+                                </>
+                            )}
+
+                            {/* Events Cards Container with Smooth Sliding */}
+                            <div className="overflow-hidden">
+                                <motion.div
+                                    className="flex gap-4"
+                                    style={{
+                                        width: `${
+                                            events.length * (cardWidth + 16)
+                                        }px`, // cardWidth + gap
+                                        transform: `translateX(-${
+                                            currentIndex * (cardWidth + 16)
+                                        }px)`,
+                                    }}
+                                    animate={{
+                                        transform: `translateX(-${
+                                            currentIndex * (cardWidth + 16)
+                                        }px)`,
+                                    }}
+                                    transition={{
+                                        type: "spring",
+                                        stiffness: 300,
+                                        damping: 30,
+                                        duration: 0.8,
+                                    }}
+                                >
+                                    {events.map((event, index) => (
+                                        <motion.div
+                                            key={event.id}
+                                            className="flex-none"
+                                            style={{ width: `${cardWidth}px` }}
+                                            initial={{ opacity: 0, y: 20 }}
+                                            whileInView={{ opacity: 1, y: 0 }}
+                                            transition={{
+                                                duration: 0.6,
+                                                delay: index * 0.1,
+                                            }}
+                                            viewport={{ once: true }}
+                                        >
+                                            <div
+                                                className="bg-white cursor-pointer mb-8 sm:mb-12 md:mb-16 lg:mb-20 pt-6 sm:pt-8 md:pt-10 lg:pt-12 transition-all duration-500 hover:shadow-lg rounded-lg"
+                                                onClick={() =>
+                                                    handleEventClick(event.id)
+                                                }
+                                                style={{
+                                                    width: "100%",
+                                                    height: "auto",
+                                                    border: "0px",
+                                                    backgroundColor:
+                                                        "rgb(255, 255, 255)",
+                                                    position: "relative",
+                                                    fontFamily:
+                                                        "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+                                                }}
+                                            >
+                                                {/* Green accent bar - positioned at very top of card */}
+                                                <div
+                                                    className="absolute top-0 left-0 w-8 sm:w-12 md:w-16 h-1"
+                                                    style={{
+                                                        backgroundColor:
+                                                            "#22c55e",
+                                                        zIndex: 10,
+                                                    }}
+                                                ></div>
+
+                                                {/* Card Header */}
+                                                <div
+                                                    className="relative px-3 sm:px-4 md:px-6 lg:px-8 pb-6 sm:pb-8 md:pb-10 lg:pb-12"
+                                                    style={{
+                                                        minHeight: "180px",
+                                                    }}
+                                                >
+                                                    {/* Date */}
+                                                    <div
+                                                        className="text-xs sm:text-xs md:text-xs text-gray-700 uppercase mb-3 sm:mb-4 md:mb-5 mt-2 sm:mt-3 md:mt-4 font-medium"
+                                                        style={{
+                                                            letterSpacing:
+                                                                "1px",
+                                                        }}
+                                                    >
+                                                        {event.dateRange}
+                                                    </div>
+
+                                                    {/* Title */}
+                                                    <h2
+                                                        className="text-base sm:text-lg md:text-xl font-normal text-gray-900 mb-3 sm:mb-4 md:mb-5 leading-tight"
+                                                        style={{
+                                                            fontFamily: "serif",
+                                                        }}
+                                                    >
+                                                        {event.title}
+                                                    </h2>
+
+                                                    {/* Category */}
+                                                    <p
+                                                        className="text-xs sm:text-xs md:text-xs text-gray-700 uppercase font-medium"
+                                                        style={{
+                                                            letterSpacing:
+                                                                "1px",
+                                                        }}
+                                                    >
+                                                        {event.category}
+                                                    </p>
+                                                </div>
+
+                                                {/* Image */}
+                                                <div className="relative flex-1 overflow-hidden h-48 sm:h-56 md:h-64 lg:h-72">
+                                                    <Image
+                                                        src={event.image}
+                                                        alt={event.title}
+                                                        fill
+                                                        className="object-cover transition-transform duration-300 hover:scale-105"
+                                                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </motion.div>
+                                    ))}
+                                </motion.div>
+                            </div>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="text-center py-12">
+                        <p className="text-gray-500 text-lg">
+                            No events found for {selectedFilter}
+                        </p>
+                    </div>
+                )}
+
+                {/* Mobile/Tablet View All Button */}
+                <motion.div
+                    className="flex lg:hidden justify-center mt-6 sm:mt-8 md:mt-10"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.4 }}
+                    viewport={{ once: true }}
+                >
+                    <Button
+                        variant="ghost"
+                        className="text-gray-600 hover:text-gray-900 transition-all duration-300 text-sm sm:text-base"
+                    >
+                        VIEW ALL EVENTS
+                        <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 ml-2" />
+                    </Button>
+                </motion.div>
+            </div>
+        </section>
+    );
 };
 
 export default EventsGallery;

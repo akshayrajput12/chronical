@@ -30,8 +30,9 @@ const Header = () => {
     const lowerHeaderRef = useRef<HTMLDivElement>(null);
 
     // Check if current page is portfolio page or blog detail page
-    const isPortfolioPage = pathname?.startsWith('/portfolio');
-    const isBlogDetailPage = pathname?.startsWith('/blog/') && pathname !== '/blog';
+    const isPortfolioPage = pathname?.startsWith("/portfolio");
+    const isBlogDetailPage =
+        pathname?.startsWith("/blog/") && pathname !== "/blog";
     const isSpecialPage = isPortfolioPage || isBlogDetailPage;
 
     // Context value is provided directly to the provider
@@ -165,11 +166,11 @@ const Header = () => {
                                         activeClassName="bg-[#a5cd39] text-white"
                                     />
                                     <TabItem
-                                        href="/"
+                                        href="/conference"
                                         label="CONFERENCE"
-                                        isActive={activeLink === "/free-zone"}
+                                        isActive={activeLink === "/conference"}
                                         onClick={() => {
-                                            setActiveLink("/free-zone");
+                                            setActiveLink("/conference");
                                             setShowEventsSubMenu(false);
                                         }}
                                         className="bg-[#222222] hover:bg-[#333333]"
@@ -200,7 +201,9 @@ const Header = () => {
                                         href="/portfolio"
                                         label="PORTFOLIO"
                                         isActive={activeLink === "/portfolio"}
-                                        onClick={() => setActiveLink("/portfolio")}
+                                        onClick={() =>
+                                            setActiveLink("/portfolio")
+                                        }
                                     />
                                     <NavItem
                                         href="/support"
@@ -282,7 +285,10 @@ const Header = () => {
                                             <nav className="flex items-center w-full">
                                                 <div className="flex-shrink-0 mr-8">
                                                     <Logo
-                                                        isScrolled={isScrolled || isSpecialPage}
+                                                        isScrolled={
+                                                            isScrolled ||
+                                                            isSpecialPage
+                                                        }
                                                     />
                                                 </div>
                                                 <div className="flex items-center justify-between flex-1">
@@ -308,7 +314,8 @@ const Header = () => {
                                                             <div
                                                                 className={cn(
                                                                     "absolute left-0 top-full w-[600px] py-3 transition-all duration-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible z-50",
-                                                                    (isScrolled || isSpecialPage) &&
+                                                                    (isScrolled ||
+                                                                        isSpecialPage) &&
                                                                         "bg-white shadow-md",
                                                                 )}
                                                             >
@@ -317,7 +324,8 @@ const Header = () => {
                                                                         href="/restaurants-retail"
                                                                         className={cn(
                                                                             "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
-                                                                            isScrolled || isSpecialPage
+                                                                            isScrolled ||
+                                                                                isSpecialPage
                                                                                 ? "text-gray-700"
                                                                                 : "text-white",
                                                                         )}
@@ -330,7 +338,8 @@ const Header = () => {
                                                                         href="/getting-here"
                                                                         className={cn(
                                                                             "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
-                                                                            isScrolled || isSpecialPage
+                                                                            isScrolled ||
+                                                                                isSpecialPage
                                                                                 ? "text-gray-700"
                                                                                 : "text-white",
                                                                         )}
@@ -342,7 +351,8 @@ const Header = () => {
                                                                         href="/hotels"
                                                                         className={cn(
                                                                             "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
-                                                                            isScrolled || isSpecialPage
+                                                                            isScrolled ||
+                                                                                isSpecialPage
                                                                                 ? "text-gray-700"
                                                                                 : "text-white",
                                                                         )}
@@ -353,7 +363,8 @@ const Header = () => {
                                                                         href="/neighbourhood-guide"
                                                                         className={cn(
                                                                             "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
-                                                                            isScrolled || isSpecialPage
+                                                                            isScrolled ||
+                                                                                isSpecialPage
                                                                                 ? "text-gray-700"
                                                                                 : "text-white",
                                                                         )}
@@ -367,7 +378,8 @@ const Header = () => {
                                                         <div
                                                             className={cn(
                                                                 "h-12 w-px mx-4",
-                                                                isScrolled || isSpecialPage
+                                                                isScrolled ||
+                                                                    isSpecialPage
                                                                     ? "bg-gray-300"
                                                                     : "bg-white/40",
                                                             )}
@@ -389,7 +401,8 @@ const Header = () => {
                                                         <div
                                                             className={cn(
                                                                 "h-12 w-px mx-4",
-                                                                isScrolled || isSpecialPage
+                                                                isScrolled ||
+                                                                    isSpecialPage
                                                                     ? "bg-gray-300"
                                                                     : "bg-white/40",
                                                             )}
@@ -414,7 +427,8 @@ const Header = () => {
                                                             <div
                                                                 className={cn(
                                                                     "absolute left-0 top-full w-[600px] py-3 transition-all duration-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible z-50",
-                                                                    (isScrolled || isSpecialPage) &&
+                                                                    (isScrolled ||
+                                                                        isSpecialPage) &&
                                                                         "bg-white shadow-md",
                                                                 )}
                                                             >
@@ -423,7 +437,8 @@ const Header = () => {
                                                                         href="/plan-your-trip"
                                                                         className={cn(
                                                                             "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
-                                                                            isScrolled || isSpecialPage
+                                                                            isScrolled ||
+                                                                                isSpecialPage
                                                                                 ? "text-gray-700"
                                                                                 : "text-white",
                                                                         )}
@@ -436,7 +451,8 @@ const Header = () => {
                                                                         href="/experience-dubai"
                                                                         className={cn(
                                                                             "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
-                                                                            isScrolled || isSpecialPage
+                                                                            isScrolled ||
+                                                                                isSpecialPage
                                                                                 ? "text-gray-700"
                                                                                 : "text-white",
                                                                         )}
@@ -450,7 +466,8 @@ const Header = () => {
                                                         <div
                                                             className={cn(
                                                                 "h-12 w-px mx-4",
-                                                                isScrolled || isSpecialPage
+                                                                isScrolled ||
+                                                                    isSpecialPage
                                                                     ? "bg-gray-300"
                                                                     : "bg-white/40",
                                                             )}
@@ -475,7 +492,8 @@ const Header = () => {
                                                             <div
                                                                 className={cn(
                                                                     "absolute left-0 top-full w-[600px] py-3 transition-all duration-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible z-50",
-                                                                    (isScrolled || isSpecialPage) &&
+                                                                    (isScrolled ||
+                                                                        isSpecialPage) &&
                                                                         "bg-white shadow-md",
                                                                 )}
                                                             >
@@ -484,7 +502,8 @@ const Header = () => {
                                                                         href="/venues"
                                                                         className={cn(
                                                                             "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
-                                                                            isScrolled || isSpecialPage
+                                                                            isScrolled ||
+                                                                                isSpecialPage
                                                                                 ? "text-gray-700"
                                                                                 : "text-white",
                                                                         )}
@@ -495,7 +514,8 @@ const Header = () => {
                                                                         href="/venue-services"
                                                                         className={cn(
                                                                             "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
-                                                                            isScrolled || isSpecialPage
+                                                                            isScrolled ||
+                                                                                isSpecialPage
                                                                                 ? "text-gray-700"
                                                                                 : "text-white",
                                                                         )}
@@ -507,7 +527,8 @@ const Header = () => {
                                                                         href="/venue-explorer"
                                                                         className={cn(
                                                                             "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
-                                                                            isScrolled || isSpecialPage
+                                                                            isScrolled ||
+                                                                                isSpecialPage
                                                                                 ? "text-gray-700"
                                                                                 : "text-white",
                                                                         )}
@@ -519,7 +540,8 @@ const Header = () => {
                                                                         href="/event-enquiry"
                                                                         className={cn(
                                                                             "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
-                                                                            isScrolled || isSpecialPage
+                                                                            isScrolled ||
+                                                                                isSpecialPage
                                                                                 ? "text-gray-700"
                                                                                 : "text-white",
                                                                         )}
@@ -533,29 +555,91 @@ const Header = () => {
                                                         <div
                                                             className={cn(
                                                                 "h-12 w-px mx-4",
-                                                                isScrolled || isSpecialPage
+                                                                isScrolled ||
+                                                                    isSpecialPage
                                                                     ? "bg-gray-300"
                                                                     : "bg-white/40",
                                                             )}
                                                         ></div>
-                                                        <SubNavItem
-                                                            href="/exhibit"
-                                                            label="EXHIBIT AT AN EVENT"
-                                                            subLabel="Be part of our leading events"
-                                                            isActive={
-                                                                activeLink ===
-                                                                "/exhibit"
-                                                            }
-                                                            onClick={() =>
-                                                                setActiveLink(
-                                                                    "/exhibit",
-                                                                )
-                                                            }
-                                                        />
+                                                        <div className="relative group">
+                                                            <SubNavItem
+                                                                href="/exhibit"
+                                                                label="EXHIBIT AT AN EVENT"
+                                                                subLabel="Be part of our leading events"
+                                                                isActive={
+                                                                    activeLink ===
+                                                                    "/exhibit"
+                                                                }
+                                                                onClick={() =>
+                                                                    setActiveLink(
+                                                                        "/exhibit",
+                                                                    )
+                                                                }
+                                                            />
+
+                                                            {/* Vertical Dropdown Menu - Only visible on hover */}
+                                                            <div
+                                                                className={cn(
+                                                                    "absolute left-0 top-full w-auto min-w-[300px] py-3 transition-all duration-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible z-50",
+                                                                    (isScrolled ||
+                                                                        isSpecialPage) &&
+                                                                        "bg-white shadow-md",
+                                                                )}
+                                                            >
+                                                                <div className="flex flex-col gap-y-1 px-4">
+                                                                    <Link
+                                                                        href="/customexhibitionstands"
+                                                                        className={cn(
+                                                                            "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2 whitespace-nowrap",
+                                                                            isScrolled ||
+                                                                                isSpecialPage
+                                                                                ? "text-gray-700"
+                                                                                : "text-white",
+                                                                        )}
+                                                                    >
+                                                                        CUSTOM
+                                                                        EXHIBITION
+                                                                        STANDS
+                                                                    </Link>
+                                                                    <Link
+                                                                        href="/doubledeckerexhibitionstands"
+                                                                        className={cn(
+                                                                            "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2 whitespace-nowrap",
+                                                                            isScrolled ||
+                                                                                isSpecialPage
+                                                                                ? "text-gray-700"
+                                                                                : "text-white",
+                                                                        )}
+                                                                    >
+                                                                        DOUBLE
+                                                                        DECKER
+                                                                        EXHIBITION
+                                                                        STANDS
+                                                                    </Link>
+                                                                    <Link
+                                                                        href="/countrypavilionexpoboothsolutions"
+                                                                        className={cn(
+                                                                            "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2 whitespace-nowrap",
+                                                                            isScrolled ||
+                                                                                isSpecialPage
+                                                                                ? "text-gray-700"
+                                                                                : "text-white",
+                                                                        )}
+                                                                    >
+                                                                        COUNTRY
+                                                                        PAVILION
+                                                                        EXPO
+                                                                        BOOTH
+                                                                        SOLUTIONS
+                                                                    </Link>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                         <div
                                                             className={cn(
                                                                 "h-12 w-px mx-4",
-                                                                isScrolled || isSpecialPage
+                                                                isScrolled ||
+                                                                    isSpecialPage
                                                                     ? "bg-gray-300"
                                                                     : "bg-white/40",
                                                             )}
@@ -594,7 +678,9 @@ const Header = () => {
                         >
                             <div className="h-full overflow-y-auto">
                                 <div className="flex justify-between items-center p-4 border-b border-gray-200 bg-[#222222]">
-                                    <Logo isScrolled={isScrolled || isSpecialPage} />
+                                    <Logo
+                                        isScrolled={isScrolled || isSpecialPage}
+                                    />
                                     <button
                                         className="text-white"
                                         onClick={() =>
@@ -699,34 +785,88 @@ const Header = () => {
                                                                 );
                                                             }}
                                                         />
-                                                        <MobileNavItem
-                                                            href="/exhibit"
-                                                            label="EXHIBIT AT AN EVENT"
-                                                            isActive={
-                                                                activeLink ===
-                                                                "/exhibit"
-                                                            }
-                                                            onClick={() => {
-                                                                setActiveLink(
-                                                                    "/exhibit",
-                                                                );
-                                                                setIsMobileMenuOpen(
-                                                                    false,
-                                                                );
-                                                            }}
-                                                        />
+                                                        <div>
+                                                            <MobileNavItem
+                                                                href="/exhibit"
+                                                                label="EXHIBIT AT AN EVENT"
+                                                                isActive={
+                                                                    activeLink ===
+                                                                    "/exhibit"
+                                                                }
+                                                                onClick={() => {
+                                                                    setActiveLink(
+                                                                        "/exhibit",
+                                                                    );
+                                                                    setIsMobileMenuOpen(
+                                                                        false,
+                                                                    );
+                                                                }}
+                                                            />
+                                                            <div className="pl-4 mt-2 space-y-2">
+                                                                <MobileNavItem
+                                                                    href="/customexhibitionstands"
+                                                                    label="CUSTOM EXHIBITION STANDS"
+                                                                    isActive={
+                                                                        activeLink ===
+                                                                        "/customexhibitionstands"
+                                                                    }
+                                                                    onClick={() => {
+                                                                        setActiveLink(
+                                                                            "/customexhibitionstands",
+                                                                        );
+                                                                        setIsMobileMenuOpen(
+                                                                            false,
+                                                                        );
+                                                                    }}
+                                                                />
+                                                                <MobileNavItem
+                                                                    href="/doubledeckerexhibitionstands"
+                                                                    label="DOUBLE DECKER EXHIBITION STANDS"
+                                                                    isActive={
+                                                                        activeLink ===
+                                                                        "/doubledeckerexhibitionstands"
+                                                                    }
+                                                                    onClick={() => {
+                                                                        setActiveLink(
+                                                                            "/doubledeckerexhibitionstands",
+                                                                        );
+                                                                        setIsMobileMenuOpen(
+                                                                            false,
+                                                                        );
+                                                                    }}
+                                                                />
+                                                                <MobileNavItem
+                                                                    href="/countrypavilionexpoboothsolutions"
+                                                                    label="COUNTRY PAVILION EXPO BOOTH SOLUTIONS"
+                                                                    isActive={
+                                                                        activeLink ===
+                                                                        "/countrypavilionexpoboothsolutions"
+                                                                    }
+                                                                    onClick={() => {
+                                                                        setActiveLink(
+                                                                            "/countrypavilionexpoboothsolutions",
+                                                                        );
+                                                                        setIsMobileMenuOpen(
+                                                                            false,
+                                                                        );
+                                                                    }}
+                                                                />
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 )}
                                             </div>
 
                                             <MobileNavItem
-                                                href="/"
-                                                label="CONGRESS"
+                                                href="/conference"
+                                                label="CONFERENCE"
                                                 isActive={
-                                                    activeLink === "/free-zone"
+                                                    activeLink === "/conference"
                                                 }
                                                 onClick={() => {
-                                                    setActiveLink("/free-zone");
+                                                    setActiveLink(
+                                                        "/conference",
+                                                    );
                                                     setIsMobileMenuOpen(false);
                                                 }}
                                             />
@@ -803,7 +943,9 @@ const Header = () => {
                                                     activeLink === "/contact-us"
                                                 }
                                                 onClick={() => {
-                                                    setActiveLink("/contact-us");
+                                                    setActiveLink(
+                                                        "/contact-us",
+                                                    );
                                                     setIsMobileMenuOpen(false);
                                                 }}
                                             />
@@ -933,8 +1075,9 @@ const SubNavItem = ({
 }) => {
     const { isScrolled } = useContext(HeaderContext);
     const pathname = usePathname();
-    const isPortfolioPage = pathname?.startsWith('/portfolio');
-    const isBlogDetailPage = pathname?.startsWith('/blog/') && pathname !== '/blog';
+    const isPortfolioPage = pathname?.startsWith("/portfolio");
+    const isBlogDetailPage =
+        pathname?.startsWith("/blog/") && pathname !== "/blog";
     const isSpecialPage = isPortfolioPage || isBlogDetailPage;
 
     return (
@@ -954,7 +1097,9 @@ const SubNavItem = ({
             <span
                 className={cn(
                     "text-xs mt-1 max-w-[150px] text-center",
-                    isScrolled || isSpecialPage ? "text-gray-500" : "text-white/80",
+                    isScrolled || isSpecialPage
+                        ? "text-gray-500"
+                        : "text-white/80",
                 )}
             >
                 {subLabel}
