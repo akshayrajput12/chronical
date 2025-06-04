@@ -11,10 +11,10 @@ const staticVideoPath = "/videos/hero-background.mp4";
 // Default data in case the database fetch fails
 const defaultData: HeroSectionType = {
     id: "default",
-    heading: "Launch, Grow and Thrive in the Free Zone",
-    subheading: "for Business Game Changers",
+    heading: "Turn Heads at Your Next Exhibition with Stands That Wow",
+    subheading: "Elegant. Functional. Memorable",
     description:
-        "Welcome to Chronicle Exhibits - a connected, collaborative world-class exhibition stand builder for pioneering entrepreneurs, startups and multinationals, in the heart of Dubai’s central business district.",
+        "Delivering elegance, precision, and premium craftsmanship — Chronicle Exhibition Organizing LLC curates high-end exhibition experiences for elite brands across Dubai and the Middle East.",
     cta_primary_text: "GET STARTED",
     cta_primary_url: "#",
     cta_secondary_text: "LEARN MORE",
