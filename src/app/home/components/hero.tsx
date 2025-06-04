@@ -12,7 +12,7 @@ const staticVideoPath = "/videos/hero-background.mp4";
 const defaultData: HeroSectionType = {
     id: "default",
     heading: "Turn Heads at Your Next Exhibition with Stands That Wow",
-    subheading: "Elegant. Functional. Memorable",
+    subheading: "Elegant . Functional . Memorable",
     description:
         "Delivering elegance, precision, and premium craftsmanship — Chronicle Exhibition Organizing LLC curates high-end exhibition experiences for elite brands across Dubai and the Middle East.",
     cta_primary_text: "GET STARTED",
