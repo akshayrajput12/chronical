@@ -195,7 +195,7 @@ const HeroSection: React.FC = () => {
                     </motion.h2>
 
                     <motion.p
-                        className="text-base sm:text-lg font-nunito font-medium pt-2"
+                        className="text-base sm:text-lg font-noto-kufi-arabic font-medium pt-2"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 1 }}
@@ -211,7 +211,7 @@ const HeroSection: React.FC = () => {
                     >
                         <motion.a
                             href={heroData.cta_primary_url}
-                            className="px-8 py-3 bg-[#a5cd39] text-white font-medium rounded-md hover:bg-[#94b933] transition-colors"
+                            className="px-8 py-3 bg-[#a5cd39] text-white font-noto-kufi-arabic font-medium rounded-md hover:bg-[#94b933] transition-colors"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                         >
@@ -220,7 +220,7 @@ const HeroSection: React.FC = () => {
 
                         <motion.a
                             href={heroData.cta_secondary_url}
-                            className="px-8 py-3 border border-white text-white font-medium rounded-md hover:bg-white/10 transition-colors"
+                            className="px-8 py-3 border border-white text-white font-noto-kufi-arabic font-medium rounded-md hover:bg-white/10 transition-colors"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                         >
