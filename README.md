@@ -1,7 +1,6 @@
 ### Chronicles UAE WebSite 
 * install peacock, prettier and eslint for formatting and linting
 
-
 ### To run the project locally
 
 * clone the project
