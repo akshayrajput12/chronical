@@ -14,7 +14,7 @@ const BoothRequirements = () => {
           </h2>
 
           {/* Contact Information */}
-          <div className="text-center text-lg md:text-xl font-nunito text-gray-700">
+          <div className="text-center text-lg md:text-xl font-noto-kufi-arabic text-gray-700">
             <span>Call </span>
             <a
               href="tel:+971543474645"

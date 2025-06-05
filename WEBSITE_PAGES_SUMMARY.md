@@ -154,10 +154,10 @@ All three exhibition stand pages are properly linked in the mobile menu under "E
 
 1. **Typography System**: Applied Combined Typography Example across all pages
 2. **Navigation Links**: Fixed desktop dropdown navigation to point to correct exhibition stand pages
-3. **Font Hierarchy**: 
+3. **Font Hierarchy**:
    - H1, H2: Rubik
    - H3-H6: Markazi Text
-   - Body text: Nunito
+   - Body text: Noto Kufi Arabic
    - Arabic text: Noto Kufi Arabic
 
 ## Testing Status

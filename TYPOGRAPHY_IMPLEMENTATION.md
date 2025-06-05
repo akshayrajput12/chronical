@@ -18,7 +18,7 @@ This document outlines the comprehensive typography implementation that applies 
 - **Line Height**: 1.3
 
 ### 3. Body Text (P, SPAN, DIV, A, etc.)
-- **Font**: Nunito
+- **Font**: Noto Kufi Arabic
 - **Usage**: Paragraphs, navigation, buttons, general text
 - **Weight**: 400 (Regular)
 - **Line Height**: 1.6
@@ -81,14 +81,14 @@ h3, h4, h5, h6 {
 
 /* Body Text */
 p, span, div, a, li, td, th, label, input, textarea, button {
-  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+  font-family: var(--font-noto-kufi-arabic), 'Noto Kufi Arabic', sans-serif !important;
 }
 ```
 
 ### 2. Tailwind CSS Overrides
 ```css
 .font-sans {
-  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+  font-family: var(--font-noto-kufi-arabic), 'Noto Kufi Arabic', sans-serif !important;
 }
 
 .font-serif {
@@ -120,7 +120,7 @@ p, span, div, a, li, td, th, label, input, textarea, button {
 ### Font Family Classes
 - `.font-rubik` - Rubik font
 - `.font-markazi` - Markazi Text font
-- `.font-nunito` - Nunito font
+- `.font-nunito` - Noto Kufi Arabic font (mapped to Nunito class for compatibility)
 - `.font-noto-kufi-arabic` - Noto Kufi Arabic font
 
 ### Typography Hierarchy Classes

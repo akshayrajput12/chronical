@@ -4,12 +4,12 @@
    FONT HIERARCHY:
    - H1, H2: Rubik (Main Headlines)
    - H3, H4, H5, H6: Markazi Text (Elegant Subheadings)
-   - P, SPAN, DIV, A, etc.: Nunito (Body Text)
+   - P, SPAN, DIV, A, etc.: Noto Kufi Arabic (Body Text)
    - Arabic Text: Noto Kufi Arabic
 */
 
 /* Import Google Fonts - Alternative method for reference */
-@import url('https://fonts.googleapis.com/css2?family=Markazi+Text:wght@400..700&family=Noto+Kufi+Arabic:wght@100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Markazi+Text:wght@400..700&family=Noto+Kufi+Arabic:wght@100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
 
 /* =============================================================================
    GLOBAL TYPOGRAPHY HIERARCHY
@@ -29,9 +29,9 @@ h3, h4, h5, h6 {
   line-height: 1.3;
 }
 
-/* Body Text - Paragraphs, spans, and general text use Nunito */
+/* Body Text - Paragraphs, spans, and general text use Noto Kufi Arabic */
 p, span, div, a, li, td, th, label, input, textarea, button {
-  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+  font-family: var(--font-noto-kufi-arabic), 'Noto Kufi Arabic', sans-serif !important;
   line-height: 1.6;
 }
 
@@ -48,17 +48,17 @@ p, span, div, a, li, td, th, label, input, textarea, button {
 
 /* Navigation and Menu Items */
 nav a, nav button, nav span {
-  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+  font-family: var(--font-noto-kufi-arabic), 'Noto Kufi Arabic', sans-serif !important;
 }
 
 /* Form Elements */
 input, textarea, select, option {
-  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+  font-family: var(--font-noto-kufi-arabic), 'Noto Kufi Arabic', sans-serif !important;
 }
 
 /* Buttons */
 button, .btn, [role="button"] {
-  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+  font-family: var(--font-noto-kufi-arabic), 'Noto Kufi Arabic', sans-serif !important;
 }
 
 /* Cards and Content Blocks */
@@ -71,7 +71,7 @@ button, .btn, [role="button"] {
 }
 
 .card p, .card span, .card div {
-  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+  font-family: var(--font-noto-kufi-arabic), 'Noto Kufi Arabic', sans-serif !important;
 }
 
 /* =============================================================================
@@ -88,7 +88,7 @@ button, .btn, [role="button"] {
 }
 
 .font-nunito {
-  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+  font-family: var(--font-noto-kufi-arabic), 'Noto Kufi Arabic', sans-serif !important;
 }
 
 .font-noto-kufi-arabic {
@@ -111,7 +111,7 @@ button, .btn, [role="button"] {
 }
 
 .body-text {
-  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+  font-family: var(--font-noto-kufi-arabic), 'Noto Kufi Arabic', sans-serif !important;
   font-weight: 400;
   font-size: 1rem;
   line-height: 1.6;
@@ -182,7 +182,7 @@ button, .btn, [role="button"] {
 
 /* Header Navigation */
 header nav a, header nav button {
-  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+  font-family: var(--font-noto-kufi-arabic), 'Noto Kufi Arabic', sans-serif !important;
 }
 
 /* Footer */
@@ -195,7 +195,7 @@ footer h3, footer h4, footer h5, footer h6 {
 }
 
 footer p, footer span, footer a, footer li {
-  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+  font-family: var(--font-noto-kufi-arabic), 'Noto Kufi Arabic', sans-serif !important;
 }
 
 /* Admin Panel - Maintain existing fonts for admin interface */
@@ -215,17 +215,17 @@ body[data-admin="true"] * {
 
 /* Table Elements */
 table, caption, thead, tbody, tfoot, tr, td, th {
-  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+  font-family: var(--font-noto-kufi-arabic), 'Noto Kufi Arabic', sans-serif !important;
 }
 
 /* List Elements */
 ul, ol, dl, dt, dd {
-  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+  font-family: var(--font-noto-kufi-arabic), 'Noto Kufi Arabic', sans-serif !important;
 }
 
 /* Form Labels and Legends */
 legend, fieldset {
-  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+  font-family: var(--font-noto-kufi-arabic), 'Noto Kufi Arabic', sans-serif !important;
 }
 
 /* Code and Pre Elements - Keep monospace but ensure consistency */
@@ -241,7 +241,7 @@ blockquote, q, cite {
 
 /* Small Text Elements */
 small, sub, sup {
-  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+  font-family: var(--font-noto-kufi-arabic), 'Noto Kufi Arabic', sans-serif !important;
 }
 
 /* =============================================================================
@@ -250,7 +250,7 @@ small, sub, sup {
 
 /* Tailwind CSS Font Family Overrides */
 .font-sans {
-  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+  font-family: var(--font-noto-kufi-arabic), 'Noto Kufi Arabic', sans-serif !important;
 }
 
 .font-serif {
@@ -271,7 +271,7 @@ small, sub, sup {
 }
 
 .prose p, .prose span, .prose a, .prose li {
-  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+  font-family: var(--font-noto-kufi-arabic), 'Noto Kufi Arabic', sans-serif !important;
 }
 
 /* React Component Overrides */
@@ -297,9 +297,9 @@ h3.font-sans, h4.font-sans, h5.font-sans, h6.font-sans {
   font-family: var(--font-markazi-text), 'Markazi Text', serif !important;
 }
 
-/* Ensure body text uses Nunito regardless of other classes */
+/* Ensure body text uses Noto Kufi Arabic regardless of other classes */
 p.font-serif, span.font-serif, div.font-serif {
-  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+  font-family: var(--font-noto-kufi-arabic), 'Noto Kufi Arabic', sans-serif !important;
 }
 
 /* =============================================================================
@@ -316,7 +316,7 @@ p.font-serif, span.font-serif, div.font-serif {
 }
 
 [data-framer-component] p, [data-framer-component] span, [data-framer-component] div {
-  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+  font-family: var(--font-noto-kufi-arabic), 'Noto Kufi Arabic', sans-serif !important;
 }
 
 /* =============================================================================
@@ -333,6 +333,6 @@ p.font-serif, span.font-serif, div.font-serif {
   }
 
   p, span, div, a, li {
-    font-family: 'Nunito', sans-serif !important;
+    font-family: 'Noto Kufi Arabic', sans-serif !important;
   }
 }

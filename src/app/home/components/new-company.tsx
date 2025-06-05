@@ -262,14 +262,14 @@ const NewCompany = () => {
             </motion.div>
 
             <motion.p
-              className="text-gray-700 font-nunito mb-6"
+              className="text-gray-700 font-noto-kufi-arabic mb-6"
               variants={textVariants}
             >
               {sectionData.description_1}
             </motion.p>
 
             <motion.p
-              className="text-gray-700 font-nunito mb-8"
+              className="text-gray-700 font-noto-kufi-arabic mb-8"
               variants={textVariants}
             >
               {sectionData.description_2}

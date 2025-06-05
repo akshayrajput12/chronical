@@ -792,7 +792,7 @@ const TabItem = ({
             <Link
                 href={href}
                 className={cn(
-                    "uppercase font-nunito font-semibold transition-colors p-4 px-3 text-white text-sm tracking-wide",
+                    "uppercase font-noto-kufi-arabic font-semibold transition-colors p-4 px-3 text-white text-sm tracking-wide",
                     className,
                     isActive && (activeClassName || className),
                 )}
@@ -806,7 +806,7 @@ const TabItem = ({
     return (
         <button
             className={cn(
-                "uppercase font-nunito font-semibold transition-colors py-3 px-6 text-white text-sm tracking-wide",
+                "uppercase font-noto-kufi-arabic font-semibold transition-colors py-3 px-6 text-white text-sm tracking-wide",
                 className,
                 isActive && (activeClassName || className),
             )}
@@ -833,7 +833,7 @@ const NavItem = ({
         <Link
             href={href}
             className={cn(
-                "uppercase font-nunito font-medium transition-colors px-3 text-[12px]",
+                "uppercase font-noto-kufi-arabic font-medium transition-colors px-3 text-[12px]",
                 "text-white hover:text-[#a5cd39]",
                 isActive && "text-[#a5cd39]",
             )}
@@ -881,7 +881,7 @@ const SubNavItem = ({
             <span className="uppercase font-markazi font-medium text-sm">{label}</span>
             <span
                 className={cn(
-                    "text-xs font-nunito mt-1 max-w-[150px] text-center",
+                    "text-xs font-noto-kufi-arabic mt-1 max-w-[150px] text-center",
                     isScrolled || isSpecialPage
                         ? "text-gray-500"
                         : "text-white/80",
@@ -908,7 +908,7 @@ const MobileNavItem = ({
     <Link
         href={href}
         className={cn(
-            "text-[#2C2C2C] uppercase font-nunito font-medium block py-2 hover:text-[#a5cd39] transition-colors",
+            "text-[#2C2C2C] uppercase font-noto-kufi-arabic font-medium block py-2 hover:text-[#a5cd39] transition-colors",
             isActive && "text-[#a5cd39]",
         )}
         onClick={onClick}

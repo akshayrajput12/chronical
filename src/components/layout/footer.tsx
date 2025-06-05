@@ -154,7 +154,7 @@ const Footer = () => {
                                 <h3 className="text-lg font-rubik font-bold mb-3 text-[#a5cd39]">
                                     COMPANY PROFILE
                                 </h3>
-                                <p className="text-xs font-nunito text-gray-400 mb-4">
+                                <p className="text-xs font-noto-kufi-arabic text-gray-400 mb-4">
                                     Get detailed information about our services,
                                     portfolio, and expertise in exhibition stand
                                     design. Our company profile includes our
@@ -188,7 +188,7 @@ const FooterLink = ({ href, label }: { href: string; label: string }) => (
             className="text-gray-300 hover:text-[#a5cd39] transition-colors flex items-center group"
         >
             <ChevronRight className="w-3.5 h-3.5 mr-1 text-[#a5cd39] transform group-hover:translate-x-1 transition-transform duration-300" />
-            <span className="font-nunito group-hover:translate-x-1 transition-transform duration-300">
+            <span className="font-noto-kufi-arabic group-hover:translate-x-1 transition-transform duration-300">
                 {label}
             </span>
         </Link>

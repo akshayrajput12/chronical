@@ -85,12 +85,12 @@ const ContactInfo = () => {
                   </motion.p>
                   <motion.a
                     href="mailto:care@chronicleexhibits.com"
-                    className="text-base font-nunito text-gray-600 hover:text-[#a5cd39] transition-colors duration-300 block font-medium"
+                    className="text-base font-noto-kufi-arabic text-gray-600 hover:text-[#a5cd39] transition-colors duration-300 block font-medium"
                     whileHover={{ scale: 1.01 }}
                   >
                     care@chronicleexhibits.com
                   </motion.a>
-                  <p className="text-sm font-nunito text-gray-500 leading-relaxed pt-2">
+                  <p className="text-sm font-noto-kufi-arabic text-gray-500 leading-relaxed pt-2">
                     Reach out for support, service requests, and post-project assistance.
                   </p>
                 </div>
