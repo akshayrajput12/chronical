@@ -878,7 +878,9 @@ const SubNavItem = ({
             )}
             onClick={onClick}
         >
-            <span className="uppercase font-markazi font-medium text-sm">{label}</span>
+            <span className="uppercase font-noto-kufi-arabic font-medium text-sm">
+                {label}
+            </span>
             <span
                 className={cn(
                     "text-xs font-noto-kufi-arabic mt-1 max-w-[150px] text-center",
