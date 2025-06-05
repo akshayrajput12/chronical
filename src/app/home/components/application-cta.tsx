@@ -97,21 +97,21 @@ const ApplicationCta = () => {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between">
             <div className="md:max-w-2xl">
               <motion.h2
-                className="text-3xl md:text-4xl font-bold text-white mb-4 text-center md:text-left"
+                className="text-3xl md:text-4xl font-rubik font-bold text-white mb-4 text-center md:text-left"
                 variants={itemVariants}
               >
                 Start Your Application
               </motion.h2>
 
               <motion.p
-                className="text-white text-base md:text-lg mb-2 text-center md:text-left"
+                className="text-white font-nunito text-base md:text-lg mb-2 text-center md:text-left"
                 variants={itemVariants}
               >
                 Take your first step in forming your new company today with our online application.
               </motion.p>
 
               <motion.p
-                className="text-white text-base md:text-lg mb-8 md:mb-0 text-center md:text-left"
+                className="text-white font-nunito text-base md:text-lg mb-8 md:mb-0 text-center md:text-left"
                 variants={itemVariants}
               >
                 Our Free Zone team are on hand to guide you through the application process.

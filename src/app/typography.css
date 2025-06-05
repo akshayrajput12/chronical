@@ -1,0 +1,338 @@
+/* Global Typography Hierarchy - Combined Typography Example Implementation */
+/* This file applies the exact font hierarchy from the Combined Typography Example across the entire website */
+/*
+   FONT HIERARCHY:
+   - H1, H2: Rubik (Main Headlines)
+   - H3, H4, H5, H6: Markazi Text (Elegant Subheadings)
+   - P, SPAN, DIV, A, etc.: Nunito (Body Text)
+   - Arabic Text: Noto Kufi Arabic
+*/
+
+/* Import Google Fonts - Alternative method for reference */
+@import url('https://fonts.googleapis.com/css2?family=Markazi+Text:wght@400..700&family=Noto+Kufi+Arabic:wght@100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+
+/* =============================================================================
+   GLOBAL TYPOGRAPHY HIERARCHY
+   ============================================================================= */
+
+/* Main Headlines - H1, H2 use Rubik */
+h1, h2 {
+  font-family: var(--font-rubik), 'Rubik', sans-serif !important;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* Elegant Subheadings - H3, H4, H5, H6 use Markazi Text */
+h3, h4, h5, h6 {
+  font-family: var(--font-markazi-text), 'Markazi Text', serif !important;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+/* Body Text - Paragraphs, spans, and general text use Nunito */
+p, span, div, a, li, td, th, label, input, textarea, button {
+  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+  line-height: 1.6;
+}
+
+/* Arabic Text Support - Use Noto Kufi Arabic for Arabic content */
+[lang="ar"], [dir="rtl"], .arabic-text {
+  font-family: var(--font-noto-kufi-arabic), 'Noto Kufi Arabic', sans-serif !important;
+  direction: rtl;
+  text-align: right;
+}
+
+/* =============================================================================
+   SPECIFIC COMPONENT OVERRIDES
+   ============================================================================= */
+
+/* Navigation and Menu Items */
+nav a, nav button, nav span {
+  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+}
+
+/* Form Elements */
+input, textarea, select, option {
+  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+}
+
+/* Buttons */
+button, .btn, [role="button"] {
+  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+}
+
+/* Cards and Content Blocks */
+.card h1, .card h2 {
+  font-family: var(--font-rubik), 'Rubik', sans-serif !important;
+}
+
+.card h3, .card h4, .card h5, .card h6 {
+  font-family: var(--font-markazi-text), 'Markazi Text', serif !important;
+}
+
+.card p, .card span, .card div {
+  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+}
+
+/* =============================================================================
+   UTILITY CLASSES
+   ============================================================================= */
+
+/* Font Family Utilities */
+.font-rubik {
+  font-family: var(--font-rubik), 'Rubik', sans-serif !important;
+}
+
+.font-markazi {
+  font-family: var(--font-markazi-text), 'Markazi Text', serif !important;
+}
+
+.font-nunito {
+  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+}
+
+.font-noto-kufi-arabic {
+  font-family: var(--font-noto-kufi-arabic), 'Noto Kufi Arabic', sans-serif !important;
+}
+
+/* Typography Hierarchy Classes */
+.heading-primary {
+  font-family: var(--font-rubik), 'Rubik', sans-serif !important;
+  font-weight: 700;
+  font-size: 2.5rem;
+  line-height: 1.2;
+}
+
+.heading-secondary {
+  font-family: var(--font-markazi-text), 'Markazi Text', serif !important;
+  font-weight: 600;
+  font-size: 1.875rem;
+  line-height: 1.3;
+}
+
+.body-text {
+  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.arabic-text {
+  font-family: var(--font-noto-kufi-arabic), 'Noto Kufi Arabic', sans-serif !important;
+  direction: rtl;
+  text-align: right;
+}
+
+/* =============================================================================
+   RESPONSIVE TYPOGRAPHY
+   ============================================================================= */
+
+/* Mobile First Approach */
+@media (max-width: 640px) {
+  h1 {
+    font-size: 1.875rem; /* 30px */
+  }
+  
+  h2 {
+    font-size: 1.5rem; /* 24px */
+  }
+  
+  h3 {
+    font-size: 1.25rem; /* 20px */
+  }
+  
+  h4, h5, h6 {
+    font-size: 1.125rem; /* 18px */
+  }
+}
+
+/* Tablet */
+@media (min-width: 641px) and (max-width: 1024px) {
+  h1 {
+    font-size: 2.25rem; /* 36px */
+  }
+  
+  h2 {
+    font-size: 1.875rem; /* 30px */
+  }
+  
+  h3 {
+    font-size: 1.5rem; /* 24px */
+  }
+}
+
+/* Desktop */
+@media (min-width: 1025px) {
+  h1 {
+    font-size: 3rem; /* 48px */
+  }
+  
+  h2 {
+    font-size: 2.25rem; /* 36px */
+  }
+  
+  h3 {
+    font-size: 1.875rem; /* 30px */
+  }
+}
+
+/* =============================================================================
+   COMPONENT SPECIFIC OVERRIDES
+   ============================================================================= */
+
+/* Header Navigation */
+header nav a, header nav button {
+  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+}
+
+/* Footer */
+footer h1, footer h2 {
+  font-family: var(--font-rubik), 'Rubik', sans-serif !important;
+}
+
+footer h3, footer h4, footer h5, footer h6 {
+  font-family: var(--font-markazi-text), 'Markazi Text', serif !important;
+}
+
+footer p, footer span, footer a, footer li {
+  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+}
+
+/* Admin Panel - Maintain existing fonts for admin interface */
+[class*="admin"] h1, [class*="admin"] h2, [class*="admin"] h3, [class*="admin"] h4, [class*="admin"] h5, [class*="admin"] h6,
+[class*="admin"] p, [class*="admin"] span, [class*="admin"] div, [class*="admin"] a, [class*="admin"] button {
+  font-family: inherit !important;
+}
+
+/* Ensure admin routes don't get affected */
+body[data-admin="true"] * {
+  font-family: inherit !important;
+}
+
+/* =============================================================================
+   ADDITIONAL ELEMENT COVERAGE
+   ============================================================================= */
+
+/* Table Elements */
+table, caption, thead, tbody, tfoot, tr, td, th {
+  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+}
+
+/* List Elements */
+ul, ol, dl, dt, dd {
+  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+}
+
+/* Form Labels and Legends */
+legend, fieldset {
+  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+}
+
+/* Code and Pre Elements - Keep monospace but ensure consistency */
+code, pre, kbd, samp {
+  font-family: var(--font-geist-mono), 'Courier New', monospace !important;
+}
+
+/* Quote Elements */
+blockquote, q, cite {
+  font-family: var(--font-markazi-text), 'Markazi Text', serif !important;
+  font-style: italic;
+}
+
+/* Small Text Elements */
+small, sub, sup {
+  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+}
+
+/* =============================================================================
+   FRAMEWORK SPECIFIC OVERRIDES
+   ============================================================================= */
+
+/* Tailwind CSS Font Family Overrides */
+.font-sans {
+  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+}
+
+.font-serif {
+  font-family: var(--font-markazi-text), 'Markazi Text', serif !important;
+}
+
+.font-mono {
+  font-family: var(--font-geist-mono), 'Courier New', monospace !important;
+}
+
+/* Tailwind Prose Overrides */
+.prose h1, .prose h2 {
+  font-family: var(--font-rubik), 'Rubik', sans-serif !important;
+}
+
+.prose h3, .prose h4, .prose h5, .prose h6 {
+  font-family: var(--font-markazi-text), 'Markazi Text', serif !important;
+}
+
+.prose p, .prose span, .prose a, .prose li {
+  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+}
+
+/* React Component Overrides */
+[class*="text-"], [class*="font-"] {
+  font-family: inherit;
+}
+
+/* Ensure headings always use correct fonts regardless of other classes */
+h1, h1[class*="font-"], h2, h2[class*="font-"] {
+  font-family: var(--font-rubik), 'Rubik', sans-serif !important;
+}
+
+h3, h3[class*="font-"], h4, h4[class*="font-"], h5, h5[class*="font-"], h6, h6[class*="font-"] {
+  font-family: var(--font-markazi-text), 'Markazi Text', serif !important;
+}
+
+/* Override any conflicting Tailwind font classes on headings */
+h1.font-serif, h2.font-serif {
+  font-family: var(--font-rubik), 'Rubik', sans-serif !important;
+}
+
+h3.font-sans, h4.font-sans, h5.font-sans, h6.font-sans {
+  font-family: var(--font-markazi-text), 'Markazi Text', serif !important;
+}
+
+/* Ensure body text uses Nunito regardless of other classes */
+p.font-serif, span.font-serif, div.font-serif {
+  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+}
+
+/* =============================================================================
+   MOTION AND ANIMATION ELEMENTS
+   ============================================================================= */
+
+/* Framer Motion Elements */
+[data-framer-component] h1, [data-framer-component] h2 {
+  font-family: var(--font-rubik), 'Rubik', sans-serif !important;
+}
+
+[data-framer-component] h3, [data-framer-component] h4, [data-framer-component] h5, [data-framer-component] h6 {
+  font-family: var(--font-markazi-text), 'Markazi Text', serif !important;
+}
+
+[data-framer-component] p, [data-framer-component] span, [data-framer-component] div {
+  font-family: var(--font-nunito), 'Nunito', sans-serif !important;
+}
+
+/* =============================================================================
+   PRINT STYLES
+   ============================================================================= */
+
+@media print {
+  h1, h2 {
+    font-family: 'Rubik', sans-serif !important;
+  }
+
+  h3, h4, h5, h6 {
+    font-family: 'Markazi Text', serif !important;
+  }
+
+  p, span, div, a, li {
+    font-family: 'Nunito', sans-serif !important;
+  }
+}

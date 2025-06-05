@@ -79,7 +79,7 @@ const DynamicCell = () => {
         <div className="max-w-3xl mx-auto">
           {/* Title with exact styling from the image */}
           <motion.h2
-            className="text-4xl sm:text-5xl font-bold text-[#222] mb-4"
+            className="text-4xl sm:text-5xl font-rubik font-bold text-[#222] mb-4"
             variants={itemVariants}
           >
             <span className="text-[#222]">A Dynamic Central</span> Business District
@@ -94,7 +94,7 @@ const DynamicCell = () => {
 
           {/* Subtitle - Simple and clean as in the image */}
           <motion.p
-            className="text-[#444] text-lg"
+            className="text-[#444] font-nunito text-lg"
             variants={itemVariants}
           >
             Dubai is the future economy and global trade gateway.

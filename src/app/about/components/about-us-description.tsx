@@ -67,7 +67,7 @@ const AboutUsDescription = () => {
             transition={{ duration: 0.8 }}
           >
             <motion.p
-              className="text-gray-700 leading-relaxed mb-8 text-center max-w-4xl mx-auto"
+              className="text-gray-700 leading-relaxed mb-8 text-center max-w-4xl mx-auto font-nunito"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
@@ -75,7 +75,7 @@ const AboutUsDescription = () => {
               ESC has emerged as a prime institution spearheading interest of Electronics and IT industry in the country. The Council proactively engages with the Government, both at the Centre and in States, to create a policy and regulatory environment conducive to growth of industry. Council also works in close coordination with India&apos;s Diplomatic Missions in various countries and Missions of various countries in India. ESC has an extensive network of like-minded organizations world over that helps in linking member companies with their counterparts in these economies. Significantly, ESC acts as the implementing agency for Government schemes to promote electronics and IT exports from India. Sectors covered by the Council include:
             </motion.p>
             <motion.h2
-              className="text-3xl font-serif text-gray-900 mb-10 relative inline-block"
+              className="text-3xl font-markazi font-bold text-gray-900 mb-10 relative inline-block"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
@@ -129,7 +129,7 @@ const AboutUsDescription = () => {
                     />
                   </div>
                 </motion.div>
-                <h3 className="text-xl font-medium text-gray-900 group-hover:text-[#a5cd39] transition-colors duration-300">{service.title}</h3>
+                <h3 className="text-xl font-markazi font-semibold text-gray-900 group-hover:text-[#a5cd39] transition-colors duration-300">{service.title}</h3>
               </motion.div>
             ))}
           </motion.div>

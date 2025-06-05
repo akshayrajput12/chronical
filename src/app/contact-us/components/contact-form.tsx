@@ -65,10 +65,10 @@ const ContactForm = () => {
             transition={{ duration: 0.6 }}
           >
             <CheckCircle className="w-16 h-16 text-[#a5cd39] mx-auto mb-6" />
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+            <h3 className="text-2xl font-rubik font-bold text-gray-900 mb-4">
               Thank You for Your Message!
             </h3>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg font-nunito text-gray-600">
               We&apos;ve received your inquiry and will get back to you within 24 hours.
             </p>
           </motion.div>
@@ -87,7 +87,7 @@ const ContactForm = () => {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <p className="text-gray-700 text-base leading-relaxed">
+          <p className="text-gray-700 font-nunito text-base leading-relaxed">
             For more information about Dubai World Trade Centre or any of our services, please contact us through the form below.
           </p>
         </motion.div>

@@ -88,7 +88,7 @@ const DedicationSection = () => {
             className="text-center mb-12"
             variants={itemVariants}
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-2 text-[#333333]">
+            <h2 className="text-3xl md:text-4xl font-rubik font-bold mb-2 text-[#333333]">
               DEDICATION TO QUALITY AND PRECISION
             </h2>
           </motion.div>
@@ -166,8 +166,8 @@ const FeatureCard = ({ title, description, image, index }: FeatureCardProps) => 
 
       {/* Content */}
       <div className="p-0">
-        <h3 className="text-base font-bold mb-2 text-[#a5cd39]">{title}</h3>
-        <p className="text-gray-700 text-sm leading-relaxed">{description}</p>
+        <h3 className="text-base font-markazi font-bold mb-2 text-[#a5cd39]">{title}</h3>
+        <p className="text-gray-700 text-sm leading-relaxed font-nunito">{description}</p>
       </div>
     </motion.div>
   );

@@ -21,7 +21,7 @@ const ContactHero = () => {
       {/* Content */}
       <div className="relative z-10 text-center text-white w-full px-24 md:px-32 lg:px-48">
         <motion.h1
-          className="text-5xl md:text-6xl font-bold mb-6"
+          className="text-5xl md:text-6xl font-rubik font-bold mb-6"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
@@ -30,7 +30,7 @@ const ContactHero = () => {
         </motion.h1>
 
         <motion.p
-          className="text-base md:text-lg text-white/90 max-w-2xl mx-auto leading-relaxed"
+          className="text-base md:text-lg font-nunito text-white/90 max-w-2xl mx-auto leading-relaxed"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}

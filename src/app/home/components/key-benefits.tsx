@@ -155,7 +155,7 @@ const KeyBenefits = () => {
           animate={controls}
           variants={itemVariants}
         >
-          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">Key Benefits</h2>
+          <h2 className="text-4xl sm:text-5xl font-rubik font-bold text-white mb-4">Key Benefits</h2>
           <div className="w-16 h-[3px] bg-white mb-6 mx-auto"></div>
         </motion.div>
 
@@ -179,7 +179,7 @@ const KeyBenefits = () => {
                 {benefit.icon}
               </motion.div>
               <motion.p
-                className="text-white text-sm font-medium max-w-[120px]"
+                className="text-white text-sm font-nunito font-medium max-w-[120px]"
                 variants={itemVariants}
               >
                 {benefit.title}

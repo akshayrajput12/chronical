@@ -9,12 +9,12 @@ const BoothRequirements = () => {
         {/* Main Card */}
         <div className="border-2 border-[#a5cd39] rounded-lg p-8 md:p-12 bg-white shadow-sm hover:shadow-md transition-shadow duration-300 max-w-4xl mx-auto">
           {/* Heading */}
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-gray-900 mb-6">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-rubik font-bold text-center text-gray-900 mb-6">
             DESCRIBE YOUR EXHIBITION BOOTH REQUIREMENTS
           </h2>
 
           {/* Contact Information */}
-          <div className="text-center text-lg md:text-xl text-gray-700">
+          <div className="text-center text-lg md:text-xl font-nunito text-gray-700">
             <span>Call </span>
             <a
               href="tel:+971543474645"

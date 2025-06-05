@@ -327,7 +327,7 @@ const Header = () => {
                                                             >
                                                                 <div className="flex space-x-8 px-4">
                                                                     <Link
-                                                                        href="/restaurants-retail"
+                                                                        href="/customexhibitionstands"
                                                                         className={cn(
                                                                             "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
                                                                             isScrolled ||
@@ -340,7 +340,7 @@ const Header = () => {
                                                                         STANDS
                                                                     </Link>
                                                                     <Link
-                                                                        href="/getting-here"
+                                                                        href="/doubledeckerexhibitionstands"
                                                                         className={cn(
                                                                             "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
                                                                             isScrolled ||
@@ -354,7 +354,7 @@ const Header = () => {
                                                                         STANDS
                                                                     </Link>
                                                                     <Link
-                                                                        href="/hotels"
+                                                                        href="/countrypavilionexpoboothsolutions"
                                                                         className={cn(
                                                                             "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
                                                                             isScrolled ||
@@ -429,16 +429,16 @@ const Header = () => {
                                                         ></div>
                                                         <div className="relative group">
                                                             <SubNavItem
-                                                                href="/organise-event"
+                                                                href="/portfolio"
                                                                 label="PORTFOLIO"
-                                                                subLabel="Turnkey solutions for your events"
+                                                                subLabel="Our exhibition stand projects"
                                                                 isActive={
                                                                     activeLink ===
-                                                                    "/organise-event"
+                                                                    "/portfolio"
                                                                 }
                                                                 onClick={() =>
                                                                     setActiveLink(
-                                                                        "/organise-event",
+                                                                        "/portfolio",
                                                                     )
                                                                 }
                                                             />
@@ -792,7 +792,7 @@ const TabItem = ({
             <Link
                 href={href}
                 className={cn(
-                    "uppercase font-semibold transition-colors p-4 px-3 text-white text-sm tracking-wide",
+                    "uppercase font-nunito font-semibold transition-colors p-4 px-3 text-white text-sm tracking-wide",
                     className,
                     isActive && (activeClassName || className),
                 )}
@@ -806,7 +806,7 @@ const TabItem = ({
     return (
         <button
             className={cn(
-                "uppercase font-semibold transition-colors py-3 px-6 text-white text-sm tracking-wide",
+                "uppercase font-nunito font-semibold transition-colors py-3 px-6 text-white text-sm tracking-wide",
                 className,
                 isActive && (activeClassName || className),
             )}
@@ -833,7 +833,7 @@ const NavItem = ({
         <Link
             href={href}
             className={cn(
-                "uppercase font-medium transition-colors px-3 text-[12px]",
+                "uppercase font-nunito font-medium transition-colors px-3 text-[12px]",
                 "text-white hover:text-[#a5cd39]",
                 isActive && "text-[#a5cd39]",
             )}
@@ -878,10 +878,10 @@ const SubNavItem = ({
             )}
             onClick={onClick}
         >
-            <span className="uppercase font-medium text-sm">{label}</span>
+            <span className="uppercase font-markazi font-medium text-sm">{label}</span>
             <span
                 className={cn(
-                    "text-xs mt-1 max-w-[150px] text-center",
+                    "text-xs font-nunito mt-1 max-w-[150px] text-center",
                     isScrolled || isSpecialPage
                         ? "text-gray-500"
                         : "text-white/80",
@@ -908,7 +908,7 @@ const MobileNavItem = ({
     <Link
         href={href}
         className={cn(
-            "text-[#2C2C2C] uppercase font-medium block py-2 hover:text-[#a5cd39] transition-colors",
+            "text-[#2C2C2C] uppercase font-nunito font-medium block py-2 hover:text-[#a5cd39] transition-colors",
             isActive && "text-[#a5cd39]",
         )}
         onClick={onClick}

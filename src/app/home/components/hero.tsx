@@ -131,7 +131,7 @@ const HeroSection: React.FC = () => {
                 >
                     <div className="overflow-hidden mb-6">
                         <motion.h1
-                            className="text-3xl sm:text-4xl md:text-5xl font-bold whitespace-normal md:whitespace-nowrap leading-tight tracking-tight"
+                            className="text-3xl sm:text-4xl md:text-5xl font-rubik font-bold whitespace-normal md:whitespace-nowrap leading-tight tracking-tight"
                             initial={{ y: 100, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{
@@ -186,7 +186,7 @@ const HeroSection: React.FC = () => {
                     </div>
 
                     <motion.h2
-                        className="text-xl sm:text-2xl font-semibold mb-6"
+                        className="text-xl sm:text-2xl font-markazi font-semibold mb-6"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 1.5 }}
@@ -195,7 +195,7 @@ const HeroSection: React.FC = () => {
                     </motion.h2>
 
                     <motion.p
-                        className="text-base sm:text-lg font-medium pt-2"
+                        className="text-base sm:text-lg font-nunito font-medium pt-2"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 1 }}

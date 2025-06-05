@@ -181,12 +181,12 @@ const BusinessHubSection = () => {
       <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 md:gap-20 items-start">
         {/* Headings */}
         <div className="max-w-md">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-[#222] leading-tight">
+          <h2 className="text-4xl md:text-5xl font-rubik font-extrabold text-[#222] leading-tight">
             <span className="text-[#222] block hover:translate-x-1 transition-transform duration-300">
               {businessData.heading}
             </span>
           </h2>
-          <div className="text-2xl md:text-3xl text-[#333] font-medium mt-2">
+          <div className="text-2xl md:text-3xl font-markazi text-[#333] font-medium mt-2">
             {businessData.subheading}
           </div>
           <div className="w-24 h-[3px] bg-[#a5cd39] mt-6 hover:w-32 transition-all duration-300" />
@@ -197,7 +197,7 @@ const BusinessHubSection = () => {
           {businessData.paragraphs.map((paragraph) => (
             <p
               key={paragraph.id}
-              className="leading-relaxed hover:translate-x-1 hover:text-[#222] transition-all duration-200"
+              className="font-nunito leading-relaxed hover:translate-x-1 hover:text-[#222] transition-all duration-200"
             >
               {paragraph.content}
             </p>
@@ -218,12 +218,12 @@ const BusinessHubSection = () => {
             </div>
 
             {/* Label */}
-            <div className="text-xl md:text-2xl font-medium text-[#333] mt-2 hover:-translate-y-0.5 transition-transform duration-200">
+            <div className="text-xl md:text-2xl font-markazi font-medium text-[#333] mt-2 hover:-translate-y-0.5 transition-transform duration-200">
               {stat.label}
             </div>
 
             {/* Sublabel */}
-            <div className="text-sm text-[#666] uppercase tracking-wide mt-1 hover:-translate-y-0.5 transition-transform duration-200">
+            <div className="text-sm font-nunito text-[#666] uppercase tracking-wide mt-1 hover:-translate-y-0.5 transition-transform duration-200">
               {stat.sublabel}
             </div>
 

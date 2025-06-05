@@ -7,6 +7,12 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        'rubik': ['var(--font-rubik)', 'sans-serif'],
+        'nunito': ['var(--font-nunito)', 'sans-serif'],
+        'markazi': ['var(--font-markazi-text)', 'serif'],
+        'noto-kufi-arabic': ['var(--font-noto-kufi-arabic)', 'sans-serif'],
+      },
       animation: {
         "fade-in": "fade-in 0.5s ease-in-out forwards",
         "slide-in-from-top": "slide-in-from-top 0.5s ease-in-out forwards",

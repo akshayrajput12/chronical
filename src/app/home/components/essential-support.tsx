@@ -117,13 +117,13 @@ const EssentialSupport = () => {
 
       <div className="container mx-auto px-4 relative z-20">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-2">
-            {sectionData.heading} <span className="font-normal">{sectionData.heading_span}</span>
+          <h2 className="text-3xl md:text-4xl font-rubik font-bold mb-2">
+            {sectionData.heading} <span className="font-markazi font-normal">{sectionData.heading_span}</span>
           </h2>
           <div className="flex justify-center">
             <div className="h-1 bg-[#a5cd39] w-16 mt-2 mb-6"></div>
           </div>
-          <p className="text-gray-600 max-w-3xl mx-auto">
+          <p className="text-gray-600 font-nunito max-w-3xl mx-auto">
             {sectionData.description}
           </p>
         </div>
@@ -143,14 +143,14 @@ const EssentialSupport = () => {
                 </div>
                 <div className="border-t border-gray-300 flex-grow ml-4"></div>
               </div>
-              <h3 className="text-lg font-semibold mb-6">{category.title}</h3>
+              <h3 className="text-lg font-markazi font-semibold mb-6">{category.title}</h3>
               <ul className="space-y-4">
                 {getSortedServices(category).map((service, serviceIndex) => (
                   <li key={serviceIndex} className="flex items-start">
                     <svg className="w-5 h-5 text-[#a5cd39] mr-2 mt-0.5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" />
                     </svg>
-                    <span className="text-sm text-gray-700">{service.service_text}</span>
+                    <span className="text-sm font-nunito text-gray-700">{service.service_text}</span>
                   </li>
                 ))}
               </ul>
@@ -170,14 +170,14 @@ const EssentialSupport = () => {
                 </div>
                 <div className="border-t border-gray-300 flex-grow ml-4"></div>
               </div>
-              <h3 className="text-lg font-semibold mb-6">{categories[4].title}</h3>
+              <h3 className="text-lg font-markazi font-semibold mb-6">{categories[4].title}</h3>
               <ul className="space-y-4">
                 {getSortedServices(categories[4]).map((service, serviceIndex) => (
                   <li key={serviceIndex} className="flex items-start">
                     <svg className="w-5 h-5 text-[#a5cd39] mr-2 mt-0.5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" />
                     </svg>
-                    <span className="text-sm text-gray-700">{service.service_text}</span>
+                    <span className="text-sm font-nunito text-gray-700">{service.service_text}</span>
                   </li>
                 ))}
               </ul>

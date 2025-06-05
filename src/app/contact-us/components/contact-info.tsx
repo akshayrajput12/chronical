@@ -28,25 +28,25 @@ const ContactInfo = () => {
               </motion.div>
 
               <div className="flex-1">
-                <h3 className="text-sm font-bold text-[#a5cd39] uppercase tracking-wider mb-3 group-hover:tracking-widest transition-all duration-300">
+                <h3 className="text-sm font-markazi font-bold text-[#a5cd39] uppercase tracking-wider mb-3 group-hover:tracking-widest transition-all duration-300">
                   SALES DEPARTMENT
                 </h3>
 
                 <div className="space-y-2">
                   <motion.p
-                    className="text-2xl font-bold text-gray-900 group-hover:text-[#a5cd39] transition-colors duration-300"
+                    className="text-2xl font-rubik font-bold text-gray-900 group-hover:text-[#a5cd39] transition-colors duration-300"
                     whileHover={{ scale: 1.02 }}
                   >
                     +971 554 974 645
                   </motion.p>
                   <motion.a
                     href="mailto:sales@chronicleexhibits.com"
-                    className="text-base text-gray-600 hover:text-[#a5cd39] transition-colors duration-300 block font-medium"
+                    className="text-base font-nunito text-gray-600 hover:text-[#a5cd39] transition-colors duration-300 block font-medium"
                     whileHover={{ scale: 1.01 }}
                   >
                     sales@chronicleexhibits.com
                   </motion.a>
-                  <p className="text-sm text-gray-500 leading-relaxed pt-2">
+                  <p className="text-sm font-nunito text-gray-500 leading-relaxed pt-2">
                     Get in touch for project inquiries, quotes, and exhibition stand design consultations.
                   </p>
                 </div>
@@ -72,25 +72,25 @@ const ContactInfo = () => {
               </motion.div>
 
               <div className="flex-1">
-                <h3 className="text-sm font-bold text-[#a5cd39] uppercase tracking-wider mb-3 group-hover:tracking-widest transition-all duration-300">
+                <h3 className="text-sm font-markazi font-bold text-[#a5cd39] uppercase tracking-wider mb-3 group-hover:tracking-widest transition-all duration-300">
                   CUSTOMER CARE
                 </h3>
 
                 <div className="space-y-2">
                   <motion.p
-                    className="text-2xl font-bold text-gray-900 group-hover:text-[#a5cd39] transition-colors duration-300"
+                    className="text-2xl font-rubik font-bold text-gray-900 group-hover:text-[#a5cd39] transition-colors duration-300"
                     whileHover={{ scale: 1.02 }}
                   >
                     +971 (0)4 389 3999
                   </motion.p>
                   <motion.a
                     href="mailto:care@chronicleexhibits.com"
-                    className="text-base text-gray-600 hover:text-[#a5cd39] transition-colors duration-300 block font-medium"
+                    className="text-base font-nunito text-gray-600 hover:text-[#a5cd39] transition-colors duration-300 block font-medium"
                     whileHover={{ scale: 1.01 }}
                   >
                     care@chronicleexhibits.com
                   </motion.a>
-                  <p className="text-sm text-gray-500 leading-relaxed pt-2">
+                  <p className="text-sm font-nunito text-gray-500 leading-relaxed pt-2">
                     Reach out for support, service requests, and post-project assistance.
                   </p>
                 </div>

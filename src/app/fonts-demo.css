@@ -1,0 +1,65 @@
+/* Google Fonts Import - Alternative Method */
+@import url('https://fonts.googleapis.com/css2?family=Markazi+Text:wght@400..700&family=Noto+Kufi+Arabic:wght@100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+
+/* 
+This file demonstrates the Google Fonts import style you requested.
+However, we're using Next.js font optimization in layout.tsx for better performance.
+
+Font Usage Classes:
+- .font-rubik - For headings
+- .font-markazi - For subheadings  
+- .font-nunito - For paragraphs and body text
+- .font-noto-kufi-arabic - For Arabic text support
+
+Example usage:
+<h1 className="font-rubik font-bold">Main Heading</h1>
+<h2 className="font-markazi font-semibold">Subheading</h2>
+<p className="font-nunito">Body text paragraph</p>
+<p className="font-noto-kufi-arabic" dir="rtl">Arabic text</p>
+*/
+
+/* Custom CSS classes using the imported fonts */
+.demo-rubik {
+  font-family: 'Rubik', sans-serif;
+}
+
+.demo-markazi {
+  font-family: 'Markazi Text', serif;
+}
+
+.demo-nunito {
+  font-family: 'Nunito', sans-serif;
+}
+
+.demo-noto-kufi {
+  font-family: 'Noto Kufi Arabic', sans-serif;
+}
+
+/* Typography hierarchy examples */
+.heading-primary {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 700;
+  font-size: 2.5rem;
+  line-height: 1.2;
+}
+
+.heading-secondary {
+  font-family: 'Markazi Text', serif;
+  font-weight: 600;
+  font-size: 1.875rem;
+  line-height: 1.3;
+}
+
+.body-text {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.arabic-text {
+  font-family: 'Noto Kufi Arabic', sans-serif;
+  font-weight: 400;
+  direction: rtl;
+  text-align: right;
+}

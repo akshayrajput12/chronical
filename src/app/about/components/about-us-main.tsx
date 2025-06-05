@@ -101,14 +101,14 @@ const AboutUsMain = () => {
               {/* Right side - Text content */}
               <div className="w-full ml-0 sm:ml-[40px] md:ml-[60px] lg:ml-[80px] md:w-[500px] lg:w-[550px] pt-8 md:pt-0">
                 <motion.div variants={itemVariants}>
-                  <div className="text-[#a5cd39] uppercase tracking-wider mb-3 font-medium">ABOUT US</div>
-                  <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif text-gray-900 mb-6 leading-tight">
+                  <div className="text-[#a5cd39] uppercase tracking-wider mb-3 font-medium font-markazi">ABOUT US</div>
+                  <h2 className="text-3xl md:text-4xl lg:text-5xl font-rubik font-bold text-gray-900 mb-6 leading-tight">
                     Electronics And Computer Software Export Promotion Council
                   </h2>
                 </motion.div>
 
                 <motion.p
-                  className="text-gray-600 mb-6 leading-relaxed text-base"
+                  className="text-gray-600 mb-6 leading-relaxed text-base font-nunito"
                   variants={itemVariants}
                 >
                   Electronics & Computer Software Export Promotion Council or ESC, is India&apos;s apex trade promotion organization mandated to promote international cooperation in the field of electronics, telecom, and IT. Established with the support of Ministry of Commerce in the year 1989, Council has over 2300 members spread all over the country.

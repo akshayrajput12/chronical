@@ -182,9 +182,9 @@ const NewCompany = () => {
               variants={containerVariants}
             >
               <motion.div variants={titleVariants} className="mb-4">
-                <h2 className="text-3xl md:text-4xl font-bold inline-block">
+                <h2 className="text-3xl md:text-4xl font-rubik font-bold inline-block">
                   New Company{" "}
-                  <span className="font-normal text-gray-700">Formation</span>
+                  <span className="font-markazi font-normal text-gray-700">Formation</span>
                 </h2>
                 <motion.div
                   className="h-1 bg-[#a5cd39] mt-2"
@@ -193,7 +193,7 @@ const NewCompany = () => {
               </motion.div>
 
               <motion.p
-                className="text-gray-700 mb-6"
+                className="text-gray-700 font-nunito mb-6"
                 variants={textVariants}
               >
                 Forming a new company has never been easier and can be done online from
@@ -203,7 +203,7 @@ const NewCompany = () => {
               </motion.p>
 
               <motion.p
-                className="text-gray-700 mb-8"
+                className="text-gray-700 font-nunito mb-8"
                 variants={textVariants}
               >
                 From determining your new company structure to defining different business
@@ -251,9 +251,9 @@ const NewCompany = () => {
             variants={containerVariants}
           >
             <motion.div variants={titleVariants} className="mb-4">
-              <h2 className="text-3xl md:text-4xl font-bold inline-block">
+              <h2 className="text-3xl md:text-4xl font-rubik font-bold inline-block">
                 {sectionData.title}{" "}
-                <span className="font-normal text-gray-700">{sectionData.subtitle}</span>
+                <span className="font-markazi font-normal text-gray-700">{sectionData.subtitle}</span>
               </h2>
               <motion.div
                 className="h-1 bg-[#a5cd39] mt-2"
@@ -262,14 +262,14 @@ const NewCompany = () => {
             </motion.div>
 
             <motion.p
-              className="text-gray-700 mb-6"
+              className="text-gray-700 font-nunito mb-6"
               variants={textVariants}
             >
               {sectionData.description_1}
             </motion.p>
 
             <motion.p
-              className="text-gray-700 mb-8"
+              className="text-gray-700 font-nunito mb-8"
               variants={textVariants}
             >
               {sectionData.description_2}

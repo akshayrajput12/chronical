@@ -133,7 +133,7 @@ const InstagramFeed = () => {
     <section className="py-16 bg-gray-100" ref={ref} id="instagram-feed">
       <div className="container mx-auto px-4">
         <div className="text-center mb-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
+          <h2 className="text-2xl md:text-3xl font-rubik font-bold text-gray-900">
             {title} <span className="text-[#a5cd39]">{instagramHandle}</span> {subtitle}
           </h2>
           <div className="w-16 h-[2px] bg-gray-300 mx-auto mt-4"></div>
@@ -211,11 +211,11 @@ const InstagramCard = ({ post }: InstagramCardProps) => {
 
       <div className="absolute bottom-0 left-0 right-0 p-4 text-white z-20">
         <div className="flex flex-col">
-          <h3 className="text-xl font-bold leading-tight">{post.caption}</h3>
-          {post.subcaption && <p className="text-lg leading-tight">{post.subcaption}</p>}
-          {post.tag && <p className="text-[#a5cd39] mt-1 font-medium">{post.tag}</p>}
+          <h3 className="text-xl font-markazi font-bold leading-tight">{post.caption}</h3>
+          {post.subcaption && <p className="text-lg font-nunito leading-tight">{post.subcaption}</p>}
+          {post.tag && <p className="text-[#a5cd39] font-nunito mt-1 font-medium">{post.tag}</p>}
           {hasRedirectUrl && (
-            <p className="text-white/80 text-sm mt-2 underline">Click to learn more</p>
+            <p className="text-white/80 font-nunito text-sm mt-2 underline">Click to learn more</p>
           )}
         </div>
       </div>

@@ -25,7 +25,7 @@ const Footer = () => {
                         transition={{ duration: 0.5, delay: 0.1 }}
                         viewport={{ once: true }}
                     >
-                        <h3 className="text-base w-max font-semibold uppercase mb-3 relative flex items-center group">
+                        <h3 className="text-base w-max font-markazi font-semibold uppercase mb-3 relative flex items-center group">
                             <span className="relative z-10 w-max group-hover:text-[#a5cd39] transition-colors duration-300">
                                 Services
                             </span>
@@ -59,7 +59,7 @@ const Footer = () => {
                         transition={{ duration: 0.5, delay: 0.2 }}
                         viewport={{ once: true }}
                     >
-                        <h3 className="text-base w-max font-semibold uppercase mb-3 relative flex items-center group">
+                        <h3 className="text-base w-max font-markazi font-semibold uppercase mb-3 relative flex items-center group">
                             <span className="relative z-10 w-max group-hover:text-[#a5cd39] transition-colors duration-300">
                                 Locations
                             </span>
@@ -86,7 +86,7 @@ const Footer = () => {
                         transition={{ duration: 0.5, delay: 0.3 }}
                         viewport={{ once: true }}
                     >
-                        <h3 className="text-base font-semibold w-max uppercase mb-3 relative flex items-center group">
+                        <h3 className="text-base font-markazi font-semibold w-max uppercase mb-3 relative flex items-center group">
                             <span className="relative z-10 w-max group-hover:text-[#a5cd39] transition-colors duration-300">
                                 Resources
                             </span>
@@ -109,7 +109,7 @@ const Footer = () => {
                         viewport={{ once: true }}
                     >
                         <div className="border border-gray-600 hover:border-[#a5cd39] rounded-md p-3 mb-3 text-center transition-all duration-300 hover:shadow-[0_0_10px_rgba(165,205,57,0.3)] group">
-                            <h3 className="text-sm font-medium mb-1.5 group-hover:text-[#a5cd39] transition-colors duration-300">
+                            <h3 className="text-sm font-markazi font-medium mb-1.5 group-hover:text-[#a5cd39] transition-colors duration-300">
                                 CALL US
                             </h3>
                             <a
@@ -148,13 +148,13 @@ const Footer = () => {
                     >
                         <div className="border border-gray-600 hover:border-[#a5cd39] rounded-md p-4 text-center transition-all duration-300 hover:shadow-[0_0_15px_rgba(165,205,57,0.3)] flex flex-col h-full justify-between mr-0">
                             <div>
-                                <h3 className="text-sm mb-0.5 font-medium">
+                                <h3 className="text-sm mb-0.5 font-markazi font-medium">
                                     DOWNLOAD OUR
                                 </h3>
-                                <h3 className="text-lg font-bold mb-3 text-[#a5cd39]">
+                                <h3 className="text-lg font-rubik font-bold mb-3 text-[#a5cd39]">
                                     COMPANY PROFILE
                                 </h3>
-                                <p className="text-xs text-gray-400 mb-4">
+                                <p className="text-xs font-nunito text-gray-400 mb-4">
                                     Get detailed information about our services,
                                     portfolio, and expertise in exhibition stand
                                     design. Our company profile includes our
@@ -188,7 +188,7 @@ const FooterLink = ({ href, label }: { href: string; label: string }) => (
             className="text-gray-300 hover:text-[#a5cd39] transition-colors flex items-center group"
         >
             <ChevronRight className="w-3.5 h-3.5 mr-1 text-[#a5cd39] transform group-hover:translate-x-1 transition-transform duration-300" />
-            <span className="group-hover:translate-x-1 transition-transform duration-300">
+            <span className="font-nunito group-hover:translate-x-1 transition-transform duration-300">
                 {label}
             </span>
         </Link>
