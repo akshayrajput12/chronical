@@ -15,8 +15,12 @@ import Logo from "./logo";
 import { motion, AnimatePresence } from "framer-motion";
 
 // Create a context to share header state
-const HeaderContext = createContext<{ isScrolled: boolean }>({
+const HeaderContext = createContext<{
+    isScrolled: boolean;
+    isSpecialPage: boolean;
+}>({
     isScrolled: false,
+    isSpecialPage: false,
 });
 
 const Header = () => {
@@ -26,14 +30,11 @@ const Header = () => {
     // const [showExhibitionDropdown, setShowExhibitionDropdown] = useState(false); // Not currently used
     const [activeLink, setActiveLink] = useState("");
     const [isHeaderVisible, setIsHeaderVisible] = useState(true);
-    const [showEventsSubMenu, setShowEventsSubMenu] = useState(true);
+    const [activeSubMenu, setActiveSubMenu] = useState<string | null>("expo");
     const lowerHeaderRef = useRef<HTMLDivElement>(null);
 
     // Check if current page is portfolio page or blog detail page
-    const isPortfolioPage = pathname?.startsWith("/portfolio");
-    const isBlogDetailPage =
-        pathname?.startsWith("/blog/") && pathname !== "/blog";
-    const isSpecialPage = isPortfolioPage || isBlogDetailPage;
+    const isSpecialPage = pathname !== "/";
 
     // Context value is provided directly to the provider
 
@@ -76,10 +77,6 @@ const Header = () => {
     //   setShowExhibitionDropdown(!showExhibitionDropdown);
     // };
 
-    // Toggle events submenu
-    const toggleEventsSubMenu = () => {
-        setShowEventsSubMenu(!showEventsSubMenu);
-    };
 
     // Toggle header visibility
     const toggleHeaderVisibility = () => {
@@ -114,7 +111,7 @@ const Header = () => {
     };
 
     return (
-        <HeaderContext.Provider value={{ isScrolled }}>
+        <HeaderContext.Provider value={{ isScrolled, isSpecialPage }}>
             <AnimatePresence>
                 {isHeaderVisible && (
                     <motion.header
@@ -154,14 +151,18 @@ const Header = () => {
                                     <TabItem
                                         href="/conference"
                                         label="CONFERENCE"
-                                        isActive={activeLink === "/conference"}
+                                        isActive={activeSubMenu === "conference"}
                                         onClick={() => {
                                             setActiveLink("/conference");
-                                            setShowEventsSubMenu(false);
+                                            setActiveSubMenu(
+                                                activeSubMenu === "conference"
+                                                    ? null
+                                                    : "conference",
+                                            );
                                         }}
                                         className={cn(
                                             "bg-[#222222]",
-                                            activeLink !== "/conference" &&
+                                            activeSubMenu !== "conference" &&
                                                 "hover:bg-[#333333]",
                                         )}
                                         activeClassName="bg-[#a5cd39] text-white"
@@ -169,19 +170,17 @@ const Header = () => {
                                     <TabItem
                                         href="/"
                                         label="EXPO BOOTH"
-                                        isActive={
-                                            activeLink === "/events" ||
-                                            showEventsSubMenu
-                                        }
+                                        isActive={activeSubMenu === "expo"}
                                         onClick={() => {
                                             setActiveLink("/events");
-                                            toggleEventsSubMenu();
+                                            setActiveSubMenu(
+                                                activeSubMenu === "expo" ? null : "expo",
+                                            );
                                         }}
                                         className={cn(
                                             "bg-[#222222]",
-                                            activeLink !== "/events" ||
-                                                (!showEventsSubMenu &&
-                                                    "hover:bg-[#333333]"),
+                                            activeSubMenu !== "expo" &&
+                                                "hover:bg-[#333333]",
                                         )}
                                         activeClassName="bg-[#a5cd39] text-white"
                                     />
@@ -189,14 +188,16 @@ const Header = () => {
                                     <TabItem
                                         href="/kiosk"
                                         label="KIOSK"
-                                        isActive={activeLink === "/kiosk"}
+                                        isActive={activeSubMenu === "kiosk"}
                                         onClick={() => {
                                             setActiveLink("/kiosk");
-                                            setShowEventsSubMenu(false);
+                                            setActiveSubMenu(
+                                                activeSubMenu === "kiosk" ? null : "kiosk",
+                                            );
                                         }}
                                         className={cn(
                                             "bg-[#222222]",
-                                            activeLink !== "/kiosk" &&
+                                            activeSubMenu !== "kiosk" &&
                                                 "hover:bg-[#333333]",
                                         )}
                                         activeClassName="bg-[#a5cd39] text-white"
@@ -292,7 +293,7 @@ const Header = () => {
                         </div>
 
                         {/* Events Lower Header - Only visible when Events tab is active */}
-                        {showEventsSubMenu && (
+                        {activeSubMenu && (
                             <div
                                 ref={lowerHeaderRef}
                                 className="w-full transition-all duration-300"
@@ -516,7 +517,11 @@ const Header = () => {
                                                             "text-[#a5cd39]",
                                                     )}
                                                     onClick={() => {
-                                                        toggleEventsSubMenu();
+                                                        setActiveSubMenu(
+                                                            activeSubMenu === "expo"
+                                                                ? null
+                                                                : "expo",
+                                                        );
                                                         setActiveLink(
                                                             "/events",
                                                         );
@@ -524,7 +529,7 @@ const Header = () => {
                                                 >
                                                     EXPO
                                                 </Link>
-                                                {showEventsSubMenu && (
+                                                {activeSubMenu === "expo" && (
                                                     <div className="pl-4 mt-2 space-y-3">
                                                         <MobileNavItem
                                                             href="/visit-us"
@@ -897,12 +902,7 @@ const SubNavItem = ({
     isActive?: boolean;
     onClick?: () => void;
 }) => {
-    const { isScrolled } = useContext(HeaderContext);
-    const pathname = usePathname();
-    const isPortfolioPage = pathname?.startsWith("/portfolio");
-    const isBlogDetailPage =
-        pathname?.startsWith("/blog/") && pathname !== "/blog";
-    const isSpecialPage = isPortfolioPage || isBlogDetailPage;
+    const { isScrolled, isSpecialPage } = useContext(HeaderContext);
 
     return (
         <Link
