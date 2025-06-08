@@ -6,7 +6,7 @@ import Image from "next/image";
 
 const DoubleDeckerHero = () => {
   return (
-    <section className="relative h-[60vh] md:h-[70vh] lg:h-[80vh] overflow-hidden">
+    <section className="relative h-[60vh] sm:h-[65vh] md:h-[70vh] lg:h-[75vh] overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0">
         <Image
@@ -30,10 +30,10 @@ const DoubleDeckerHero = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 uppercase tracking-wide">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold mb-4 sm:mb-6 uppercase tracking-wide leading-tight">
                 DOUBLE DECKER EXHIBITION STANDS
               </h1>
-              <p className="text-base sm:text-lg md:text-xl lg:text-2xl max-w-4xl mx-auto leading-relaxed">
+              <p className="text-sm sm:text-base md:text-lg lg:text-xl max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-3xl mx-auto leading-relaxed font-light tracking-wide">
                 Make your exhibit stand out and step up with our smartly created Double Decker Exhibition Stands. Engage your visitors with
                 our stunning and innovative double-decker booths. Make the most of your space, and do not compromise in design. Impress
                 your guests during trade shows and special events by incorporating these.

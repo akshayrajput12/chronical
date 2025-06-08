@@ -177,8 +177,8 @@ const BusinessHubSection = () => {
   }
 
   return (
-    <section id="business-hub" className="bg-white py-20 px-4 md:px-20 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 md:gap-20 items-start">
+    <section id="business-hub" className="bg-white py-8 sm:py-12 md:py-16 lg:py-20 px-4 md:px-20 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-6 sm:gap-8 md:gap-10 lg:gap-12 xl:gap-16 items-start">
         {/* Headings */}
         <div className="max-w-md">
           <h2 className="text-4xl md:text-5xl font-rubik font-extrabold text-[#222] leading-tight">
@@ -206,7 +206,7 @@ const BusinessHubSection = () => {
       </div>
 
       {/* Stats */}
-      <div className="mt-20 grid grid-cols-1 sm:grid-cols-3 gap-8 md:gap-16 border-t border-gray-200 pt-16">
+      <div className="mt-8 sm:mt-10 md:mt-12 lg:mt-16 xl:mt-20 grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 md:gap-12 lg:gap-16 border-t border-gray-200 pt-8 sm:pt-10 md:pt-12 lg:pt-16">
         {businessData.stats.map((stat) => (
           <div
             key={stat.id}

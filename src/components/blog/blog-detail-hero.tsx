@@ -17,7 +17,7 @@ const BlogDetailHero = ({ title, subtitle, date, heroImage }: BlogDetailHeroProp
     return (
         <section className="w-full bg-white">
             {/* Full width hero container with background image */}
-            <div className="relative w-full overflow-hidden">
+            <div className="relative w-full h-[60vh] sm:h-[65vh] md:h-[70vh] lg:h-[75vh] overflow-hidden flex items-center justify-center">
                 {/* Background Image */}
                 <div className="absolute inset-0 z-0">
                     <Image
@@ -32,12 +32,12 @@ const BlogDetailHero = ({ title, subtitle, date, heroImage }: BlogDetailHeroProp
                 </div>
 
                 {/* Content */}
-                <div className="relative z-10 px-4 md:px-6 lg:px-8 py-16 md:py-20 lg:py-24">
+                <div className="relative z-10 px-4 sm:px-6 md:px-8 lg:px-12 text-center text-white w-full">
                     <div className="max-w-7xl mx-auto">
-                        <div className="max-w-4xl mx-auto text-center">
+                        <div className="max-w-4xl mx-auto">
                             {/* Press Release Label */}
                             <motion.div
-                                className="mb-6"
+                                className="mb-4 sm:mb-6"
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.6 }}
@@ -49,7 +49,7 @@ const BlogDetailHero = ({ title, subtitle, date, heroImage }: BlogDetailHeroProp
 
                             {/* Title */}
                             <motion.h1
-                                className="text-white font-serif text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-normal leading-tight mb-8"
+                                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold text-white mb-4 sm:mb-6 leading-tight"
                                 initial={{ opacity: 0, y: 30 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8, delay: 0.2 }}
@@ -64,7 +64,7 @@ const BlogDetailHero = ({ title, subtitle, date, heroImage }: BlogDetailHeroProp
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.6, delay: 0.3 }}
                             >
-                                <span className="text-white/90 text-sm font-medium uppercase tracking-wider">
+                                <span className="text-white/90 text-sm sm:text-base md:text-lg lg:text-xl font-light max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-3xl mx-auto leading-relaxed tracking-wide">
                                     {date}
                                 </span>
                             </motion.div>

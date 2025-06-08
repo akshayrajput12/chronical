@@ -42,7 +42,7 @@ export default function EventDetailPage() {
     return (
         <div className="min-h-screen bg-gray-100">
             {/* Hero Section - Full Width */}
-            <section className="relative h-[60vh] md:h-[70vh] lg:h-[80vh] w-full overflow-hidden">
+            <section className="relative h-[60vh] sm:h-[65vh] md:h-[70vh] lg:h-[75vh] w-full overflow-hidden">
                 {/* Background Image - Same as Event Card */}
                 <Image
                     src={event.image}
@@ -59,19 +59,22 @@ export default function EventDetailPage() {
                     }}
                 />
 
+                {/* Dark Overlay */}
+                <div className="absolute inset-0 bg-black/40 z-5"></div>
+
                 {/* Centered Title */}
-                <div className="relative z-20 flex items-center justify-center h-full text-center text-white px-6">
+                <div className="relative z-20 flex items-center justify-center h-full text-center text-white px-4 sm:px-6 md:px-8 lg:px-12">
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
                         className="max-w-4xl"
                     >
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-light leading-tight mb-8">
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold leading-tight mb-4 sm:mb-6">
                             {event.title}
                         </h1>
-                        <div className="mt-8">
-                            <ChevronDown className="w-6 h-6 mx-auto animate-bounce opacity-70" />
+                        <div className="mt-4 sm:mt-8">
+                            <ChevronDown className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 mx-auto animate-bounce opacity-70" />
                         </div>
                     </motion.div>
                 </div>

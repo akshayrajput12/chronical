@@ -25,8 +25,8 @@ const Footer = () => {
                         transition={{ duration: 0.5, delay: 0.1 }}
                         viewport={{ once: true }}
                     >
-                        <h3 className="text-base w-max font-markazi font-semibold uppercase mb-3 relative flex items-center group">
-                            <span className="relative z-10 w-max group-hover:text-[#a5cd39] transition-colors duration-300">
+                        <h3 className="w-max font-markazi font-semibold uppercase mb-3 relative flex items-center group">
+                            <span className="relative z-10 w-max group-hover:text-[#a5cd39] transition-colors duration-300 text-sm sm:text-base md:text-lg lg:text-xl" style={{ fontSize: '18px' }}>
                                 Services
                             </span>
                             <span className="absolute bottom-0 left-0 w-6 h-0.5 bg-[#a5cd39] group-hover:w-full transition-all duration-300"></span>
@@ -59,8 +59,8 @@ const Footer = () => {
                         transition={{ duration: 0.5, delay: 0.2 }}
                         viewport={{ once: true }}
                     >
-                        <h3 className="text-base w-max font-markazi font-semibold uppercase mb-3 relative flex items-center group">
-                            <span className="relative z-10 w-max group-hover:text-[#a5cd39] transition-colors duration-300">
+                        <h3 className="w-max font-markazi font-semibold uppercase mb-3 relative flex items-center group">
+                            <span className="relative z-10 w-max group-hover:text-[#a5cd39] transition-colors duration-300 text-sm sm:text-base md:text-lg lg:text-xl" style={{ fontSize: '18px' }}>
                                 Locations
                             </span>
                             <span className="absolute bottom-0 left-0 w-6 h-0.5 bg-[#a5cd39] group-hover:w-full transition-all duration-300"></span>
@@ -86,8 +86,8 @@ const Footer = () => {
                         transition={{ duration: 0.5, delay: 0.3 }}
                         viewport={{ once: true }}
                     >
-                        <h3 className="text-base font-markazi font-semibold w-max uppercase mb-3 relative flex items-center group">
-                            <span className="relative z-10 w-max group-hover:text-[#a5cd39] transition-colors duration-300">
+                        <h3 className="font-markazi font-semibold w-max uppercase mb-3 relative flex items-center group">
+                            <span className="relative z-10 w-max group-hover:text-[#a5cd39] transition-colors duration-300 text-sm sm:text-base md:text-lg lg:text-xl" style={{ fontSize: '18px' }}>
                                 Resources
                             </span>
                             <span className="absolute bottom-0 left-0 w-6 h-0.5 bg-[#a5cd39] group-hover:w-full transition-all duration-300"></span>
@@ -109,8 +109,8 @@ const Footer = () => {
                         viewport={{ once: true }}
                     >
                         <div className="border border-gray-600 hover:border-[#a5cd39] rounded-md p-3 mb-3 text-center transition-all duration-300 hover:shadow-[0_0_10px_rgba(165,205,57,0.3)] group">
-                            <h3 className="text-sm font-markazi font-medium mb-1.5 group-hover:text-[#a5cd39] transition-colors duration-300">
-                                CALL US
+                            <h3 className="font-markazi font-medium mb-1.5 group-hover:text-[#a5cd39] transition-colors duration-300">
+                                <span className="text-sm sm:text-base md:text-lg lg:text-xl" style={{ fontSize: '18px' }}>CALL US</span>
                             </h3>
                             <a
                                 href="tel:+971554974645"
@@ -148,8 +148,8 @@ const Footer = () => {
                     >
                         <div className="border border-gray-600 hover:border-[#a5cd39] rounded-md p-4 text-center transition-all duration-300 hover:shadow-[0_0_15px_rgba(165,205,57,0.3)] flex flex-col h-full justify-between mr-0">
                             <div>
-                                <h3 className="text-sm mb-0.5 font-markazi font-medium">
-                                    DOWNLOAD OUR
+                                <h3 className="mb-0.5 font-markazi font-medium">
+                                    <span className="text-sm sm:text-base md:text-lg lg:text-xl" style={{ fontSize: '18px' }}>DOWNLOAD OUR</span>
                                 </h3>
                                 <h3 className="text-lg font-rubik font-bold mb-3 text-[#a5cd39]">
                                     COMPANY PROFILE
