@@ -225,13 +225,13 @@ const NewCompany = () => {
             </motion.div>
 
             <motion.div
-              className="lg:w-1/2"
+              className="w-full lg:w-1/2 mt-10 lg:mt-0"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.3 }}
             >
               <ImageScrollGrid
-                className="h-[550px]"
+                className="h-[400px] sm:h-[550px]"
               />
             </motion.div>
           </div>
@@ -287,13 +287,13 @@ const NewCompany = () => {
           </motion.div>
 
           <motion.div
-            className="lg:w-1/2"
+            className="w-full lg:w-1/2 mt-10 lg:mt-0"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.3 }}
           >
             <ImageScrollGrid
-              className="h-[550px]"
+              className="h-[400px] sm:h-[550px]"
               columnImages={images}
             />
           </motion.div>

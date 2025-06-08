@@ -59,6 +59,9 @@ const InstagramFeed = () => {
   const [posts, setPosts] = useState<InstagramPostType[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
   // Fetch Instagram feed data
   useEffect(() => {
     const fetchData = async () => {
@@ -98,6 +101,28 @@ const InstagramFeed = () => {
       scrollRef.current.scrollBy({ left: 280, behavior: 'smooth' });
     }
   };
+
+  // Check scroll position to enable/disable buttons
+  const checkScroll = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
+    }
+  };
+
+  useEffect(() => {
+    const scrollElement = scrollRef.current;
+    if (scrollElement) {
+      scrollElement.addEventListener('scroll', checkScroll);
+      checkScroll(); // Initial check
+    }
+    return () => {
+      if (scrollElement) {
+        scrollElement.removeEventListener('scroll', checkScroll);
+      }
+    };
+  }, [posts]);
 
   // Show loading state or fallback to default content
   if (loading) {
@@ -174,20 +199,24 @@ const InstagramFeed = () => {
           </div>
 
           {/* Navigation Arrows */}
-          <button
-            onClick={scrollLeft}
-            className="absolute left-0 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow-md z-10"
-            aria-label="Previous slide"
-          >
-            <ChevronLeft size={24} />
-          </button>
-          <button
-            onClick={scrollRight}
-            className="absolute right-0 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow-md z-10"
-            aria-label="Next slide"
-          >
-            <ChevronRight size={24} />
-          </button>
+          {canScrollLeft && (
+            <button
+              onClick={scrollLeft}
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow-md z-10 transition-opacity"
+              aria-label="Previous slide"
+            >
+              <ChevronLeft size={24} />
+            </button>
+          )}
+          {canScrollRight && (
+            <button
+              onClick={scrollRight}
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow-md z-10 transition-opacity"
+              aria-label="Next slide"
+            >
+              <ChevronRight size={24} />
+            </button>
+          )}
         </div>
       </div>
     </section>

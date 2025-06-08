@@ -27,10 +27,11 @@ const Header = () => {
     const pathname = usePathname();
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    // const [showExhibitionDropdown, setShowExhibitionDropdown] = useState(false); // Not currently used
     const [activeLink, setActiveLink] = useState("");
+    const [mobileSubMenus, setMobileSubMenus] = useState<Record<string, boolean>>({});
     const [isHeaderVisible, setIsHeaderVisible] = useState(true);
     const [activeSubMenu, setActiveSubMenu] = useState<string | null>("expo");
+    const [mounted, setMounted] = useState(false);
     const lowerHeaderRef = useRef<HTMLDivElement>(null);
 
     // Check if current page is portfolio page or blog detail page
@@ -67,9 +68,25 @@ const Header = () => {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
     // Toggle mobile menu
     const toggleMobileMenu = () => {
         setIsMobileMenuOpen(!isMobileMenuOpen);
+        if (isMobileMenuOpen) {
+            setMobileSubMenus({}); // Reset submenus when closing main menu
+        }
+    };
+
+    const toggleMobileSubMenu = (key: string) => {
+        setMobileSubMenus(prev => ({ ...prev, [key]: !prev[key] }));
+    };
+
+    const closeMobileMenu = () => {
+        setIsMobileMenuOpen(false);
+        setMobileSubMenus({});
     };
 
     // Toggle exhibition dropdown (not currently used)
@@ -257,8 +274,8 @@ const Header = () => {
 
                                 {/* Mobile Menu Button */}
                                 <div className="flex items-center justify-between w-full lg:hidden">
-                                    <div className="bg-[#222222] px-4 py-3 flex-1 flex items-center justify-between">
-                                        <Logo isScrolled={isScrolled} />
+                                    <div className={cn("px-4 py-3 flex-1 flex items-center justify-between", mounted ? "bg-white" : "bg-[#222222]")}>
+                                        <Logo isScrolled={mounted} />
                                         <div className="flex items-center space-x-3">
                                             {/* Mobile WhatsApp Button */}
                                             <Link
@@ -276,7 +293,7 @@ const Header = () => {
                                                 <span className="hidden sm:inline">WA</span>
                                             </Link>
                                             <button
-                                                className="text-white"
+                                                className={cn(mounted ? "text-gray-800" : "text-white")}
                                                 onClick={toggleMobileMenu}
                                                 aria-label="Toggle menu"
                                             >
@@ -483,15 +500,11 @@ const Header = () => {
                             )}
                         >
                             <div className="h-full overflow-y-auto">
-                                <div className="flex justify-between items-center p-4 border-b border-gray-200 bg-[#222222]">
-                                    <Logo
-                                        isScrolled={isScrolled || isSpecialPage}
-                                    />
+                                <div className="flex justify-between items-center p-4 border-b border-gray-200 bg-white">
+                                    <Logo isScrolled={true} />
                                     <button
-                                        className="text-white"
-                                        onClick={() =>
-                                            setIsMobileMenuOpen(false)
-                                        }
+                                        className="text-gray-800"
+                                        onClick={closeMobileMenu}
                                         aria-label="Close menu"
                                     >
                                         <X className="w-6 h-6" />
@@ -508,163 +521,84 @@ const Header = () => {
 
                                             {/* Events with submenu */}
                                             <div className="relative">
-                                                <Link
-                                                    href="/"
+                                                <button
                                                     className={cn(
                                                         "text-[#2C2C2C] uppercase font-medium w-full text-left py-2 block",
-                                                        activeLink ===
-                                                            "/events" &&
-                                                            "text-[#a5cd39]",
+                                                        mobileSubMenus['expo'] && "text-[#a5cd39]",
                                                     )}
-                                                    onClick={() => {
-                                                        setActiveSubMenu(
-                                                            activeSubMenu === "expo"
-                                                                ? null
-                                                                : "expo",
-                                                        );
-                                                        setActiveLink(
-                                                            "/events",
-                                                        );
-                                                    }}
+                                                    onClick={() => toggleMobileSubMenu('expo')}
                                                 >
-                                                    EXPO
-                                                </Link>
-                                                {activeSubMenu === "expo" && (
-                                                    <div className="pl-4 mt-2 space-y-3">
-                                                        <MobileNavItem
-                                                            href="/visit-us"
-                                                            label="VISIT US"
-                                                            isActive={
-                                                                activeLink ===
-                                                                "/visit-us"
-                                                            }
-                                                            onClick={() => {
-                                                                setActiveLink(
-                                                                    "/visit-us",
-                                                                );
-                                                                setIsMobileMenuOpen(
-                                                                    false,
-                                                                );
-                                                            }}
-                                                        />
-                                                        <MobileNavItem
-                                                            href="/whats-on"
-                                                            label="WHAT'S ON"
-                                                            isActive={
-                                                                activeLink ===
-                                                                "/whats-on"
-                                                            }
-                                                            onClick={() => {
-                                                                setActiveLink(
-                                                                    "/whats-on",
-                                                                );
-                                                                setIsMobileMenuOpen(
-                                                                    false,
-                                                                );
-                                                            }}
-                                                        />
-                                                        <MobileNavItem
-                                                            href="/experience-dubai"
-                                                            label="EXPERIENCE DUBAI"
-                                                            isActive={
-                                                                activeLink ===
-                                                                "/experience-dubai"
-                                                            }
-                                                            onClick={() => {
-                                                                setActiveLink(
-                                                                    "/experience-dubai",
-                                                                );
-                                                                setIsMobileMenuOpen(
-                                                                    false,
-                                                                );
-                                                            }}
-                                                        />
-                                                        <MobileNavItem
-                                                            href="/organise-event"
-                                                            label="ORGANISE AN EVENT"
-                                                            isActive={
-                                                                activeLink ===
-                                                                "/organise-event"
-                                                            }
-                                                            onClick={() => {
-                                                                setActiveLink(
-                                                                    "/organise-event",
-                                                                );
-                                                                setIsMobileMenuOpen(
-                                                                    false,
-                                                                );
-                                                            }}
-                                                        />
-                                                        <div>
-                                                            <MobileNavItem
-                                                                href="/exhibit"
-                                                                label="EXHIBIT AT AN EVENT"
-                                                                isActive={
-                                                                    activeLink ===
-                                                                    "/exhibit"
-                                                                }
-                                                                onClick={() => {
-                                                                    setActiveLink(
-                                                                        "/exhibit",
-                                                                    );
-                                                                    setIsMobileMenuOpen(
-                                                                        false,
-                                                                    );
-                                                                }}
-                                                            />
-                                                            <div className="pl-4 mt-2 space-y-2">
-                                                                <MobileNavItem
-                                                                    href="/customexhibitionstands"
-                                                                    label="CUSTOM EXHIBITION STANDS"
-                                                                    isActive={
-                                                                        activeLink ===
-                                                                        "/customexhibitionstands"
-                                                                    }
-                                                                    onClick={() => {
-                                                                        setActiveLink(
-                                                                            "/customexhibitionstands",
-                                                                        );
-                                                                        setIsMobileMenuOpen(
-                                                                            false,
-                                                                        );
-                                                                    }}
-                                                                />
-                                                                <MobileNavItem
-                                                                    href="/doubledeckerexhibitionstands"
-                                                                    label="DOUBLE DECKER EXHIBITION STANDS"
-                                                                    isActive={
-                                                                        activeLink ===
-                                                                        "/doubledeckerexhibitionstands"
-                                                                    }
-                                                                    onClick={() => {
-                                                                        setActiveLink(
-                                                                            "/doubledeckerexhibitionstands",
-                                                                        );
-                                                                        setIsMobileMenuOpen(
-                                                                            false,
-                                                                        );
-                                                                    }}
-                                                                />
-                                                                <MobileNavItem
-                                                                    href="/countrypavilionexpoboothsolutions"
-                                                                    label="COUNTRY PAVILION EXPO BOOTH SOLUTIONS"
-                                                                    isActive={
-                                                                        activeLink ===
-                                                                        "/countrypavilionexpoboothsolutions"
-                                                                    }
-                                                                    onClick={() => {
-                                                                        setActiveLink(
-                                                                            "/countrypavilionexpoboothsolutions",
-                                                                        );
-                                                                        setIsMobileMenuOpen(
-                                                                            false,
-                                                                        );
-                                                                    }}
-                                                                />
+                                                    EXPO BOOTH
+                                                </button>
+                                                <AnimatePresence>
+                                                    {mobileSubMenus['expo'] && (
+                                                        <motion.div
+                                                            initial={{ height: 0, opacity: 0 }}
+                                                            animate={{ height: 'auto', opacity: 1 }}
+                                                            exit={{ height: 0, opacity: 0 }}
+                                                            className="pl-4 mt-2 space-y-3 overflow-hidden"
+                                                        >
+                                                            <div className="relative">
+                                                                <button
+                                                                    className={cn(
+                                                                        "text-[#2C2C2C] uppercase font-medium w-full text-left py-2 block",
+                                                                        mobileSubMenus['exhibition'] && "text-[#a5cd39]",
+                                                                    )}
+                                                                    onClick={() => toggleMobileSubMenu('exhibition')}
+                                                                >
+                                                                    EXHIBITION STANDS
+                                                                </button>
+                                                                <AnimatePresence>
+                                                                    {mobileSubMenus['exhibition'] && (
+                                                                        <motion.div
+                                                                            initial={{ height: 0, opacity: 0 }}
+                                                                            animate={{ height: 'auto', opacity: 1 }}
+                                                                            exit={{ height: 0, opacity: 0 }}
+                                                                            className="pl-4 mt-2 space-y-2 overflow-hidden"
+                                                                        >
+                                                                            <MobileNavItem
+                                                                                href="/customexhibitionstands"
+                                                                                label="CUSTOM STANDS"
+                                                                                isActive={pathname === "/customexhibitionstands"}
+                                                                                onClick={closeMobileMenu}
+                                                                            />
+                                                                            <MobileNavItem
+                                                                                href="/doubledeckerexhibitionstands"
+                                                                                label="DOUBLE DECKER STANDS"
+                                                                                isActive={pathname === "/doubledeckerexhibitionstands"}
+                                                                                onClick={closeMobileMenu}
+                                                                            />
+                                                                            <MobileNavItem
+                                                                                href="/countrypavilionexpoboothsolutions"
+                                                                                label="EXPO PAVILION STANDS"
+                                                                                isActive={pathname === "/countrypavilionexpoboothsolutions"}
+                                                                                onClick={closeMobileMenu}
+                                                                            />
+                                                                        </motion.div>
+                                                                    )}
+                                                                </AnimatePresence>
                                                             </div>
-                                                        </div>
-                                                    </div>
-                                                )}
+                                                            <MobileNavItem
+                                                                href="/whats-on"
+                                                                label="TOP EXHIBITIONS"
+                                                                isActive={pathname === "/whats-on"}
+                                                                onClick={closeMobileMenu}
+                                                            />
+                                                            <MobileNavItem
+                                                                href="/experience-dubai"
+                                                                label="TOP EXPO LOCATIONS"
+                                                                isActive={pathname === "/experience-dubai"}
+                                                                onClick={closeMobileMenu}
+                                                            />
+                                                            <MobileNavItem
+                                                                href="/portfolio"
+                                                                label="PORTFOLIO"
+                                                                isActive={pathname === "/portfolio"}
+                                                                onClick={closeMobileMenu}
+                                                            />
+                                                        </motion.div>
+                                                    )}
+                                                </AnimatePresence>
                                             </div>
 
                                             <MobileNavItem
@@ -674,21 +608,17 @@ const Header = () => {
                                                     activeLink === "/conference"
                                                 }
                                                 onClick={() => {
-                                                    setActiveLink(
-                                                        "/conference",
-                                                    );
-                                                    setIsMobileMenuOpen(false);
+                                                    setActiveLink("/conference");
+                                                    closeMobileMenu();
                                                 }}
                                             />
                                             <MobileNavItem
                                                 href="/kiosk"
                                                 label="KIOSK"
-                                                isActive={
-                                                    activeLink === "/kiosk"
-                                                }
+                                                isActive={activeLink === "/kiosk"}
                                                 onClick={() => {
                                                     setActiveLink("/kiosk");
-                                                    setIsMobileMenuOpen(false);
+                                                    closeMobileMenu();
                                                 }}
                                             />
                                         </div>
@@ -707,56 +637,45 @@ const Header = () => {
                                                 }
                                                 onClick={() => {
                                                     setActiveLink("/about");
-                                                    setIsMobileMenuOpen(false);
+                                                    closeMobileMenu();
                                                 }}
                                             />
                                             <MobileNavItem
                                                 href="/portfolio"
                                                 label="PORTFOLIO"
-                                                isActive={
-                                                    activeLink === "/portfolio"
-                                                }
+                                                isActive={activeLink === "/portfolio"}
                                                 onClick={() => {
                                                     setActiveLink("/portfolio");
-                                                    setIsMobileMenuOpen(false);
+                                                    closeMobileMenu();
                                                 }}
                                             />
                                             <MobileNavItem
                                                 href="/industry-insights"
                                                 label="INDUSTRY INSIGHTS"
                                                 isActive={
-                                                    activeLink ===
-                                                    "/industry-insights"
+                                                    activeLink === "/industry-insights"
                                                 }
                                                 onClick={() => {
-                                                    setActiveLink(
-                                                        "/industry-insights",
-                                                    );
-                                                    setIsMobileMenuOpen(false);
+                                                    setActiveLink("/industry-insights");
+                                                    closeMobileMenu();
                                                 }}
                                             />
                                             <MobileNavItem
                                                 href="/blog"
                                                 label="BLOG"
-                                                isActive={
-                                                    activeLink === "/blog"
-                                                }
+                                                isActive={activeLink === "/blog"}
                                                 onClick={() => {
                                                     setActiveLink("/blog");
-                                                    setIsMobileMenuOpen(false);
+                                                    closeMobileMenu();
                                                 }}
                                             />
                                             <MobileNavItem
                                                 href="/contact-us"
                                                 label="CONTACT US"
-                                                isActive={
-                                                    activeLink === "/contact-us"
-                                                }
+                                                isActive={activeLink === "/contact-us"}
                                                 onClick={() => {
-                                                    setActiveLink(
-                                                        "/contact-us",
-                                                    );
-                                                    setIsMobileMenuOpen(false);
+                                                    setActiveLink("/contact-us");
+                                                    closeMobileMenu();
                                                 }}
                                             />
                                             <MobileNavItem
@@ -765,7 +684,7 @@ const Header = () => {
                                                 isActive={activeLink === "/ar"}
                                                 onClick={() => {
                                                     setActiveLink("/ar");
-                                                    setIsMobileMenuOpen(false);
+                                                    closeMobileMenu();
                                                 }}
                                             />
 
@@ -774,7 +693,7 @@ const Header = () => {
                                                 <Link
                                                     href="https://wa.me/yournumberhere"
                                                     className="bg-[#a5cd39] text-white hover:bg-[#8fb82f] transition-colors duration-300 rounded px-4 py-3 flex items-center justify-center space-x-2 w-full"
-                                                    onClick={() => setIsMobileMenuOpen(false)}
+                                                    onClick={closeMobileMenu}
                                                 >
                                                     <svg
                                                         xmlns="http://www.w3.org/2000/svg"
@@ -797,8 +716,8 @@ const Header = () => {
                         {isMobileMenuOpen && (
                             <div
                                 className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-                                onClick={() => setIsMobileMenuOpen(false)}
-                            />
+                                onClick={closeMobileMenu}
+                           />
                         )}
 
                         {/* Sticky Search Button for Mobile */}

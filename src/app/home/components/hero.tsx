@@ -102,7 +102,7 @@ const HeroSection: React.FC = () => {
     }
 
     return (
-        <section id="hero" className="relative w-full h-screen overflow-hidden">
+        <section id="hero" className="relative w-full h-[90vh] overflow-hidden">
             {/* Background Video */}
             <motion.video
                 initial={{ scale: 1.1 }}
@@ -112,17 +112,18 @@ const HeroSection: React.FC = () => {
                 loop
                 muted
                 playsInline
-                className="absolute top-0 left-0 w-full h-4/5 object-cover"
+                poster="/images/home.jpg"
+                className="absolute top-0 left-0 w-full h-full object-cover"
             >
                 <source src={staticVideoPath} type="video/mp4" />
                 Your browser does not support the video tag.
             </motion.video>
 
             {/* Greyish Overlay */}
-            <div className="absolute top-0 left-0 w-full h-4/5 bg-[#1a1a1a]/60 z-10" />
+            <div className="absolute top-0 left-0 w-full h-full bg-[#1a1a1a]/60 z-10" />
 
             {/* Content */}
-            <div className="relative z-20 flex items-center justify-center h-4/5 px-4 text-center text-white pt-16 md:pt-20">
+            <div className="relative z-20 flex items-center justify-center h-full px-4 text-center text-white pt-16 md:pt-20">
                 <motion.div
                     className="max-w-6xl mx-auto"
                     initial={{ opacity: 0, y: 20 }}
@@ -211,7 +212,7 @@ const HeroSection: React.FC = () => {
                     >
                         <motion.a
                             href={heroData.cta_primary_url}
-                            className="px-8 py-3 bg-[#a5cd39] text-white font-noto-kufi-arabic font-medium rounded-md hover:bg-[#94b933] transition-colors"
+                            className="px-6 py-2 sm:px-8 sm:py-3 text-sm sm:text-base bg-[#a5cd39] text-white font-noto-kufi-arabic font-medium rounded-md hover:bg-[#94b933] transition-colors"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                         >
@@ -220,7 +221,7 @@ const HeroSection: React.FC = () => {
 
                         <motion.a
                             href={heroData.cta_secondary_url}
-                            className="px-8 py-3 border border-white text-white font-noto-kufi-arabic font-medium rounded-md hover:bg-white/10 transition-colors"
+                            className="px-6 py-2 sm:px-8 sm:py-3 text-sm sm:text-base border border-white text-white font-noto-kufi-arabic font-medium rounded-md hover:bg-white/10 transition-colors"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                         >
