@@ -13,7 +13,12 @@ interface BlogDetailHeroProps {
     heroImage: string;
 }
 
-const BlogDetailHero = ({ title, subtitle, date, heroImage }: BlogDetailHeroProps) => {
+const BlogDetailHero = ({
+    title,
+    subtitle,
+    date,
+    heroImage,
+}: BlogDetailHeroProps) => {
     return (
         <section className="w-full bg-white">
             {/* Full width hero container with background image */}
@@ -75,35 +80,39 @@ const BlogDetailHero = ({ title, subtitle, date, heroImage }: BlogDetailHeroProp
 
             {/* Back to News Link - Outside the hero container */}
             <div className="bg-white py-8 md:py-12">
-                <div className="w-full px-24 md:px-32 lg:px-48">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.4 }}
-                    >
-                        <Link
-                            href="/blog"
-                            className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 text-sm font-medium uppercase tracking-wide transition-colors duration-300"
+                <div className="container mx-auto px-4">
+                    <div className="max-w-6xl mx-auto">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, delay: 0.4 }}
                         >
-                            <ArrowLeft className="w-4 h-4" />
-                            BACK TO OUR NEWS
-                        </Link>
-                    </motion.div>
+                            <Link
+                                href="/blog"
+                                className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 text-sm font-medium uppercase tracking-wide transition-colors duration-300"
+                            >
+                                <ArrowLeft className="w-4 h-4" />
+                                BACK TO OUR NEWS
+                            </Link>
+                        </motion.div>
+                    </div>
                 </div>
             </div>
 
             {/* Subtitle Section */}
             <div className="bg-white pb-8 md:pb-12">
-                <div className="w-full px-24 md:px-32 lg:px-48">
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 0.5 }}
-                    >
-                        <h2 className="text-gray-800 font-serif text-xl md:text-2xl lg:text-3xl font-normal leading-relaxed text-center">
-                            {subtitle}
-                        </h2>
-                    </motion.div>
+                <div className="container mx-auto px-4">
+                    <div className="max-w-6xl mx-auto">
+                        <motion.div
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.5 }}
+                        >
+                            <h2 className="text-gray-800 font-serif text-xl md:text-2xl lg:text-3xl font-normal leading-relaxed text-center">
+                                {subtitle}
+                            </h2>
+                        </motion.div>
+                    </div>
                 </div>
             </div>
         </section>

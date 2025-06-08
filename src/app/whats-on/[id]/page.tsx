@@ -82,156 +82,160 @@ export default function EventDetailPage() {
 
             {/* Back to Event List */}
             <section className="bg-white py-4 border-b border-gray-200">
-                <div className="max-w-6xl mx-auto px-6">
-                    <Link
-                        href="/whats-on"
-                        className="inline-flex items-center text-gray-600 hover:text-[#a5cd39] transition-colors duration-300"
-                    >
-                        <ArrowLeft className="w-4 h-4 mr-2" />
-                        <span className="text-sm font-medium uppercase tracking-wide">
-                            BACK TO EVENT LIST
-                        </span>
-                    </Link>
+                <div className="container mx-auto px-4">
+                    <div className="max-w-6xl mx-auto">
+                        <Link
+                            href="/whats-on"
+                            className="inline-flex items-center text-gray-600 hover:text-[#a5cd39] transition-colors duration-300"
+                        >
+                            <ArrowLeft className="w-4 h-4 mr-2" />
+                            <span className="text-sm font-medium uppercase tracking-wide">
+                                BACK TO EVENT LIST
+                            </span>
+                        </Link>
+                    </div>
                 </div>
             </section>
 
             {/* Event Info Cards Section */}
-            <section className="py-12 md:py-16 bg-white">
-                <div className="w-full px-4 md:px-8 lg:px-12 xl:px-24">
-                    <div className="flex items-center justify-center gap-2 md:gap-4 lg:gap-6 xl:gap-8 flex-wrap lg:flex-nowrap">
-                        {/* TIME & DATE */}
-                        <motion.div
-                            className="flex items-center gap-2 md:gap-4 lg:gap-6"
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6 }}
-                            viewport={{ once: true }}
-                        >
-                            <div className="text-center px-1 md:px-2 lg:px-3">
-                                <div className="text-2xl md:text-3xl lg:text-4xl text-[#a5cd39] mb-2 md:mb-3 lg:mb-4">
-                                    <Calendar className="w-6 h-6 md:w-8 h-8 lg:w-10 h-10 mx-auto" />
+            <section className="py-8 md:py-12 lg:py-16 bg-white">
+                <div className="container mx-auto px-4">
+                    <div className="max-w-6xl mx-auto">
+                        <div className="flex items-center justify-center gap-2 md:gap-4 lg:gap-6 xl:gap-8 flex-wrap lg:flex-nowrap">
+                            {/* TIME & DATE */}
+                            <motion.div
+                                className="flex items-center gap-2 md:gap-4 lg:gap-6"
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.6 }}
+                                viewport={{ once: true }}
+                            >
+                                <div className="text-center px-1 md:px-2 lg:px-3">
+                                    <div className="text-2xl md:text-3xl lg:text-4xl text-[#a5cd39] mb-2 md:mb-3 lg:mb-4">
+                                        <Calendar className="w-6 h-6 md:w-8 h-8 lg:w-10 h-10 mx-auto" />
+                                    </div>
+                                    <div className="text-[#a5cd39] font-bold text-xs md:text-xs lg:text-sm uppercase tracking-wider">
+                                        TIME & DATE
+                                    </div>
+                                    <div className="h-0.5 md:h-1 w-8 md:w-10 lg:w-12 mx-auto bg-gray-200 my-1 md:my-2 lg:my-3"></div>
+                                    <div className="text-black text-xs md:text-xs lg:text-sm font-medium">
+                                        {event.dateRange}
+                                    </div>
                                 </div>
-                                <div className="text-[#a5cd39] font-bold text-xs md:text-xs lg:text-sm uppercase tracking-wider">
-                                    TIME & DATE
-                                </div>
-                                <div className="h-0.5 md:h-1 w-8 md:w-10 lg:w-12 mx-auto bg-gray-200 my-1 md:my-2 lg:my-3"></div>
-                                <div className="text-black text-xs md:text-xs lg:text-sm font-medium">
-                                    {event.dateRange}
-                                </div>
-                            </div>
-                            <div className="border-l h-16 md:h-20 lg:h-24 border-gray-300"></div>
-                        </motion.div>
+                                <div className="border-l h-16 md:h-20 lg:h-24 border-gray-300"></div>
+                            </motion.div>
 
-                        {/* LOCATION */}
-                        <motion.div
-                            className="flex items-center gap-2 md:gap-4 lg:gap-6"
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, delay: 0.1 }}
-                            viewport={{ once: true }}
-                        >
-                            <div className="text-center px-1 md:px-2 lg:px-3">
-                                <div className="text-2xl md:text-3xl lg:text-4xl text-[#a5cd39] mb-2 md:mb-3 lg:mb-4">
-                                    <MapPin className="w-6 h-6 md:w-8 h-8 lg:w-10 h-10 mx-auto" />
+                            {/* LOCATION */}
+                            <motion.div
+                                className="flex items-center gap-2 md:gap-4 lg:gap-6"
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.6, delay: 0.1 }}
+                                viewport={{ once: true }}
+                            >
+                                <div className="text-center px-1 md:px-2 lg:px-3">
+                                    <div className="text-2xl md:text-3xl lg:text-4xl text-[#a5cd39] mb-2 md:mb-3 lg:mb-4">
+                                        <MapPin className="w-6 h-6 md:w-8 h-8 lg:w-10 h-10 mx-auto" />
+                                    </div>
+                                    <div className="text-[#a5cd39] font-bold text-xs md:text-xs lg:text-sm uppercase tracking-wider">
+                                        LOCATION
+                                    </div>
+                                    <div className="h-0.5 md:h-1 w-8 md:w-10 lg:w-12 mx-auto bg-gray-200 my-1 md:my-2 lg:my-3"></div>
+                                    <div className="text-black text-xs md:text-xs lg:text-sm font-medium">
+                                        {event.venue}
+                                    </div>
                                 </div>
-                                <div className="text-[#a5cd39] font-bold text-xs md:text-xs lg:text-sm uppercase tracking-wider">
-                                    LOCATION
-                                </div>
-                                <div className="h-0.5 md:h-1 w-8 md:w-10 lg:w-12 mx-auto bg-gray-200 my-1 md:my-2 lg:my-3"></div>
-                                <div className="text-black text-xs md:text-xs lg:text-sm font-medium">
-                                    {event.venue}
-                                </div>
-                            </div>
-                            <div className="border-l h-16 md:h-20 lg:h-24 border-gray-300"></div>
-                        </motion.div>
+                                <div className="border-l h-16 md:h-20 lg:h-24 border-gray-300"></div>
+                            </motion.div>
 
-                        {/* EVENT TYPE */}
-                        <motion.div
-                            className="flex items-center gap-2 md:gap-4 lg:gap-6"
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, delay: 0.2 }}
-                            viewport={{ once: true }}
-                        >
-                            <div className="text-center px-1 md:px-2 lg:px-3">
-                                <div className="text-2xl md:text-3xl lg:text-4xl text-[#a5cd39] mb-2 md:mb-3 lg:mb-4">
-                                    <MessageSquare className="w-6 h-6 md:w-8 h-8 lg:w-10 h-10 mx-auto" />
+                            {/* EVENT TYPE */}
+                            <motion.div
+                                className="flex items-center gap-2 md:gap-4 lg:gap-6"
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.6, delay: 0.2 }}
+                                viewport={{ once: true }}
+                            >
+                                <div className="text-center px-1 md:px-2 lg:px-3">
+                                    <div className="text-2xl md:text-3xl lg:text-4xl text-[#a5cd39] mb-2 md:mb-3 lg:mb-4">
+                                        <MessageSquare className="w-6 h-6 md:w-8 h-8 lg:w-10 h-10 mx-auto" />
+                                    </div>
+                                    <div className="text-[#a5cd39] font-bold text-xs md:text-xs lg:text-sm uppercase tracking-wider">
+                                        EVENT TYPE
+                                    </div>
+                                    <div className="h-0.5 md:h-1 w-8 md:w-10 lg:w-12 mx-auto bg-gray-200 my-1 md:my-2 lg:my-3"></div>
+                                    <div className="text-black text-xs md:text-xs lg:text-sm font-medium">
+                                        {event.eventType}
+                                    </div>
                                 </div>
-                                <div className="text-[#a5cd39] font-bold text-xs md:text-xs lg:text-sm uppercase tracking-wider">
-                                    EVENT TYPE
-                                </div>
-                                <div className="h-0.5 md:h-1 w-8 md:w-10 lg:w-12 mx-auto bg-gray-200 my-1 md:my-2 lg:my-3"></div>
-                                <div className="text-black text-xs md:text-xs lg:text-sm font-medium">
-                                    {event.eventType}
-                                </div>
-                            </div>
-                            <div className="border-l h-16 md:h-20 lg:h-24 border-gray-300"></div>
-                        </motion.div>
+                                <div className="border-l h-16 md:h-20 lg:h-24 border-gray-300"></div>
+                            </motion.div>
 
-                        {/* INDUSTRY */}
-                        <motion.div
-                            className="flex items-center gap-2 md:gap-4 lg:gap-6"
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, delay: 0.3 }}
-                            viewport={{ once: true }}
-                        >
-                            <div className="text-center px-1 md:px-2 lg:px-3">
-                                <div className="text-2xl md:text-3xl lg:text-4xl text-[#a5cd39] mb-2 md:mb-3 lg:mb-4">
-                                    <Building2 className="w-6 h-6 md:w-8 h-8 lg:w-10 h-10 mx-auto" />
+                            {/* INDUSTRY */}
+                            <motion.div
+                                className="flex items-center gap-2 md:gap-4 lg:gap-6"
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.6, delay: 0.3 }}
+                                viewport={{ once: true }}
+                            >
+                                <div className="text-center px-1 md:px-2 lg:px-3">
+                                    <div className="text-2xl md:text-3xl lg:text-4xl text-[#a5cd39] mb-2 md:mb-3 lg:mb-4">
+                                        <Building2 className="w-6 h-6 md:w-8 h-8 lg:w-10 h-10 mx-auto" />
+                                    </div>
+                                    <div className="text-[#a5cd39] font-bold text-xs md:text-xs lg:text-sm uppercase tracking-wider">
+                                        INDUSTRY
+                                    </div>
+                                    <div className="h-0.5 md:h-1 w-8 md:w-10 lg:w-12 mx-auto bg-gray-200 my-1 md:my-2 lg:my-3"></div>
+                                    <div className="text-black text-xs md:text-xs lg:text-sm font-medium">
+                                        {event.industry}
+                                    </div>
                                 </div>
-                                <div className="text-[#a5cd39] font-bold text-xs md:text-xs lg:text-sm uppercase tracking-wider">
-                                    INDUSTRY
-                                </div>
-                                <div className="h-0.5 md:h-1 w-8 md:w-10 lg:w-12 mx-auto bg-gray-200 my-1 md:my-2 lg:my-3"></div>
-                                <div className="text-black text-xs md:text-xs lg:text-sm font-medium">
-                                    {event.industry}
-                                </div>
-                            </div>
-                            <div className="border-l h-16 md:h-20 lg:h-24 border-gray-300"></div>
-                        </motion.div>
+                                <div className="border-l h-16 md:h-20 lg:h-24 border-gray-300"></div>
+                            </motion.div>
 
-                        {/* AUDIENCE */}
-                        <motion.div
-                            className="flex items-center gap-2 md:gap-4 lg:gap-6"
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, delay: 0.4 }}
-                            viewport={{ once: true }}
-                        >
-                            <div className="text-center px-1 md:px-2 lg:px-3">
-                                <div className="text-2xl md:text-3xl lg:text-4xl text-[#a5cd39] mb-2 md:mb-3 lg:mb-4">
-                                    <Users className="w-6 h-6 md:w-8 h-8 lg:w-10 h-10 mx-auto" />
+                            {/* AUDIENCE */}
+                            <motion.div
+                                className="flex items-center gap-2 md:gap-4 lg:gap-6"
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.6, delay: 0.4 }}
+                                viewport={{ once: true }}
+                            >
+                                <div className="text-center px-1 md:px-2 lg:px-3">
+                                    <div className="text-2xl md:text-3xl lg:text-4xl text-[#a5cd39] mb-2 md:mb-3 lg:mb-4">
+                                        <Users className="w-6 h-6 md:w-8 h-8 lg:w-10 h-10 mx-auto" />
+                                    </div>
+                                    <div className="text-[#a5cd39] font-bold text-xs md:text-xs lg:text-sm uppercase tracking-wider">
+                                        AUDIENCE
+                                    </div>
+                                    <div className="h-0.5 md:h-1 w-8 md:w-10 lg:w-12 mx-auto bg-gray-200 my-1 md:my-2 lg:my-3"></div>
+                                    <div className="text-black text-xs md:text-xs lg:text-sm font-medium">
+                                        {event.audience}
+                                    </div>
                                 </div>
-                                <div className="text-[#a5cd39] font-bold text-xs md:text-xs lg:text-sm uppercase tracking-wider">
-                                    AUDIENCE
-                                </div>
-                                <div className="h-0.5 md:h-1 w-8 md:w-10 lg:w-12 mx-auto bg-gray-200 my-1 md:my-2 lg:my-3"></div>
-                                <div className="text-black text-xs md:text-xs lg:text-sm font-medium">
-                                    {event.audience}
-                                </div>
-                            </div>
-                            <div className="border-l h-16 md:h-20 lg:h-24 border-gray-300"></div>
-                        </motion.div>
+                                <div className="border-l h-16 md:h-20 lg:h-24 border-gray-300"></div>
+                            </motion.div>
 
-                        {/* Share Icon */}
-                        <motion.div
-                            className="text-center px-1 md:px-2 lg:px-3"
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, delay: 0.5 }}
-                            viewport={{ once: true }}
-                        >
-                            <div className="text-xl md:text-2xl lg:text-3xl border border-[#a5cd39] md:border-2 rounded-full p-2 md:p-3 lg:p-4 w-10 h-10 md:w-12 h-12 lg:w-16 h-16 flex items-center justify-center cursor-pointer hover:bg-[#a5cd39] hover:text-white transition-colors duration-300 text-[#a5cd39]">
-                                <svg
-                                    className="w-4 h-4 md:w-5 h-5 lg:w-6 h-6"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                >
-                                    <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
-                                </svg>
-                            </div>
-                        </motion.div>
+                            {/* Share Icon */}
+                            <motion.div
+                                className="text-center px-1 md:px-2 lg:px-3"
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.6, delay: 0.5 }}
+                                viewport={{ once: true }}
+                            >
+                                <div className="text-xl md:text-2xl lg:text-3xl border border-[#a5cd39] md:border-2 rounded-full p-2 md:p-3 lg:p-4 w-10 h-10 md:w-12 h-12 lg:w-16 h-16 flex items-center justify-center cursor-pointer hover:bg-[#a5cd39] hover:text-white transition-colors duration-300 text-[#a5cd39]">
+                                    <svg
+                                        className="w-4 h-4 md:w-5 h-5 lg:w-6 h-6"
+                                        fill="currentColor"
+                                        viewBox="0 0 20 20"
+                                    >
+                                        <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
+                                    </svg>
+                                </div>
+                            </motion.div>
+                        </div>
                     </div>
                 </div>
             </section>

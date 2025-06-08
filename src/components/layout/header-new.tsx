@@ -28,7 +28,9 @@ const Header = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [activeLink, setActiveLink] = useState("");
-    const [mobileSubMenus, setMobileSubMenus] = useState<Record<string, boolean>>({});
+    const [mobileSubMenus, setMobileSubMenus] = useState<
+        Record<string, boolean>
+    >({});
     const [isHeaderVisible, setIsHeaderVisible] = useState(true);
     const [activeSubMenu, setActiveSubMenu] = useState<string | null>("expo");
     const [mounted, setMounted] = useState(false);
@@ -93,7 +95,6 @@ const Header = () => {
     // const toggleExhibitionDropdown = () => {
     //   setShowExhibitionDropdown(!showExhibitionDropdown);
     // };
-
 
     // Toggle header visibility
     const toggleHeaderVisibility = () => {
@@ -168,7 +169,9 @@ const Header = () => {
                                     <TabItem
                                         href="/conference"
                                         label="CONFERENCE"
-                                        isActive={activeSubMenu === "conference"}
+                                        isActive={
+                                            activeSubMenu === "conference"
+                                        }
                                         onClick={() => {
                                             setActiveLink("/conference");
                                             setActiveSubMenu(
@@ -191,7 +194,9 @@ const Header = () => {
                                         onClick={() => {
                                             setActiveLink("/events");
                                             setActiveSubMenu(
-                                                activeSubMenu === "expo" ? null : "expo",
+                                                activeSubMenu === "expo"
+                                                    ? null
+                                                    : "expo",
                                             );
                                         }}
                                         className={cn(
@@ -209,7 +214,9 @@ const Header = () => {
                                         onClick={() => {
                                             setActiveLink("/kiosk");
                                             setActiveSubMenu(
-                                                activeSubMenu === "kiosk" ? null : "kiosk",
+                                                activeSubMenu === "kiosk"
+                                                    ? null
+                                                    : "kiosk",
                                             );
                                         }}
                                         className={cn(
@@ -228,7 +235,9 @@ const Header = () => {
                                             href="/about"
                                             label="ABOUT US"
                                             isActive={activeLink === "/about"}
-                                            onClick={() => setActiveLink("/about")}
+                                            onClick={() =>
+                                                setActiveLink("/about")
+                                            }
                                         />
                                         <NavItem
                                             href="/support"
@@ -242,7 +251,9 @@ const Header = () => {
                                             href="/blog"
                                             label="BLOG"
                                             isActive={activeLink === "/blog"}
-                                            onClick={() => setActiveLink("/blog")}
+                                            onClick={() =>
+                                                setActiveLink("/blog")
+                                            }
                                         />
                                         <NavItem
                                             href="/contact-us"
@@ -274,7 +285,14 @@ const Header = () => {
 
                                 {/* Mobile Menu Button */}
                                 <div className="flex items-center justify-between w-full lg:hidden">
-                                    <div className={cn("px-4 py-3 flex-1 flex items-center justify-between", mounted ? "bg-white" : "bg-[#222222]")}>
+                                    <div
+                                        className={cn(
+                                            "px-4 py-3 flex-1 flex items-center justify-between",
+                                            mounted
+                                                ? "bg-white"
+                                                : "bg-[#222222]",
+                                        )}
+                                    >
                                         <Logo isScrolled={mounted} />
                                         <div className="flex items-center space-x-3">
                                             {/* Mobile WhatsApp Button */}
@@ -290,10 +308,16 @@ const Header = () => {
                                                 >
                                                     <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
                                                 </svg>
-                                                <span className="hidden sm:inline">WA</span>
+                                                <span className="hidden sm:inline">
+                                                    WA
+                                                </span>
                                             </Link>
                                             <button
-                                                className={cn(mounted ? "text-gray-800" : "text-white")}
+                                                className={cn(
+                                                    mounted
+                                                        ? "text-gray-800"
+                                                        : "text-white",
+                                                )}
                                                 onClick={toggleMobileMenu}
                                                 aria-label="Toggle menu"
                                             >
@@ -524,55 +548,104 @@ const Header = () => {
                                                 <button
                                                     className={cn(
                                                         "text-[#2C2C2C] uppercase font-medium w-full text-left py-2 block",
-                                                        mobileSubMenus['expo'] && "text-[#a5cd39]",
+                                                        mobileSubMenus[
+                                                            "expo"
+                                                        ] && "text-[#a5cd39]",
                                                     )}
-                                                    onClick={() => toggleMobileSubMenu('expo')}
+                                                    onClick={() =>
+                                                        toggleMobileSubMenu(
+                                                            "expo",
+                                                        )
+                                                    }
                                                 >
                                                     EXPO BOOTH
                                                 </button>
                                                 <AnimatePresence>
-                                                    {mobileSubMenus['expo'] && (
+                                                    {mobileSubMenus["expo"] && (
                                                         <motion.div
-                                                            initial={{ height: 0, opacity: 0 }}
-                                                            animate={{ height: 'auto', opacity: 1 }}
-                                                            exit={{ height: 0, opacity: 0 }}
+                                                            initial={{
+                                                                height: 0,
+                                                                opacity: 0,
+                                                            }}
+                                                            animate={{
+                                                                height: "auto",
+                                                                opacity: 1,
+                                                            }}
+                                                            exit={{
+                                                                height: 0,
+                                                                opacity: 0,
+                                                            }}
                                                             className="pl-4 mt-2 space-y-3 overflow-hidden"
                                                         >
                                                             <div className="relative">
                                                                 <button
                                                                     className={cn(
                                                                         "text-[#2C2C2C] uppercase font-medium w-full text-left py-2 block",
-                                                                        mobileSubMenus['exhibition'] && "text-[#a5cd39]",
+                                                                        mobileSubMenus[
+                                                                            "exhibition"
+                                                                        ] &&
+                                                                            "text-[#a5cd39]",
                                                                     )}
-                                                                    onClick={() => toggleMobileSubMenu('exhibition')}
+                                                                    onClick={() =>
+                                                                        toggleMobileSubMenu(
+                                                                            "exhibition",
+                                                                        )
+                                                                    }
                                                                 >
-                                                                    EXHIBITION STANDS
+                                                                    EXHIBITION
+                                                                    STANDS
                                                                 </button>
                                                                 <AnimatePresence>
-                                                                    {mobileSubMenus['exhibition'] && (
+                                                                    {mobileSubMenus[
+                                                                        "exhibition"
+                                                                    ] && (
                                                                         <motion.div
-                                                                            initial={{ height: 0, opacity: 0 }}
-                                                                            animate={{ height: 'auto', opacity: 1 }}
-                                                                            exit={{ height: 0, opacity: 0 }}
+                                                                            initial={{
+                                                                                height: 0,
+                                                                                opacity: 0,
+                                                                            }}
+                                                                            animate={{
+                                                                                height: "auto",
+                                                                                opacity: 1,
+                                                                            }}
+                                                                            exit={{
+                                                                                height: 0,
+                                                                                opacity: 0,
+                                                                            }}
                                                                             className="pl-4 mt-2 space-y-2 overflow-hidden"
                                                                         >
                                                                             <MobileNavItem
                                                                                 href="/customexhibitionstands"
                                                                                 label="CUSTOM STANDS"
-                                                                                isActive={pathname === "/customexhibitionstands"}
-                                                                                onClick={closeMobileMenu}
+                                                                                isActive={
+                                                                                    pathname ===
+                                                                                    "/customexhibitionstands"
+                                                                                }
+                                                                                onClick={
+                                                                                    closeMobileMenu
+                                                                                }
                                                                             />
                                                                             <MobileNavItem
                                                                                 href="/doubledeckerexhibitionstands"
                                                                                 label="DOUBLE DECKER STANDS"
-                                                                                isActive={pathname === "/doubledeckerexhibitionstands"}
-                                                                                onClick={closeMobileMenu}
+                                                                                isActive={
+                                                                                    pathname ===
+                                                                                    "/doubledeckerexhibitionstands"
+                                                                                }
+                                                                                onClick={
+                                                                                    closeMobileMenu
+                                                                                }
                                                                             />
                                                                             <MobileNavItem
                                                                                 href="/countrypavilionexpoboothsolutions"
                                                                                 label="EXPO PAVILION STANDS"
-                                                                                isActive={pathname === "/countrypavilionexpoboothsolutions"}
-                                                                                onClick={closeMobileMenu}
+                                                                                isActive={
+                                                                                    pathname ===
+                                                                                    "/countrypavilionexpoboothsolutions"
+                                                                                }
+                                                                                onClick={
+                                                                                    closeMobileMenu
+                                                                                }
                                                                             />
                                                                         </motion.div>
                                                                     )}
@@ -581,20 +654,35 @@ const Header = () => {
                                                             <MobileNavItem
                                                                 href="/whats-on"
                                                                 label="TOP EXHIBITIONS"
-                                                                isActive={pathname === "/whats-on"}
-                                                                onClick={closeMobileMenu}
+                                                                isActive={
+                                                                    pathname ===
+                                                                    "/whats-on"
+                                                                }
+                                                                onClick={
+                                                                    closeMobileMenu
+                                                                }
                                                             />
                                                             <MobileNavItem
                                                                 href="/experience-dubai"
                                                                 label="TOP EXPO LOCATIONS"
-                                                                isActive={pathname === "/experience-dubai"}
-                                                                onClick={closeMobileMenu}
+                                                                isActive={
+                                                                    pathname ===
+                                                                    "/experience-dubai"
+                                                                }
+                                                                onClick={
+                                                                    closeMobileMenu
+                                                                }
                                                             />
                                                             <MobileNavItem
                                                                 href="/portfolio"
                                                                 label="PORTFOLIO"
-                                                                isActive={pathname === "/portfolio"}
-                                                                onClick={closeMobileMenu}
+                                                                isActive={
+                                                                    pathname ===
+                                                                    "/portfolio"
+                                                                }
+                                                                onClick={
+                                                                    closeMobileMenu
+                                                                }
                                                             />
                                                         </motion.div>
                                                     )}
@@ -608,14 +696,18 @@ const Header = () => {
                                                     activeLink === "/conference"
                                                 }
                                                 onClick={() => {
-                                                    setActiveLink("/conference");
+                                                    setActiveLink(
+                                                        "/conference",
+                                                    );
                                                     closeMobileMenu();
                                                 }}
                                             />
                                             <MobileNavItem
                                                 href="/kiosk"
                                                 label="KIOSK"
-                                                isActive={activeLink === "/kiosk"}
+                                                isActive={
+                                                    activeLink === "/kiosk"
+                                                }
                                                 onClick={() => {
                                                     setActiveLink("/kiosk");
                                                     closeMobileMenu();
@@ -643,7 +735,9 @@ const Header = () => {
                                             <MobileNavItem
                                                 href="/portfolio"
                                                 label="PORTFOLIO"
-                                                isActive={activeLink === "/portfolio"}
+                                                isActive={
+                                                    activeLink === "/portfolio"
+                                                }
                                                 onClick={() => {
                                                     setActiveLink("/portfolio");
                                                     closeMobileMenu();
@@ -653,17 +747,22 @@ const Header = () => {
                                                 href="/industry-insights"
                                                 label="INDUSTRY INSIGHTS"
                                                 isActive={
-                                                    activeLink === "/industry-insights"
+                                                    activeLink ===
+                                                    "/industry-insights"
                                                 }
                                                 onClick={() => {
-                                                    setActiveLink("/industry-insights");
+                                                    setActiveLink(
+                                                        "/industry-insights",
+                                                    );
                                                     closeMobileMenu();
                                                 }}
                                             />
                                             <MobileNavItem
                                                 href="/blog"
                                                 label="BLOG"
-                                                isActive={activeLink === "/blog"}
+                                                isActive={
+                                                    activeLink === "/blog"
+                                                }
                                                 onClick={() => {
                                                     setActiveLink("/blog");
                                                     closeMobileMenu();
@@ -672,9 +771,13 @@ const Header = () => {
                                             <MobileNavItem
                                                 href="/contact-us"
                                                 label="CONTACT US"
-                                                isActive={activeLink === "/contact-us"}
+                                                isActive={
+                                                    activeLink === "/contact-us"
+                                                }
                                                 onClick={() => {
-                                                    setActiveLink("/contact-us");
+                                                    setActiveLink(
+                                                        "/contact-us",
+                                                    );
                                                     closeMobileMenu();
                                                 }}
                                             />
@@ -703,7 +806,9 @@ const Header = () => {
                                                     >
                                                         <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
                                                     </svg>
-                                                    <span className="font-medium uppercase">Contact via WhatsApp</span>
+                                                    <span className="font-medium uppercase">
+                                                        Contact via WhatsApp
+                                                    </span>
                                                 </Link>
                                             </div>
                                         </div>
@@ -717,7 +822,7 @@ const Header = () => {
                             <div
                                 className="fixed inset-0 bg-black/50 z-40 lg:hidden"
                                 onClick={closeMobileMenu}
-                           />
+                            />
                         )}
 
                         {/* Sticky Search Button for Mobile */}

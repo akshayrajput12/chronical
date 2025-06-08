@@ -87,31 +87,33 @@ const portfolioItems: PortfolioItem[] = [
 
 const PortfolioGallery = () => {
     return (
-        <section className="py-16 bg-white">
-            <div className="w-full px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 2xl:px-48">
-                {/* Gallery Grid - Masonry Style with Random Sizes */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 lg:gap-4 auto-rows-[150px] sm:auto-rows-[180px] lg:auto-rows-[200px]">
-                    {portfolioItems.map(item => (
-                        <div
-                            key={item.id}
-                            className={`group relative overflow-hidden ${item.className}`}
-                        >
-                            <Image
-                                src={item.src}
-                                alt={item.alt}
-                                fill
-                                className="object-cover group-hover:scale-105 transition-transform duration-300"
-                                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                            />
+        <section className="py-8 md:py-12 lg:py-16 bg-white">
+            <div className="container mx-auto px-4">
+                <div className="max-w-6xl mx-auto">
+                    {/* Gallery Grid - Masonry Style with Random Sizes */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 lg:gap-4 auto-rows-[150px] sm:auto-rows-[180px] lg:auto-rows-[200px]">
+                        {portfolioItems.map(item => (
+                            <div
+                                key={item.id}
+                                className={`group relative overflow-hidden ${item.className}`}
+                            >
+                                <Image
+                                    src={item.src}
+                                    alt={item.alt}
+                                    fill
+                                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                                />
 
-                            {/* VIEW CASE Full Overlay on Hover - Shows on ALL images */}
-                            <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                <span className="text-white text-sm sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-rubik font-bold tracking-wider">
-                                    VIEW CASE
-                                </span>
+                                {/* VIEW CASE Full Overlay on Hover - Shows on ALL images */}
+                                <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    <span className="text-white text-sm sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-rubik font-bold tracking-wider">
+                                        VIEW CASE
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
             </div>
         </section>
