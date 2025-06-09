@@ -3,6 +3,7 @@
 ### To run the project locally
 
 * clone the project
+* 
 * run `npm install` to install the dependencies
 * run `npm run dev` to start the project
 * open `http://localhost:3000` in your browser
