@@ -163,7 +163,7 @@ const Header = () => {
 
                         {/* Upper Header */}
                         <div className="w-full bg-[#222222]">
-                            <div className="container mx-auto max-w-[1240px] flex items-center justify-between py-0 relative">
+                            <div className="w-full px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 flex items-center justify-between py-0 relative">
                                 {/* Left Main Navigation Tabs */}
                                 <div className="hidden lg:flex items-center relative">
                                     <TabItem
@@ -228,8 +228,8 @@ const Header = () => {
                                     />
                                 </div>
 
-                                {/* Right Navigation - Responsive */}
-                                <div className="hidden md:flex items-center justify-end flex-1 -mr-[60px] lg:-mr-[0px] xl:-mr-[115px] 2xl:-mr-[115px]">
+                                {/* Right Navigation - Extends to screen edge */}
+                                <div className="hidden md:flex items-center justify-end flex-1 -mr-6 md:-mr-10 lg:-mr-12 xl:-mr-16 2xl:-mr-18 ml-20 md:ml-32 lg:ml-40 xl:ml-52 2xl:ml-64">
                                     <div className="flex items-center space-x-2 md:space-x-3 lg:space-x-3 xl:space-x-5">
                                         <NavItem
                                             href="/about"
@@ -264,7 +264,7 @@ const Header = () => {
                                             }
                                         />
                                     </div>
-                                    {/* WhatsApp button - responsive spacing */}
+                                    {/* WhatsApp button - extends to screen edge */}
                                     <div className="ml-3 md:ml-4 lg:ml-6 xl:ml-8">
                                         <Link
                                             href="https://wa.me/yournumberhere"
@@ -294,27 +294,26 @@ const Header = () => {
                                         )}
                                     >
                                         <Logo isScrolled={mounted} />
-                                        <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
+                                        <div className="flex items-center space-x-3 flex-shrink-0">
                                             {/* Mobile WhatsApp Button */}
                                             <Link
                                                 href="https://wa.me/yournumberhere"
-                                                className="bg-transparent border border-[#a5cd39] text-[#a5cd39] hover:bg-[#a5cd39] hover:text-white transition-colors duration-300 rounded px-2 py-1 sm:px-3 sm:py-2 flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm whitespace-nowrap flex-shrink-0"
+                                                className="bg-transparent border border-[#a5cd39] text-[#a5cd39] hover:bg-[#a5cd39] hover:text-white transition-colors duration-300 rounded px-2 py-1 sm:px-3 sm:py-2 md:px-3 md:py-2 flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm md:text-sm whitespace-nowrap flex-shrink-0"
                                             >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
-                                                    className="h-3 w-3 sm:h-4 sm:w-4"
+                                                    className="h-3 w-3 sm:h-4 sm:w-4 md:h-4 md:w-4"
                                                     fill="currentColor"
                                                     viewBox="0 0 24 24"
                                                 >
                                                     <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
                                                 </svg>
-                                                <span className="hidden sm:inline">
+                                                <span className="hidden sm:inline md:inline">
                                                     WHATSAPP
                                                 </span>
                                             </Link>
                                             <button
                                                 className={cn(
-                                                    "p-1",
                                                     mounted
                                                         ? "text-gray-800"
                                                         : "text-white",
@@ -323,9 +322,9 @@ const Header = () => {
                                                 aria-label="Toggle menu"
                                             >
                                                 {isMobileMenuOpen ? (
-                                                    <X className="w-5 h-5 sm:w-6 sm:h-6" />
+                                                    <X className="w-6 h-6" />
                                                 ) : (
-                                                    <Menu className="w-5 h-5 sm:w-6 sm:h-6" />
+                                                    <Menu className="w-6 h-6" />
                                                 )}
                                             </button>
                                         </div>
@@ -348,7 +347,7 @@ const Header = () => {
                                             : "bg-transparent",
                                     )}
                                 >
-                                    <div className="container mx-auto px-4 relative z-10">
+                                    <div className="w-full px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 relative z-10">
                                         <div className="flex flex-col">
                                             {/* Events Sub-Navigation */}
                                             <nav className="flex items-start w-full">
@@ -518,7 +517,7 @@ const Header = () => {
                         {/* Mobile Navigation - Slide from right */}
                         <div
                             className={cn(
-                                "fixed top-0 right-0 h-full w-[300px] bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out",
+                                "fixed top-0 right-0 h-full w-[280px] sm:w-[320px] md:w-[350px] bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out",
                                 isMobileMenuOpen
                                     ? "translate-x-0"
                                     : "translate-x-full",
@@ -902,7 +901,7 @@ const NavItem = ({
         <Link
             href={href}
             className={cn(
-                "uppercase font-noto-kufi-arabic font-medium transition-colors px-1 md:px-2 lg:px-2 xl:px-3 text-[10px] md:text-[11px] lg:text-[11px] xl:text-[12px] whitespace-nowrap",
+                "uppercase font-noto-kufi-arabic font-medium transition-colors px-2 xl:px-3 text-[11px] xl:text-[12px] whitespace-nowrap",
                 "text-white hover:text-[#a5cd39]",
                 isActive && "text-[#a5cd39]",
             )}
