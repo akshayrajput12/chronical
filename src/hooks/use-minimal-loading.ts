@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useCallback } from "react";
+import { useEffect } from "react";
 import { useMinimalLoading } from "@/components/providers/minimal-loading-provider";
 
 interface LoaderOptions {

@@ -1,21 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import { useGlobalLoader } from "@/hooks/use-page-loading";
+import { useMinimalLoader } from "@/hooks/use-minimal-loading";
 import { Button } from "@/components/ui/button";
-import {
-    LoadingMessages,
-    LoadingConfigs,
-    createLoadingWrapper,
-    withMinimumDuration,
-} from "@/utils/loader-utils";
 
 export default function LoaderDemoPage() {
-    const { showLoader, hideLoader, isLoading } = useGlobalLoader();
+    const { showLoader, hideLoader, isLoading } = useMinimalLoader();
     const [loadingTime, setLoadingTime] = useState(3);
-
-    // Create a loading wrapper for demo operations
-    const loadingWrapper = createLoadingWrapper(showLoader, hideLoader);
 
     const handleShowLoader = (message?: string) => {
         showLoader(message);
@@ -26,20 +17,15 @@ export default function LoaderDemoPage() {
         }, loadingTime * 1000);
     };
 
-    const simulateDataFetch = async (
-        message: string,
-        config = LoadingConfigs.STANDARD,
-    ) => {
-        await loadingWrapper(
-            () =>
-                withMinimumDuration(
-                    new Promise(resolve =>
-                        setTimeout(resolve, Math.random() * 2000 + 1000),
-                    ),
-                    config.minDuration || 1000,
-                ),
-            { message, ...config },
+    const simulateDataFetch = async (message: string) => {
+        showLoader(message);
+
+        // Simulate data fetching
+        await new Promise(resolve =>
+            setTimeout(resolve, Math.random() * 2000 + 1000),
         );
+
+        hideLoader();
     };
 
     return (
@@ -139,49 +125,39 @@ export default function LoaderDemoPage() {
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                                 <Button
                                     onClick={() =>
-                                        simulateDataFetch(
-                                            LoadingMessages.FETCHING_DATA,
-                                            LoadingConfigs.QUICK,
-                                        )
+                                        simulateDataFetch("Fetching data...")
                                     }
                                     disabled={isLoading}
                                     className="bg-green-600 hover:bg-green-700 text-white text-sm"
                                 >
-                                    Quick Fetch (0.5s min)
+                                    Quick Fetch
                                 </Button>
 
                                 <Button
                                     onClick={() =>
                                         simulateDataFetch(
-                                            LoadingMessages.LOADING_EXHIBITIONS,
-                                            LoadingConfigs.STANDARD,
+                                            "Loading exhibitions...",
                                         )
                                     }
                                     disabled={isLoading}
                                     className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm"
                                 >
-                                    Standard Load (1s min)
+                                    Standard Load
                                 </Button>
 
                                 <Button
                                     onClick={() =>
-                                        simulateDataFetch(
-                                            LoadingMessages.UPLOADING,
-                                            LoadingConfigs.LONG,
-                                        )
+                                        simulateDataFetch("Uploading files...")
                                     }
                                     disabled={isLoading}
                                     className="bg-red-600 hover:bg-red-700 text-white text-sm"
                                 >
-                                    Long Operation (1.5s min)
+                                    Long Operation
                                 </Button>
 
                                 <Button
                                     onClick={() =>
-                                        simulateDataFetch(
-                                            LoadingMessages.PROCESSING,
-                                            LoadingConfigs.CRITICAL,
-                                        )
+                                        simulateDataFetch("Processing...")
                                     }
                                     disabled={isLoading}
                                     className="bg-yellow-600 hover:bg-yellow-700 text-white text-sm"
@@ -192,7 +168,7 @@ export default function LoaderDemoPage() {
                                 <Button
                                     onClick={() =>
                                         simulateDataFetch(
-                                            LoadingMessages.LOADING_PORTFOLIO,
+                                            "Loading portfolio...",
                                         )
                                     }
                                     disabled={isLoading}
@@ -203,9 +179,7 @@ export default function LoaderDemoPage() {
 
                                 <Button
                                     onClick={() =>
-                                        simulateDataFetch(
-                                            LoadingMessages.SAVING_CHANGES,
-                                        )
+                                        simulateDataFetch("Saving changes...")
                                     }
                                     disabled={isLoading}
                                     className="bg-teal-600 hover:bg-teal-700 text-white text-sm"
@@ -241,14 +215,14 @@ export default function LoaderDemoPage() {
                                 Usage in Components:
                             </h3>
                             <pre className="bg-white p-4 rounded border text-sm overflow-x-auto">
-                                {`import { usePageLoading } from "@/hooks/use-page-loading";
+                                {`import { useComponentLoading } from "@/hooks/use-minimal-loading";
 
 // For automatic loading state management
 const [loading, setLoading] = useState(true);
-usePageLoading(loading, "Custom message...");
+useComponentLoading(loading, "Custom message...");
 
 // For manual control
-const { showLoader, hideLoader } = useGlobalLoader();
+const { showLoader, hideLoader } = useMinimalLoader();
 showLoader("Loading...");
 hideLoader();`}
                             </pre>

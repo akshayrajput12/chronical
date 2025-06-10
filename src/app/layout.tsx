@@ -100,14 +100,16 @@ export default function RootLayout({
                                 animation: "pulse 2s ease-in-out infinite",
                             }}
                         >
-                            <img
-                                src="/logo.png"
-                                alt="Chronicle Exhibits"
+                            <div
                                 style={{
                                     width: "48px",
-                                    height: "auto",
-                                    maxWidth: "48px",
+                                    height: "18px",
+                                    backgroundImage: "url(/logo.png)",
+                                    backgroundSize: "contain",
+                                    backgroundRepeat: "no-repeat",
+                                    backgroundPosition: "center",
                                 }}
+                                aria-label="Chronicle Exhibits"
                             />
                         </div>
                     </div>

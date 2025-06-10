@@ -1,13 +1,6 @@
 "use client";
 
-import React, {
-    createContext,
-    useContext,
-    useState,
-    useEffect,
-    ReactNode,
-} from "react";
-import { usePathname } from "next/navigation";
+import React, { createContext, useContext, useState, ReactNode } from "react";
 import MinimalLoader from "@/components/ui/minimal-loader";
 
 interface MinimalLoadingContextType {
@@ -54,7 +47,7 @@ export const MinimalLoadingProvider: React.FC<MinimalLoadingProviderProps> = ({
         showMessage: false,
         persistent: false,
     });
-    const pathname = usePathname();
+    // Removed pathname since we're not using route change effects
 
     // Show loader with custom message and options
     const showLoader = (customMessage?: string, options?: LoaderOptions) => {
