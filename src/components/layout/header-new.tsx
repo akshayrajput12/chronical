@@ -160,7 +160,12 @@ const Header = () => {
                         )}
 
                         {/* Upper Header */}
-                        <div className="w-full bg-[#222222] lg:bg-[#222222] md:bg-white sm:bg-white bg-white">
+                        <div className={cn(
+                            "w-full transition-colors duration-300",
+                            isScrolled || isSpecialPage
+                                ? "bg-white"
+                                : "bg-[#222222] lg:bg-[#222222] md:bg-transparent sm:bg-transparent bg-transparent"
+                        )}>
                             <div className="w-full px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 flex items-center justify-between py-0 relative">
                                 {/* Left Main Navigation Tabs */}
                                 <div className="hidden lg:flex items-center relative">
@@ -285,10 +290,11 @@ const Header = () => {
                                 <div className="flex items-center justify-between w-full lg:hidden">
                                     <div
                                         className={cn(
-                                            "px-4 md:px-6 py-3 md:py-4 flex-1 flex items-center justify-between bg-white",
+                                            "px-4 md:px-6 py-3 md:py-4 flex-1 flex items-center justify-between transition-colors duration-300",
+                                            isScrolled || isSpecialPage ? "bg-white" : "bg-transparent",
                                         )}
                                     >
-                                        <Logo isScrolled={true} />
+                                        <Logo isScrolled={isScrolled || isSpecialPage} />
                                         <div className="flex items-center space-x-3 md:space-x-4 flex-shrink-0">
                                             {/* Mobile/Tablet WhatsApp Button */}
                                             <Link
@@ -309,7 +315,8 @@ const Header = () => {
                                             </Link>
                                             <button
                                                 className={cn(
-                                                    "p-1 md:p-2 text-gray-800",
+                                                    "p-1 md:p-2 transition-colors duration-300",
+                                                    isScrolled || isSpecialPage ? "text-gray-800" : "text-white",
                                                 )}
                                                 onClick={toggleMobileMenu}
                                                 aria-label="Toggle menu"

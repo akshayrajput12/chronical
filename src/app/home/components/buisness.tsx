@@ -25,28 +25,76 @@ interface BusinessSection {
   stats: BusinessStat[];
 }
 
-// Simple number formatter without animations
-const NumberDisplay = ({ value }: { value: number }) => {
+// Odometer counter effect for numbers
+const NumberDisplay = ({ value, label }: { value: number; label?: string }) => {
+  const [displayValue, setDisplayValue] = React.useState(0);
+  const [isVisible, setIsVisible] = React.useState(false);
+  const elementRef = React.useRef<HTMLDivElement>(null);
+
+  // Special case for countries stat - show "50+" format
+  const isCountriesStat = label?.toLowerCase().includes('countries') || label?.toLowerCase().includes('country');
+
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !isVisible) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    if (elementRef.current) {
+      observer.observe(elementRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [isVisible]);
+
+  React.useEffect(() => {
+    if (isVisible && !isCountriesStat) {
+      const duration = 2000; // 2 seconds
+      const steps = 60;
+      const increment = value / steps;
+      let current = 0;
+      let step = 0;
+
+      const timer = setInterval(() => {
+        step++;
+        current = Math.min(value, Math.floor(increment * step));
+        setDisplayValue(current);
+
+        if (step >= steps) {
+          clearInterval(timer);
+          setDisplayValue(value);
+        }
+      }, duration / steps);
+
+      return () => clearInterval(timer);
+    } else if (isVisible && isCountriesStat) {
+      // For countries, just set the display value immediately
+      setDisplayValue(value);
+    }
+  }, [isVisible, value, isCountriesStat]);
+
   const formatNumber = (num: number) => {
-    if (num >= 1000000) {
+    // Special formatting for countries stat
+    if (isCountriesStat) {
+      return <div>{num}+</div>;
+    }
+
+    if (num >= 20000) {
       return (
         <div className="inline-flex items-baseline">
           <span>{(num / 1000000).toFixed(1)}</span>
-          <span className="text-3xl ml-1">M</span>
-        </div>
-      );
-    } else if (num >= 1000) {
-      return (
-        <div className="inline-flex items-baseline">
-          <span>{Math.floor(num / 1000)}</span>
-          <span className="text-3xl ml-1">K</span>
+          <span className="text-2xl ml-1">M</span>
         </div>
       );
     }
-    return <div>{num}</div>;
+    return <div>{num.toLocaleString()}</div>;
   };
 
-  return formatNumber(value);
+  return <div ref={elementRef}>{formatNumber(displayValue)}</div>;
 };
 
 const BusinessHubSection = () => {
@@ -177,27 +225,28 @@ const BusinessHubSection = () => {
   }
 
   return (
-    <section id="business-hub" className="bg-white py-8 sm:py-12 md:py-16 lg:py-20 px-4 md:px-20 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 lg:gap-10 xl:gap-12 items-start">
+    <section id="business-hub" className="bg-white py-8 sm:py-12 md:py-16 lg:py-20 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-2 sm:gap-3 md:gap-4 items-start">
         {/* Headings */}
-        <div className="max-w-md">
-          <h2 className="text-4xl md:text-5xl font-rubik font-extrabold text-[#222] leading-tight">
+        <div className="w-full ml-8 md:ml-12 lg:ml-16">
+          <h2 className="text-4xl md:text-5xl font-rubik text-[#222] leading-tight" style={{ fontWeight: '950' }}>
             <span className="text-[#222] block hover:translate-x-1 transition-transform duration-300">
               {businessData.heading}
             </span>
           </h2>
-          <div className="text-2xl md:text-3xl font-markazi text-[#333] font-medium mt-2">
+          <p className="text-2xl md:text-3xl font-markazi text-[#333] font-medium mt-2">
             {businessData.subheading}
-          </div>
+          </p>
           <div className="w-24 h-[3px] bg-[#a5cd39] mt-6 hover:w-32 transition-all duration-300" />
         </div>
 
         {/* Paragraphs */}
-        <div className="text-[#444] text-base md:text-lg space-y-6">
-          {businessData.paragraphs.map((paragraph) => (
+        <div className="text-[#444] space-y-6 w-full">
+          {businessData.paragraphs.map((paragraph, index) => (
             <p
               key={paragraph.id}
-              className="font-nunito leading-relaxed hover:translate-x-1 hover:text-[#222] transition-all duration-200"
+              className={`${index === 0 ? 'font-markazi text-[21px] md:text-[23px] lg:text-[25px]' : 'font-noto-kufi-arabic text-[12px] md:text-[13px] lg:text-[14px]'} leading-relaxed hover:translate-x-1 hover:text-[#222] transition-all duration-200`}
+              style={index === 0 ? { fontWeight: '0' } : {}}
             >
               {paragraph.content}
             </p>
@@ -206,24 +255,28 @@ const BusinessHubSection = () => {
       </div>
 
       {/* Stats */}
-      <div className="mt-8 sm:mt-10 md:mt-12 lg:mt-16 xl:mt-20 grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 md:gap-12 lg:gap-16 border-t border-gray-200 pt-8 sm:pt-10 md:pt-12 lg:pt-16">
-        {businessData.stats.map((stat) => (
+      <div className="mt-4 sm:mt-6 md:mt-8 mx-12 md:mx-20 lg:mx-28 xl:mx-36 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 md:gap-12 lg:gap-16 border-t border-gray-200 pt-6 sm:pt-8 md:pt-10">
+        {businessData.stats.map((stat, index) => (
           <div
             key={stat.id}
             className="flex flex-col items-center text-center hover:-translate-y-1 transition-transform duration-300"
           >
             {/* Stat number */}
-            <div className="text-5xl md:text-6xl font-extrabold text-[#a5cd39] leading-none hover:scale-105 transition-transform duration-300">
-              <NumberDisplay value={stat.value} />
+            <div
+              className="text-2xl md:text-3xl lg:text-4xl font-medium text-[#a5cd39] leading-none hover:scale-105 transition-transform duration-300"
+            >
+              <NumberDisplay value={stat.value} label={stat.label} />
             </div>
 
             {/* Label */}
-            <div className="text-xl md:text-2xl font-markazi font-medium text-[#333] mt-2 hover:-translate-y-0.5 transition-transform duration-200">
+            <div className={`${index === 0 ? 'font-markazi text-[20px] md:text-[22px] lg:text-[24px]' : 'font-noto-kufi-arabic text-[12px] md:text-[13px] lg:text-[14px]'} text-[#333] mt-2 hover:-translate-y-0.5 transition-transform duration-200`}
+                 style={index === 0 ? { fontWeight: '100' } : {}}>
               {stat.label}
             </div>
 
             {/* Sublabel */}
-            <div className="text-sm font-nunito text-[#666] uppercase tracking-wide mt-1 hover:-translate-y-0.5 transition-transform duration-200">
+            <div className={`${index === 0 ? 'font-markazi text-[20px] md:text-[22px] lg:text-[24px]' : 'font-noto-kufi-arabic text-[12px] md:text-[13px] lg:text-[14px]'} text-[#666] uppercase tracking-wide mt-1 hover:-translate-y-0.5 transition-transform duration-200`}
+                 style={index === 0 ? { fontWeight: '100' } : {}}>
               {stat.sublabel}
             </div>
 

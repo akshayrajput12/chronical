@@ -155,8 +155,8 @@ const NewCompany = () => {
               <div className="animate-pulse grid grid-cols-3 gap-4 h-[550px]">
                 {[1, 2, 3].map(col => (
                   <div key={col} className="space-y-4">
-                    {[1, 2, 3, 4].map(row => (
-                      <div key={`${col}-${row}`} className="h-[200px] bg-gray-200 rounded-md"></div>
+                    {[1, 2].map(row => (
+                      <div key={`${col}-${row}`} className="h-[400px] bg-gray-200 rounded-md"></div>
                     ))}
                   </div>
                 ))}

@@ -194,10 +194,11 @@ SELECT
   display_order
 FROM 
   business_section,
-  (VALUES 
+  (VALUES
     (2000, 'Companies', 'AND GROWING', 1),
     (40, 'Industries', 'REPRESENTED', 2),
-    (2000000, 'Sq Ft.', 'OF PREMIUM OFFICE SPACE', 3)
+    (2000000, 'Sq Ft.', 'OF PREMIUM OFFICE SPACE', 3),
+    (50, 'Countries', 'WORLDWIDE PRESENCE', 4)
   ) AS stats(value, label, sublabel, display_order)
 ON CONFLICT DO NOTHING;
 

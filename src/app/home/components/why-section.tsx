@@ -74,7 +74,7 @@ const WhySection = () => {
             ></div>
 
             {/* Subtitle */}
-            <p className="text-[#444] text-lg font-markazi max-w-3xl mx-auto mb-16">
+            <p className="font-markazi text-[21px] md:text-[23px] lg:text-[25px] leading-relaxed hover:translate-x-1 hover:text-[#222] transition-all duration-200 text-[#444] max-w-3xl mx-auto mb-16" style={{ fontWeight: '0' }}>
               {whyData?.subtitle || "Building on a 45 year legacy, DWTC Free Zone connects businesses and communities propelling their potential for success."}
             </p>
           </div>

@@ -53,6 +53,7 @@ const defaultInstagramPosts = [
 const InstagramFeed = () => {
   const ref = useRef(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const desktopScrollRef = useRef<HTMLDivElement>(null);
 
   // State for Instagram feed data
   const [sectionData, setSectionData] = useState<InstagramFeedSection | null>(null);
@@ -61,6 +62,8 @@ const InstagramFeed = () => {
 
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
+  const [canScrollLeftDesktop, setCanScrollLeftDesktop] = useState(false);
+  const [canScrollRightDesktop, setCanScrollRightDesktop] = useState(true);
 
   // Fetch Instagram feed data
   useEffect(() => {
@@ -102,6 +105,19 @@ const InstagramFeed = () => {
     }
   };
 
+  // Scroll functions for desktop carousel
+  const scrollLeftDesktop = () => {
+    if (desktopScrollRef.current) {
+      desktopScrollRef.current.scrollBy({ left: -320, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRightDesktop = () => {
+    if (desktopScrollRef.current) {
+      desktopScrollRef.current.scrollBy({ left: 320, behavior: 'smooth' });
+    }
+  };
+
   // Check scroll position to enable/disable buttons
   const checkScroll = () => {
     if (scrollRef.current) {
@@ -111,15 +127,35 @@ const InstagramFeed = () => {
     }
   };
 
+  // Check scroll position for desktop carousel
+  const checkScrollDesktop = () => {
+    if (desktopScrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = desktopScrollRef.current;
+      setCanScrollLeftDesktop(scrollLeft > 0);
+      setCanScrollRightDesktop(scrollLeft < scrollWidth - clientWidth - 1);
+    }
+  };
+
   useEffect(() => {
     const scrollElement = scrollRef.current;
+    const desktopScrollElement = desktopScrollRef.current;
+
     if (scrollElement) {
       scrollElement.addEventListener('scroll', checkScroll);
       checkScroll(); // Initial check
     }
+
+    if (desktopScrollElement) {
+      desktopScrollElement.addEventListener('scroll', checkScrollDesktop);
+      checkScrollDesktop(); // Initial check
+    }
+
     return () => {
       if (scrollElement) {
         scrollElement.removeEventListener('scroll', checkScroll);
+      }
+      if (desktopScrollElement) {
+        desktopScrollElement.removeEventListener('scroll', checkScrollDesktop);
       }
     };
   }, [posts]);
@@ -136,10 +172,10 @@ const InstagramFeed = () => {
             </div>
           </div>
 
-          <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto">
+          <div className="hidden md:flex gap-4 max-w-6xl mx-auto overflow-hidden">
             {[1, 2, 3, 4].map(i => (
-              <div key={i} className="animate-pulse">
-                <div className="w-full h-[240px] bg-gray-200 rounded-md"></div>
+              <div key={i} className="animate-pulse flex-shrink-0 w-[300px]">
+                <div className="w-full h-[240px] bg-gray-200"></div>
               </div>
             ))}
           </div>
@@ -164,21 +200,52 @@ const InstagramFeed = () => {
           <div className="w-16 h-[2px] bg-gray-300 mx-auto mt-4"></div>
         </div>
 
-        {/* Desktop View - Grid */}
-        <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto">
-          {displayPosts.map((post) => (
-            <InstagramCard
-              key={post.id}
-              post={{
-                ...post,
-                image: post.image_url
-              }}
-            />
-          ))}
+        {/* Desktop View - Carousel */}
+        <div className="hidden md:block max-w-6xl mx-auto">
+          <div
+            className="flex overflow-x-auto scrollbar-hide snap-x snap-mandatory"
+            ref={desktopScrollRef}
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
+            <div className="flex gap-4 pb-4">
+              {displayPosts.map((post) => (
+                <div key={post.id} className="snap-center flex-shrink-0 w-[300px]">
+                  <InstagramCard
+                    post={{
+                      ...post,
+                      image: post.image_url
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Desktop Navigation Arrows - Outside the carousel */}
+        <div className="relative hidden md:block max-w-6xl mx-auto">
+          {canScrollLeftDesktop && (
+            <button
+              onClick={scrollLeftDesktop}
+              className="absolute -left-16 top-1/2 -translate-y-1/2 bg-white/90 rounded-full p-3 shadow-lg z-10 transition-all hover:bg-white hover:shadow-xl"
+              aria-label="Previous slide"
+            >
+              <ChevronLeft size={24} className="text-gray-700" />
+            </button>
+          )}
+          {canScrollRightDesktop && (
+            <button
+              onClick={scrollRightDesktop}
+              className="absolute -right-16 top-1/2 -translate-y-1/2 bg-white/90 rounded-full p-3 shadow-lg z-10 transition-all hover:bg-white hover:shadow-xl"
+              aria-label="Next slide"
+            >
+              <ChevronRight size={24} className="text-gray-700" />
+            </button>
+          )}
         </div>
 
         {/* Mobile View - Carousel */}
-        <div className="relative md:hidden">
+        <div className="md:hidden">
           <div
             className="flex overflow-x-auto scrollbar-hide snap-x snap-mandatory"
             ref={scrollRef}
@@ -197,24 +264,26 @@ const InstagramFeed = () => {
               ))}
             </div>
           </div>
+        </div>
 
-          {/* Navigation Arrows */}
+        {/* Mobile Navigation Arrows - Outside the carousel */}
+        <div className="relative md:hidden">
           {canScrollLeft && (
             <button
               onClick={scrollLeft}
-              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow-md z-10 transition-opacity"
+              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 rounded-full p-2 shadow-lg z-10 transition-all hover:bg-white hover:shadow-xl"
               aria-label="Previous slide"
             >
-              <ChevronLeft size={24} />
+              <ChevronLeft size={20} className="text-gray-700" />
             </button>
           )}
           {canScrollRight && (
             <button
               onClick={scrollRight}
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow-md z-10 transition-opacity"
+              className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 rounded-full p-2 shadow-lg z-10 transition-all hover:bg-white hover:shadow-xl"
               aria-label="Next slide"
             >
-              <ChevronRight size={24} />
+              <ChevronRight size={20} className="text-gray-700" />
             </button>
           )}
         </div>
@@ -228,7 +297,7 @@ const InstagramCard = ({ post }: InstagramCardProps) => {
   const hasRedirectUrl = post.redirect_url && post.redirect_url.trim() !== '';
 
   const cardContent = (
-    <div className="relative overflow-hidden rounded-md shadow-md group h-[240px] hover:-translate-y-1 transition-transform duration-200">
+    <div className="relative overflow-hidden shadow-md group h-[240px] hover:-translate-y-1 transition-transform duration-200">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/70 z-10"></div>
 
       <Image

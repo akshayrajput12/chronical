@@ -132,7 +132,7 @@ const HeroSection: React.FC = () => {
                 >
                     <div className="overflow-hidden mb-0">
                         <motion.h1
-                            className="text-3xl sm:text-4xl md:text-5xl font-rubik font-bold whitespace-normal md:whitespace-nowrap leading-tight tracking-tight"
+                            className="text-3xl sm:text-4xl md:text-5xl font-rubik font-bold whitespace-normal leading-tight tracking-tight"
                             initial={{ y: 100, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{
@@ -148,40 +148,7 @@ const HeroSection: React.FC = () => {
                                 transition={{ duration: 0.3, delay: 0.5 }}
                                 className="inline-block font-rubik"
                             >
-                                Launch,
-                            </motion.span>{" "}
-                            <motion.span
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ duration: 0.3, delay: 0.7 }}
-                                className="inline-block font-rubik"
-                            >
-                                Grow
-                            </motion.span>{" "}
-                            <motion.span
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ duration: 0.3, delay: 0.9 }}
-                                className="inline-block font-rubik"
-                            >
-                                and
-                            </motion.span>{" "}
-                            <motion.span
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ duration: 0.3, delay: 1.1 }}
-                                className="inline-block text-[#a5cd39] font-rubik"
-                                whileHover={{ scale: 1.05 }}
-                            >
-                                Thrive
-                            </motion.span>{" "}
-                            <motion.span
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ duration: 0.3, delay: 1.3 }}
-                                className="inline-block font-rubik"
-                            >
-                                in the Free Zone
+                                {heroData.heading}
                             </motion.span>
                         </motion.h1>
                     </div>
@@ -194,6 +161,17 @@ const HeroSection: React.FC = () => {
                     >
                         {heroData.subheading}
                     </motion.h2>
+
+                    {/* Typing Animation */}
+                    <motion.div
+                        className="text-lg sm:text-xl font-noto-kufi-arabic font-medium text-[#a5cd39] mb-4 h-8"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 1.7 }}
+                    >
+                        <span>{displayText}</span>
+                        <span className="animate-pulse">|</span>
+                    </motion.div>
 
                     <motion.p
                         className="text-base sm:text-lg font-noto-kufi-arabic font-medium pt-2"

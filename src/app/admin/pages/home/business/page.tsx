@@ -74,6 +74,12 @@ const BusinessSectionEditor = () => {
         label: "Sq Ft.",
         sublabel: "OF PREMIUM OFFICE SPACE",
         display_order: 3
+      },
+      {
+        value: 50,
+        label: "Countries",
+        sublabel: "WORLDWIDE PRESENCE",
+        display_order: 4
       }
     ]
   });
@@ -486,15 +492,15 @@ const BusinessSectionEditor = () => {
               ))}
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-6 border-t border-gray-300">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-6 border-t border-gray-300">
               {businessData.stats.map((stat, index) => (
                 <div key={index} className="text-center">
-                  <div className="text-3xl font-bold text-[#a5cd39]">
-                    {stat.value >= 1000000
-                      ? `${(stat.value / 1000000).toFixed(1)}M`
-                      : stat.value >= 1000
-                        ? `${Math.floor(stat.value / 1000)}K`
-                        : stat.value}
+                  <div className="text-3xl font-medium text-[#a5cd39]">
+                    {stat.label.toLowerCase().includes('countries') || stat.label.toLowerCase().includes('country')
+                      ? `${stat.value}+`
+                      : stat.value >= 20000
+                        ? `${(stat.value / 1000000).toFixed(1)}M`
+                        : stat.value.toLocaleString()}
                   </div>
                   <div className="text-lg font-medium text-gray-800">{stat.label}</div>
                   <div className="text-sm text-gray-500">{stat.sublabel}</div>

@@ -157,24 +157,24 @@ const ImageScrollGrid: React.FC<ImageScrollGridProps> = ({ className, columnImag
         <div className="absolute w-full" ref={column1Ref}>
           {/* Original images */}
           {column1Images.map((src, index) => (
-            <div key={`col1-img-${index}`} className="mb-4 overflow-hidden rounded-md shadow-md h-[200px] transform transition-all duration-500 hover:shadow-xl">
+            <div key={`col1-img-${index}`} className="mb-4 overflow-hidden rounded-md shadow-md h-[400px] transform transition-all duration-500 hover:shadow-xl">
               <Image
                 src={src}
                 alt={getAltText(1, index)}
                 width={400}
-                height={300}
+                height={800}
                 className="w-full h-full object-cover transition-all duration-700 hover:scale-110 hover:brightness-110 filter"
               />
             </div>
           ))}
           {/* Duplicated images for seamless loop */}
           {column1Images.map((src, index) => (
-            <div key={`col1-dup-${index}`} className="mb-4 overflow-hidden rounded-md shadow-md h-[200px] transform transition-all duration-500 hover:shadow-xl">
+            <div key={`col1-dup-${index}`} className="mb-4 overflow-hidden rounded-md shadow-md h-[400px] transform transition-all duration-500 hover:shadow-xl">
               <Image
                 src={src}
                 alt={getAltText(1, index)}
                 width={400}
-                height={300}
+                height={800}
                 className="w-full h-full object-cover transition-all duration-700 hover:scale-110 hover:brightness-110 filter"
               />
             </div>
@@ -187,24 +187,24 @@ const ImageScrollGrid: React.FC<ImageScrollGridProps> = ({ className, columnImag
         <div className="absolute w-full" ref={column2Ref}>
           {/* Original images */}
           {column2Images.map((src, index) => (
-            <div key={`col2-img-${index}`} className="mb-4 overflow-hidden rounded-md shadow-md h-[200px] transform transition-all duration-500 hover:shadow-xl">
+            <div key={`col2-img-${index}`} className="mb-4 overflow-hidden rounded-md shadow-md h-[400px] transform transition-all duration-500 hover:shadow-xl">
               <Image
                 src={src}
                 alt={getAltText(2, index)}
                 width={400}
-                height={300}
+                height={800}
                 className="w-full h-full object-cover transition-all duration-700 hover:scale-110 hover:brightness-110 filter"
               />
             </div>
           ))}
           {/* Duplicated images for seamless loop */}
           {column2Images.map((src, index) => (
-            <div key={`col2-dup-${index}`} className="mb-4 overflow-hidden rounded-md shadow-md h-[200px] transform transition-all duration-500 hover:shadow-xl">
+            <div key={`col2-dup-${index}`} className="mb-4 overflow-hidden rounded-md shadow-md h-[400px] transform transition-all duration-500 hover:shadow-xl">
               <Image
                 src={src}
                 alt={getAltText(2, index)}
                 width={400}
-                height={300}
+                height={800}
                 className="w-full h-full object-cover transition-all duration-700 hover:scale-110 hover:brightness-110 filter"
               />
             </div>
@@ -217,24 +217,24 @@ const ImageScrollGrid: React.FC<ImageScrollGridProps> = ({ className, columnImag
         <div className="absolute w-full" ref={column3Ref}>
           {/* Original images */}
           {column3Images.map((src, index) => (
-            <div key={`col3-img-${index}`} className="mb-4 overflow-hidden rounded-md shadow-md h-[200px] transform transition-all duration-500 hover:shadow-xl">
+            <div key={`col3-img-${index}`} className="mb-4 overflow-hidden rounded-md shadow-md h-[400px] transform transition-all duration-500 hover:shadow-xl">
               <Image
                 src={src}
                 alt={getAltText(3, index)}
                 width={400}
-                height={300}
+                height={800}
                 className="w-full h-full object-cover transition-all duration-700 hover:scale-110 hover:brightness-110 filter"
               />
             </div>
           ))}
           {/* Duplicated images for seamless loop */}
           {column3Images.map((src, index) => (
-            <div key={`col3-dup-${index}`} className="mb-4 overflow-hidden rounded-md shadow-md h-[200px] transform transition-all duration-500 hover:shadow-xl">
+            <div key={`col3-dup-${index}`} className="mb-4 overflow-hidden rounded-md shadow-md h-[400px] transform transition-all duration-500 hover:shadow-xl">
               <Image
                 src={src}
                 alt={getAltText(3, index)}
                 width={400}
-                height={300}
+                height={800}
                 className="w-full h-full object-cover transition-all duration-700 hover:scale-110 hover:brightness-110 filter"
               />
             </div>
