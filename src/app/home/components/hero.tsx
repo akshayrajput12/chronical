@@ -4,6 +4,7 @@ import { ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
 import { getHeroSection } from "@/services/hero.service";
 import { HeroSection as HeroSectionType } from "@/types/hero";
+import { useComponentLoading } from "@/hooks/use-minimal-loading";
 
 // Static video path
 const staticVideoPath = "/videos/hero-background.mp4";
@@ -35,6 +36,9 @@ const HeroSection: React.FC = () => {
     const [typingIndex, setTypingIndex] = useState(0);
     const [displayText, setDisplayText] = useState("");
     const [isDeleting, setIsDeleting] = useState(false);
+
+    // Use minimal loader for this component - won't block the entire screen
+    useComponentLoading(loading, "Loading hero section...");
 
     // Fetch hero data from the database
     useEffect(() => {
@@ -92,14 +96,8 @@ const HeroSection: React.FC = () => {
         return () => clearTimeout(timeout);
     }, [displayText, isDeleting, typingIndex, typingTexts]);
 
-    // Show loading state
-    if (loading) {
-        return (
-            <div className="flex items-center justify-center h-screen bg-gray-900">
-                <div className="animate-spin h-12 w-12 border-4 border-[#a5cd39] border-t-transparent rounded-full"></div>
-            </div>
-        );
-    }
+    // Show default content while loading - minimal loader will show in corner
+    // This prevents blank screens during data loading
 
     return (
         <section id="hero" className="relative w-full h-[90vh] overflow-hidden">
