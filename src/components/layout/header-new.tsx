@@ -324,7 +324,10 @@ const Header = () => {
                                                 : "bg-[#222222]",
                                         )}
                                     >
-                                        <Logo isScrolled={isScrolled} />
+                                        <Logo
+                                            isScrolled={false}
+                                            forceLight={true}
+                                        />
                                         <div className="flex items-center space-x-3 md:space-x-4 flex-shrink-0">
                                             {/* Mobile/Tablet WhatsApp Button */}
                                             <Link
@@ -558,7 +561,10 @@ const Header = () => {
                         >
                             <div className="h-full overflow-y-auto">
                                 <div className="flex justify-between items-center p-4 md:p-6 border-b border-gray-200 bg-white">
-                                    <Logo isScrolled={true} />
+                                    <Logo
+                                        isScrolled={false}
+                                        forceLight={true}
+                                    />
                                     <button
                                         className="text-gray-800 p-1 md:p-2"
                                         onClick={closeMobileMenu}
