@@ -25,17 +25,58 @@ const Header = () => {
     const pathname = usePathname();
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const [activeLink, setActiveLink] = useState("");
     const [mobileSubMenus, setMobileSubMenus] = useState<
         Record<string, boolean>
     >({});
     const [isHeaderVisible, setIsHeaderVisible] = useState(true);
-    const [activeSubMenu, setActiveSubMenu] = useState<string | null>("expo");
 
     const lowerHeaderRef = useRef<HTMLDivElement>(null);
 
+    // Check if current page is home page
+    const isHomePage = pathname === "/";
     // Check if current page is portfolio page or blog detail page
     const isSpecialPage = pathname !== "/";
+
+    // Navigation mapping - determines which nav item should be active based on current pathname
+    const getActiveNavigation = () => {
+        // Left navigation (main tabs)
+        if (pathname === "/conference")
+            return { type: "main", key: "conference" };
+        if (pathname === "/" || pathname === "/home")
+            return { type: "main", key: "expo" };
+        if (pathname === "/kiosk") return { type: "main", key: "kiosk" };
+
+        // Right navigation items
+        if (pathname === "/about") return { type: "right", key: "about" };
+        if (pathname === "/support") return { type: "right", key: "support" };
+        if (pathname === "/blog" || pathname.startsWith("/blog/"))
+            return { type: "right", key: "blog" };
+        if (pathname === "/cities" || pathname.startsWith("/cities/"))
+            return { type: "right", key: "cities" };
+        if (pathname === "/contact-us")
+            return { type: "right", key: "contact" };
+
+        // Sub-navigation items (should show expo as active main tab)
+        if (
+            pathname === "/visit-us" ||
+            pathname === "/customexhibitionstands" ||
+            pathname === "/doubledeckerexhibitionstands" ||
+            pathname === "/countrypavilionexpoboothsolutions" ||
+            pathname === "/whats-on" ||
+            pathname.startsWith("/whats-on/") ||
+            pathname === "/experience-dubai" ||
+            pathname === "/portfolio"
+        ) {
+            return { type: "main", key: "expo" };
+        }
+
+        // Default to expo for home and unknown routes
+        return { type: "main", key: "expo" };
+    };
+
+    const activeNavigation = getActiveNavigation();
+    const activeSubMenu =
+        activeNavigation.type === "main" ? activeNavigation.key : "expo";
 
     // Context value is provided directly to the provider
 
@@ -168,14 +209,6 @@ const Header = () => {
                                         isActive={
                                             activeSubMenu === "conference"
                                         }
-                                        onClick={() => {
-                                            setActiveLink("/conference");
-                                            setActiveSubMenu(
-                                                activeSubMenu === "conference"
-                                                    ? null
-                                                    : "conference",
-                                            );
-                                        }}
                                         className={cn(
                                             "bg-[#222222]",
                                             activeSubMenu !== "conference" &&
@@ -187,14 +220,6 @@ const Header = () => {
                                         href="/"
                                         label="EXPO BOOTH"
                                         isActive={activeSubMenu === "expo"}
-                                        onClick={() => {
-                                            setActiveLink("/events");
-                                            setActiveSubMenu(
-                                                activeSubMenu === "expo"
-                                                    ? null
-                                                    : "expo",
-                                            );
-                                        }}
                                         className={cn(
                                             "bg-[#222222]",
                                             activeSubMenu !== "expo" &&
@@ -207,14 +232,6 @@ const Header = () => {
                                         href="/kiosk"
                                         label="KIOSK"
                                         isActive={activeSubMenu === "kiosk"}
-                                        onClick={() => {
-                                            setActiveLink("/kiosk");
-                                            setActiveSubMenu(
-                                                activeSubMenu === "kiosk"
-                                                    ? null
-                                                    : "kiosk",
-                                            );
-                                        }}
                                         className={cn(
                                             "bg-[#222222]",
                                             activeSubMenu !== "kiosk" &&
@@ -230,33 +247,49 @@ const Header = () => {
                                         <NavItem
                                             href="/about"
                                             label="ABOUT US"
-                                            isActive={activeLink === "/about"}
-                                            onClick={() =>
-                                                setActiveLink("/about")
+                                            isActive={
+                                                activeNavigation.type ===
+                                                    "right" &&
+                                                activeNavigation.key === "about"
                                             }
                                         />
                                         <NavItem
                                             href="/support"
                                             label="SUPPORT"
-                                            isActive={activeLink === "/support"}
-                                            onClick={() =>
-                                                setActiveLink("/support")
+                                            isActive={
+                                                activeNavigation.type ===
+                                                    "right" &&
+                                                activeNavigation.key ===
+                                                    "support"
                                             }
                                         />
                                         <NavItem
                                             href="/blog"
                                             label="BLOG"
-                                            isActive={activeLink === "/blog"}
-                                            onClick={() =>
-                                                setActiveLink("/blog")
+                                            isActive={
+                                                activeNavigation.type ===
+                                                    "right" &&
+                                                activeNavigation.key === "blog"
+                                            }
+                                        />
+                                        <NavItem
+                                            href="/cities"
+                                            label="CITIES"
+                                            isActive={
+                                                activeNavigation.type ===
+                                                    "right" &&
+                                                activeNavigation.key ===
+                                                    "cities"
                                             }
                                         />
                                         <NavItem
                                             href="/contact-us"
                                             label="CONTACT US"
-                                            isActive={activeLink === "/contact"}
-                                            onClick={() =>
-                                                setActiveLink("/contact")
+                                            isActive={
+                                                activeNavigation.type ===
+                                                    "right" &&
+                                                activeNavigation.key ===
+                                                    "contact"
                                             }
                                         />
                                     </div>
@@ -341,9 +374,11 @@ const Header = () => {
                                 <div
                                     className={cn(
                                         "hidden relative py-3 lg:block transition-all duration-300 w-full",
-                                        isScrolled
-                                            ? "bg-white shadow-md"
-                                            : "bg-transparent",
+                                        isHomePage
+                                            ? isScrolled
+                                                ? "bg-white shadow-md"
+                                                : "bg-transparent"
+                                            : "bg-white shadow-md",
                                     )}
                                 >
                                     <div className="w-full px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 relative z-10">
@@ -364,13 +399,8 @@ const Header = () => {
                                                                 label="EXHIBITION STANDS"
                                                                 subLabel="Hotels, dining and amenities"
                                                                 isActive={
-                                                                    activeLink ===
+                                                                    pathname ===
                                                                     "/visit-us"
-                                                                }
-                                                                onClick={() =>
-                                                                    setActiveLink(
-                                                                        "/visit-us",
-                                                                    )
                                                                 }
                                                             />
 
@@ -378,7 +408,9 @@ const Header = () => {
                                                             <div
                                                                 className={cn(
                                                                     "absolute left-0 top-full w-[600px] py-3 transition-all duration-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible z-50",
-                                                                    isScrolled &&
+                                                                    (isHomePage
+                                                                        ? isScrolled
+                                                                        : true) &&
                                                                         "bg-white shadow-md",
                                                                 )}
                                                             >
@@ -387,7 +419,11 @@ const Header = () => {
                                                                         href="/customexhibitionstands"
                                                                         className={cn(
                                                                             "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
-                                                                            isScrolled
+                                                                            (
+                                                                                isHomePage
+                                                                                    ? isScrolled
+                                                                                    : true
+                                                                            )
                                                                                 ? "text-gray-700"
                                                                                 : "text-white",
                                                                         )}
@@ -399,7 +435,11 @@ const Header = () => {
                                                                         href="/doubledeckerexhibitionstands"
                                                                         className={cn(
                                                                             "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
-                                                                            isScrolled
+                                                                            (
+                                                                                isHomePage
+                                                                                    ? isScrolled
+                                                                                    : true
+                                                                            )
                                                                                 ? "text-gray-700"
                                                                                 : "text-white",
                                                                         )}
@@ -412,7 +452,11 @@ const Header = () => {
                                                                         href="/countrypavilionexpoboothsolutions"
                                                                         className={cn(
                                                                             "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
-                                                                            isScrolled
+                                                                            (
+                                                                                isHomePage
+                                                                                    ? isScrolled
+                                                                                    : true
+                                                                            )
                                                                                 ? "text-gray-700"
                                                                                 : "text-white",
                                                                         )}
@@ -427,7 +471,11 @@ const Header = () => {
                                                         <div
                                                             className={cn(
                                                                 "h-12 w-px mx-4",
-                                                                isScrolled
+                                                                (
+                                                                    isHomePage
+                                                                        ? isScrolled
+                                                                        : true
+                                                                )
                                                                     ? "bg-gray-300"
                                                                     : "bg-gray-300",
                                                             )}
@@ -437,19 +485,21 @@ const Header = () => {
                                                             label="TOP EXHIBITIONS"
                                                             subLabel="Upcoming exhibitions and events"
                                                             isActive={
-                                                                activeLink ===
-                                                                "/whats-on"
-                                                            }
-                                                            onClick={() =>
-                                                                setActiveLink(
-                                                                    "/whats-on",
+                                                                pathname ===
+                                                                    "/whats-on" ||
+                                                                pathname.startsWith(
+                                                                    "/whats-on/",
                                                                 )
                                                             }
                                                         />
                                                         <div
                                                             className={cn(
                                                                 "h-12 w-px mx-4",
-                                                                isScrolled
+                                                                (
+                                                                    isHomePage
+                                                                        ? isScrolled
+                                                                        : true
+                                                                )
                                                                     ? "bg-gray-300"
                                                                     : "bg-gray-300",
                                                             )}
@@ -460,20 +510,19 @@ const Header = () => {
                                                                 label="TOP EXPO LOCATIONS"
                                                                 subLabel="The best Dubai has to offer"
                                                                 isActive={
-                                                                    activeLink ===
+                                                                    pathname ===
                                                                     "/experience-dubai"
-                                                                }
-                                                                onClick={() =>
-                                                                    setActiveLink(
-                                                                        "/experience-dubai",
-                                                                    )
                                                                 }
                                                             />
                                                         </div>
                                                         <div
                                                             className={cn(
                                                                 "h-12 w-px mx-4",
-                                                                isScrolled
+                                                                (
+                                                                    isHomePage
+                                                                        ? isScrolled
+                                                                        : true
+                                                                )
                                                                     ? "bg-gray-300"
                                                                     : "bg-gray-300",
                                                             )}
@@ -484,13 +533,8 @@ const Header = () => {
                                                                 label="PORTFOLIO"
                                                                 subLabel="Our exhibition stand projects"
                                                                 isActive={
-                                                                    activeLink ===
+                                                                    pathname ===
                                                                     "/portfolio"
-                                                                }
-                                                                onClick={() =>
-                                                                    setActiveLink(
-                                                                        "/portfolio",
-                                                                    )
                                                                 }
                                                             />
                                                         </div>
@@ -682,25 +726,15 @@ const Header = () => {
                                                 href="/conference"
                                                 label="CONFERENCE"
                                                 isActive={
-                                                    activeLink === "/conference"
+                                                    pathname === "/conference"
                                                 }
-                                                onClick={() => {
-                                                    setActiveLink(
-                                                        "/conference",
-                                                    );
-                                                    closeMobileMenu();
-                                                }}
+                                                onClick={closeMobileMenu}
                                             />
                                             <MobileNavItem
                                                 href="/kiosk"
                                                 label="KIOSK"
-                                                isActive={
-                                                    activeLink === "/kiosk"
-                                                }
-                                                onClick={() => {
-                                                    setActiveLink("/kiosk");
-                                                    closeMobileMenu();
-                                                }}
+                                                isActive={pathname === "/kiosk"}
+                                                onClick={closeMobileMenu}
                                             />
                                         </div>
 
@@ -713,71 +747,61 @@ const Header = () => {
                                             <MobileNavItem
                                                 href="/about"
                                                 label="ABOUT US"
-                                                isActive={
-                                                    activeLink === "/about"
-                                                }
-                                                onClick={() => {
-                                                    setActiveLink("/about");
-                                                    closeMobileMenu();
-                                                }}
+                                                isActive={pathname === "/about"}
+                                                onClick={closeMobileMenu}
                                             />
                                             <MobileNavItem
                                                 href="/portfolio"
                                                 label="PORTFOLIO"
                                                 isActive={
-                                                    activeLink === "/portfolio"
+                                                    pathname === "/portfolio"
                                                 }
-                                                onClick={() => {
-                                                    setActiveLink("/portfolio");
-                                                    closeMobileMenu();
-                                                }}
+                                                onClick={closeMobileMenu}
                                             />
                                             <MobileNavItem
                                                 href="/industry-insights"
                                                 label="INDUSTRY INSIGHTS"
                                                 isActive={
-                                                    activeLink ===
+                                                    pathname ===
                                                     "/industry-insights"
                                                 }
-                                                onClick={() => {
-                                                    setActiveLink(
-                                                        "/industry-insights",
-                                                    );
-                                                    closeMobileMenu();
-                                                }}
+                                                onClick={closeMobileMenu}
                                             />
                                             <MobileNavItem
                                                 href="/blog"
                                                 label="BLOG"
                                                 isActive={
-                                                    activeLink === "/blog"
+                                                    pathname === "/blog" ||
+                                                    pathname.startsWith(
+                                                        "/blog/",
+                                                    )
                                                 }
-                                                onClick={() => {
-                                                    setActiveLink("/blog");
-                                                    closeMobileMenu();
-                                                }}
+                                                onClick={closeMobileMenu}
+                                            />
+                                            <MobileNavItem
+                                                href="/cities"
+                                                label="CITIES"
+                                                isActive={
+                                                    pathname === "/cities" ||
+                                                    pathname.startsWith(
+                                                        "/cities/",
+                                                    )
+                                                }
+                                                onClick={closeMobileMenu}
                                             />
                                             <MobileNavItem
                                                 href="/contact-us"
                                                 label="CONTACT US"
                                                 isActive={
-                                                    activeLink === "/contact-us"
+                                                    pathname === "/contact-us"
                                                 }
-                                                onClick={() => {
-                                                    setActiveLink(
-                                                        "/contact-us",
-                                                    );
-                                                    closeMobileMenu();
-                                                }}
+                                                onClick={closeMobileMenu}
                                             />
                                             <MobileNavItem
                                                 href="/ar"
                                                 label="عربي"
-                                                isActive={activeLink === "/ar"}
-                                                onClick={() => {
-                                                    setActiveLink("/ar");
-                                                    closeMobileMenu();
-                                                }}
+                                                isActive={pathname === "/ar"}
+                                                onClick={closeMobileMenu}
                                             />
 
                                             {/* WhatsApp Button in Mobile/Tablet Menu */}
@@ -833,14 +857,12 @@ const TabItem = ({
     href,
     label,
     isActive,
-    onClick,
     className,
     activeClassName,
 }: {
     href?: string;
     label: string;
     isActive?: boolean;
-    onClick?: () => void;
     className?: string;
     activeClassName?: string;
 }) => {
@@ -853,7 +875,6 @@ const TabItem = ({
                     className,
                     isActive && (activeClassName || className),
                 )}
-                onClick={onClick}
             >
                 {label}
             </Link>
@@ -867,7 +888,6 @@ const TabItem = ({
                 className,
                 isActive && (activeClassName || className),
             )}
-            onClick={onClick}
         >
             {label}
         </button>
@@ -879,22 +899,23 @@ const NavItem = ({
     href,
     label,
     isActive,
-    onClick,
 }: {
     href: string;
     label: string;
     isActive?: boolean;
-    onClick?: () => void;
 }) => {
+    const { isScrolled } = useContext(HeaderContext);
+
     return (
         <Link
             href={href}
             className={cn(
                 "uppercase font-noto-kufi-arabic font-medium transition-colors px-2 xl:px-3 text-[11px] xl:text-[12px] whitespace-nowrap",
-                "text-white hover:text-[#a5cd39]",
+                isScrolled
+                    ? "text-[#2C2C2C] hover:text-[#a5cd39]"
+                    : "text-white hover:text-[#a5cd39]",
                 isActive && "text-[#a5cd39]",
             )}
-            onClick={onClick}
         >
             {label}
         </Link>
@@ -907,15 +928,18 @@ const SubNavItem = ({
     label,
     subLabel,
     isActive,
-    onClick,
 }: {
     href: string;
     label: string;
     subLabel: string;
     isActive?: boolean;
-    onClick?: () => void;
 }) => {
     const { isScrolled } = useContext(HeaderContext);
+    const pathname = usePathname();
+    const isHomePage = pathname === "/";
+
+    // Determine if we should show dark text (white background)
+    const shouldShowDarkText = isHomePage ? isScrolled : true;
 
     return (
         <Link
@@ -924,11 +948,10 @@ const SubNavItem = ({
                 "flex flex-col transition-colors text-center px-2",
                 isActive
                     ? "text-[#a5cd39]"
-                    : isScrolled
+                    : shouldShowDarkText
                     ? "text-[#2C2C2C] hover:text-[#a5cd39]"
                     : "text-white hover:text-[#a5cd39]",
             )}
-            onClick={onClick}
         >
             <span className="uppercase font-noto-kufi-arabic font-medium text-sm">
                 {label}
@@ -936,7 +959,7 @@ const SubNavItem = ({
             <span
                 className={cn(
                     "text-xs font-noto-kufi-arabic mt-1 max-w-[150px] text-center",
-                    isScrolled ? "text-gray-500" : "text-white/80",
+                    shouldShowDarkText ? "text-gray-500" : "text-white/80",
                 )}
             >
                 {subLabel}
