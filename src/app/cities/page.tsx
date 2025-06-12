@@ -3,52 +3,62 @@
 import React from "react";
 import CitiesHero from "@/components/cities/cities-hero";
 import CitiesGrid from "@/components/cities/cities-grid";
-
-// Cities data based on footer locations
-const cities = [
-    {
-        id: 1,
-        name: "Saudi Arabia",
-        slug: "saudi-arabia",
-        image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-    },
-    {
-        id: 2,
-        name: "Abu Dhabi",
-        slug: "abu-dhabi",
-        image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-    },
-    {
-        id: 3,
-        name: "Qatar",
-        slug: "qatar",
-        image: "https://images.unsplash.com/photo-1539650116574-75c0c6d73f6e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-    },
-    {
-        id: 4,
-        name: "Turkey",
-        slug: "turkey",
-        image: "https://images.unsplash.com/photo-1541432901042-2d8bd64b4a9b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-    },
-    {
-        id: 5,
-        name: "Kuwait",
-        slug: "kuwait",
-        image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-    },
-    {
-        id: 6,
-        name: "Jordan",
-        slug: "jordan",
-        image: "https://images.unsplash.com/photo-1539650116574-75c0c6d73f6e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-    },
-];
+import { useCities } from "@/hooks/use-cities";
+import { useComponentLoading } from "@/hooks/use-minimal-loading";
 
 const CitiesPage = () => {
+    const { cities, isLoading, error } = useCities();
+
+    // Use the component loading hook for consistent loading states
+    useComponentLoading(isLoading, "Loading cities...");
+
+    // Show error state
+    if (error) {
+        return (
+            <div className="min-h-screen bg-white flex items-center justify-center">
+                <div className="text-center py-8 md:py-12 lg:py-16">
+                    <h1 className="text-2xl font-bold text-red-600 mb-4">
+                        Error Loading Cities
+                    </h1>
+                    <p className="text-gray-600 mb-6">{error?.message}</p>
+                    <button
+                        onClick={() => window.location.reload()}
+                        className="bg-[#a5cd39] hover:bg-[#8fb82e] text-white px-6 py-2 rounded-full transition-colors duration-300"
+                    >
+                        Try Again
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
+    // Transform cities data for the grid component (maintaining backward compatibility)
+    const citiesForGrid = cities.map(city => ({
+        id: city.id,
+        name: city.name,
+        slug: city.slug,
+        image: city.heroImage,
+    }));
+
     return (
         <div className="min-h-screen bg-white">
             <CitiesHero />
-            <CitiesGrid cities={cities} />
+            {isLoading ? (
+                <div className="py-8 md:py-12 lg:py-16">
+                    <div className="container mx-auto px-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {[...Array(6)].map((_, index) => (
+                                <div
+                                    key={index}
+                                    className="bg-gray-200 h-64 rounded-lg animate-pulse"
+                                ></div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            ) : (
+                <CitiesGrid cities={citiesForGrid} />
+            )}
         </div>
     );
 };

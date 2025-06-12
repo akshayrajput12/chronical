@@ -5,18 +5,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface CityDetailHeroProps {
-    title: string;
-    subtitle: string;
+    cityName: string;
     heroImage: string;
 }
 
-const CityDetailHero = ({
-    title,
-    subtitle,
-    heroImage,
-}: CityDetailHeroProps) => {
+const CityDetailHero = ({ cityName, heroImage }: CityDetailHeroProps) => {
     return (
         <section className="w-full bg-white">
             {/* Full width hero container with background image */}
@@ -25,49 +21,84 @@ const CityDetailHero = ({
                 <div className="absolute inset-0 z-0">
                     <Image
                         src={heroImage}
-                        alt={title}
+                        alt={`Exhibition services in ${cityName}`}
                         fill
                         className="object-cover"
                         priority
                     />
                     {/* Dark overlay for better text readability */}
-                    <div className="absolute inset-0 bg-black/40"></div>
+                    <div className="absolute inset-0 bg-black/50"></div>
                 </div>
 
-                {/* Back Button */}
-                <motion.div
-                    className="absolute top-8 left-8 z-20"
-                    initial={{ opacity: 0, x: -30 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.8, delay: 0.3 }}
-                >
-                    <Link
-                        href="/cities"
-                        className="flex items-center gap-2 text-white hover:text-[#a5cd39] transition-colors duration-300 bg-black/20 backdrop-blur-sm rounded-full px-4 py-2 hover:bg-black/30"
-                    >
-                        <ArrowLeft className="w-4 h-4" />
-                        <span className="text-sm font-medium">Back to Cities</span>
-                    </Link>
-                </motion.div>
+                {/* Content - matching the reference image design */}
+                <div className="relative z-10 px-4 sm:px-6 md:px-8 lg:px-12 text-center text-white w-full">
+                    <div className="max-w-7xl mx-auto">
+                        <div className="max-w-5xl mx-auto">
+                            {/* Main Heading - exactly matching the reference image */}
+                            <motion.h1
+                                className="text-xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-6 sm:mb-8 leading-tight uppercase tracking-wide"
+                                initial={{ opacity: 0, y: 30 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8 }}
+                            >
+                                EXHIBITION STAND DESIGN BUILDER &<br />
+                                CONTRACTOR COMPANY IN {cityName.toUpperCase()},
+                                UAE.
+                            </motion.h1>
 
-                {/* Content Container */}
-                <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
-                    <motion.h1
-                        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6 leading-tight"
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8 }}
-                    >
-                        {title}
-                    </motion.h1>
-                    <motion.p
-                        className="text-sm sm:text-base md:text-lg lg:text-xl mb-8 max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-3xl mx-auto font-light leading-relaxed tracking-wide"
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 0.2 }}
-                    >
-                        {subtitle}
-                    </motion.p>
+                            {/* Description Text - matching the reference image */}
+                            <motion.p
+                                className="text-sm sm:text-base md:text-lg lg:text-xl text-white/90 mb-8 sm:mb-10 max-w-4xl mx-auto leading-relaxed font-light"
+                                initial={{ opacity: 0, y: 30 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8, delay: 0.2 }}
+                            >
+                                Chronicle Exhibition Organizing LLC is one of
+                                the most reputable exhibition stand design
+                                manufacturers, and contractors located in{" "}
+                                {cityName} offering an exhaustive array of
+                                stand-up services for exhibitions. We provide
+                                complete display stand solutions, including
+                                designing, planning, fabricating and erecting
+                                and putting up.
+                            </motion.p>
+
+                            {/* Call-to-Action Button - matching the reference image */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 30 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8, delay: 0.4 }}
+                            >
+                                <Button
+                                    className="bg-gray-600/80 hover:bg-gray-700/90 text-white px-8 py-3 text-sm font-medium uppercase tracking-wider rounded-none border-0 backdrop-blur-sm transition-all duration-300 hover:scale-105"
+                                    size="lg"
+                                >
+                                    Request For Quotation
+                                </Button>
+                            </motion.div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Back to Cities Link */}
+            <div className="bg-white py-8 md:py-12">
+                <div className="container mx-auto px-4">
+                    <div className="max-w-6xl mx-auto">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, delay: 0.4 }}
+                        >
+                            <Link
+                                href="/cities"
+                                className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 text-sm font-medium uppercase tracking-wide transition-colors duration-300"
+                            >
+                                <ArrowLeft className="w-4 h-4" />
+                                BACK TO CITIES
+                            </Link>
+                        </motion.div>
+                    </div>
                 </div>
             </div>
         </section>

@@ -1,45 +1,51 @@
-/* Global Typography Hierarchy - Combined Typography Example Implementation */
-/* This file applies the exact font hierarchy from the Combined Typography Example across the entire website */
+/* Global Typography Hierarchy - Applied to ALL pages EXCEPT Home Page */
+/* This file applies consistent font hierarchy across the entire website excluding the home page */
 /*
-   FONT HIERARCHY:
-   - H1, H2: Rubik (Main Headlines)
-   - H3, H4, H5, H6: Markazi Text (Elegant Subheadings)
-   - P, SPAN, DIV, A, etc.: Noto Kufi Arabic (Body Text)
-   - Arabic Text: Noto Kufi Arabic
+   FONT HIERARCHY (All pages except home):
+   - H1, H2: Rubik with light weight (300)
+   - H3, H4, H5, H6: Markazi Text with medium bold weight (600)
+   - P, SPAN, DIV, A, etc.: Noto Kufi Arabic (400)
+   - Home page retains its current custom styling
 */
 
 /* Import Google Fonts - Alternative method for reference */
 @import url("https://fonts.googleapis.com/css2?family=Markazi+Text:wght@400..700&family=Noto+Kufi+Arabic:wght@100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
 
 /* =============================================================================
-   GLOBAL TYPOGRAPHY HIERARCHY
+   GLOBAL TYPOGRAPHY HIERARCHY - EXCLUDING HOME PAGE
    ============================================================================= */
 
-/* Main Headlines - H1, H2 use Rubik with lighter weight */
-h1,
-h2 {
-    font-family: var(--font-rubik), "Rubik", sans-serif;
+/* Main Headlines - H1, H2 use Rubik with light weight (300) */
+/* Exclude home page routes: /, /home */
+body:not(.home-page) h1,
+body:not(.home-page) h2 {
+    font-family: var(--font-rubik), "Rubik", sans-serif !important;
+    font-weight: 300 !important; /* Light weight as requested */
 }
 
-/* Elegant Subheadings - H3, H4, H5, H6 use Markazi Text with lighter weight */
-h3,
-h4,
-h5,
-h6 {
-    font-family: var(--font-markazi-text), "Markazi Text", serif;
+/* Elegant Subheadings - H3, H4, H5, H6 use Markazi Text with medium bold weight (600) */
+/* Exclude home page routes: /, /home */
+body:not(.home-page) h3,
+body:not(.home-page) h4,
+body:not(.home-page) h5,
+body:not(.home-page) h6 {
+    font-family: var(--font-markazi-text), "Markazi Text", serif !important;
+    font-weight: 600 !important; /* Medium bold weight as requested */
 }
 
 /* Body Text - Paragraphs, spans, and general text use Noto Kufi Arabic */
-p,
-span,
-div,
-a,
-li,
-td,
-th,
-label,
-input,
-textarea,
-button {
-    font-family: var(--font-noto-kufi-arabic), "Noto Kufi Arabic", sans-serif;
+/* Exclude home page routes: /, /home */
+body:not(.home-page) p,
+body:not(.home-page) span,
+body:not(.home-page) div,
+body:not(.home-page) a,
+body:not(.home-page) li,
+body:not(.home-page) td,
+body:not(.home-page) th,
+body:not(.home-page) label,
+body:not(.home-page) input,
+body:not(.home-page) textarea,
+body:not(.home-page) button {
+    font-family: var(--font-noto-kufi-arabic), "Noto Kufi Arabic", sans-serif !important;
+    font-weight: 400 !important; /* Normal weight for body text */
 }

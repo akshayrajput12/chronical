@@ -1,0 +1,158 @@
+"use client";
+
+import React from "react";
+import { motion } from "framer-motion";
+import { City } from "@/types/cities";
+import PortfolioGallery from "@/app/portfolio/components/portfolio-gallery";
+
+interface CityPortfolioSectionProps {
+    city: City;
+}
+
+const CityPortfolioSection = ({ city }: CityPortfolioSectionProps) => {
+    return (
+        <section className="py-8 md:py-12 lg:py-16 bg-white">
+            <div className="container mx-auto px-4">
+                <div className="max-w-6xl mx-auto">
+                    {/* Section Header */}
+                    <motion.div
+                        className="text-center mb-8 md:mb-12"
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
+                        viewport={{ once: true }}
+                    >
+                        {/* Main Title */}
+                        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 uppercase tracking-wide leading-tight mb-6 md:mb-8">
+                            OUR RECENT WORK PORTFOLIO
+                        </h2>
+
+                        {/* Description Paragraph */}
+                        <p className="text-base md:text-lg text-gray-700 leading-relaxed max-w-4xl mx-auto mb-8">
+                            Explore our portfolio for a glimpse of our latest achievements in design and construction of country pavilions in the UAE. Each of our projects demonstrates our dedication to excellence, showcasing distinctive and custom-designed pavilions that reflect the distinctiveness of the country.
+                        </p>
+
+                        {/* Decorative Line */}
+                        <div className="flex items-center justify-center">
+                            <div className="w-16 md:w-20 h-px bg-gray-300"></div>
+                            <div className="mx-4 w-2 h-2 bg-gray-400 rounded-full"></div>
+                            <div className="w-16 md:w-20 h-px bg-gray-300"></div>
+                        </div>
+                    </motion.div>
+
+                    {/* Portfolio Gallery Component */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                        viewport={{ once: true }}
+                    >
+                        {/* Remove the section wrapper from PortfolioGallery since we're wrapping it here */}
+                        <div className="py-0">
+                            <div className="max-w-6xl mx-auto">
+                                {/* Gallery Grid - Masonry Style with Random Sizes */}
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 lg:gap-4 auto-rows-[150px] sm:auto-rows-[180px] lg:auto-rows-[200px]">
+                                    {/* Portfolio Items */}
+                                    {[
+                                        {
+                                            id: 1,
+                                            src: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=600&fit=crop",
+                                            alt: "Modern tech exhibition booth with purple lighting and interactive displays",
+                                            className: "row-span-2",
+                                        },
+                                        {
+                                            id: 2,
+                                            src: "https://images.unsplash.com/photo-1559223607-b4d0555ae227?w=400&h=300&fit=crop",
+                                            alt: "Colorful triangular booth design with red and blue elements",
+                                            className: "row-span-1",
+                                        },
+                                        {
+                                            id: 3,
+                                            src: "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=400&h=500&fit=crop",
+                                            alt: "Professional booth with circular ceiling design and attendees",
+                                            className: "row-span-2",
+                                        },
+                                        {
+                                            id: 4,
+                                            src: "https://images.unsplash.com/photo-1511578314322-379afb476865?w=400&h=500&fit=crop",
+                                            alt: "Wooden and modern booth design with clean lines",
+                                            className: "row-span-2",
+                                        },
+                                        {
+                                            id: 5,
+                                            src: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=400&h=400&fit=crop",
+                                            alt: "Red and white booth with multiple display screens",
+                                            className: "row-span-2",
+                                        },
+                                        {
+                                            id: 6,
+                                            src: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop",
+                                            alt: "White minimalist booth with green accents",
+                                            className: "row-span-1",
+                                        },
+                                        {
+                                            id: 7,
+                                            src: "https://images.unsplash.com/photo-1464207687429-7505649dae38?w=400&h=300&fit=crop",
+                                            alt: "Exhibition hall with golden lighting",
+                                            className: "row-span-1",
+                                        },
+                                        {
+                                            id: 8,
+                                            src: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&h=300&fit=crop",
+                                            alt: "Modern exhibition space with attendees",
+                                            className: "row-span-1",
+                                        },
+                                        {
+                                            id: 9,
+                                            src: "https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=400&h=400&fit=crop",
+                                            alt: "Trade show booth with interactive displays",
+                                            className: "row-span-2",
+                                        },
+                                        {
+                                            id: 10,
+                                            src: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=400&h=300&fit=crop",
+                                            alt: "Corporate exhibition stand",
+                                            className: "row-span-1",
+                                        },
+                                        {
+                                            id: 11,
+                                            src: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=400&h=500&fit=crop",
+                                            alt: "Large scale exhibition with multiple booths",
+                                            className: "row-span-2",
+                                        },
+                                        {
+                                            id: 12,
+                                            src: "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=400&h=300&fit=crop",
+                                            alt: "Professional conference and exhibition setup",
+                                            className: "row-span-1",
+                                        },
+                                    ].map(item => (
+                                        <div
+                                            key={item.id}
+                                            className={`group relative overflow-hidden ${item.className}`}
+                                        >
+                                            <img
+                                                src={item.src}
+                                                alt={item.alt}
+                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                            />
+
+                                            {/* VIEW CASE Full Overlay on Hover */}
+                                            <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                                <span className="text-white text-sm sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-rubik font-bold tracking-wider">
+                                                    VIEW CASE
+                                                </span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </motion.div>
+                </div>
+            </div>
+        </section>
+    );
+};
+
+export default CityPortfolioSection;
