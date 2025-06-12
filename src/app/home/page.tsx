@@ -7,6 +7,7 @@ import SetupProcess from "./components/setup-process";
 import NewCompany from "./components/new-company";
 import ApplicationCta from "./components/application-cta";
 import EssentialSupport from "./components/essential-support";
+import BoothRequirementsForm from "./components/booth-requirements-form";
 
 function page() {
     return (
@@ -19,6 +20,7 @@ function page() {
             <NewCompany />
             <SetupProcess />
             <ApplicationCta />
+            <BoothRequirementsForm />
         </div>
     );
 }
