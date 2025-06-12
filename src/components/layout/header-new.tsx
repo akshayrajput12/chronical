@@ -34,8 +34,6 @@ const Header = () => {
 
     // Check if current page is home page
     const isHomePage = pathname === "/";
-    // Check if current page is portfolio page or blog detail page
-    const isSpecialPage = pathname !== "/";
 
     // Navigation mapping - determines which nav item should be active based on current pathname
     const getActiveNavigation = () => {

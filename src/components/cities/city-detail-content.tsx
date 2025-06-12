@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import { Phone, Mail, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface CityDetailContentProps {
@@ -10,7 +10,10 @@ interface CityDetailContentProps {
     description: string;
 }
 
-const CityDetailContent = ({ cityName, description }: CityDetailContentProps) => {
+const CityDetailContent = ({
+    cityName,
+    description,
+}: CityDetailContentProps) => {
     return (
         <section className="py-8 md:py-12 lg:py-16 bg-white">
             <div className="container mx-auto px-4">
@@ -40,7 +43,9 @@ const CityDetailContent = ({ cityName, description }: CityDetailContentProps) =>
                         viewport={{ once: true }}
                     >
                         <div className="bg-gray-50 p-6 rounded-lg">
-                            <h3 className="text-xl font-bold text-[#2C2C2C] mb-4">Our Services</h3>
+                            <h3 className="text-xl font-bold text-[#2C2C2C] mb-4">
+                                Our Services
+                            </h3>
                             <ul className="space-y-2 text-gray-600">
                                 <li>• Custom Exhibition Stand Design</li>
                                 <li>• Double Decker Exhibitions</li>
@@ -49,9 +54,11 @@ const CityDetailContent = ({ cityName, description }: CityDetailContentProps) =>
                                 <li>• Conference & Event Management</li>
                             </ul>
                         </div>
-                        
+
                         <div className="bg-gray-50 p-6 rounded-lg">
-                            <h3 className="text-xl font-bold text-[#2C2C2C] mb-4">Why Choose Us</h3>
+                            <h3 className="text-xl font-bold text-[#2C2C2C] mb-4">
+                                Why Choose Us
+                            </h3>
                             <ul className="space-y-2 text-gray-600">
                                 <li>• Local expertise and knowledge</li>
                                 <li>• International quality standards</li>
@@ -70,7 +77,9 @@ const CityDetailContent = ({ cityName, description }: CityDetailContentProps) =>
                         transition={{ duration: 0.8, delay: 0.4 }}
                         viewport={{ once: true }}
                     >
-                        <h3 className="text-2xl font-bold mb-6 text-center">Get In Touch</h3>
+                        <h3 className="text-2xl font-bold mb-6 text-center">
+                            Get In Touch
+                        </h3>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                             <div className="text-center">
                                 <Phone className="w-8 h-8 text-[#a5cd39] mx-auto mb-2" />
@@ -79,19 +88,23 @@ const CityDetailContent = ({ cityName, description }: CityDetailContentProps) =>
                             </div>
                             <div className="text-center">
                                 <Mail className="w-8 h-8 text-[#a5cd39] mx-auto mb-2" />
-                                <p className="text-sm text-gray-300">Email Us</p>
-                                <p className="font-medium">info@chronicles-dubai.com</p>
+                                <p className="text-sm text-gray-300">
+                                    Email Us
+                                </p>
+                                <p className="font-medium">
+                                    info@chronicles-dubai.com
+                                </p>
                             </div>
                             <div className="text-center">
                                 <Clock className="w-8 h-8 text-[#a5cd39] mx-auto mb-2" />
-                                <p className="text-sm text-gray-300">Working Hours</p>
+                                <p className="text-sm text-gray-300">
+                                    Working Hours
+                                </p>
                                 <p className="font-medium">9 AM - 6 PM</p>
                             </div>
                         </div>
                         <div className="text-center">
-                            <Button
-                                className="bg-[#a5cd39] hover:bg-[#8fb82e] text-white px-8 py-3 text-sm font-bold uppercase tracking-wide rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg border-0"
-                            >
+                            <Button className="bg-[#a5cd39] hover:bg-[#8fb82e] text-white px-8 py-3 text-sm font-bold uppercase tracking-wide rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg border-0">
                                 Contact Our {cityName} Team
                             </Button>
                         </div>
