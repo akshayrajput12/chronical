@@ -128,9 +128,9 @@ const HeroSection: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.2 }}
                 >
-                    <div className="overflow-hidden mb-0">
+                    <div className="overflow-hidden mb-4">
                         <motion.h1
-                            className="text-3xl sm:text-4xl md:text-5xl font-rubik font-bold whitespace-normal leading-tight tracking-tight"
+                            className="text-3xl sm:text-4xl md:text-5xl font-rubik font-semibold whitespace-normal leading-tight tracking-tight"
                             initial={{ y: 100, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{
@@ -144,7 +144,7 @@ const HeroSection: React.FC = () => {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ duration: 0.3, delay: 0.5 }}
-                                className="inline-block font-rubik"
+                                className="inline-block font-rubik!"
                             >
                                 {heroData.heading}
                             </motion.span>
@@ -152,24 +152,13 @@ const HeroSection: React.FC = () => {
                     </div>
 
                     <motion.h2
-                        className="text-xl sm:text-2xl font-markazi font-semibold mb-4"
+                        className="text-xl font-markazi font-medium mb-5"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 1.5 }}
                     >
                         {heroData.subheading}
                     </motion.h2>
-
-                    {/* Typing Animation */}
-                    <motion.div
-                        className="text-lg sm:text-xl font-noto-kufi-arabic font-medium text-[#a5cd39] mb-4 h-8"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 1.7 }}
-                    >
-                        <span>{displayText}</span>
-                        <span className="animate-pulse">|</span>
-                    </motion.div>
 
                     <motion.p
                         className="text-base sm:text-lg font-noto-kufi-arabic font-medium pt-2"

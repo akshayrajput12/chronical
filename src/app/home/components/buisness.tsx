@@ -97,7 +97,11 @@ const NumberDisplay = ({ value, label }: { value: number; label?: string }) => {
         return <div>{num.toLocaleString()}</div>;
     };
 
-    return <div ref={elementRef}>{formatNumber(displayValue)}</div>;
+    return (
+        <div className="font-rubik!" ref={elementRef}>
+            {formatNumber(displayValue)}
+        </div>
+    );
 };
 
 const BusinessHubSection = () => {
@@ -252,15 +256,12 @@ const BusinessHubSection = () => {
             <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-2 sm:gap-3 md:gap-4 items-start">
                 {/* Headings */}
                 <div className="w-full ml-8 md:ml-12 lg:ml-16">
-                    <h2
-                        className="text-4xl md:text-5xl font-rubik text-[#222] leading-tight"
-                        style={{ fontWeight: "950" }}
-                    >
-                        <span className="text-[#222] block hover:translate-x-1 transition-transform duration-300">
+                    <h2 className="text-4xl font-rubik font-semibold text-[#222] leading-tight">
+                        <span className="text-[#222] font-rubik! block hover:translate-x-1 transition-transform duration-300">
                             {businessData.heading}
                         </span>
                     </h2>
-                    <p className="text-2xl md:text-3xl font-markazi text-[#333] font-medium mt-2">
+                    <p className="text-2xl md:text-3xl font-rubik! text-[#222] font-medium">
                         {businessData.subheading}
                     </p>
                     <div className="w-24 h-[3px] bg-[#a5cd39] mt-6 hover:w-32 transition-all duration-300" />
@@ -273,9 +274,9 @@ const BusinessHubSection = () => {
                             key={paragraph.id}
                             className={`${
                                 index === 0
-                                    ? "font-markazi text-[21px] md:text-[23px] lg:text-[25px]"
+                                    ? "font-markazi-text! text-[21px] md:text-[21px] lg:text-[21px] leading-[22px]"
                                     : "font-noto-kufi-arabic text-[12px] md:text-[13px] lg:text-[14px]"
-                            } leading-relaxed hover:translate-x-1 hover:text-[#222] transition-all duration-200`}
+                            } hover:translate-x-1 hover:text-[#222] transition-all duration-200`}
                             style={index === 0 ? { fontWeight: "0" } : {}}
                         >
                             {paragraph.content}
@@ -286,7 +287,7 @@ const BusinessHubSection = () => {
 
             {/* Stats */}
             <div className="mt-4 sm:mt-6 md:mt-8 mx-12 md:mx-20 lg:mx-28 xl:mx-36 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 md:gap-12 lg:gap-16 border-t border-gray-200 pt-6 sm:pt-8 md:pt-10">
-                {businessData.stats.map((stat, index) => (
+                {businessData.stats.map(stat => (
                     <div
                         key={stat.id}
                         className="flex flex-col items-center text-center hover:-translate-y-1 transition-transform duration-300"
@@ -301,26 +302,11 @@ const BusinessHubSection = () => {
 
                         {/* Label */}
                         <div
-                            className={`${
-                                index === 0
-                                    ? "font-markazi text-[20px] md:text-[22px] lg:text-[24px]"
-                                    : "font-noto-kufi-arabic text-[12px] md:text-[13px] lg:text-[14px]"
-                            } text-[#333] mt-2 hover:-translate-y-0.5 transition-transform duration-200`}
-                            style={index === 0 ? { fontWeight: "100" } : {}}
+                            className={
+                                "text-[#333] text-lg mt-2 hover:-translate-y-0.5 transition-transform duration-200 font-medium font-noto-kufi-arabic"
+                            }
                         >
                             {stat.label}
-                        </div>
-
-                        {/* Sublabel */}
-                        <div
-                            className={`${
-                                index === 0
-                                    ? "font-markazi text-[20px] md:text-[22px] lg:text-[24px]"
-                                    : "font-noto-kufi-arabic text-[12px] md:text-[13px] lg:text-[14px]"
-                            } text-[#666] uppercase tracking-wide mt-1 hover:-translate-y-0.5 transition-transform duration-200`}
-                            style={index === 0 ? { fontWeight: "100" } : {}}
-                        >
-                            {stat.sublabel}
                         </div>
 
                         {/* Decorative line */}
