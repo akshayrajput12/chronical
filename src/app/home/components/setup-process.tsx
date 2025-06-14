@@ -186,7 +186,7 @@ const SetupProcess = () => {
                         ></motion.div>
                     </div>
                     <motion.p
-                        className="text-gray-300 font-nunito max-w-2xl mx-auto"
+                        className="text-gray-300 font-markazi-text text-xl max-w-2xl mx-auto"
                         variants={textVariants}
                     >
                         Form a new company with quick and easy steps via our

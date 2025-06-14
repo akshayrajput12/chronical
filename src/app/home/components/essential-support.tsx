@@ -212,7 +212,7 @@ const EssentialSupport = () => {
                                                     clipRule="evenodd"
                                                 />
                                             </svg>
-                                            <span className="text-[14px] md:text-[14px] lg:text-[14px] font-nunito text-gray-700">
+                                            <span className="text-[14px] md:text-[14px] lg:text-[14px] font-noto-kufi-arabic text-gray-700">
                                                 {service.service_text}
                                             </span>
                                         </li>
@@ -226,7 +226,7 @@ const EssentialSupport = () => {
                 <div className="flex justify-center mt-16">
                     <a
                         href={sectionData.cta_url}
-                        className="bg-[#a5cd39] text-white px-10 py-3 rounded-md font-medium hover:bg-[#94b933] transition-colors duration-300 uppercase"
+                        className="bg-[#a5cd39] text-white px-10 py-3 rounded-md font-medium hover:bg-[#94b933] transition-colors duration-300 uppercase font-noto-kufi-arabic"
                     >
                         {sectionData.cta_text}
                     </a>
