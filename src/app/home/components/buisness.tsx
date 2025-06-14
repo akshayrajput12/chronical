@@ -274,7 +274,7 @@ const BusinessHubSection = () => {
                             key={paragraph.id}
                             className={`${
                                 index === 0
-                                    ? "font-markazi-text! text-[21px] md:text-[21px] lg:text-[21px] leading-[22px]"
+                                    ? "font-markazi-text! text-[22px] leading-[28px]"
                                     : "font-noto-kufi-arabic text-[12px] md:text-[13px] lg:text-[14px]"
                             } hover:translate-x-1 hover:text-[#222] transition-all duration-200`}
                             style={index === 0 ? { fontWeight: "0" } : {}}

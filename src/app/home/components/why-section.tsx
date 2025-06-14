@@ -36,7 +36,7 @@ const WhySection = () => {
     if (isLoading) {
         return (
             <section
-                className="relative overflow-hidden w-full py-20 -mt-40 z-10"
+                className="relative overflow-hidden w-full py-20 z-10"
                 id="why-section"
             >
                 <div className="container mx-auto px-4">
@@ -64,7 +64,7 @@ const WhySection = () => {
 
     return (
         <section
-            className="relative overflow-hidden w-full py-20 -mt-40 z-10"
+            className="relative overflow-hidden w-full py-20 -mt-64 z-10"
             id="why-section"
             ref={ref}
         >
