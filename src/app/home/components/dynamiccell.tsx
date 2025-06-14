@@ -102,7 +102,7 @@ const DynamicCell = () => {
 
                     {/* Subtitle - Simple and clean as in the image */}
                     <motion.p
-                        className="text-[#444] font-nunito text-lg"
+                        className="text-[#444] font-noto-kufi-arabic text-lg"
                         variants={itemVariants}
                     >
                         Dubai is the future economy and global trade gateway.

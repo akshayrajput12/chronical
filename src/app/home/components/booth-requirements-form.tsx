@@ -123,7 +123,7 @@ const BoothRequirementsForm = () => {
                         transition={{ duration: 0.6 }}
                         viewport={{ once: true }}
                     >
-                        <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-white uppercase tracking-wide text-center">
+                        <h2 className="text-base md:text-2xl lg:text-3xl font-rubik font-bold text-white uppercase tracking-wide text-center">
                             DESCRIBE YOUR TRADE SHOW BOOTH REQUIREMENTS
                         </h2>
                     </motion.div>
@@ -142,7 +142,7 @@ const BoothRequirementsForm = () => {
                             <div className="space-y-1">
                                 <Label
                                     htmlFor="companyName"
-                                    className="text-white font-medium text-sm uppercase tracking-wide"
+                                    className="text-white text-base font-medium uppercase tracking-wide"
                                 >
                                     Person/Company Name *
                                 </Label>
@@ -164,7 +164,7 @@ const BoothRequirementsForm = () => {
                             <div className="space-y-1">
                                 <Label
                                     htmlFor="email"
-                                    className="text-white font-medium text-sm uppercase tracking-wide"
+                                    className="text-white font-medium text-base uppercase tracking-wide"
                                 >
                                     Email Address *
                                 </Label>
@@ -190,7 +190,7 @@ const BoothRequirementsForm = () => {
                             <div className="space-y-1">
                                 <Label
                                     htmlFor="phone"
-                                    className="text-white font-medium text-sm uppercase tracking-wide"
+                                    className="text-white font-medium text-base uppercase tracking-wide"
                                 >
                                     Phone Number *
                                 </Label>
@@ -212,7 +212,7 @@ const BoothRequirementsForm = () => {
                             <div className="space-y-1">
                                 <Label
                                     htmlFor="budget"
-                                    className="text-white font-medium text-sm uppercase tracking-wide"
+                                    className="text-white font-medium text-base uppercase tracking-wide"
                                 >
                                     Budget (USD)
                                 </Label>
@@ -238,7 +238,7 @@ const BoothRequirementsForm = () => {
                         <div className="space-y-1">
                             <Label
                                 htmlFor="file-upload"
-                                className="text-white font-medium text-sm uppercase tracking-wide"
+                                className="text-white font-medium text-base uppercase tracking-wide"
                             >
                                 Upload Files for Booth Designs
                             </Label>
@@ -254,15 +254,15 @@ const BoothRequirementsForm = () => {
                                     <span
                                         className={`${
                                             formData.file
-                                                ? "text-gray-700"
-                                                : "text-gray-500"
+                                                ? "text-gray-700 font-noto-kufi-arabic"
+                                                : "text-gray-500 font-noto-kufi-arabic"
                                         }`}
                                     >
                                         {formData.file
                                             ? formData.file.name
                                             : "Choose files (PDF, DOC, JPG, PNG)"}
                                     </span>
-                                    <span className="text-xs text-gray-400 bg-gray-50 px-3 py-1 rounded-sm font-medium">
+                                    <span className="text-xs text-gray-400 font-noto-kufi-arabic bg-gray-50 px-3 py-1 rounded-sm font-medium">
                                         BROWSE
                                     </span>
                                 </div>
@@ -273,7 +273,7 @@ const BoothRequirementsForm = () => {
                         <div className="space-y-1">
                             <Label
                                 htmlFor="message"
-                                className="text-white font-medium text-sm uppercase tracking-wide"
+                                className="text-white font-medium text-base uppercase tracking-wide"
                             >
                                 Message/Customizations *
                             </Label>
@@ -294,7 +294,7 @@ const BoothRequirementsForm = () => {
                             <Button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className="bg-[#a5cd39] hover:bg-[#8fb32a] text-black px-12 py-4 text-base font-semibold transition-all duration-200 rounded-md uppercase tracking-wider min-w-[200px] shadow-sm hover:shadow-md"
+                                className="bg-[#a5cd39] hover:bg-[#8fb32a] text-black px-12 py-4 text-base font-semibold transition-all duration-200 rounded-md font-noto-kufi-arabic uppercase tracking-wider min-w-[200px] shadow-sm hover:shadow-md"
                             >
                                 {isSubmitting ? (
                                     <>
@@ -305,7 +305,7 @@ const BoothRequirementsForm = () => {
                                     "SUBMIT REQUEST"
                                 )}
                             </Button>
-                            <p className="text-white/90 text-sm mt-4 max-w-lg mx-auto leading-relaxed">
+                            <p className="text-white/90 text-2xl font-markazi-text mt-4 max-w-lg mx-auto leading-relaxed">
                                 Our team will review your requirements and
                                 provide a detailed proposal within 24 hours.
                             </p>

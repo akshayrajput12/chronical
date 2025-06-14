@@ -206,7 +206,7 @@ const SetupProcess = () => {
                                 <div className="text-center border-b md:border-b-0 md:border-r border-gray-600 pb-4 md:pb-0 md:pr-8 w-full">
                                     <div className="relative mb-6">
                                         <div className="border-t border-gray-400 absolute w-32 top-1/2 left-0"></div>
-                                        <p className="text-sm font-markazi font-medium mx-auto px-4 inline-block">
+                                        <p className="text-xl font-markazi-text font-medium mx-auto px-4 inline-block">
                                             How To Apply
                                         </p>
                                         <div className="border-t border-gray-400 absolute w-32 top-1/2 right-0"></div>
@@ -238,7 +238,7 @@ const SetupProcess = () => {
                                                             {step.id}
                                                         </span>
                                                     </motion.div>
-                                                    <p className="text-xs md:text-sm font-nunito max-w-[80px] md:max-w-[120px] text-center">
+                                                    <p className="text-xs md:text-sm font-noto-kufi-arabic max-w-[80px] md:max-w-[120px] text-center">
                                                         {step.title}
                                                     </p>
                                                 </motion.div>
@@ -250,7 +250,7 @@ const SetupProcess = () => {
                             <div className="text-center md:pl-8">
                                 <div className="relative mb-6">
                                     <div className="border-t border-gray-400 absolute w-32 top-1/2 left-0"></div>
-                                    <p className="text-sm font-markazi font-medium mx-auto px-4 inline-block">
+                                    <p className="text-xl font-markazi-text font-medium mx-auto px-4 inline-block">
                                         Getting Started
                                     </p>
                                     <div className="border-t border-gray-400 absolute w-32 top-1/2 right-0"></div>
@@ -271,7 +271,7 @@ const SetupProcess = () => {
                                             >
                                                 <span>{step.id}</span>
                                             </motion.div>
-                                            <p className="text-xs md:text-sm font-nunito max-w-[80px] md:max-w-[120px] text-center">
+                                            <p className="text-xs md:text-sm font-noto-kufi-arabic max-w-[80px] md:max-w-[120px] text-center">
                                                 {step.title}
                                             </p>
                                         </motion.div>

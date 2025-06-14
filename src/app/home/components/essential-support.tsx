@@ -170,7 +170,7 @@ const EssentialSupport = () => {
                     <div className="flex justify-center">
                         <div className="h-1 bg-[#a5cd39] w-16 mt-2 mb-6"></div>
                     </div>
-                    <p className="text-gray-600 font-nunito max-w-3xl mx-auto">
+                    <p className="text-gray-600 font-markazi-text! text-2xl max-w-3xl mx-auto">
                         {sectionData.description}
                     </p>
                 </div>
@@ -190,7 +190,7 @@ const EssentialSupport = () => {
                                 </div>
                                 <div className="border-t border-gray-300 flex-grow ml-4"></div>
                             </div>
-                            <h4 className="font-markazi text-[22px] font-semibold md:text-[22px] lg:text-[22px] leading-relaxed hover:translate-x-1 hover:text-[#222] transition-all duration-200 mb-6 ml-3 font-light">
+                            <h4 className="font-markazi-text text-2xl font-semibold hover:translate-x-1 hover:text-[#222] transition-all duration-200 mb-6 ml-3 font-light">
                                 {category.title}
                             </h4>
                             <ul className="space-y-4">

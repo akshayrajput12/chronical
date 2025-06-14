@@ -1,18 +1,15 @@
-import * as React from "react"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
-const labelVariants = "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+const labelVariants =
+    "text-xl font-medium font-noto-kufi-arabic leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70";
 
 const Label = React.forwardRef<
-  HTMLLabelElement,
-  React.LabelHTMLAttributes<HTMLLabelElement>
+    HTMLLabelElement,
+    React.LabelHTMLAttributes<HTMLLabelElement>
 >(({ className, ...props }, ref) => (
-  <label
-    ref={ref}
-    className={cn(labelVariants, className)}
-    {...props}
-  />
-))
-Label.displayName = "Label"
+    <label ref={ref} className={cn(labelVariants, className)} {...props} />
+));
+Label.displayName = "Label";
 
-export { Label }
+export { Label };

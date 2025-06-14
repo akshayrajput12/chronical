@@ -88,7 +88,7 @@ const WhySection = () => {
 
                         {/* Subtitle */}
                         <p
-                            className="font-markazi text-[21px] text-xl leading-relaxed hover:translate-x-1 hover:text-[#222] transition-all duration-200 text-[#444] max-w-3xl mx-auto mb-16"
+                            className="font-noto-kufi-arabic hover:translate-x-1 hover:text-[#222] transition-all duration-200 text-[#444] max-w-3xl mx-auto mb-16 text-lg"
                             style={{ fontWeight: "0" }}
                         >
                             {whyData?.subtitle ||
@@ -100,12 +100,12 @@ const WhySection = () => {
                     <div className="grid md:grid-cols-2 gap-8 md:gap-16">
                         {/* Left column */}
                         <div>
-                            <p className="text-[#444] mb-6 font-rubik leading-relaxed">
+                            <p className="text-[#444] mb-6 font-noto-kufi-arabic leading-relaxed">
                                 {whyData?.left_column_text_1 ||
                                     "DWTC Free Zone provides a unique and highly desirable proposition for businesses seeking a competitive and well-regulated ecosystem to operate in regional and global markets. Offering a range of benefits such as 100% foreign ownership, 0% taxes and customs duties, and streamlined procedures for visas and permits, the DWTC free zone is a future-focused ecosystem designed for transformative business growth."}
                             </p>
 
-                            <p className="text-[#444] font-rubik leading-relaxed">
+                            <p className="text-[#444] font-noto-kufi-arabic leading-relaxed">
                                 {whyData?.left_column_text_2 ||
                                     "We are a progressive and welcoming free zone, open to all businesses. Anchored by world-class infrastructure and flexible company formation, licensing and setup solutions, DWTC Free Zone offers an ideal environment, nurturing a sustainable economy from Dubai."}
                             </p>
@@ -113,7 +113,7 @@ const WhySection = () => {
 
                         {/* Right column */}
                         <div>
-                            <p className="text-[#444] mb-6 font-rubik leading-relaxed">
+                            <p className="text-[#444] mb-6 font-noto-kufi-arabic leading-relaxed">
                                 {whyData?.right_column_text ||
                                     "Spanning from the iconic Sheikh Rashid Tower to the neighboring One Central, DWTC Free Zone offers a diverse range of 1,200+ licensed business activities and is home to more than 1,800 small and medium businesses."}
                             </p>
@@ -138,7 +138,7 @@ const WhySection = () => {
                                             {whyData?.image_overlay_heading ||
                                                 "2 MILLION+ SQ FT. OF"}
                                         </h3>
-                                        <p className="text-2xl font-markazi font-bold">
+                                        <p className="text-2xl font-markazi-text font-bold">
                                             {whyData?.image_overlay_subheading ||
                                                 "PREMIUM COMMERCIAL OFFICES"}
                                         </p>
