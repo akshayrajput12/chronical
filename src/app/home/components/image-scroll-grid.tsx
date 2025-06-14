@@ -92,7 +92,7 @@ const ImageScrollGrid: React.FC<ImageScrollGridProps> = ({
 
             // Column 2 - Bottom to Top
             const column2 = column2Ref.current;
-            const column2Height = column2.scrollHeight / 2;
+            const column2Height = column2.scrollHeight / 4;
             let column2Position = column2Height;
 
             // Column 3 - Bottom to Top (like middle grid)

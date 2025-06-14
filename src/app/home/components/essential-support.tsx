@@ -180,56 +180,57 @@ const EssentialSupport = () => {
                     {categories.slice(0, 3).map((category, index) => (
                         <div
                             key={index}
-                            className="flex flex-col bg-white p-6 shadow-md hover:shadow-lg transition-shadow duration-300"
+                            className="flex flex-col bg-white p-6 shadow-md justify-between hover:shadow-lg transition-shadow duration-300"
                         >
-                            <div className="flex items-center mb-6">
-                                <div className="w-14 h-14 rounded-full border-2 border-[#a5cd39] flex items-center justify-center text-[#a5cd39]">
-                                    <div className="w-6 h-6">
-                                        {renderSvgIcon(category.icon_svg)}
+                            <div>
+                                <div className="flex items-center mb-6">
+                                    <div className="w-14 h-14 rounded-full border-2 border-[#a5cd39] flex items-center justify-center text-[#a5cd39]">
+                                        <div className="w-6 h-6">
+                                            {renderSvgIcon(category.icon_svg)}
+                                        </div>
                                     </div>
+                                    <div className="border-t border-gray-300 flex-grow ml-4"></div>
                                 </div>
-                                <div className="border-t border-gray-300 flex-grow ml-4"></div>
-                            </div>
-                            <h4 className="font-markazi-text text-2xl font-semibold hover:translate-x-1 hover:text-[#222] transition-all duration-200 mb-6 ml-3 font-light">
-                                {category.title}
-                            </h4>
-                            <ul className="space-y-4">
-                                {getSortedServices(category).map(
-                                    (service, serviceIndex) => (
-                                        <li
-                                            key={serviceIndex}
-                                            className="flex items-start"
-                                        >
-                                            <svg
-                                                className="w-5 h-5 text-[#a5cd39] mr-2 mt-0.5 flex-shrink-0"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                viewBox="0 0 20 20"
-                                                fill="currentColor"
+                                <h4 className="font-markazi-text text-2xl font-semibold hover:translate-x-1 hover:text-[#222] transition-all duration-200 mb-6 ml-3 font-light">
+                                    {category.title}
+                                </h4>
+                                <ul className="space-y-4">
+                                    {getSortedServices(category).map(
+                                        (service, serviceIndex) => (
+                                            <li
+                                                key={serviceIndex}
+                                                className="flex items-start"
                                             >
-                                                <path
-                                                    fillRule="evenodd"
-                                                    d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                                                    clipRule="evenodd"
-                                                />
-                                            </svg>
-                                            <span className="text-[14px] md:text-[14px] lg:text-[14px] font-noto-kufi-arabic text-gray-700">
-                                                {service.service_text}
-                                            </span>
-                                        </li>
-                                    ),
-                                )}
-                            </ul>
+                                                <svg
+                                                    className="w-5 h-5 text-[#a5cd39] mr-2 mt-0.5 flex-shrink-0"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 20 20"
+                                                    fill="currentColor"
+                                                >
+                                                    <path
+                                                        fillRule="evenodd"
+                                                        d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+                                                        clipRule="evenodd"
+                                                    />
+                                                </svg>
+                                                <span className="text-[14px] md:text-[14px] lg:text-[14px] font-noto-kufi-arabic text-gray-700">
+                                                    {service.service_text}
+                                                </span>
+                                            </li>
+                                        ),
+                                    )}
+                                </ul>
+                            </div>
+                            <div className="flex mt-8">
+                                <a
+                                    href={sectionData.cta_url}
+                                    className="bg-[#a5cd39] text-white px-6 py-2 rounded-md font-medium hover:bg-[#94b933] transition-colors duration-300 uppercase font-noto-kufi-arabic text-sm"
+                                >
+                                    {sectionData.cta_text}
+                                </a>
+                            </div>
                         </div>
                     ))}
-                </div>
-
-                <div className="flex justify-center mt-16">
-                    <a
-                        href={sectionData.cta_url}
-                        className="bg-[#a5cd39] text-white px-10 py-3 rounded-md font-medium hover:bg-[#94b933] transition-colors duration-300 uppercase font-noto-kufi-arabic"
-                    >
-                        {sectionData.cta_text}
-                    </a>
                 </div>
             </div>
         </section>

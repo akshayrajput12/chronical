@@ -198,7 +198,7 @@ const Header = () => {
                                 isScrolled ? "bg-white" : "bg-[#222222]",
                             )}
                         >
-                            <div className="w-full px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 flex items-center justify-between py-0 relative">
+                            <div className="w-full px-4 sm:px-6 md:px-8 text-xs lg:px-12 xl:px-16 2xl:px-20 flex items-center justify-between py-0 relative">
                                 {/* Left Main Navigation Tabs */}
                                 <div className="hidden lg:flex items-center relative">
                                     <TabItem
@@ -419,7 +419,7 @@ const Header = () => {
                                                                     <Link
                                                                         href="/customexhibitionstands"
                                                                         className={cn(
-                                                                            "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
+                                                                            "text-xs uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
                                                                             (
                                                                                 isHomePage
                                                                                     ? isScrolled
@@ -435,7 +435,7 @@ const Header = () => {
                                                                     <Link
                                                                         href="/doubledeckerexhibitionstands"
                                                                         className={cn(
-                                                                            "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
+                                                                            "text-xs uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
                                                                             (
                                                                                 isHomePage
                                                                                     ? isScrolled
@@ -452,7 +452,7 @@ const Header = () => {
                                                                     <Link
                                                                         href="/countrypavilionexpoboothsolutions"
                                                                         className={cn(
-                                                                            "text-sm uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
+                                                                            "text-xs uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
                                                                             (
                                                                                 isHomePage
                                                                                     ? isScrolled
@@ -471,14 +471,14 @@ const Header = () => {
                                                         </div>
                                                         <div
                                                             className={cn(
-                                                                "h-12 w-px mx-4",
+                                                                "h-12 w-[1.5px] mx-4",
                                                                 (
                                                                     isHomePage
                                                                         ? isScrolled
                                                                         : true
                                                                 )
-                                                                    ? "bg-gray-300"
-                                                                    : "bg-gray-300",
+                                                                    ? "bg-white"
+                                                                    : "bg-white",
                                                             )}
                                                         ></div>
                                                         <SubNavItem
@@ -495,14 +495,14 @@ const Header = () => {
                                                         />
                                                         <div
                                                             className={cn(
-                                                                "h-12 w-px mx-4",
+                                                                "h-12 w-[1.5px] mx-4",
                                                                 (
                                                                     isHomePage
                                                                         ? isScrolled
                                                                         : true
                                                                 )
-                                                                    ? "bg-gray-300"
-                                                                    : "bg-gray-300",
+                                                                    ? "bg-white"
+                                                                    : "bg-white",
                                                             )}
                                                         ></div>
                                                         <div className="relative group">
@@ -518,14 +518,14 @@ const Header = () => {
                                                         </div>
                                                         <div
                                                             className={cn(
-                                                                "h-12 w-px mx-4",
+                                                                "h-12 w-[1.5px] mx-4",
                                                                 (
                                                                     isHomePage
                                                                         ? isScrolled
                                                                         : true
                                                                 )
-                                                                    ? "bg-gray-300"
-                                                                    : "bg-gray-300",
+                                                                    ? "bg-white"
+                                                                    : "bg-white",
                                                             )}
                                                         ></div>
                                                         <div className="relative group">
@@ -875,7 +875,7 @@ const TabItem = ({
             <Link
                 href={href}
                 className={cn(
-                    "uppercase font-noto-kufi-arabic font-semibold transition-colors p-4 px-3 text-white text-sm tracking-wide",
+                    "uppercase font-noto-kufi-arabic text-xs font-semibold transition-colors p-4 px-3 text-white tracking-wide",
                     className,
                     isActive && (activeClassName || className),
                 )}
@@ -957,7 +957,7 @@ const SubNavItem = ({
                     : "text-white hover:text-[#a5cd39]",
             )}
         >
-            <span className="uppercase font-noto-kufi-arabic font-medium text-sm">
+            <span className="uppercase tracking-[1.25px] font-noto-kufi-arabic font-medium text-sm">
                 {label}
             </span>
             <span

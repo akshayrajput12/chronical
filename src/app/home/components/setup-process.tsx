@@ -149,16 +149,14 @@ const SetupProcess = () => {
             type: "diamond",
         },
         { id: 3, title: "Consider Your Office Solutions", type: "diamond" },
-        { id: 4, title: "Submit Your Application", type: "diamond" },
+        { id: 4, title: "Submit Your Application", type: "circle" },
         { id: 5, title: "Receive Initial Approval", type: "circle" },
-        { id: 6, title: "Sign Your Lease", type: "circle" },
-        { id: 7, title: "Start Your Business", type: "circle" },
     ];
 
     return (
         <section
             ref={ref}
-            className="relative py-16 md:py-20 text-white -mt-1 bg-cover bg-center bg-no-repeat"
+            className="relative py-16 md:py-20 text-white bg-cover bg-center bg-no-repeat"
             style={{
                 backgroundImage:
                     'linear-gradient(rgba(44, 44, 44, 0.9), rgba(44, 44, 44, 0.9)), url("https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80")',
@@ -186,7 +184,7 @@ const SetupProcess = () => {
                         ></motion.div>
                     </div>
                     <motion.p
-                        className="text-gray-300 font-markazi-text text-xl max-w-2xl mx-auto"
+                        className="text-gray-300 font-markazi-text text-2xl max-w-2xl mx-auto"
                         variants={textVariants}
                     >
                         Form a new company with quick and easy steps via our
@@ -205,15 +203,15 @@ const SetupProcess = () => {
                             <div className="flex flex-col items-center justify-center">
                                 <div className="text-center border-b md:border-b-0 md:border-r border-gray-600 pb-4 md:pb-0 md:pr-8 w-full">
                                     <div className="relative mb-6">
-                                        <div className="border-t border-gray-400 absolute w-32 top-1/2 left-0"></div>
+                                        <div className="border-t-2 border-gray-400 absolute w-24 top-1/2 left-32"></div>
                                         <p className="text-xl font-markazi-text font-medium mx-auto px-4 inline-block">
                                             How To Apply
                                         </p>
-                                        <div className="border-t border-gray-400 absolute w-32 top-1/2 right-0"></div>
+                                        <div className="border-t-2 border-gray-400 absolute w-24 top-1/2 right-32"></div>
                                     </div>
                                     <div className="flex flex-row md:flex-row justify-center space-x-4 md:space-x-6 lg:space-x-10">
                                         {steps
-                                            .slice(0, 4)
+                                            .slice(0, 3)
                                             .map((step, index) => (
                                                 <motion.div
                                                     key={step.id}
@@ -249,14 +247,14 @@ const SetupProcess = () => {
 
                             <div className="text-center md:pl-8">
                                 <div className="relative mb-6">
-                                    <div className="border-t border-gray-400 absolute w-32 top-1/2 left-0"></div>
+                                    <div className="border-t-2 border-gray-400 absolute w-24 top-1/2 left-32"></div>
                                     <p className="text-xl font-markazi-text font-medium mx-auto px-4 inline-block">
                                         Getting Started
                                     </p>
-                                    <div className="border-t border-gray-400 absolute w-32 top-1/2 right-0"></div>
+                                    <div className="border-t-2 border-gray-400 absolute w-24 top-1/2 right-32"></div>
                                 </div>
                                 <div className="flex flex-row md:flex-row justify-center space-x-4 md:space-x-6 lg:space-x-10">
-                                    {steps.slice(4).map((step, index) => (
+                                    {steps.slice(3).map((step, index) => (
                                         <motion.div
                                             key={step.id}
                                             className="flex flex-col items-center"

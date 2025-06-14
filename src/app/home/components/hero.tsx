@@ -12,7 +12,7 @@ const staticVideoPath = "/videos/hero-background.mp4";
 // Default data in case the database fetch fails
 const defaultData: HeroSectionType = {
     id: "default",
-    heading: "Turn Heads at Your Next Exhibition with Stands That Wow",
+    heading: "Turn Heads at Your Next Exhibition with Stands",
     subheading: "Elegant . Functional . Memorable",
     description:
         "Delivering elegance, precision, and premium craftsmanship — Chronicle Exhibition Organizing LLC curates high-end exhibition experiences for elite brands across Dubai and the Middle East.",
@@ -100,7 +100,7 @@ const HeroSection: React.FC = () => {
     // This prevents blank screens during data loading
 
     return (
-        <section id="hero" className="relative w-full h-[90vh] overflow-hidden">
+        <section id="hero" className="relative w-full h-[80vh] overflow-hidden">
             {/* Background Video */}
             <motion.video
                 initial={{ scale: 1.1 }}
@@ -130,7 +130,7 @@ const HeroSection: React.FC = () => {
                 >
                     <div className="overflow-hidden mb-4">
                         <motion.h1
-                            className="text-3xl sm:text-4xl md:text-5xl font-rubik font-semibold whitespace-normal leading-tight tracking-tight"
+                            className="text-3xl sm:text-4xl md:text-5xl font-rubik font-bold whitespace-normal leading-tight tracking-tight"
                             initial={{ y: 100, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{
@@ -152,7 +152,7 @@ const HeroSection: React.FC = () => {
                     </div>
 
                     <motion.h2
-                        className="text-xl font-markazi font-medium mb-5"
+                        className="text-2xl sm:text-3xl md:text-4xl font-rubik! font-normal mb-5"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 1.5 }}
@@ -161,38 +161,13 @@ const HeroSection: React.FC = () => {
                     </motion.h2>
 
                     <motion.p
-                        className="text-base sm:text-lg font-noto-kufi-arabic font-medium pt-2"
+                        className="text-lg sm:text-2xl font-markazi-text font-medium pt-2"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 1 }}
                     >
                         {heroData.description}
                     </motion.p>
-
-                    <motion.div
-                        className="mt-8 flex justify-center space-x-4"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 1.2 }}
-                    >
-                        <motion.a
-                            href={heroData.cta_primary_url}
-                            className="px-6 py-2 sm:px-8 sm:py-3 text-sm sm:text-base bg-[#a5cd39] text-white font-noto-kufi-arabic font-medium rounded-md hover:bg-[#94b933] transition-colors"
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                        >
-                            {heroData.cta_primary_text}
-                        </motion.a>
-
-                        <motion.a
-                            href={heroData.cta_secondary_url}
-                            className="px-6 py-2 sm:px-8 sm:py-3 text-sm sm:text-base border border-white text-white font-noto-kufi-arabic font-medium rounded-md hover:bg-white/10 transition-colors"
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                        >
-                            {heroData.cta_secondary_text}
-                        </motion.a>
-                    </motion.div>
                 </motion.div>
             </div>
 

@@ -123,7 +123,7 @@ const BoothRequirementsForm = () => {
                         transition={{ duration: 0.6 }}
                         viewport={{ once: true }}
                     >
-                        <h2 className="text-base md:text-2xl lg:text-3xl font-rubik font-bold text-white uppercase tracking-wide text-center">
+                        <h2 className="text-xl leading-[44px] md:text-3xl lg:text-4xl font-rubik font-bold text-white uppercase tracking-wide text-center">
                             DESCRIBE YOUR TRADE SHOW BOOTH REQUIREMENTS
                         </h2>
                     </motion.div>
@@ -138,18 +138,12 @@ const BoothRequirementsForm = () => {
                         viewport={{ once: true }}
                     >
                         {/* Row 1: Company Name and Email */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="space-y-1">
-                                <Label
-                                    htmlFor="companyName"
-                                    className="text-white text-base font-medium uppercase tracking-wide"
-                                >
-                                    Person/Company Name *
-                                </Label>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-2">
                                 <Input
                                     id="companyName"
                                     type="text"
-                                    placeholder="Enter your company name"
+                                    placeholder="Enter your name"
                                     value={formData.companyName}
                                     onChange={e =>
                                         handleInputChange(
@@ -157,17 +151,27 @@ const BoothRequirementsForm = () => {
                                             e.target.value,
                                         )
                                     }
-                                    className="w-full h-14 px-4 py-3 text-base bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md placeholder:text-gray-500 transition-all duration-200"
+                                    className="w-full h-12 px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md placeholder:text-gray-500 transition-all duration-200"
                                     required
                                 />
                             </div>
-                            <div className="space-y-1">
-                                <Label
-                                    htmlFor="email"
-                                    className="text-white font-medium text-base uppercase tracking-wide"
-                                >
-                                    Email Address *
-                                </Label>
+                            <div className="space-y-2">
+                                <Input
+                                    id="companyName"
+                                    type="text"
+                                    placeholder="Enter company name"
+                                    value={formData.companyName}
+                                    onChange={e =>
+                                        handleInputChange(
+                                            "companyName",
+                                            e.target.value,
+                                        )
+                                    }
+                                    className="w-full h-12 px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md placeholder:text-gray-500 transition-all duration-200"
+                                    required
+                                />
+                            </div>
+                            <div className="space-y-2">
                                 <Input
                                     id="email"
                                     type="email"
@@ -179,21 +183,11 @@ const BoothRequirementsForm = () => {
                                             e.target.value,
                                         )
                                     }
-                                    className="w-full h-14 px-4 py-3 text-base bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md placeholder:text-gray-500 transition-all duration-200"
+                                    className="w-full h-12 px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md placeholder:text-gray-500 transition-all duration-200"
                                     required
                                 />
                             </div>
-                        </div>
-
-                        {/* Row 2: Phone and Budget */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="space-y-1">
-                                <Label
-                                    htmlFor="phone"
-                                    className="text-white font-medium text-base uppercase tracking-wide"
-                                >
-                                    Phone Number *
-                                </Label>
+                            <div className="space-y-2">
                                 <Input
                                     id="phone"
                                     type="tel"
@@ -205,43 +199,14 @@ const BoothRequirementsForm = () => {
                                             e.target.value,
                                         )
                                     }
-                                    className="w-full h-14 px-4 py-3 text-base bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md placeholder:text-gray-500 transition-all duration-200"
+                                    className="w-full h-12 px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md placeholder:text-gray-500 transition-all duration-200"
                                     required
-                                />
-                            </div>
-                            <div className="space-y-1">
-                                <Label
-                                    htmlFor="budget"
-                                    className="text-white font-medium text-base uppercase tracking-wide"
-                                >
-                                    Budget (USD)
-                                </Label>
-                                <Input
-                                    id="budget"
-                                    type="number"
-                                    placeholder="e.g., 10000"
-                                    value={formData.budget}
-                                    onChange={e =>
-                                        handleInputChange(
-                                            "budget",
-                                            e.target.value,
-                                        )
-                                    }
-                                    className="w-full h-14 px-4 py-3 text-base bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md placeholder:text-gray-500 transition-all duration-200 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                                    min="0"
-                                    step="100"
                                 />
                             </div>
                         </div>
 
-                        {/* Row 3: File Upload */}
-                        <div className="space-y-1">
-                            <Label
-                                htmlFor="file-upload"
-                                className="text-white font-medium text-base uppercase tracking-wide"
-                            >
-                                Upload Files for Booth Designs
-                            </Label>
+                        {/* Row 2: File Upload */}
+                        <div className="space-y-2">
                             <div className="relative">
                                 <input
                                     type="file"
@@ -250,7 +215,7 @@ const BoothRequirementsForm = () => {
                                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                                     accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                                 />
-                                <div className="flex items-center justify-between w-full h-14 px-4 py-3 text-base bg-white border border-gray-300 hover:border-[#a5cd39] focus-within:border-[#a5cd39] rounded-md cursor-pointer transition-all duration-200">
+                                <div className="flex items-center justify-between w-full h-12 px-4 py-2 text-sm bg-white border border-gray-300 hover:border-[#a5cd39] focus-within:border-[#a5cd39] rounded-md cursor-pointer transition-all duration-200">
                                     <span
                                         className={`${
                                             formData.file
@@ -262,7 +227,7 @@ const BoothRequirementsForm = () => {
                                             ? formData.file.name
                                             : "Choose files (PDF, DOC, JPG, PNG)"}
                                     </span>
-                                    <span className="text-xs text-gray-400 font-noto-kufi-arabic bg-gray-50 px-3 py-1 rounded-sm font-medium">
+                                    <span className="text-xs text-gray-600 font-noto-kufi-arabic bg-gray-200 px-3 py-1 rounded-sm font-medium">
                                         BROWSE
                                     </span>
                                 </div>
@@ -270,13 +235,7 @@ const BoothRequirementsForm = () => {
                         </div>
 
                         {/* Row 4: Message */}
-                        <div className="space-y-1">
-                            <Label
-                                htmlFor="message"
-                                className="text-white font-medium text-base uppercase tracking-wide"
-                            >
-                                Message/Customizations *
-                            </Label>
+                        <div className="space-y-2">
                             <Textarea
                                 id="message"
                                 placeholder="Describe your booth requirements, design preferences, special features, or any specific customizations you need..."
@@ -284,7 +243,7 @@ const BoothRequirementsForm = () => {
                                 onChange={e =>
                                     handleInputChange("message", e.target.value)
                                 }
-                                className="w-full min-h-[120px] px-4 py-3 text-base bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md resize-none placeholder:text-gray-500 transition-all duration-200"
+                                className="w-full min-h-[120px] px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md resize-none placeholder:text-gray-500 transition-all duration-200"
                                 required
                             />
                         </div>
@@ -294,7 +253,7 @@ const BoothRequirementsForm = () => {
                             <Button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className="bg-[#a5cd39] hover:bg-[#8fb32a] text-black px-12 py-4 text-base font-semibold transition-all duration-200 rounded-md font-noto-kufi-arabic uppercase tracking-wider min-w-[200px] shadow-sm hover:shadow-md"
+                                className="bg-[#a5cd39] hover:bg-[#8fb32a] text-black px-12 py-4 text-sm font-semibold transition-all duration-200 rounded-md font-noto-kufi-arabic uppercase tracking-wider min-w-[200px] shadow-sm hover:shadow-md"
                             >
                                 {isSubmitting ? (
                                     <>
@@ -305,6 +264,7 @@ const BoothRequirementsForm = () => {
                                     "SUBMIT REQUEST"
                                 )}
                             </Button>
+                            {/* show this message on form submit */}
                             <p className="text-white/90 text-2xl font-markazi-text mt-4 max-w-lg mx-auto leading-relaxed">
                                 Our team will review your requirements and
                                 provide a detailed proposal within 24 hours.

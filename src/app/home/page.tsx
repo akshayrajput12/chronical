@@ -17,9 +17,8 @@ function page() {
             <BusinessHubSection />
             <DynamicCell />
             <WhySection />
-            <NewCompany />
             <SetupProcess />
-            <ApplicationCta />
+            <NewCompany />
             <BoothRequirementsForm />
         </div>
     );

@@ -294,14 +294,14 @@ const NewCompany = () => {
                         </motion.div>
 
                         <motion.p
-                            className="text-gray-700 font-noto-kufi-arabic mb-6"
+                            className="text-gray-700 font-noto-kufi-arabic text-sm mb-6 leading-[24px]"
                             variants={textVariants}
                         >
                             {sectionData.description_1}
                         </motion.p>
 
                         <motion.p
-                            className="text-gray-700 font-noto-kufi-arabic mb-8"
+                            className="text-gray-700 font-noto-kufi-arabic text-sm mb-8 leading-[24px]"
                             variants={textVariants}
                         >
                             {sectionData.description_2}
@@ -309,7 +309,7 @@ const NewCompany = () => {
 
                         <Link href={sectionData.button_url}>
                             <motion.button
-                                className="bg-[#a5cd39] font-noto-kufi-arabic text-white py-3 px-8 rounded-md font-medium"
+                                className="bg-[#a5cd39] font-noto-kufi-arabic text-sm leading-[24px] text-white py-3 px-8 rounded-md font-medium"
                                 variants={buttonVariants}
                                 whileHover="hover"
                             >
