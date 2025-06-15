@@ -11,6 +11,50 @@ const defaultImage = {
     alt: "Dubai Business District",
 };
 
+// Hardcoded fallback image for database issues
+const hardcodedFallbackImage = {
+    src: "/images/home.jpg", // Hardcoded fallback when database fails (using existing image)
+    alt: "Dubai Business District - DWTC Free Zone",
+};
+
+// Hardcoded fallback business data for database issues
+const hardcodedBusinessData: BusinessSection = {
+    id: "fallback-business-section",
+    heading: "DWTC Free Zone",
+    subheading: "Your Gateway to Global Business Success",
+    paragraphs: [],
+    stats: [
+        {
+            id: "fallback-stat-1",
+            value: 5786,
+            label: "Projects",
+            sublabel: "Successful Projects",
+            display_order: 1,
+        },
+        {
+            id: "fallback-stat-2",
+            value: 824,
+            label: "Events and Conferences",
+            sublabel: "Annual Events",
+            display_order: 2,
+        },
+        {
+            id: "fallback-stat-3",
+            value: 50,
+            label: "Countries",
+            sublabel: "Global Reach",
+            display_order: 3,
+        },
+        {
+            id: "fallback-stat-4",
+            value: 415,
+            label: "Clients",
+            sublabel: "Satisfied Clients",
+            display_order: 4,
+        },
+    ],
+};
+
 // Odometer counter effect for numbers
 const NumberDisplay = ({ value, label }: { value: number; label?: string }) => {
     const [displayValue, setDisplayValue] = React.useState(0);
@@ -114,6 +158,7 @@ const DynamicCell = () => {
         useState<DynamicCellDisplayData | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [imageError, setImageError] = useState(false);
 
     useEffect(() => {
         if (isInView) {
@@ -169,7 +214,9 @@ const DynamicCell = () => {
                         "Error fetching dynamic cell data:",
                         dynamicCellError,
                     );
-                    // Continue with default data if dynamic cell fetch fails
+                    // Set image error flag to use hardcoded fallback
+                    setImageError(true);
+                    console.log("Using hardcoded fallback image due to database error");
                 } else if (
                     dynamicCellSection &&
                     dynamicCellSection.length > 0
@@ -190,6 +237,10 @@ const DynamicCell = () => {
 
                     setDynamicCellData(cellData);
                     console.log("Dynamic cell data:", cellData);
+                } else {
+                    // No data returned, use hardcoded fallback
+                    setImageError(true);
+                    console.log("No dynamic cell data found, using hardcoded fallback image");
                 }
 
                 // Get active business section
@@ -207,9 +258,9 @@ const DynamicCell = () => {
                         "Error fetching business section:",
                         sectionError,
                     );
-                    setError(
-                        `Failed to fetch business section: ${sectionError.message}`,
-                    );
+                    console.log("Using hardcoded business data due to database error");
+                    setBusinessData(hardcodedBusinessData);
+                    setImageError(true);
                     setLoading(false);
                     return;
                 }
@@ -217,7 +268,9 @@ const DynamicCell = () => {
                 console.log("Business section data:", sectionData);
 
                 if (!sectionData) {
-                    setError("No active business section found");
+                    console.log("No active business section found, using hardcoded data");
+                    setBusinessData(hardcodedBusinessData);
+                    setImageError(true);
                     setLoading(false);
                     return;
                 }
@@ -235,9 +288,9 @@ const DynamicCell = () => {
                         "Error fetching business paragraphs:",
                         paragraphsError,
                     );
-                    setError(
-                        `Failed to fetch paragraphs: ${paragraphsError.message}`,
-                    );
+                    console.log("Using hardcoded business data due to paragraphs error");
+                    setBusinessData(hardcodedBusinessData);
+                    setImageError(true);
                     setLoading(false);
                     return;
                 }
@@ -253,7 +306,9 @@ const DynamicCell = () => {
 
                 if (statsError) {
                     console.error("Error fetching business stats:", statsError);
-                    setError(`Failed to fetch stats: ${statsError.message}`);
+                    console.log("Using hardcoded business data due to stats error");
+                    setBusinessData(hardcodedBusinessData);
+                    setImageError(true);
                     setLoading(false);
                     return;
                 }
@@ -273,7 +328,9 @@ const DynamicCell = () => {
                 setBusinessData(combinedData);
             } catch (error) {
                 console.error("Unexpected error in fetchBusinessData:", error);
-                setError("An unexpected error occurred");
+                console.log("Using hardcoded business data due to unexpected error");
+                setBusinessData(hardcodedBusinessData);
+                setImageError(true);
             } finally {
                 setLoading(false);
             }
@@ -297,15 +354,25 @@ const DynamicCell = () => {
             >
                 <Image
                     src={
-                        dynamicCellData?.background_image_url ||
-                        defaultImage.src
+                        imageError
+                            ? hardcodedFallbackImage.src
+                            : dynamicCellData?.background_image_url ||
+                              defaultImage.src
                     }
-                    alt={dynamicCellData?.title || defaultImage.alt}
+                    alt={
+                        imageError
+                            ? hardcodedFallbackImage.alt
+                            : dynamicCellData?.title || defaultImage.alt
+                    }
                     fill
                     className="object-cover object-center"
                     priority
                     sizes="100vw"
                     quality={100}
+                    onError={() => {
+                        console.log("Image failed to load, using hardcoded fallback");
+                        setImageError(true);
+                    }}
                 />
             </motion.div>
 

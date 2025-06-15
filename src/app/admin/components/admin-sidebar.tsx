@@ -245,14 +245,7 @@ const AdminSidebar = () => {
                                             "/admin/pages/home/essential-support"
                                         }
                                     />
-                                    <SubNavItem
-                                        href="/admin/pages/home/application-cta"
-                                        label="Application CTA"
-                                        isActive={
-                                            pathname ===
-                                            "/admin/pages/home/application-cta"
-                                        }
-                                    />
+
                                     <SubNavItem
                                         href="/admin/pages/home/setup-process"
                                         label="Setup Process"

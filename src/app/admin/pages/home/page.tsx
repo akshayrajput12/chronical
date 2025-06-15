@@ -87,14 +87,7 @@ const HomePage = () => {
             lastUpdated: "Recently updated",
             status: "Active",
         },
-        {
-            id: "application-cta",
-            title: "Application CTA",
-            description: "Call to action for applications",
-            icon: <FileText size={24} className="text-orange-500" />,
-            lastUpdated: "1 month ago",
-            status: "Active",
-        },
+
         {
             id: "setup-process",
             title: "Setup Process",
