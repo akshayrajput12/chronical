@@ -1,11 +1,142 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 import { motion, useAnimation, Variants } from "framer-motion";
+import { supabase } from "@/lib/supabase";
+import {
+    SetupProcessDisplayData,
+    SetupProcessStep,
+} from "@/types/setup-process";
 
 const SetupProcess = () => {
     const controls = useAnimation();
     const ref = useRef<HTMLDivElement>(null);
+
+    // State for setup process data
+    const [setupData, setSetupData] = useState<SetupProcessDisplayData | null>(
+        null,
+    );
+    const [loading, setLoading] = useState(true);
+
+    // Default fallback data - memoized to prevent unnecessary re-renders
+    const defaultData: SetupProcessDisplayData = useMemo(
+        () => ({
+            id: "default",
+            title: "Setting Up Your Business",
+            subtitle:
+                "Form a new company with quick and easy steps via our eServices platform.",
+            background_image_url:
+                "https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80",
+            how_to_apply_steps: [
+                {
+                    id: "1",
+                    title: "Determine Company Type",
+                    step_number: 1,
+                    step_type: "diamond",
+                    category: "how_to_apply",
+                } as SetupProcessStep,
+                {
+                    id: "2",
+                    title: "Select Business Activity & License Type",
+                    step_number: 2,
+                    step_type: "diamond",
+                    category: "how_to_apply",
+                } as SetupProcessStep,
+                {
+                    id: "3",
+                    title: "Consider Your Office Solutions",
+                    step_number: 3,
+                    step_type: "diamond",
+                    category: "how_to_apply",
+                } as SetupProcessStep,
+            ],
+            getting_started_steps: [
+                {
+                    id: "4",
+                    title: "Submit Your Application",
+                    step_number: 4,
+                    step_type: "circle",
+                    category: "getting_started",
+                } as SetupProcessStep,
+                {
+                    id: "5",
+                    title: "Receive Initial Approval",
+                    step_number: 5,
+                    step_type: "circle",
+                    category: "getting_started",
+                } as SetupProcessStep,
+            ],
+        }),
+        [],
+    );
+
+    // Fetch setup process data from database
+    useEffect(() => {
+        const fetchSetupProcessData = async () => {
+            try {
+                // Get section data
+                const { data: sectionData, error: sectionError } =
+                    await supabase
+                        .from("setup_process_section")
+                        .select("*")
+                        .eq("is_active", true)
+                        .single();
+
+                if (sectionError || !sectionData) {
+                    console.log(
+                        "No setup process section found, using default data",
+                    );
+                    setSetupData(defaultData);
+                    setLoading(false);
+                    return;
+                }
+
+                // Get steps data
+                const { data: stepsData, error: stepsError } = await supabase
+                    .from("setup_process_steps")
+                    .select("*")
+                    .eq("section_id", sectionData.id)
+                    .eq("is_active", true)
+                    .order("display_order", { ascending: true });
+
+                if (stepsError) {
+                    console.error(
+                        "Error fetching setup process steps:",
+                        stepsError,
+                    );
+                    setSetupData(defaultData);
+                    setLoading(false);
+                    return;
+                }
+
+                // Organize steps by category
+                const howToApplySteps =
+                    stepsData?.filter(
+                        step => step.category === "how_to_apply",
+                    ) || [];
+                const gettingStartedSteps =
+                    stepsData?.filter(
+                        step => step.category === "getting_started",
+                    ) || [];
+
+                setSetupData({
+                    id: sectionData.id,
+                    title: sectionData.title,
+                    subtitle: sectionData.subtitle,
+                    background_image_url: sectionData.background_image_url,
+                    how_to_apply_steps: howToApplySteps,
+                    getting_started_steps: gettingStartedSteps,
+                });
+            } catch (error) {
+                console.error("Error fetching setup process data:", error);
+                setSetupData(defaultData);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchSetupProcessData();
+    }, [defaultData]);
 
     useEffect(() => {
         const element = ref.current;
@@ -141,25 +272,38 @@ const SetupProcess = () => {
         },
     };
 
-    const steps = [
-        { id: 1, title: "Determine Company Type", type: "diamond" },
-        {
-            id: 2,
-            title: "Select Business Activity & License Type",
-            type: "diamond",
-        },
-        { id: 3, title: "Consider Your Office Solutions", type: "diamond" },
-        { id: 4, title: "Submit Your Application", type: "circle" },
-        { id: 5, title: "Receive Initial Approval", type: "circle" },
-    ];
+    // Show loading state
+    if (loading) {
+        return (
+            <section
+                ref={ref}
+                className="relative py-16 md:py-20 text-white bg-cover bg-center bg-no-repeat bg-gray-900"
+            >
+                <div className="container mx-auto px-4">
+                    <div className="flex items-center justify-center min-h-[400px]">
+                        <div className="text-center">
+                            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#a5cd39] mx-auto"></div>
+                            <p className="mt-4 text-gray-300">
+                                Loading setup process...
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+    }
+
+    // Use setupData or fallback to defaultData
+    const data = setupData || defaultData;
 
     return (
         <section
             ref={ref}
             className="relative py-16 md:py-20 text-white bg-cover bg-center bg-no-repeat"
             style={{
-                backgroundImage:
-                    'linear-gradient(rgba(44, 44, 44, 0.9), rgba(44, 44, 44, 0.9)), url("https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80")',
+                backgroundImage: data.background_image_url
+                    ? `linear-gradient(rgba(44, 44, 44, 0.9), rgba(44, 44, 44, 0.9)), url("${data.background_image_url}")`
+                    : "linear-gradient(rgba(44, 44, 44, 0.9), rgba(44, 44, 44, 0.9))",
                 backgroundPosition: "center",
                 backgroundSize: "cover",
             }}
@@ -175,7 +319,7 @@ const SetupProcess = () => {
                         className="text-3xl md:text-4xl font-rubik font-bold mb-2"
                         variants={titleVariants}
                     >
-                        Setting Up Your Business
+                        {data.title}
                     </motion.h2>
                     <div className="flex justify-center">
                         <motion.div
@@ -187,8 +331,7 @@ const SetupProcess = () => {
                         className="text-gray-300 font-markazi-text text-2xl max-w-2xl mx-auto"
                         variants={textVariants}
                     >
-                        Form a new company with quick and easy steps via our
-                        eServices platform.
+                        {data.subtitle}
                     </motion.p>
                 </motion.div>
 
@@ -210,9 +353,8 @@ const SetupProcess = () => {
                                         <div className="border-t-2 border-gray-400 absolute w-24 top-1/2 right-32"></div>
                                     </div>
                                     <div className="flex flex-row md:flex-row justify-center space-x-4 md:space-x-6 lg:space-x-10">
-                                        {steps
-                                            .slice(0, 3)
-                                            .map((step, index) => (
+                                        {data.how_to_apply_steps.map(
+                                            (step, index) => (
                                                 <motion.div
                                                     key={step.id}
                                                     className="flex flex-col items-center"
@@ -233,14 +375,15 @@ const SetupProcess = () => {
                                                                     "rotate(-45deg)",
                                                             }}
                                                         >
-                                                            {step.id}
+                                                            {step.step_number}
                                                         </span>
                                                     </motion.div>
                                                     <p className="text-xs md:text-sm font-noto-kufi-arabic max-w-[80px] md:max-w-[120px] text-center">
                                                         {step.title}
                                                     </p>
                                                 </motion.div>
-                                            ))}
+                                            ),
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -254,26 +397,38 @@ const SetupProcess = () => {
                                     <div className="border-t-2 border-gray-400 absolute w-24 top-1/2 right-32"></div>
                                 </div>
                                 <div className="flex flex-row md:flex-row justify-center space-x-4 md:space-x-6 lg:space-x-10">
-                                    {steps.slice(3).map((step, index) => (
-                                        <motion.div
-                                            key={step.id}
-                                            className="flex flex-col items-center"
-                                            custom={index + 4}
-                                            variants={stepVariants}
-                                        >
+                                    {data.getting_started_steps.map(
+                                        (step, index) => (
                                             <motion.div
-                                                className="w-12 h-12 md:w-16 md:h-16 bg-white rounded-full flex items-center justify-center text-[#2C2C2C] font-bold text-xl md:text-2xl mb-5 shadow-md"
-                                                custom={index + 4}
-                                                variants={circleVariants}
-                                                whileHover="hover"
+                                                key={step.id}
+                                                className="flex flex-col items-center"
+                                                custom={
+                                                    index +
+                                                    data.how_to_apply_steps
+                                                        .length
+                                                }
+                                                variants={stepVariants}
                                             >
-                                                <span>{step.id}</span>
+                                                <motion.div
+                                                    className="w-12 h-12 md:w-16 md:h-16 bg-white rounded-full flex items-center justify-center text-[#2C2C2C] font-bold text-xl md:text-2xl mb-5 shadow-md"
+                                                    custom={
+                                                        index +
+                                                        data.how_to_apply_steps
+                                                            .length
+                                                    }
+                                                    variants={circleVariants}
+                                                    whileHover="hover"
+                                                >
+                                                    <span>
+                                                        {step.step_number}
+                                                    </span>
+                                                </motion.div>
+                                                <p className="text-xs md:text-sm font-noto-kufi-arabic max-w-[80px] md:max-w-[120px] text-center">
+                                                    {step.title}
+                                                </p>
                                             </motion.div>
-                                            <p className="text-xs md:text-sm font-noto-kufi-arabic max-w-[80px] md:max-w-[120px] text-center">
-                                                {step.title}
-                                            </p>
-                                        </motion.div>
-                                    ))}
+                                        ),
+                                    )}
                                 </div>
                             </div>
                         </div>

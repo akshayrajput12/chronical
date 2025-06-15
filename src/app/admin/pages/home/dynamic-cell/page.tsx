@@ -1,242 +1,610 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import Link from 'next/link';
-import { 
-  Save, 
-  Eye, 
-  ArrowLeft, 
-  Upload,
-} from 'lucide-react';
-import Image from 'next/image';
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import {
+    Save,
+    Eye,
+    Upload,
+    Trash,
+    Settings,
+    Image as ImageIcon,
+} from "lucide-react";
+import { toast } from "sonner";
+import { supabase } from "@/lib/supabase";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Image from "next/image";
+
+// Types
+interface DynamicCellImage {
+    id: string;
+    filename: string;
+    original_filename: string;
+    file_path: string;
+    file_size: number;
+    mime_type: string;
+    width: number;
+    height: number;
+    alt_text: string;
+    is_active: boolean;
+    created_at: string;
+    updated_at: string;
+}
+
+interface SectionData {
+    title: string;
+    description: string;
+    fallback_image_url: string;
+    is_active: boolean;
+}
 
 const DynamicCellEditor = () => {
-  // Animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
+    const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
+    const [uploading, setUploading] = useState(false);
 
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { duration: 0.5 },
-    },
-  };
-
-  // Sample data for the dynamic cell section
-  const [dynamicCellData, setDynamicCellData] = useState({
-    heading: "A Dynamic Central Business District",
-    headingBoldPart: "A Dynamic Central",
-    underlineColor: "#a5cd39",
-    subtitle: "Dubai is the future economy and global trade gateway.",
-    backgroundImageUrl: "/images/home.jpg",
-    backgroundImageAlt: "Dubai Business District"
-  });
-
-  // Handle input changes
-  const handleInputChange = (field: keyof typeof dynamicCellData, value: string) => {
-    setDynamicCellData({
-      ...dynamicCellData,
-      [field]: value
+    const [sectionData, setSectionData] = useState<SectionData>({
+        title: "Business Hub",
+        description: "Dynamic business statistics and information center",
+        fallback_image_url: "/images/home.jpg",
+        is_active: true,
     });
 
-    // Update the heading when either part changes
-    if (field === 'headingBoldPart') {
-      const remainingPart = dynamicCellData.heading.replace(dynamicCellData.headingBoldPart, '').trim();
-      setDynamicCellData(prev => ({
-        ...prev,
-        heading: `${value} ${remainingPart}`
-      }));
+    const [images, setImages] = useState<DynamicCellImage[]>([]);
+    const [activeImage, setActiveImage] = useState<DynamicCellImage | null>(
+        null,
+    );
+    const [sectionId, setSectionId] = useState<string | null>(null);
+
+    // Animation variants
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: { staggerChildren: 0.1 },
+        },
+    };
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0 },
+    };
+
+    // Fetch data on mount
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                // Get section data
+                const { data: sectionData, error: sectionError } =
+                    await supabase
+                        .from("dynamic_cell_section")
+                        .select("*")
+                        .eq("is_active", true)
+                        .single();
+
+                if (sectionData) {
+                    setSectionId(sectionData.id);
+                    setSectionData({
+                        title: sectionData.title,
+                        description: sectionData.description,
+                        fallback_image_url: sectionData.fallback_image_url,
+                        is_active: sectionData.is_active,
+                    });
+                }
+
+                // Get images
+                const { data: imagesData } = await supabase
+                    .from("dynamic_cell_images")
+                    .select("*")
+                    .order("created_at", { ascending: false });
+
+                setImages(imagesData || []);
+                const active = imagesData?.find(img => img.is_active);
+                setActiveImage(active || null);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                toast.error("Failed to load data");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    // Handle file upload
+    const handleFileUpload = async (files: FileList | null) => {
+        if (!files || files.length === 0) return;
+
+        const file = files[0];
+
+        if (
+            !["image/jpeg", "image/jpg", "image/png", "image/webp"].includes(
+                file.type,
+            )
+        ) {
+            toast.error(
+                "Unsupported file format. Please use JPG, PNG, or WebP.",
+            );
+            return;
+        }
+
+        if (file.size > 10 * 1024 * 1024) {
+            toast.error("File size too large. Maximum size is 10MB.");
+            return;
+        }
+
+        setUploading(true);
+        try {
+            const fileExt = file.name.split(".").pop();
+            const fileName = `${Date.now()}-${Math.random()
+                .toString(36)
+                .substring(2)}.${fileExt}`;
+
+            // Upload to storage
+            const { error: uploadError } = await supabase.storage
+                .from("dynamic-cell-images")
+                .upload(fileName, file);
+
+            if (uploadError) {
+                toast.error("Failed to upload image");
+                return;
+            }
+
+            // Save to database with static dimensions
+            const { data: imageRecord, error: dbError } = await supabase
+                .from("dynamic_cell_images")
+                .insert({
+                    filename: fileName,
+                    original_filename: file.name,
+                    file_path: fileName,
+                    file_size: file.size,
+                    mime_type: file.type,
+                    width: 1920, // Static width
+                    height: 1080, // Static height
+                    alt_text: `Background image - ${file.name}`,
+                    is_active: false,
+                })
+                .select()
+                .single();
+
+            if (dbError) {
+                toast.error("Failed to save image record");
+                return;
+            }
+
+            setImages(prev => [imageRecord, ...prev]);
+            toast.success("Image uploaded successfully");
+        } catch (error) {
+            console.error("Error uploading:", error);
+            toast.error("Failed to upload image");
+        } finally {
+            setUploading(false);
+        }
+    };
+
+    // Handle setting active image
+    const handleSetActiveImage = async (imageId: string) => {
+        try {
+            // Update all images to inactive
+            await supabase
+                .from("dynamic_cell_images")
+                .update({ is_active: false })
+                .neq("id", "00000000-0000-0000-0000-000000000000");
+
+            // Set selected image as active
+            await supabase
+                .from("dynamic_cell_images")
+                .update({ is_active: true })
+                .eq("id", imageId);
+
+            // Update section reference
+            await supabase
+                .from("dynamic_cell_section")
+                .update({ background_image_id: imageId })
+                .eq("id", sectionId);
+
+            // Update local state
+            setImages(prev =>
+                prev.map(img => ({
+                    ...img,
+                    is_active: img.id === imageId,
+                })),
+            );
+
+            const newActiveImage = images.find(img => img.id === imageId);
+            setActiveImage(newActiveImage || null);
+
+            toast.success("Background image updated successfully");
+        } catch (error) {
+            console.error("Error setting active image:", error);
+            toast.error("Failed to set active image");
+        }
+    };
+
+    // Handle image deletion
+    const handleDeleteImage = async (imageId: string, filePath: string) => {
+        try {
+            // Delete from storage
+            await supabase.storage
+                .from("dynamic-cell-images")
+                .remove([filePath]);
+
+            // Delete from database
+            await supabase
+                .from("dynamic_cell_images")
+                .delete()
+                .eq("id", imageId);
+
+            setImages(prev => prev.filter(img => img.id !== imageId));
+
+            if (activeImage?.id === imageId) {
+                setActiveImage(null);
+            }
+
+            toast.success("Image deleted successfully");
+        } catch (error) {
+            console.error("Error deleting image:", error);
+            toast.error("Failed to delete image");
+        }
+    };
+
+    // Handle section save
+    const handleSaveSection = async () => {
+        if (!sectionId) return;
+
+        setSaving(true);
+        try {
+            await supabase
+                .from("dynamic_cell_section")
+                .update({
+                    title: sectionData.title,
+                    description: sectionData.description,
+                    fallback_image_url: sectionData.fallback_image_url,
+                })
+                .eq("id", sectionId);
+
+            toast.success("Section data saved successfully");
+        } catch (error) {
+            console.error("Error saving section:", error);
+            toast.error("Failed to save section data");
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    // Get public URL for image
+    const getImageUrl = (filePath: string) => {
+        if (!filePath) return "";
+
+        // If it's already a full URL, return as is
+        if (filePath.startsWith("http")) {
+            return filePath;
+        }
+
+        // Otherwise, construct the Supabase URL
+        const { data } = supabase.storage
+            .from("dynamic-cell-images")
+            .getPublicUrl(filePath);
+        return data.publicUrl;
+    };
+
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center min-h-[400px]">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#a5cd39] mx-auto"></div>
+                    <p className="mt-4 text-gray-600">
+                        Loading dynamic cell data...
+                    </p>
+                </div>
+            </div>
+        );
     }
-  };
 
-  return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-      className="space-y-8"
-    >
-      {/* Header */}
-      <motion.div variants={itemVariants} className="flex justify-between items-center">
-        <div className="flex items-center gap-2">
-          <Link href="/admin/pages/home">
-            <button className="inline-flex items-center gap-1 px-3 py-2 bg-white border border-gray-200 rounded-md text-gray-700 hover:bg-gray-50 transition-colors">
-              <ArrowLeft size={16} />
-              <span>Back</span>
-            </button>
-          </Link>
-          <h1 className="text-2xl font-bold text-gray-800">Edit Dynamic Cell Section</h1>
-        </div>
-        <div className="flex gap-2">
-          <button 
-            className="inline-flex items-center gap-1 px-4 py-2 bg-white border border-gray-200 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
-            onClick={() => window.open('/#dynamic-central', '_blank')}
-          >
-            <Eye size={16} />
-            <span>Preview</span>
-          </button>
-          <button className="inline-flex items-center gap-1 px-4 py-2 bg-[#a5cd39] rounded-md text-white hover:bg-[#94b933] transition-colors">
-            <Save size={16} />
-            <span>Save Changes</span>
-          </button>
-        </div>
-      </motion.div>
+    return (
+        <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="space-y-6"
+        >
+            {/* Header */}
+            <motion.div
+                variants={itemVariants}
+                className="flex justify-between items-center"
+            >
+                <div>
+                    <h1 className="text-2xl font-bold text-gray-800">
+                        Dynamic Cell Background
+                    </h1>
+                    <p className="text-gray-600">
+                        Manage background images for the dynamic cell section
+                    </p>
+                </div>
+                <div className="flex gap-2">
+                    <Button
+                        variant="outline"
+                        onClick={() =>
+                            window.open("/#dynamic-central", "_blank")
+                        }
+                    >
+                        <Eye className="w-4 h-4 mr-2" />
+                        Preview
+                    </Button>
+                    <Button onClick={handleSaveSection} disabled={saving}>
+                        <Save className="w-4 h-4 mr-2" />
+                        {saving ? "Saving..." : "Save Changes"}
+                    </Button>
+                </div>
+            </motion.div>
 
-      {/* Editor Form */}
-      <motion.div variants={itemVariants}>
-        <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Left Column - Text Content */}
-            <div className="space-y-6">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">Content</h2>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Heading Bold Part
-                </label>
-                <input
-                  type="text"
-                  value={dynamicCellData.headingBoldPart}
-                  onChange={(e) => handleInputChange('headingBoldPart', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#a5cd39] focus:border-transparent"
-                />
-                <p className="text-xs text-gray-500 mt-1">This part of the heading will be bold</p>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Full Heading
-                </label>
-                <input
-                  type="text"
-                  value={dynamicCellData.heading}
-                  onChange={(e) => handleInputChange('heading', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#a5cd39] focus:border-transparent"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Underline Color
-                </label>
-                <div className="flex gap-2 items-center">
-                  <input
-                    type="color"
-                    value={dynamicCellData.underlineColor}
-                    onChange={(e) => handleInputChange('underlineColor', e.target.value)}
-                    className="w-10 h-10 border-0 p-0 rounded-md"
-                  />
-                  <input
-                    type="text"
-                    value={dynamicCellData.underlineColor}
-                    onChange={(e) => handleInputChange('underlineColor', e.target.value)}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#a5cd39] focus:border-transparent"
-                  />
-                </div>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Subtitle
-                </label>
-                <input
-                  type="text"
-                  value={dynamicCellData.subtitle}
-                  onChange={(e) => handleInputChange('subtitle', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#a5cd39] focus:border-transparent"
-                />
-              </div>
-            </div>
-            
-            {/* Right Column - Background Image */}
-            <div className="space-y-6">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">Background Image</h2>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Background Image
-                </label>
-                <div className="relative border border-gray-300 rounded-md overflow-hidden">
-                  <div className="aspect-video bg-gray-100 relative">
-                    {dynamicCellData.backgroundImageUrl && (
-                      <Image
-                        src={dynamicCellData.backgroundImageUrl}
-                        alt={dynamicCellData.backgroundImageAlt}
-                        fill
-                        className="object-cover"
-                      />
-                    )}
-                  </div>
-                  <div className="p-3 bg-gray-50 border-t border-gray-300 flex justify-between items-center">
-                    <span className="text-sm text-gray-500 truncate max-w-[200px]">
-                      {dynamicCellData.backgroundImageUrl || "No image selected"}
-                    </span>
-                    <button className="inline-flex items-center gap-1 px-3 py-1 bg-white border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors">
-                      <Upload size={14} />
-                      <span className="text-sm">Upload</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Background Image Alt Text
-                </label>
-                <input
-                  type="text"
-                  value={dynamicCellData.backgroundImageAlt}
-                  onChange={(e) => handleInputChange('backgroundImageAlt', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#a5cd39] focus:border-transparent"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-      
-      {/* Preview Section */}
-      <motion.div variants={itemVariants} className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <h2 className="text-lg font-semibold text-gray-800 mb-4">Preview</h2>
-        <div className="relative h-[300px] rounded-lg overflow-hidden">
-          {/* Background Image */}
-          <Image
-            src={dynamicCellData.backgroundImageUrl}
-            alt={dynamicCellData.backgroundImageAlt}
-            fill
-            className="object-cover"
-          />
-          
-          {/* Content Overlay */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
-            <div className="max-w-xl">
-              <h2 className="text-2xl font-bold text-white mb-2">
-                <span className="font-bold">{dynamicCellData.headingBoldPart}</span>
-                {dynamicCellData.heading.replace(dynamicCellData.headingBoldPart, '')}
-              </h2>
-              
-              <div 
-                className="w-16 h-[3px] mx-auto mb-4"
-                style={{ backgroundColor: dynamicCellData.underlineColor }}
-              ></div>
-              
-              <p className="text-white text-lg">{dynamicCellData.subtitle}</p>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-    </motion.div>
-  );
+            <Tabs defaultValue="settings" className="space-y-6">
+                <TabsList>
+                    <TabsTrigger value="settings">Section Settings</TabsTrigger>
+                    <TabsTrigger value="images">Manage Images</TabsTrigger>
+                    <TabsTrigger value="preview">Preview</TabsTrigger>
+                </TabsList>
+
+                {/* Section Settings Tab */}
+                <TabsContent value="settings">
+                    <motion.div variants={itemVariants}>
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Section Configuration</CardTitle>
+                                <CardDescription>
+                                    Configure the basic settings for the dynamic
+                                    cell section
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-4">
+                                <div>
+                                    <Label htmlFor="title">Section Title</Label>
+                                    <Input
+                                        id="title"
+                                        value={sectionData.title}
+                                        onChange={e =>
+                                            setSectionData(prev => ({
+                                                ...prev,
+                                                title: e.target.value,
+                                            }))
+                                        }
+                                        placeholder="Enter section title"
+                                    />
+                                </div>
+                                <div>
+                                    <Label htmlFor="description">
+                                        Description
+                                    </Label>
+                                    <Textarea
+                                        id="description"
+                                        value={sectionData.description || ""}
+                                        onChange={e =>
+                                            setSectionData(prev => ({
+                                                ...prev,
+                                                description: e.target.value,
+                                            }))
+                                        }
+                                        placeholder="Enter section description"
+                                        rows={3}
+                                    />
+                                </div>
+                                <div>
+                                    <Label htmlFor="fallback">
+                                        Fallback Image URL
+                                    </Label>
+                                    <Input
+                                        id="fallback"
+                                        value={sectionData.fallback_image_url}
+                                        onChange={e =>
+                                            setSectionData(prev => ({
+                                                ...prev,
+                                                fallback_image_url:
+                                                    e.target.value,
+                                            }))
+                                        }
+                                        placeholder="Enter fallback image URL"
+                                    />
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </motion.div>
+                </TabsContent>
+
+                {/* Images Management Tab */}
+                <TabsContent value="images">
+                    <motion.div variants={itemVariants} className="space-y-6">
+                        {/* Upload Section */}
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Upload New Image</CardTitle>
+                                <CardDescription>
+                                    Upload a new background image for the
+                                    dynamic cell section
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={e =>
+                                            handleFileUpload(e.target.files)
+                                        }
+                                        className="hidden"
+                                        id="image-upload"
+                                    />
+                                    <label
+                                        htmlFor="image-upload"
+                                        className="cursor-pointer"
+                                    >
+                                        <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                                        <p className="text-lg font-medium text-gray-700 mb-2">
+                                            {uploading
+                                                ? "Uploading..."
+                                                : "Click to upload or drag and drop"}
+                                        </p>
+                                        <p className="text-sm text-gray-500">
+                                            PNG, JPG, WebP up to 10MB
+                                        </p>
+                                    </label>
+                                </div>
+                            </CardContent>
+                        </Card>
+
+                        {/* Images Grid */}
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Uploaded Images</CardTitle>
+                                <CardDescription>
+                                    Manage your uploaded background images
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                {images.length === 0 ? (
+                                    <div className="text-center py-8">
+                                        <ImageIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                                        <p className="text-gray-500">
+                                            No images uploaded yet
+                                        </p>
+                                    </div>
+                                ) : (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                        {images.map(image => (
+                                            <div
+                                                key={image.id}
+                                                className={`relative border rounded-lg overflow-hidden ${
+                                                    image.is_active
+                                                        ? "border-green-500 ring-2 ring-green-200"
+                                                        : "border-gray-200"
+                                                }`}
+                                            >
+                                                <div className="aspect-video relative">
+                                                    <Image
+                                                        src={getImageUrl(
+                                                            image.file_path,
+                                                        )}
+                                                        alt={
+                                                            image.alt_text ||
+                                                            "Background image"
+                                                        }
+                                                        fill
+                                                        className="object-cover"
+                                                    />
+                                                    {image.is_active && (
+                                                        <div className="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded text-xs">
+                                                            Active
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <div className="p-3">
+                                                    <p className="text-sm font-medium truncate">
+                                                        {
+                                                            image.original_filename
+                                                        }
+                                                    </p>
+                                                    <p className="text-xs text-gray-500">
+                                                        {(
+                                                            image.file_size /
+                                                            1024 /
+                                                            1024
+                                                        ).toFixed(2)}{" "}
+                                                        MB
+                                                    </p>
+                                                    <div className="flex gap-2 mt-2">
+                                                        {!image.is_active && (
+                                                            <Button
+                                                                size="sm"
+                                                                variant="outline"
+                                                                onClick={() =>
+                                                                    handleSetActiveImage(
+                                                                        image.id,
+                                                                    )
+                                                                }
+                                                            >
+                                                                Set Active
+                                                            </Button>
+                                                        )}
+                                                        <Button
+                                                            size="sm"
+                                                            variant="destructive"
+                                                            onClick={() =>
+                                                                handleDeleteImage(
+                                                                    image.id,
+                                                                    image.file_path,
+                                                                )
+                                                            }
+                                                        >
+                                                            <Trash className="w-3 h-3" />
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </CardContent>
+                        </Card>
+                    </motion.div>
+                </TabsContent>
+
+                {/* Preview Tab */}
+                <TabsContent value="preview">
+                    <motion.div variants={itemVariants}>
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Live Preview</CardTitle>
+                                <CardDescription>
+                                    Preview how the dynamic cell section will
+                                    appear on the website
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="relative h-[400px] rounded-lg overflow-hidden">
+                                    <Image
+                                        src={
+                                            activeImage
+                                                ? getImageUrl(
+                                                      activeImage.file_path,
+                                                  )
+                                                : sectionData.fallback_image_url
+                                        }
+                                        alt="Dynamic cell background preview"
+                                        fill
+                                        className="object-cover"
+                                    />
+                                    <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                                        <div className="text-center text-white">
+                                            <h2 className="text-3xl font-bold mb-4">
+                                                {sectionData.title}
+                                            </h2>
+                                            {sectionData.description && (
+                                                <p className="text-lg">
+                                                    {sectionData.description}
+                                                </p>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </motion.div>
+                </TabsContent>
+            </Tabs>
+        </motion.div>
+    );
 };
 
 export default DynamicCellEditor;

@@ -104,7 +104,10 @@ const AdminSidebar = () => {
     // Fetch user data
     useEffect(() => {
         const fetchUser = async () => {
-            const { data: { user }, error } = await supabase.auth.getUser();
+            const {
+                data: { user },
+                error,
+            } = await supabase.auth.getUser();
             if (user && !error) {
                 setUser(user);
                 setIsSignedIn(true);
@@ -123,7 +126,7 @@ const AdminSidebar = () => {
 
     const handleLogout = async () => {
         await supabase.auth.signOut();
-        router.push('/login');
+        router.push("/login");
     };
 
     return (
@@ -211,6 +214,14 @@ const AdminSidebar = () => {
                                         }
                                     />
                                     <SubNavItem
+                                        href="/admin/pages/home/dynamic-cell"
+                                        label="Dynamic Cell"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/home/dynamic-cell"
+                                        }
+                                    />
+                                    <SubNavItem
                                         href="/admin/pages/home/why-section"
                                         label="Why Section"
                                         isActive={
@@ -235,19 +246,26 @@ const AdminSidebar = () => {
                                         }
                                     />
                                     <SubNavItem
-                                        href="/admin/pages/home/instagram-feed"
-                                        label="Instagram Feed"
-                                        isActive={
-                                            pathname ===
-                                            "/admin/pages/home/instagram-feed"
-                                        }
-                                    />
-                                    <SubNavItem
                                         href="/admin/pages/home/application-cta"
                                         label="Application CTA"
                                         isActive={
                                             pathname ===
                                             "/admin/pages/home/application-cta"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/home/setup-process"
+                                        label="Setup Process"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/home/setup-process"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/stats"
+                                        label="Stats"
+                                        isActive={
+                                            pathname === "/admin/pages/stats"
                                         }
                                     />
                                 </div>

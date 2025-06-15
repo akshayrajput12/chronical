@@ -334,7 +334,7 @@ const Header = () => {
                                             >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
-                                                    className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5"
+                                                    className="h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7"
                                                     fill="currentColor"
                                                     viewBox="0 0 24 24"
                                                 >
@@ -817,7 +817,7 @@ const Header = () => {
                                                 >
                                                     <svg
                                                         xmlns="http://www.w3.org/2000/svg"
-                                                        className="h-5 w-5 md:h-6 md:w-6"
+                                                        className="h-6 w-6 md:h-8 md:w-8"
                                                         fill="currentColor"
                                                         viewBox="0 0 24 24"
                                                     >

@@ -175,15 +175,15 @@ const BusinessHubSection = () => {
             id="business-hub"
             className="bg-white py-8 sm:py-12 md:py-16 lg:py-20 relative overflow-hidden"
         >
-            <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-2 sm:gap-3 md:gap-4 items-start">
+            <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-2 sm:gap-3 md:gap-4 items-start px-4 md:px-6 lg:px-8">
                 {/* Headings */}
-                <div className="w-full ml-8 md:ml-12 lg:ml-16">
-                    <h2 className="text-4xl font-rubik font-bold text-[#222] leading-tight">
+                <div className="w-full md:ml-8 lg:ml-12 xl:ml-16">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-rubik font-bold text-[#222] leading-tight">
                         <span className="text-[#222] font-rubik! block hover:translate-x-1 transition-transform duration-300">
                             {businessData.heading}
                         </span>
                     </h2>
-                    <p className="text-2xl md:text-4xl mt-2 font-rubik! text-[#222] font-normal">
+                    <p className="text-xl sm:text-2xl md:text-4xl mt-2 font-rubik! text-[#222] font-normal">
                         {businessData.subheading}
                     </p>
                     <div className="w-24 h-[3px] bg-[#a5cd39] mt-6 hover:w-32 transition-all duration-300" />
@@ -196,8 +196,8 @@ const BusinessHubSection = () => {
                             key={paragraph.id}
                             className={`${
                                 index === 0
-                                    ? "font-markazi-text! text-[22px] leading-[28px]"
-                                    : "font-noto-kufi-arabic text-[12px] md:text-[13px] lg:text-[14px] leading-[24px]"
+                                    ? "font-markazi-text! text-lg sm:text-xl md:text-[22px] leading-[28px]"
+                                    : "font-noto-kufi-arabic text-xs sm:text-sm md:text-[13px] lg:text-[14px] leading-[24px]"
                             } hover:translate-x-1 hover:text-[#222] transition-all duration-200`}
                             style={index === 0 ? { fontWeight: "0" } : {}}
                         >

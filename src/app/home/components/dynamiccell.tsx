@@ -4,9 +4,10 @@ import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import { motion, useInView, useAnimation } from "framer-motion";
 import { supabase } from "@/lib/supabase";
+import { DynamicCellDisplayData } from "@/types/dynamic-cell";
 
-const buildingImage = {
-    src: "/images/home.jpg", // Using the existing image
+const defaultImage = {
+    src: "/images/home.jpg", // Fallback image
     alt: "Dubai Business District",
 };
 
@@ -66,7 +67,7 @@ const NumberDisplay = ({ value, label }: { value: number; label?: string }) => {
 
     const formatNumber = (num: number) => {
         return (
-            <div style={{ fontSize: "40px" }} className="text-2xl ml-1">
+            <div className="text-xl md:text-2xl lg:text-3xl xl:text-4xl ml-1">
                 {num.toLocaleString()}+
             </div>
         );
@@ -109,6 +110,8 @@ const DynamicCell = () => {
     const [businessData, setBusinessData] = useState<BusinessSection | null>(
         null,
     );
+    const [dynamicCellData, setDynamicCellData] =
+        useState<DynamicCellDisplayData | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -148,12 +151,46 @@ const DynamicCell = () => {
     };
 
     useEffect(() => {
-        const fetchBusinessData = async () => {
+        const fetchAllData = async () => {
             setLoading(true);
             setError(null);
 
             try {
-                console.log("Fetching business section data...");
+                console.log(
+                    "Fetching business section and dynamic cell data...",
+                );
+
+                // Fetch dynamic cell data first
+                const { data: dynamicCellSection, error: dynamicCellError } =
+                    await supabase.rpc("get_dynamic_cell_section");
+
+                if (dynamicCellError) {
+                    console.error(
+                        "Error fetching dynamic cell data:",
+                        dynamicCellError,
+                    );
+                    // Continue with default data if dynamic cell fetch fails
+                } else if (
+                    dynamicCellSection &&
+                    dynamicCellSection.length > 0
+                ) {
+                    const cellData = dynamicCellSection[0];
+
+                    // If background_image_url is a file path (not a full URL), construct the Supabase URL
+                    if (
+                        cellData.background_image_url &&
+                        !cellData.background_image_url.startsWith("http")
+                    ) {
+                        const { data: urlData } = supabase.storage
+                            .from("dynamic-cell-images")
+                            .getPublicUrl(cellData.background_image_url);
+
+                        cellData.background_image_url = urlData.publicUrl;
+                    }
+
+                    setDynamicCellData(cellData);
+                    console.log("Dynamic cell data:", cellData);
+                }
 
                 // Get active business section
                 const { data: sectionData, error: sectionError } =
@@ -242,12 +279,12 @@ const DynamicCell = () => {
             }
         };
 
-        fetchBusinessData();
+        fetchAllData();
     }, []);
 
     return (
         <section
-            className="relative bg-white overflow-hidden w-full h-screen"
+            className="relative bg-white overflow-hidden w-full min-h-screen h-auto md:h-screen"
             id="dynamic-central"
             ref={ref}
         >
@@ -259,8 +296,11 @@ const DynamicCell = () => {
                 animate={controls}
             >
                 <Image
-                    src={buildingImage.src}
-                    alt={buildingImage.alt}
+                    src={
+                        dynamicCellData?.background_image_url ||
+                        defaultImage.src
+                    }
+                    alt={dynamicCellData?.title || defaultImage.alt}
                     fill
                     className="object-cover object-center"
                     priority
@@ -271,20 +311,20 @@ const DynamicCell = () => {
 
             {/* Content overlay - Centered horizontally but at the top of the section */}
             <motion.div
-                className="relative z-10 h-full w-full flex flex-col items-center justify-start text-center px-4 pt-32 md:pt-40"
+                className="relative z-10 h-full w-full flex flex-col items-center justify-center md:justify-start text-center px-4 py-8 md:pt-32 lg:pt-40"
                 variants={containerVariants}
                 initial="hidden"
                 animate={controls}
             >
                 {/* Stats */}
-                <div className="mt-8 sm:mt-8 md:mt-24 mx-12 md:mx-20 lg:mx-28 xl:mx-36 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 md:gap-12 lg:gap-16 pt-6 sm:pt-8 md:pt-10">
+                <div className="mt-4 md:mt-8 lg:mt-24 mx-4 sm:mx-8 md:mx-12 lg:mx-20 xl:mx-28 2xl:mx-36 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8 lg:gap-12 xl:gap-16 pt-4 sm:pt-6 md:pt-8 lg:pt-10">
                     {businessData?.stats.map(stat => (
                         <div
                             key={stat.id}
-                            className="flex flex-col items-center text-center hover:-translate-y-1 transition-transform duration-300"
+                            className="flex flex-col items-center text-center hover:-translate-y-1 transition-transform duration-300 px-2"
                         >
                             {/* Stat number */}
-                            <div className="text-2xl md:text-3xl lg:text-4xl font-medium text-[#a5cd39] leading-none hover:scale-105 transition-transform duration-300">
+                            <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-medium text-[#a5cd39] leading-none hover:scale-105 transition-transform duration-300">
                                 <NumberDisplay
                                     value={stat.value}
                                     label={stat.label}
@@ -294,14 +334,14 @@ const DynamicCell = () => {
                             {/* Label */}
                             <div
                                 className={
-                                    "text-[#333] text-2xl mt-2 hover:-translate-y-0.5 transition-transform duration-200 font-medium font-markazi-text"
+                                    "text-[#333] text-base sm:text-lg md:text-xl lg:text-2xl mt-2 hover:-translate-y-0.5 transition-transform duration-200 font-medium font-markazi-text"
                                 }
                             >
                                 {stat.label}
                             </div>
 
                             {/* Decorative line */}
-                            <div className="w-12 h-[2px] bg-gray-200 mt-4" />
+                            <div className="w-8 sm:w-10 md:w-12 h-[1px] md:h-[2px] bg-gray-200 mt-2 md:mt-4" />
                         </div>
                     ))}
                 </div>
