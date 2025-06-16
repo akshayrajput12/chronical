@@ -139,8 +139,8 @@ const WhySection = () => {
                                     "Spanning from the iconic Sheikh Rashid Tower to the neighboring One Central, DWTC Free Zone offers a diverse range of 1,200+ licensed business activities and is home to more than 1,800 small and medium businesses."}
                             </p>
                             {/* Desktop Media with text overlay */}
-                            <div className="absolute -bottom-24 bg-amber-800 w-[48vw] h-[400px]">
-                                <div className="relative mt-8 w-[48vw] h-[400px] overflow-hidden hover:scale-[1.02] transition-transform duration-300">
+                            <div className="absolute  w-[48vw] h-[280px]">
+                                <div className="relative w-full h-full overflow-hidden hover:scale-[1.02] transition-transform duration-300">
                                     {/* Check media type and display accordingly */}
                                     {whyData?.media_type === "video" &&
                                     whyData?.video_url ? (

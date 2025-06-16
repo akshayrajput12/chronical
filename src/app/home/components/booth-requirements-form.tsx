@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import { CheckCircle } from "lucide-react";
 
 const BoothRequirementsForm = () => {
@@ -114,7 +113,7 @@ const BoothRequirementsForm = () => {
             </div>
 
             <div className="relative z-10 container mx-auto px-4">
-                <div className="max-w-4xl mx-auto">
+                <div className="max-w-7xl mx-auto">
                     {/* Title */}
                     <motion.div
                         className="text-center mb-8"
@@ -128,149 +127,179 @@ const BoothRequirementsForm = () => {
                         </h2>
                     </motion.div>
 
-                    {/* Form */}
-                    <motion.form
-                        onSubmit={handleSubmit}
-                        className="space-y-4"
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.2 }}
-                        viewport={{ once: true }}
-                    >
-                        {/* Row 1: Company Name and Email */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="space-y-2">
-                                <Input
-                                    id="companyName"
-                                    type="text"
-                                    placeholder="Enter your name"
-                                    value={formData.companyName}
-                                    onChange={e =>
-                                        handleInputChange(
-                                            "companyName",
-                                            e.target.value,
-                                        )
-                                    }
-                                    className="w-full h-12 px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md placeholder:text-gray-500 transition-all duration-200"
-                                    required
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <Input
-                                    id="companyName"
-                                    type="text"
-                                    placeholder="Enter company name"
-                                    value={formData.companyName}
-                                    onChange={e =>
-                                        handleInputChange(
-                                            "companyName",
-                                            e.target.value,
-                                        )
-                                    }
-                                    className="w-full h-12 px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md placeholder:text-gray-500 transition-all duration-200"
-                                    required
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <Input
-                                    id="email"
-                                    type="email"
-                                    placeholder="Enter your email address"
-                                    value={formData.email}
-                                    onChange={e =>
-                                        handleInputChange(
-                                            "email",
-                                            e.target.value,
-                                        )
-                                    }
-                                    className="w-full h-12 px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md placeholder:text-gray-500 transition-all duration-200"
-                                    required
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <Input
-                                    id="phone"
-                                    type="tel"
-                                    placeholder="Enter phone number with country code"
-                                    value={formData.phone}
-                                    onChange={e =>
-                                        handleInputChange(
-                                            "phone",
-                                            e.target.value,
-                                        )
-                                    }
-                                    className="w-full h-12 px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md placeholder:text-gray-500 transition-all duration-200"
-                                    required
-                                />
-                            </div>
-                        </div>
-
-                        {/* Row 2: File Upload */}
-                        <div className="space-y-2">
-                            <div className="relative">
-                                <input
-                                    type="file"
-                                    id="file-upload"
-                                    onChange={handleFileChange}
-                                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                                    accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-                                />
-                                <div className="flex items-center justify-between w-full h-12 px-4 py-2 text-sm bg-white border border-gray-300 hover:border-[#a5cd39] focus-within:border-[#a5cd39] rounded-md cursor-pointer transition-all duration-200">
-                                    <span
-                                        className={`${
-                                            formData.file
-                                                ? "text-gray-700 font-noto-kufi-arabic"
-                                                : "text-gray-500 font-noto-kufi-arabic"
-                                        }`}
-                                    >
-                                        {formData.file
-                                            ? formData.file.name
-                                            : "Choose files (PDF, DOC, JPG, PNG)"}
-                                    </span>
-                                    <span className="text-xs text-gray-600 font-noto-kufi-arabic bg-gray-200 px-3 py-1 rounded-sm font-medium">
-                                        BROWSE
-                                    </span>
+                    {/* Form and Map Grid */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+                        {/* Form Section */}
+                        <motion.form
+                            onSubmit={handleSubmit}
+                            className="space-y-4 mt-10"
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, delay: 0.2 }}
+                            viewport={{ once: true }}
+                        >
+                            {/* Row 1: Company Name and Email */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <Input
+                                        id="companyName"
+                                        type="text"
+                                        placeholder="Enter your name"
+                                        value={formData.companyName}
+                                        onChange={e =>
+                                            handleInputChange(
+                                                "companyName",
+                                                e.target.value,
+                                            )
+                                        }
+                                        className="w-full h-12 px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md placeholder:text-gray-500 transition-all duration-200"
+                                        required
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Input
+                                        id="companyName"
+                                        type="text"
+                                        placeholder="Enter company name"
+                                        value={formData.companyName}
+                                        onChange={e =>
+                                            handleInputChange(
+                                                "companyName",
+                                                e.target.value,
+                                            )
+                                        }
+                                        className="w-full h-12 px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md placeholder:text-gray-500 transition-all duration-200"
+                                        required
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Input
+                                        id="email"
+                                        type="email"
+                                        placeholder="Enter your email address"
+                                        value={formData.email}
+                                        onChange={e =>
+                                            handleInputChange(
+                                                "email",
+                                                e.target.value,
+                                            )
+                                        }
+                                        className="w-full h-12 px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md placeholder:text-gray-500 transition-all duration-200"
+                                        required
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Input
+                                        id="phone"
+                                        type="tel"
+                                        placeholder="Enter phone number with country code"
+                                        value={formData.phone}
+                                        onChange={e =>
+                                            handleInputChange(
+                                                "phone",
+                                                e.target.value,
+                                            )
+                                        }
+                                        className="w-full h-12 px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md placeholder:text-gray-500 transition-all duration-200"
+                                        required
+                                    />
                                 </div>
                             </div>
-                        </div>
 
-                        {/* Row 4: Message */}
-                        <div className="space-y-2">
-                            <Textarea
-                                id="message"
-                                placeholder="Describe your booth requirements, design preferences, special features, or any specific customizations you need..."
-                                value={formData.message}
-                                onChange={e =>
-                                    handleInputChange("message", e.target.value)
-                                }
-                                className="w-full min-h-[120px] px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md resize-none placeholder:text-gray-500 transition-all duration-200"
-                                required
-                            />
-                        </div>
+                            {/* Row 2: File Upload */}
+                            <div className="space-y-2">
+                                <div className="relative">
+                                    <input
+                                        type="file"
+                                        id="file-upload"
+                                        onChange={handleFileChange}
+                                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                        accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                                    />
+                                    <div className="flex items-center justify-between w-full h-12 px-4 py-2 text-sm bg-white border border-gray-300 hover:border-[#a5cd39] focus-within:border-[#a5cd39] rounded-md cursor-pointer transition-all duration-200">
+                                        <span
+                                            className={`${
+                                                formData.file
+                                                    ? "text-gray-700 font-noto-kufi-arabic"
+                                                    : "text-gray-500 font-noto-kufi-arabic"
+                                            }`}
+                                        >
+                                            {formData.file
+                                                ? formData.file.name
+                                                : "Choose files (PDF, DOC, JPG, PNG)"}
+                                        </span>
+                                        <span className="text-xs text-gray-600 font-noto-kufi-arabic bg-gray-200 px-3 py-1 rounded-sm font-medium">
+                                            BROWSE
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
 
-                        {/* Submit Button */}
-                        <div className="text-center pt-4">
-                            <Button
-                                type="submit"
-                                disabled={isSubmitting}
-                                className="bg-[#a5cd39] hover:bg-[#8fb32a] text-black px-12 py-4 text-sm font-semibold transition-all duration-200 rounded-md font-noto-kufi-arabic uppercase tracking-wider min-w-[200px] shadow-sm hover:shadow-md"
-                            >
-                                {isSubmitting ? (
-                                    <>
-                                        <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin mr-2" />
-                                        Processing...
-                                    </>
-                                ) : (
-                                    "SUBMIT REQUEST"
-                                )}
-                            </Button>
-                            {/* show this message on form submit */}
-                            <p className="text-white/90 text-2xl font-markazi-text mt-4 max-w-lg mx-auto leading-relaxed">
-                                Our team will review your requirements and
-                                provide a detailed proposal within 24 hours.
-                            </p>
-                        </div>
-                    </motion.form>
+                            {/* Row 4: Message */}
+                            <div className="space-y-2">
+                                <Textarea
+                                    id="message"
+                                    placeholder="Describe your booth requirements, design preferences, special features, or any specific customizations you need..."
+                                    value={formData.message}
+                                    onChange={e =>
+                                        handleInputChange(
+                                            "message",
+                                            e.target.value,
+                                        )
+                                    }
+                                    className="w-full min-h-[120px] px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md resize-none placeholder:text-gray-500 transition-all duration-200"
+                                    required
+                                />
+                            </div>
+
+                            {/* Submit Button */}
+                            <div className="text-center pt-4">
+                                <Button
+                                    type="submit"
+                                    disabled={isSubmitting}
+                                    className="bg-[#a5cd39] hover:bg-[#8fb32a] text-black px-12 py-4 text-sm font-semibold transition-all duration-200 rounded-md font-noto-kufi-arabic uppercase tracking-wider min-w-[200px] shadow-sm hover:shadow-md"
+                                >
+                                    {isSubmitting ? (
+                                        <>
+                                            <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin mr-2" />
+                                            Processing...
+                                        </>
+                                    ) : (
+                                        "SUBMIT REQUEST"
+                                    )}
+                                </Button>
+                                {/* show this message on form submit */}
+                                <p className="text-white/90 text-2xl font-markazi-text mt-4 max-w-lg mx-auto leading-relaxed">
+                                    Our team will review your requirements and
+                                    provide a detailed proposal within 24 hours.
+                                </p>
+                            </div>
+                        </motion.form>
+
+                        {/* Map Section */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, delay: 0.4 }}
+                            viewport={{ once: true }}
+                        >
+                            <h3 className="text-xl font-rubik font-bold text-white mb-4 text-center">
+                                Visit Our Location
+                            </h3>
+                            <div className="w-full h-[400px]">
+                                <iframe
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3610.1739405469!2d55.27218731501!3d25.197197083896!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f43496ad9c645%3A0xbde66e5084295162!2sDubai%20World%20Trade%20Centre!5e0!3m2!1sen!2sae!4v1639123456789!5m2!1sen!2sae"
+                                    width="100%"
+                                    height="100%"
+                                    style={{ border: 0 }}
+                                    allowFullScreen
+                                    loading="lazy"
+                                    referrerPolicy="no-referrer-when-downgrade"
+                                    title="Dubai World Trade Centre Location"
+                                ></iframe>
+                            </div>
+                        </motion.div>
+                    </div>
                 </div>
             </div>
         </section>
