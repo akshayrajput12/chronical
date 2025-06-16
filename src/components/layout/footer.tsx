@@ -14,9 +14,9 @@ import { motion } from "framer-motion";
 
 const Footer = () => {
     return (
-        <footer className="bg-[#2C2C2C] text-white py-10">
+        <footer className="bg-[#2C2C2C] text-white py-10 relative">
             <div className="mx-auto px-4">
-                <div className="grid grid-cols-1 md:grid-cols-13 gap-4 max-w-[1400px] mx-auto md:pr-0">
+                <div className="grid grid-cols-1 md:grid-cols-13 gap-4 max-w-[1400px] mx-auto md:pr-0 relative">
                     {/* Column 1: Services */}
                     <motion.div
                         className="px-2 md:col-span-2"
@@ -152,17 +152,26 @@ const Footer = () => {
                         </div>
                     </motion.div>
 
-                    {/* Column 5: Download Profile */}
+                    {/* Column 5: Download Profile - Colored Background Section */}
                     <motion.div
-                        className="px-2 flex flex-col h-full md:col-span-4 md:pr-0"
+                        className=" flex flex-col h-full md:col-span-4 md:pr-0 relative"
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.5 }}
                         viewport={{ once: true }}
                     >
-                        <div className="border border-gray-600 hover:border-[#a5cd39] rounded-md p-4 text-center transition-all duration-300 hover:shadow-[0_0_15px_rgba(165,205,57,0.3)] flex flex-col h-full justify-between mr-0">
+                        {/* Green background that covers the complete right side and full footer height */}
+                        <div
+                            className="absolute -left-2 -right-2 inset-y-0 -bottom-10 bg-[#a5cd39] md:rounded-none md:-inset-y-10 md:inset-x-0 md:right-0 md:w-[calc(100%+50px)] md:-mr-2"
+                            style={{
+                                marginLeft: "-8px",
+                                marginRight: "-8px",
+                            }}
+                        ></div>
+
+                        <div className="relative z-10 p-4 text-center flex flex-col h-full justify-between">
                             <div>
-                                <h3 className="mb-0.5 font-markazi font-medium">
+                                <h3 className="mb-0.5 font-markazi font-medium text-white">
                                     <span
                                         className="text-sm sm:text-base md:text-lg lg:text-xl"
                                         style={{ fontSize: "18px" }}
@@ -170,10 +179,10 @@ const Footer = () => {
                                         DOWNLOAD OUR
                                     </span>
                                 </h3>
-                                <h3 className="text-lg font-rubik font-bold mb-3 text-[#a5cd39]">
+                                <h3 className="text-lg font-rubik font-bold mb-3 text-white">
                                     COMPANY PROFILE
                                 </h3>
-                                <p className="text-xs font-noto-kufi-arabic text-gray-400 mb-4">
+                                <p className="text-xs font-noto-kufi-arabic text-white/90 mb-4">
                                     Get detailed information about our services,
                                     portfolio, and expertise in exhibition stand
                                     design. Our company profile includes our
@@ -184,7 +193,7 @@ const Footer = () => {
 
                             <Button
                                 variant="outline"
-                                className="border-[#a5cd39] bg-[#a5cd39] text-black hover:bg-transparent hover:text-[#a5cd39] w-full h-10 text-sm transition-all duration-300 group relative overflow-hidden"
+                                className="border-white bg-white text-[#a5cd39] hover:bg-transparent hover:text-white hover:border-white w-full h-10 text-sm transition-all duration-300 group relative overflow-hidden font-medium"
                             >
                                 <span className="flex items-center justify-center gap-1.5 relative z-10 group-hover:translate-x-1 transition-transform duration-300">
                                     <Download className="w-3.5 h-3.5 transition-transform duration-300" />
