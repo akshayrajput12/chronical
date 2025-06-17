@@ -67,7 +67,7 @@ const WhySection = () => {
 
     return (
         <section
-            className="relative overflow-hidden w-full py-8 md:py-12 lg:py-20 -mt-32 md:-mt-48 lg:-mt-64 z-10"
+            className="relative overflow-hidden w-full py-8 md:py-12 lg:py-20 -mt-32 md:-mt-48 lg:-mt-[300px] z-10"
             id="why-section"
             ref={ref}
         >
