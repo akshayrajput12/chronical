@@ -16,7 +16,7 @@ const CityDetailHero = ({ cityName, heroImage }: CityDetailHeroProps) => {
     return (
         <section className="w-full bg-white">
             {/* Full width hero container with background image */}
-            <div className="relative w-full h-[60vh] sm:h-[65vh] md:h-[70vh] lg:h-[75vh] overflow-hidden flex items-center justify-center">
+            <div className="relative w-full h-[80vh] overflow-hidden flex items-center justify-center">
                 {/* Background Image */}
                 <div className="absolute inset-0 z-0">
                     <Image
@@ -47,8 +47,8 @@ const CityDetailHero = ({ cityName, heroImage }: CityDetailHeroProps) => {
                             </motion.h1>
 
                             {/* Description Text - matching the reference image */}
-                            <motion.p
-                                className="text-sm sm:text-base md:text-lg lg:text-xl text-white/90 mb-8 sm:mb-10 max-w-4xl mx-auto leading-relaxed font-light"
+                            <motion.h3
+                                className="text-sm sm:text-base md:text-lg lg:text-xl text-white/90 mb-8 sm:mb-10 max-w-4xl mx-auto leading-relaxed font-markazi-text"
                                 initial={{ opacity: 0, y: 30 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8, delay: 0.2 }}
@@ -61,7 +61,7 @@ const CityDetailHero = ({ cityName, heroImage }: CityDetailHeroProps) => {
                                 complete display stand solutions, including
                                 designing, planning, fabricating and erecting
                                 and putting up.
-                            </motion.p>
+                            </motion.h3>
 
                             {/* Call-to-Action Button - matching the reference image */}
                             <motion.div

@@ -6,7 +6,7 @@ import Image from "next/image";
 
 const DoubleDeckerHero = () => {
     return (
-        <section className="relative h-[60vh] sm:h-[65vh] md:h-[70vh] lg:h-[75vh] overflow-hidden">
+        <section className="relative h-[80vh] overflow-hidden">
             {/* Background Image */}
             <div className="absolute inset-0">
                 <Image
@@ -33,7 +33,7 @@ const DoubleDeckerHero = () => {
                             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 uppercase tracking-wide leading-tight">
                                 DOUBLE DECKER EXHIBITION STANDS
                             </h1>
-                            <p className="text-sm sm:text-base lg:text-lg max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-3xl mx-auto leading-relaxed font-light tracking-wide">
+                            <h3 className="text-sm sm:text-base lg:text-lg max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-3xl mx-auto leading-relaxed font-markazi-text tracking-wide">
                                 Make your exhibit stand out and step up with our
                                 smartly created Double Decker Exhibition Stands.
                                 Engage your visitors with our stunning and
@@ -41,7 +41,7 @@ const DoubleDeckerHero = () => {
                                 of your space, and do not compromise in design.
                                 Impress your guests during trade shows and
                                 special events by incorporating these.
-                            </p>
+                            </h3>
                         </motion.div>
                     </div>
                 </div>

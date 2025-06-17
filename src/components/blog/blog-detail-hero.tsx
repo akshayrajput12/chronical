@@ -22,7 +22,7 @@ const BlogDetailHero = ({
     return (
         <section className="w-full bg-white">
             {/* Full width hero container with background image */}
-            <div className="relative w-full h-[60vh] sm:h-[65vh] md:h-[70vh] lg:h-[75vh] overflow-hidden flex items-center justify-center">
+            <div className="relative w-full h-[80vh] overflow-hidden flex items-center justify-center">
                 {/* Background Image */}
                 <div className="absolute inset-0 z-0">
                     <Image
@@ -108,9 +108,9 @@ const BlogDetailHero = ({
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.5 }}
                         >
-                            <h2 className="text-gray-800 font-serif text-xl md:text-2xl lg:text-3xl font-normal leading-relaxed text-center">
+                            <h3 className="text-gray-800 font-markazi-text text-xl md:text-2xl lg:text-3xl font-normal leading-relaxed text-center">
                                 {subtitle}
-                            </h2>
+                            </h3>
                         </motion.div>
                     </div>
                 </div>

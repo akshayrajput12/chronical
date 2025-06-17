@@ -42,7 +42,7 @@ export default function EventDetailPage() {
     return (
         <div className="min-h-screen bg-gray-100">
             {/* Hero Section - Full Width */}
-            <section className="relative h-[60vh] sm:h-[65vh] md:h-[70vh] lg:h-[75vh] w-full overflow-hidden">
+            <section className="relative h-[80vh] w-full overflow-hidden">
                 {/* Background Image - Same as Event Card */}
                 <Image
                     src={event.image}

@@ -7,7 +7,7 @@ import Image from "next/image";
 
 const BlogHero = () => {
     return (
-        <section className="relative h-[60vh] sm:h-[65vh] md:h-[70vh] lg:h-[75vh] min-h-[500px] flex items-center justify-center overflow-hidden">
+        <section className="relative h-[80vh] flex items-center justify-center overflow-hidden">
             {/* Background Image - Modern Architecture */}
             <div className="absolute inset-0 z-0">
                 <Image
@@ -31,14 +31,14 @@ const BlogHero = () => {
                 >
                     News & Press Releases
                 </motion.h1>
-                <motion.p
-                    className="text-sm sm:text-base md:text-lg lg:text-xl mb-8 max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-3xl mx-auto font-light leading-relaxed tracking-wide"
+                <motion.h3
+                    className="text-sm sm:text-base md:text-lg lg:text-xl mb-8 max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-3xl mx-auto font-markazi-text leading-relaxed tracking-wide"
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.2 }}
                 >
                     Stay up to date with the latest news and press releases.
-                </motion.p>
+                </motion.h3>
             </div>
 
             {/* Scroll Indicator */}
@@ -48,8 +48,8 @@ const BlogHero = () => {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.5 }}
                 onClick={() => {
-                    const blogSection = document.getElementById('blog-posts');
-                    blogSection?.scrollIntoView({ behavior: 'smooth' });
+                    const blogSection = document.getElementById("blog-posts");
+                    blogSection?.scrollIntoView({ behavior: "smooth" });
                 }}
             >
                 <ChevronDown className="w-8 h-8 animate-bounce hover:text-[#a5cd39] transition-colors" />
