@@ -175,9 +175,9 @@ const BusinessHubSection = () => {
             id="business-hub"
             className="bg-white py-8 sm:py-12 md:py-16 lg:py-20 relative overflow-hidden"
         >
-            <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-2 sm:gap-3 md:gap-4 items-start px-4 md:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-x-2 sm:gap-x-3 md:gap-x-4 items-start px-4 md:px-6 lg:px-8">
                 {/* Headings */}
-                <div className="w-full md:ml-8 lg:ml-12 xl:ml-16">
+                <div className="w-full">
                     <h2 className="text-2xl sm:text-3xl md:text-4xl font-rubik font-bold text-[#222] leading-tight">
                         <span className="text-[#222] font-rubik! block hover:translate-x-1 transition-transform duration-300">
                             {businessData.heading}

@@ -61,11 +61,6 @@ const NumberDisplay = ({ value, label }: { value: number; label?: string }) => {
     const [isVisible, setIsVisible] = React.useState(false);
     const elementRef = React.useRef<HTMLDivElement>(null);
 
-    // Special case for countries stat - show "50+" format
-    const isCountriesStat =
-        label?.toLowerCase().includes("countries") ||
-        label?.toLowerCase().includes("country");
-
     React.useEffect(() => {
         const observer = new IntersectionObserver(
             ([entry]) => {
@@ -84,7 +79,7 @@ const NumberDisplay = ({ value, label }: { value: number; label?: string }) => {
     }, [isVisible]);
 
     React.useEffect(() => {
-        if (isVisible && !isCountriesStat) {
+        if (isVisible) {
             const duration = 2000; // 2 seconds
             const steps = 60;
             const increment = value / steps;
@@ -103,11 +98,8 @@ const NumberDisplay = ({ value, label }: { value: number; label?: string }) => {
             }, duration / steps);
 
             return () => clearInterval(timer);
-        } else if (isVisible && isCountriesStat) {
-            // For countries, just set the display value immediately
-            setDisplayValue(value);
         }
-    }, [isVisible, value, isCountriesStat]);
+    }, [isVisible, value]);
 
     const formatNumber = (num: number) => {
         return (
@@ -216,7 +208,9 @@ const DynamicCell = () => {
                     );
                     // Set image error flag to use hardcoded fallback
                     setImageError(true);
-                    console.log("Using hardcoded fallback image due to database error");
+                    console.log(
+                        "Using hardcoded fallback image due to database error",
+                    );
                 } else if (
                     dynamicCellSection &&
                     dynamicCellSection.length > 0
@@ -240,7 +234,9 @@ const DynamicCell = () => {
                 } else {
                     // No data returned, use hardcoded fallback
                     setImageError(true);
-                    console.log("No dynamic cell data found, using hardcoded fallback image");
+                    console.log(
+                        "No dynamic cell data found, using hardcoded fallback image",
+                    );
                 }
 
                 // Get active business section
@@ -258,7 +254,9 @@ const DynamicCell = () => {
                         "Error fetching business section:",
                         sectionError,
                     );
-                    console.log("Using hardcoded business data due to database error");
+                    console.log(
+                        "Using hardcoded business data due to database error",
+                    );
                     setBusinessData(hardcodedBusinessData);
                     setImageError(true);
                     setLoading(false);
@@ -268,7 +266,9 @@ const DynamicCell = () => {
                 console.log("Business section data:", sectionData);
 
                 if (!sectionData) {
-                    console.log("No active business section found, using hardcoded data");
+                    console.log(
+                        "No active business section found, using hardcoded data",
+                    );
                     setBusinessData(hardcodedBusinessData);
                     setImageError(true);
                     setLoading(false);
@@ -288,7 +288,9 @@ const DynamicCell = () => {
                         "Error fetching business paragraphs:",
                         paragraphsError,
                     );
-                    console.log("Using hardcoded business data due to paragraphs error");
+                    console.log(
+                        "Using hardcoded business data due to paragraphs error",
+                    );
                     setBusinessData(hardcodedBusinessData);
                     setImageError(true);
                     setLoading(false);
@@ -306,7 +308,9 @@ const DynamicCell = () => {
 
                 if (statsError) {
                     console.error("Error fetching business stats:", statsError);
-                    console.log("Using hardcoded business data due to stats error");
+                    console.log(
+                        "Using hardcoded business data due to stats error",
+                    );
                     setBusinessData(hardcodedBusinessData);
                     setImageError(true);
                     setLoading(false);
@@ -328,7 +332,9 @@ const DynamicCell = () => {
                 setBusinessData(combinedData);
             } catch (error) {
                 console.error("Unexpected error in fetchBusinessData:", error);
-                console.log("Using hardcoded business data due to unexpected error");
+                console.log(
+                    "Using hardcoded business data due to unexpected error",
+                );
                 setBusinessData(hardcodedBusinessData);
                 setImageError(true);
             } finally {
@@ -347,7 +353,7 @@ const DynamicCell = () => {
         >
             {/* Background Image - Full width and height, positioned behind content */}
             <motion.div
-                className="absolute inset-0 w-full h-full z-0"
+                className="absolute inset-0 w-full h-[90%] z-0"
                 variants={imageVariants}
                 initial="hidden"
                 animate={controls}
@@ -370,12 +376,15 @@ const DynamicCell = () => {
                     sizes="100vw"
                     quality={100}
                     onError={() => {
-                        console.log("Image failed to load, using hardcoded fallback");
+                        console.log(
+                            "Image failed to load, using hardcoded fallback",
+                        );
                         setImageError(true);
                     }}
                 />
+                {/* Dark Overlay */}
+                <div className="absolute inset-0 bg-[#1a1a1a]/60 z-10" />
             </motion.div>
-
             {/* Content overlay - Centered horizontally but at the top of the section */}
             <motion.div
                 className="relative z-10 h-full w-full flex flex-col items-center justify-center md:justify-start text-center px-4 py-8 md:pt-32 lg:pt-40"
@@ -401,7 +410,7 @@ const DynamicCell = () => {
                             {/* Label */}
                             <div
                                 className={
-                                    "text-[#333] text-base sm:text-lg md:text-xl lg:text-2xl mt-2 hover:-translate-y-0.5 transition-transform duration-200 font-medium font-markazi-text"
+                                    "text-[#ffffff] text-base sm:text-lg md:text-xl lg:text-2xl mt-2 hover:-translate-y-0.5 transition-transform duration-200 font-medium font-markazi-text"
                                 }
                             >
                                 {stat.label}

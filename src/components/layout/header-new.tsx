@@ -398,7 +398,7 @@ const Header = () => {
                                                             <SubNavItem
                                                                 href="/visit-us"
                                                                 label="EXHIBITION STANDS"
-                                                                subLabel="Hotels, dining and amenities"
+                                                                subLabel="Bespoke designs, built to impress"
                                                                 isActive={
                                                                     pathname ===
                                                                     "/visit-us"
@@ -484,7 +484,7 @@ const Header = () => {
                                                         <SubNavItem
                                                             href="/whats-on"
                                                             label="TOP EXHIBITIONS"
-                                                            subLabel="Upcoming exhibitions and events"
+                                                            subLabel="Explore major upcoming exhibitions"
                                                             isActive={
                                                                 pathname ===
                                                                     "/whats-on" ||
@@ -509,7 +509,7 @@ const Header = () => {
                                                             <SubNavItem
                                                                 href="/experience-dubai"
                                                                 label="TOP EXPO LOCATIONS"
-                                                                subLabel="The best Dubai has to offer"
+                                                                subLabel="Premier venues across Dubai & the region"
                                                                 isActive={
                                                                     pathname ===
                                                                     "/experience-dubai"
@@ -532,7 +532,7 @@ const Header = () => {
                                                             <SubNavItem
                                                                 href="/portfolio"
                                                                 label="PORTFOLIO"
-                                                                subLabel="Our exhibition stand projects"
+                                                                subLabel="Showcasing our finest stand creations"
                                                                 isActive={
                                                                     pathname ===
                                                                     "/portfolio"
