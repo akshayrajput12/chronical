@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState, useMemo } from "react";
 import { motion, useAnimation, Variants } from "framer-motion";
-import { supabase } from "@/lib/supabase";
+import { getSetupProcessData } from "@/services/setup-process.service";
 import {
     SetupProcessDisplayData,
     SetupProcessStep,
@@ -27,6 +27,7 @@ const SetupProcess = () => {
                 "Form a new company with quick and easy steps via our eServices platform.",
             background_image_url:
                 "https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80",
+            background_image_id: null,
             how_to_apply_steps: [
                 {
                     id: "1",
@@ -74,59 +75,18 @@ const SetupProcess = () => {
     useEffect(() => {
         const fetchSetupProcessData = async () => {
             try {
-                // Get section data
-                const { data: sectionData, error: sectionError } =
-                    await supabase
-                        .from("setup_process_section")
-                        .select("*")
-                        .eq("is_active", true)
-                        .single();
-
-                if (sectionError || !sectionData) {
+                console.log("Fetching setup process data...");
+                const data = await getSetupProcessData();
+                console.log("Setup process data received:", data);
+                
+                if (data) {
+                    setSetupData(data);
+                } else {
                     console.log(
-                        "No setup process section found, using default data",
+                        "No setup process data found, using default data",
                     );
                     setSetupData(defaultData);
-                    setLoading(false);
-                    return;
                 }
-
-                // Get steps data
-                const { data: stepsData, error: stepsError } = await supabase
-                    .from("setup_process_steps")
-                    .select("*")
-                    .eq("section_id", sectionData.id)
-                    .eq("is_active", true)
-                    .order("display_order", { ascending: true });
-
-                if (stepsError) {
-                    console.error(
-                        "Error fetching setup process steps:",
-                        stepsError,
-                    );
-                    setSetupData(defaultData);
-                    setLoading(false);
-                    return;
-                }
-
-                // Organize steps by category
-                const howToApplySteps =
-                    stepsData?.filter(
-                        step => step.category === "how_to_apply",
-                    ) || [];
-                const gettingStartedSteps =
-                    stepsData?.filter(
-                        step => step.category === "getting_started",
-                    ) || [];
-
-                setSetupData({
-                    id: sectionData.id,
-                    title: sectionData.title,
-                    subtitle: sectionData.subtitle,
-                    background_image_url: sectionData.background_image_url,
-                    how_to_apply_steps: howToApplySteps,
-                    getting_started_steps: gettingStartedSteps,
-                });
             } catch (error) {
                 console.error("Error fetching setup process data:", error);
                 setSetupData(defaultData);

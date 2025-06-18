@@ -13,6 +13,10 @@ import {
     Settings,
     Diamond,
     Circle,
+    Upload,
+    Image,
+    Check,
+    X,
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
@@ -40,7 +44,17 @@ import {
     SetupProcessStep,
     SetupProcessStepInput,
     SetupProcessSectionWithDetails,
+    SetupProcessImage,
+    SETUP_PROCESS_IMAGE_CONSTRAINTS,
+    SupportedImageFormat,
 } from "@/types/setup-process";
+import {
+    getSetupProcessImages,
+    uploadSetupProcessImage,
+    saveSetupProcessImageRecord,
+    setActiveSetupProcessImage,
+    deleteSetupProcessImage,
+} from "@/services/setup-process.service";
 
 const SetupProcessEditor = () => {
     // Animation variants
@@ -67,6 +81,7 @@ const SetupProcessEditor = () => {
                 "Form a new company with quick and easy steps via our eServices platform.",
             background_image_url:
                 "https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80",
+            background_image_id: null,
             is_active: true,
             steps: [],
         });
@@ -74,6 +89,11 @@ const SetupProcessEditor = () => {
     const [sectionId, setSectionId] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
+
+    // State for image management
+    const [images, setImages] = useState<SetupProcessImage[]>([]);
+    const [uploading, setUploading] = useState(false);
+    const [activeImage, setActiveImage] = useState<SetupProcessImage | null>(null);
 
     // Fetch setup process data on component mount
     useEffect(() => {
@@ -122,6 +142,7 @@ const SetupProcessEditor = () => {
                         title: sectionData.title,
                         subtitle: sectionData.subtitle,
                         background_image_url: sectionData.background_image_url,
+                        background_image_id: sectionData.background_image_id,
                         is_active: sectionData.is_active,
                         steps:
                             stepsData?.map(step => ({
@@ -135,6 +156,14 @@ const SetupProcessEditor = () => {
                             })) || [],
                     });
                 }
+
+                // Fetch images
+                const imagesData = await getSetupProcessImages();
+                setImages(imagesData);
+                
+                // Find active image
+                const active = imagesData.find(img => img.is_active);
+                setActiveImage(active || null);
             } catch (error) {
                 console.error("Error fetching setup process data:", error);
                 toast.error("Failed to load setup process data");
@@ -251,6 +280,130 @@ const SetupProcessEditor = () => {
         });
     };
 
+    // Handle file upload
+    const handleFileUpload = async (files: FileList | null) => {
+        if (!files || files.length === 0) return;
+
+        const file = files[0];
+
+        if (!SETUP_PROCESS_IMAGE_CONSTRAINTS.SUPPORTED_FORMATS.includes(file.type as SupportedImageFormat)) {
+            toast.error("Unsupported file format. Please use JPG, PNG, or WebP.");
+            return;
+        }
+
+        if (file.size > SETUP_PROCESS_IMAGE_CONSTRAINTS.MAX_FILE_SIZE) {
+            toast.error("File size too large. Maximum size is 10MB.");
+            return;
+        }
+
+        // Check if there's already an active image
+        if (activeImage) {
+            const confirmed = window.confirm(
+                "There's already an active background image. Uploading a new image will replace the current one. Do you want to continue?"
+            );
+            if (!confirmed) {
+                return;
+            }
+        }
+
+        setUploading(true);
+        try {
+            // Upload to storage and save to database (automatically sets as active)
+            const uploadResult = await uploadSetupProcessImage(file);
+            
+            if (!uploadResult.success) {
+                toast.error(uploadResult.error || "Failed to upload image");
+                return;
+            }
+
+            // Refresh images list
+            const imagesData = await getSetupProcessImages();
+            setImages(imagesData);
+            
+            // Update active image
+            const newActive = imagesData.find(img => img.is_active);
+            setActiveImage(newActive || null);
+            
+            // Update section data
+            if (uploadResult.imageId) {
+                setSectionData(prev => ({
+                    ...prev,
+                    background_image_id: uploadResult.imageId || null,
+                }));
+            }
+
+            toast.success("Image uploaded and set as active background");
+        } catch (error) {
+            console.error("Error uploading:", error);
+            toast.error("Failed to upload image");
+        } finally {
+            setUploading(false);
+        }
+    };
+
+    // Handle setting active image
+    const handleSetActiveImage = async (imageId: string) => {
+        try {
+            const result = await setActiveSetupProcessImage(imageId);
+            
+            if (!result.success) {
+                toast.error(result.error || "Failed to set active image");
+                return;
+            }
+
+            // Update local state
+            setImages(prev =>
+                prev.map(img => ({
+                    ...img,
+                    is_active: img.id === imageId,
+                })),
+            );
+
+            const newActiveImage = images.find(img => img.id === imageId);
+            setActiveImage(newActiveImage || null);
+
+            // Update section data
+            setSectionData(prev => ({
+                ...prev,
+                background_image_id: imageId,
+            }));
+
+            toast.success("Background image updated successfully");
+        } catch (error) {
+            console.error("Error setting active image:", error);
+            toast.error("Failed to set active image");
+        }
+    };
+
+    // Handle deleting image
+    const handleDeleteImage = async (imageId: string, filePath: string) => {
+        try {
+            const result = await deleteSetupProcessImage(imageId, filePath);
+            
+            if (!result.success) {
+                toast.error(result.error || "Failed to delete image");
+                return;
+            }
+
+            // Update local state
+            setImages(prev => prev.filter(img => img.id !== imageId));
+            
+            // If this was the active image, clear it
+            if (activeImage?.id === imageId) {
+                setActiveImage(null);
+                setSectionData(prev => ({
+                    ...prev,
+                    background_image_id: null,
+                }));
+            }
+
+            toast.success("Image deleted successfully");
+        } catch (error) {
+            console.error("Error deleting image:", error);
+            toast.error("Failed to delete image");
+        }
+    };
+
     // Save setup process data
     const saveSetupProcessData = async () => {
         setSaving(true);
@@ -265,6 +418,7 @@ const SetupProcessEditor = () => {
                         title: sectionData.title,
                         subtitle: sectionData.subtitle,
                         background_image_url: sectionData.background_image_url,
+                        background_image_id: sectionData.background_image_id,
                         is_active: sectionData.is_active,
                     })
                     .eq("id", currentSectionId);
@@ -284,6 +438,7 @@ const SetupProcessEditor = () => {
                         title: sectionData.title,
                         subtitle: sectionData.subtitle,
                         background_image_url: sectionData.background_image_url,
+                        background_image_id: sectionData.background_image_id,
                         is_active: sectionData.is_active,
                     })
                     .select("id")
@@ -377,8 +532,7 @@ const SetupProcessEditor = () => {
                         Setup Process Management
                     </h1>
                     <p className="text-gray-600 mt-1">
-                        Manage the setup process steps that appear on the
-                        website
+                        Manage the setup process steps and background image
                     </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -397,12 +551,10 @@ const SetupProcessEditor = () => {
                                     Setup Process Management
                                 </p>
                                 <p>
-                                    Configure the setup process section
-                                    including the main title, subtitle,
-                                    background image, and individual steps.
-                                    Steps are categorized into "How To Apply"
-                                    (diamond icons) and "Getting Started"
-                                    (circle icons).
+                                    Configure the setup process section including the main title, subtitle,
+                                    background image, and individual steps. Upload and manage background images
+                                    with static dimensions (1920x1080). Steps are categorized into "How To Apply"
+                                    (diamond icons) and "Getting Started" (circle icons).
                                 </p>
                             </div>
                         </div>
@@ -413,10 +565,11 @@ const SetupProcessEditor = () => {
             {/* Main Content */}
             <motion.div variants={itemVariants}>
                 <Tabs defaultValue="section" className="space-y-6">
-                    <TabsList className="grid w-full grid-cols-3">
+                    <TabsList className="grid w-full grid-cols-4">
                         <TabsTrigger value="section">
                             Section Settings
                         </TabsTrigger>
+                        <TabsTrigger value="images">Background Images</TabsTrigger>
                         <TabsTrigger value="steps">Manage Steps</TabsTrigger>
                         <TabsTrigger value="preview">Preview</TabsTrigger>
                     </TabsList>
@@ -427,8 +580,7 @@ const SetupProcessEditor = () => {
                             <CardHeader>
                                 <CardTitle>Section Configuration</CardTitle>
                                 <CardDescription>
-                                    Configure the main section title, subtitle,
-                                    and background image
+                                    Configure the main section title, subtitle, and background image
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">
@@ -465,7 +617,7 @@ const SetupProcessEditor = () => {
                                 </div>
                                 <div>
                                     <Label htmlFor="background_image">
-                                        Background Image URL
+                                        Fallback Background Image URL
                                     </Label>
                                     <Input
                                         id="background_image"
@@ -479,8 +631,132 @@ const SetupProcessEditor = () => {
                                                 e.target.value,
                                             )
                                         }
-                                        placeholder="Enter background image URL"
+                                        placeholder="Enter fallback background image URL"
                                     />
+                                    <p className="text-sm text-gray-500 mt-1">
+                                        This URL will be used if no uploaded image is active
+                                    </p>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </TabsContent>
+
+                    {/* Background Images Tab */}
+                    <TabsContent value="images">
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Background Image Management</CardTitle>
+                                <CardDescription>
+                                    Upload and manage background images for the setup process section
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-6">
+                                {/* Upload Section */}
+                                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
+                                    <div className="text-center">
+                                        <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                                        <h3 className="text-lg font-medium text-gray-900 mb-2">
+                                            Upload Background Image
+                                        </h3>
+                                        <p className="text-sm text-gray-500 mb-4">
+                                            Upload JPG, PNG, or WebP images (max 10MB). 
+                                            Images will be treated as 1920x1080 for consistent display.
+                                        </p>
+                                        <input
+                                            type="file"
+                                            accept="image/jpeg,image/jpg,image/png,image/webp"
+                                            onChange={(e) => handleFileUpload(e.target.files)}
+                                            className="hidden"
+                                            id="setup-process-image-upload"
+                                            disabled={uploading}
+                                        />
+                                        <label 
+                                            htmlFor="setup-process-image-upload"
+                                            className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#a5cd39] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                                        >
+                                            {uploading ? (
+                                                <>
+                                                    <span className="animate-spin h-4 w-4 border-2 border-gray-600 border-t-transparent rounded-full mr-2"></span>
+                                                    Uploading...
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Image className="h-4 w-4 mr-2" />
+                                                    Choose Image
+                                                </>
+                                            )}
+                                        </label>
+                                    </div>
+                                </div>
+
+                                {/* Images Grid */}
+                                <div>
+                                    <h3 className="text-lg font-medium text-gray-900 mb-4">
+                                        Uploaded Images ({images.length})
+                                    </h3>
+                                    {images.length === 0 ? (
+                                        <div className="text-center py-8 text-gray-500">
+                                            <Image className="h-12 w-12 mx-auto mb-2 text-gray-300" />
+                                            <p>No images uploaded yet</p>
+                                        </div>
+                                    ) : (
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                            {images.map((image) => (
+                                                <div
+                                                    key={image.id}
+                                                    className="border rounded-lg overflow-hidden bg-white"
+                                                >
+                                                    <div className="relative">
+                                                        <img
+                                                            src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/setup-process-images/${image.file_path}`}
+                                                            alt={image.alt_text}
+                                                            className="w-full h-32 object-cover"
+                                                            onError={(e) => {
+                                                                const target = e.target as HTMLImageElement;
+                                                                target.style.display = 'none';
+                                                                const fallback = target.nextElementSibling as HTMLElement;
+                                                                if (fallback) fallback.style.display = 'flex';
+                                                            }}
+                                                        />
+                                                        <div className="hidden w-full h-32 bg-gray-200 flex items-center justify-center">
+                                                            <Image className="h-8 w-8 text-gray-400" />
+                                                        </div>
+                                                        {image.is_active && (
+                                                            <div className="absolute top-2 right-2 bg-green-500 text-white rounded-full p-1">
+                                                                <Check className="h-4 w-4" />
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    <div className="p-3">
+                                                        <p className="text-sm font-medium text-gray-900 truncate">
+                                                            {image.original_filename}
+                                                        </p>
+                                                        <p className="text-xs text-gray-500">
+                                                            {(image.file_size / 1024 / 1024).toFixed(1)}MB
+                                                        </p>
+                                                        <div className="flex gap-2 mt-2">
+                                                            {!image.is_active && (
+                                                                <Button
+                                                                    size="sm"
+                                                                    onClick={() => handleSetActiveImage(image.id)}
+                                                                    className="flex-1"
+                                                                >
+                                                                    Set Active
+                                                                </Button>
+                                                            )}
+                                                            <Button
+                                                                size="sm"
+                                                                variant="destructive"
+                                                                onClick={() => handleDeleteImage(image.id, image.file_path)}
+                                                            >
+                                                                <Trash className="h-3 w-3" />
+                                                            </Button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
                             </CardContent>
                         </Card>
@@ -492,8 +768,7 @@ const SetupProcessEditor = () => {
                             <CardHeader>
                                 <CardTitle>Setup Process Steps</CardTitle>
                                 <CardDescription>
-                                    Add, edit, and reorder the setup process
-                                    steps
+                                    Add, edit, and reorder the setup process steps
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>
@@ -676,8 +951,7 @@ const SetupProcessEditor = () => {
                             <CardHeader>
                                 <CardTitle>Preview</CardTitle>
                                 <CardDescription>
-                                    Preview how the setup process will appear on
-                                    the website
+                                    Preview how the setup process will appear on the website
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>
