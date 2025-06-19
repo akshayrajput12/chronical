@@ -10,12 +10,14 @@ import { CheckCircle } from "lucide-react";
 
 const ContactForm = () => {
     const [formData, setFormData] = useState({
-        firstName: "",
-        lastName: "",
+        name: "",
+        exhibitionName: "",
+        companyName: "",
         email: "",
-        contactNumber: "",
-        organization: "",
+        phone: "",
+        budget: "",
         message: "",
+        file: null as File | null,
     });
 
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -26,6 +28,14 @@ const ContactForm = () => {
         setFormData(prev => ({
             ...prev,
             [field]: value,
+        }));
+    };
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0] || null;
+        setFormData(prev => ({
+            ...prev,
+            file,
         }));
     };
 
@@ -43,12 +53,14 @@ const ContactForm = () => {
         setTimeout(() => {
             setIsSubmitted(false);
             setFormData({
-                firstName: "",
-                lastName: "",
+                name: "",
+                exhibitionName: "",
+                companyName: "",
                 email: "",
-                contactNumber: "",
-                organization: "",
+                phone: "",
+                budget: "",
                 message: "",
+                file: null,
             });
             setAgreedToTerms(false);
         }, 3000);
@@ -109,18 +121,18 @@ const ContactForm = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                             <div className="space-y-3">
                                 <Label
-                                    htmlFor="firstName"
+                                    htmlFor="name"
                                     className="text-sm font-medium text-gray-800"
                                 >
-                                    First Name*
+                                    Full Name*
                                 </Label>
                                 <Input
-                                    id="firstName"
+                                    id="name"
                                     type="text"
-                                    value={formData.firstName}
+                                    value={formData.name}
                                     onChange={e =>
                                         handleInputChange(
-                                            "firstName",
+                                            "name",
                                             e.target.value,
                                         )
                                     }
@@ -131,18 +143,18 @@ const ContactForm = () => {
 
                             <div className="space-y-3">
                                 <Label
-                                    htmlFor="lastName"
+                                    htmlFor="exhibitionName"
                                     className="text-sm font-medium text-gray-800"
                                 >
-                                    Last Name*
+                                    Exhibition Name*
                                 </Label>
                                 <Input
-                                    id="lastName"
+                                    id="exhibitionName"
                                     type="text"
-                                    value={formData.lastName}
+                                    value={formData.exhibitionName}
                                     onChange={e =>
                                         handleInputChange(
-                                            "lastName",
+                                            "exhibitionName",
                                             e.target.value,
                                         )
                                     }
@@ -177,18 +189,43 @@ const ContactForm = () => {
 
                             <div className="space-y-3">
                                 <Label
-                                    htmlFor="contactNumber"
+                                    htmlFor="phone"
                                     className="text-sm font-medium text-gray-800"
                                 >
-                                    Contact Number*
+                                    Phone Number*
                                 </Label>
                                 <Input
-                                    id="contactNumber"
+                                    id="phone"
                                     type="tel"
-                                    value={formData.contactNumber}
+                                    placeholder="Enter phone number with country code"
+                                    value={formData.phone}
                                     onChange={e =>
                                         handleInputChange(
-                                            "contactNumber",
+                                            "phone",
+                                            e.target.value,
+                                        )
+                                    }
+                                    className="w-full h-12 px-4 py-3 text-base border border-gray-300 focus:ring-2 focus:ring-[#a5cd39] focus:border-[#a5cd39] bg-white rounded-md shadow-sm"
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 gap-6 mb-6">
+                            <div className="space-y-3">
+                                <Label
+                                    htmlFor="companyName"
+                                    className="text-sm font-medium text-gray-800"
+                                >
+                                    Company Name*
+                                </Label>
+                                <Input
+                                    id="companyName"
+                                    type="text"
+                                    value={formData.companyName}
+                                    onChange={e =>
+                                        handleInputChange(
+                                            "companyName",
                                             e.target.value,
                                         )
                                     }
@@ -201,23 +238,36 @@ const ContactForm = () => {
                         <div className="mb-6">
                             <div className="space-y-3">
                                 <Label
-                                    htmlFor="organization"
+                                    htmlFor="file-upload"
                                     className="text-sm font-medium text-gray-800"
                                 >
-                                    Organization / Company
+                                    Upload Documents (Optional)
                                 </Label>
-                                <Input
-                                    id="organization"
-                                    type="text"
-                                    value={formData.organization}
-                                    onChange={e =>
-                                        handleInputChange(
-                                            "organization",
-                                            e.target.value,
-                                        )
-                                    }
-                                    className="w-full h-12 px-4 py-3 text-base border border-gray-300 focus:ring-2 focus:ring-[#a5cd39] focus:border-[#a5cd39] bg-white rounded-md shadow-sm"
-                                />
+                                <div className="relative">
+                                    <input
+                                        type="file"
+                                        id="file-upload"
+                                        onChange={handleFileChange}
+                                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                        accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                                    />
+                                    <div className="flex items-center justify-between w-full h-12 px-4 py-2 text-sm bg-white border border-gray-300 hover:border-[#a5cd39] focus-within:border-[#a5cd39] rounded-md cursor-pointer transition-all duration-200">
+                                        <span
+                                            className={`${
+                                                formData.file
+                                                    ? "text-gray-700"
+                                                    : "text-gray-500"
+                                            }`}
+                                        >
+                                            {formData.file
+                                                ? formData.file.name
+                                                : "Choose files (PDF, DOC, JPG, PNG)"}
+                                        </span>
+                                        <span className="text-xs text-gray-600 bg-gray-200 px-3 py-1 rounded-sm font-medium">
+                                            BROWSE
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -232,6 +282,7 @@ const ContactForm = () => {
                                 <Textarea
                                     id="message"
                                     value={formData.message}
+                                    placeholder="Describe your requirements, preferences, or any specific details..."
                                     onChange={e =>
                                         handleInputChange(
                                             "message",
