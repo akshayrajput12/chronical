@@ -269,7 +269,7 @@ const NewCompany = () => {
     return (
         <section
             ref={ref}
-            className="py-20 bg-white -mt-1 overflow-hidden"
+            className="bg-white overflow-hidden"
             id="new-company"
         >
             <div className="lg:pl-32 lg:px-0 px-6 w-full">
@@ -325,7 +325,7 @@ const NewCompany = () => {
                         transition={{ duration: 0.8, delay: 0.3 }}
                     >
                         <ImageScrollGrid
-                            className="h-[400px] sm:h-[550px]"
+                            className="h-[400px] sm:h-[550px] 2xl:h-[600px]"
                             columnImages={images}
                         />
                     </motion.div>
