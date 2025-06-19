@@ -93,7 +93,9 @@ const SetupProcessEditor = () => {
     // State for image management
     const [images, setImages] = useState<SetupProcessImage[]>([]);
     const [uploading, setUploading] = useState(false);
-    const [activeImage, setActiveImage] = useState<SetupProcessImage | null>(null);
+    const [activeImage, setActiveImage] = useState<SetupProcessImage | null>(
+        null,
+    );
 
     // Fetch setup process data on component mount
     useEffect(() => {
@@ -160,7 +162,7 @@ const SetupProcessEditor = () => {
                 // Fetch images
                 const imagesData = await getSetupProcessImages();
                 setImages(imagesData);
-                
+
                 // Find active image
                 const active = imagesData.find(img => img.is_active);
                 setActiveImage(active || null);
@@ -286,8 +288,14 @@ const SetupProcessEditor = () => {
 
         const file = files[0];
 
-        if (!SETUP_PROCESS_IMAGE_CONSTRAINTS.SUPPORTED_FORMATS.includes(file.type as SupportedImageFormat)) {
-            toast.error("Unsupported file format. Please use JPG, PNG, or WebP.");
+        if (
+            !SETUP_PROCESS_IMAGE_CONSTRAINTS.SUPPORTED_FORMATS.includes(
+                file.type as SupportedImageFormat,
+            )
+        ) {
+            toast.error(
+                "Unsupported file format. Please use JPG, PNG, or WebP.",
+            );
             return;
         }
 
@@ -299,7 +307,7 @@ const SetupProcessEditor = () => {
         // Check if there's already an active image
         if (activeImage) {
             const confirmed = window.confirm(
-                "There's already an active background image. Uploading a new image will replace the current one. Do you want to continue?"
+                "There's already an active background image. Uploading a new image will replace the current one. Do you want to continue?",
             );
             if (!confirmed) {
                 return;
@@ -310,7 +318,7 @@ const SetupProcessEditor = () => {
         try {
             // Upload to storage and save to database (automatically sets as active)
             const uploadResult = await uploadSetupProcessImage(file);
-            
+
             if (!uploadResult.success) {
                 toast.error(uploadResult.error || "Failed to upload image");
                 return;
@@ -319,11 +327,11 @@ const SetupProcessEditor = () => {
             // Refresh images list
             const imagesData = await getSetupProcessImages();
             setImages(imagesData);
-            
+
             // Update active image
             const newActive = imagesData.find(img => img.is_active);
             setActiveImage(newActive || null);
-            
+
             // Update section data
             if (uploadResult.imageId) {
                 setSectionData(prev => ({
@@ -345,7 +353,7 @@ const SetupProcessEditor = () => {
     const handleSetActiveImage = async (imageId: string) => {
         try {
             const result = await setActiveSetupProcessImage(imageId);
-            
+
             if (!result.success) {
                 toast.error(result.error || "Failed to set active image");
                 return;
@@ -379,7 +387,7 @@ const SetupProcessEditor = () => {
     const handleDeleteImage = async (imageId: string, filePath: string) => {
         try {
             const result = await deleteSetupProcessImage(imageId, filePath);
-            
+
             if (!result.success) {
                 toast.error(result.error || "Failed to delete image");
                 return;
@@ -387,7 +395,7 @@ const SetupProcessEditor = () => {
 
             // Update local state
             setImages(prev => prev.filter(img => img.id !== imageId));
-            
+
             // If this was the active image, clear it
             if (activeImage?.id === imageId) {
                 setActiveImage(null);
@@ -551,10 +559,13 @@ const SetupProcessEditor = () => {
                                     Setup Process Management
                                 </p>
                                 <p>
-                                    Configure the setup process section including the main title, subtitle,
-                                    background image, and individual steps. Upload and manage background images
-                                    with static dimensions (1920x1080). Steps are categorized into "How To Apply"
-                                    (diamond icons) and "Getting Started" (circle icons).
+                                    Configure the setup process section
+                                    including the main title, subtitle,
+                                    background image, and individual steps.
+                                    Upload and manage background images with
+                                    static dimensions (1920x1080). Steps are
+                                    categorized into "How To Apply" (diamond
+                                    icons) and "Getting Started" (circle icons).
                                 </p>
                             </div>
                         </div>
@@ -569,7 +580,9 @@ const SetupProcessEditor = () => {
                         <TabsTrigger value="section">
                             Section Settings
                         </TabsTrigger>
-                        <TabsTrigger value="images">Background Images</TabsTrigger>
+                        <TabsTrigger value="images">
+                            Background Images
+                        </TabsTrigger>
                         <TabsTrigger value="steps">Manage Steps</TabsTrigger>
                         <TabsTrigger value="preview">Preview</TabsTrigger>
                     </TabsList>
@@ -580,7 +593,8 @@ const SetupProcessEditor = () => {
                             <CardHeader>
                                 <CardTitle>Section Configuration</CardTitle>
                                 <CardDescription>
-                                    Configure the main section title, subtitle, and background image
+                                    Configure the main section title, subtitle,
+                                    and background image
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">
@@ -634,7 +648,8 @@ const SetupProcessEditor = () => {
                                         placeholder="Enter fallback background image URL"
                                     />
                                     <p className="text-sm text-gray-500 mt-1">
-                                        This URL will be used if no uploaded image is active
+                                        This URL will be used if no uploaded
+                                        image is active
                                     </p>
                                 </div>
                             </CardContent>
@@ -645,9 +660,12 @@ const SetupProcessEditor = () => {
                     <TabsContent value="images">
                         <Card>
                             <CardHeader>
-                                <CardTitle>Background Image Management</CardTitle>
+                                <CardTitle>
+                                    Background Image Management
+                                </CardTitle>
                                 <CardDescription>
-                                    Upload and manage background images for the setup process section
+                                    Upload and manage background images for the
+                                    setup process section
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-6">
@@ -659,18 +677,21 @@ const SetupProcessEditor = () => {
                                             Upload Background Image
                                         </h3>
                                         <p className="text-sm text-gray-500 mb-4">
-                                            Upload JPG, PNG, or WebP images (max 10MB). 
-                                            Images will be treated as 1920x1080 for consistent display.
+                                            Upload JPG, PNG, or WebP images (max
+                                            10MB). Images will be treated as
+                                            1920x1080 for consistent display.
                                         </p>
                                         <input
                                             type="file"
                                             accept="image/jpeg,image/jpg,image/png,image/webp"
-                                            onChange={(e) => handleFileUpload(e.target.files)}
+                                            onChange={e =>
+                                                handleFileUpload(e.target.files)
+                                            }
                                             className="hidden"
                                             id="setup-process-image-upload"
                                             disabled={uploading}
                                         />
-                                        <label 
+                                        <label
                                             htmlFor="setup-process-image-upload"
                                             className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#a5cd39] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                                         >
@@ -681,7 +702,11 @@ const SetupProcessEditor = () => {
                                                 </>
                                             ) : (
                                                 <>
-                                                    <Image className="h-4 w-4 mr-2" />
+                                                    {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                                                    <Image
+                                                        className="h-4 w-4 mr-2"
+                                                        aria-hidden="true"
+                                                    />
                                                     Choose Image
                                                 </>
                                             )}
@@ -696,12 +721,16 @@ const SetupProcessEditor = () => {
                                     </h3>
                                     {images.length === 0 ? (
                                         <div className="text-center py-8 text-gray-500">
-                                            <Image className="h-12 w-12 mx-auto mb-2 text-gray-300" />
+                                            {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                                            <Image
+                                                className="h-12 w-12 mx-auto mb-2 text-gray-300"
+                                                aria-hidden="true"
+                                            />
                                             <p>No images uploaded yet</p>
                                         </div>
                                     ) : (
                                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                            {images.map((image) => (
+                                            {images.map(image => (
                                                 <div
                                                     key={image.id}
                                                     className="border rounded-lg overflow-hidden bg-white"
@@ -711,15 +740,24 @@ const SetupProcessEditor = () => {
                                                             src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/setup-process-images/${image.file_path}`}
                                                             alt={image.alt_text}
                                                             className="w-full h-32 object-cover"
-                                                            onError={(e) => {
-                                                                const target = e.target as HTMLImageElement;
-                                                                target.style.display = 'none';
-                                                                const fallback = target.nextElementSibling as HTMLElement;
-                                                                if (fallback) fallback.style.display = 'flex';
+                                                            onError={e => {
+                                                                const target =
+                                                                    e.target as HTMLImageElement;
+                                                                target.style.display =
+                                                                    "none";
+                                                                const fallback =
+                                                                    target.nextElementSibling as HTMLElement;
+                                                                if (fallback)
+                                                                    fallback.style.display =
+                                                                        "flex";
                                                             }}
                                                         />
                                                         <div className="hidden w-full h-32 bg-gray-200 flex items-center justify-center">
-                                                            <Image className="h-8 w-8 text-gray-400" />
+                                                            {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                                                            <Image
+                                                                className="h-8 w-8 text-gray-400"
+                                                                aria-hidden="true"
+                                                            />
                                                         </div>
                                                         {image.is_active && (
                                                             <div className="absolute top-2 right-2 bg-green-500 text-white rounded-full p-1">
@@ -729,16 +767,27 @@ const SetupProcessEditor = () => {
                                                     </div>
                                                     <div className="p-3">
                                                         <p className="text-sm font-medium text-gray-900 truncate">
-                                                            {image.original_filename}
+                                                            {
+                                                                image.original_filename
+                                                            }
                                                         </p>
                                                         <p className="text-xs text-gray-500">
-                                                            {(image.file_size / 1024 / 1024).toFixed(1)}MB
+                                                            {(
+                                                                image.file_size /
+                                                                1024 /
+                                                                1024
+                                                            ).toFixed(1)}
+                                                            MB
                                                         </p>
                                                         <div className="flex gap-2 mt-2">
                                                             {!image.is_active && (
                                                                 <Button
                                                                     size="sm"
-                                                                    onClick={() => handleSetActiveImage(image.id)}
+                                                                    onClick={() =>
+                                                                        handleSetActiveImage(
+                                                                            image.id,
+                                                                        )
+                                                                    }
                                                                     className="flex-1"
                                                                 >
                                                                     Set Active
@@ -747,7 +796,12 @@ const SetupProcessEditor = () => {
                                                             <Button
                                                                 size="sm"
                                                                 variant="destructive"
-                                                                onClick={() => handleDeleteImage(image.id, image.file_path)}
+                                                                onClick={() =>
+                                                                    handleDeleteImage(
+                                                                        image.id,
+                                                                        image.file_path,
+                                                                    )
+                                                                }
                                                             >
                                                                 <Trash className="h-3 w-3" />
                                                             </Button>
@@ -768,7 +822,8 @@ const SetupProcessEditor = () => {
                             <CardHeader>
                                 <CardTitle>Setup Process Steps</CardTitle>
                                 <CardDescription>
-                                    Add, edit, and reorder the setup process steps
+                                    Add, edit, and reorder the setup process
+                                    steps
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>
@@ -951,7 +1006,8 @@ const SetupProcessEditor = () => {
                             <CardHeader>
                                 <CardTitle>Preview</CardTitle>
                                 <CardDescription>
-                                    Preview how the setup process will appear on the website
+                                    Preview how the setup process will appear on
+                                    the website
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>

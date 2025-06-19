@@ -67,13 +67,13 @@ const WhySection = () => {
 
     return (
         <section
-            className="relative overflow-hidden w-full py-8 md:py-12 lg:py-20 -mt-32 md:-mt-48 lg:-mt-[300px] z-10"
+            className="relative overflow-hidden w-full py-16 md:py-24 lg:py-40 -mt-32 md:-mt-48 lg:-mt-[300px] z-10 mb-8 md:mb-12 lg:mb-16"
             id="why-section"
             ref={ref}
         >
             <div className="container mx-auto px-4">
                 {/* Main content container */}
-                <div className="max-w-7xl mx-auto bg-white shadow-xl p-6 md:p-10 lg:p-16 opacity-100 transition-opacity duration-500">
+                <div className="max-w-7xl mx-auto bg-white shadow-xl p-10 md:p-20 lg:p-28 opacity-100 transition-opacity duration-500">
                     {/* Heading */}
                     <div className="text-center mb-6 md:mb-8">
                         <h2 className="text-2xl md:text-3xl lg:text-4xl font-rubik font-bold text-[#222] mb-3 md:mb-4">
@@ -139,7 +139,7 @@ const WhySection = () => {
                                     "Spanning from the iconic Sheikh Rashid Tower to the neighboring One Central, DWTC Free Zone offers a diverse range of 1,200+ licensed business activities and is home to more than 1,800 small and medium businesses."}
                             </p>
                             {/* Desktop Media with text overlay */}
-                            <div className="absolute  w-[48vw] h-[280px]">
+                            <div className="absolute w-[48vw] h-[400px] md:h-[500px] lg:h-[600px]">
                                 <div className="relative w-full h-full overflow-hidden hover:scale-[1.02] transition-transform duration-300">
                                     {/* Check media type and display accordingly */}
                                     {whyData?.media_type === "video" &&
@@ -150,7 +150,7 @@ const WhySection = () => {
                                             loop
                                             muted
                                             playsInline
-                                            className="w-full h-full object-cover"
+                                            className="w-full h-full aspect-[818/460] 3xl:aspect-[900/505] object-cover"
                                             onError={e => {
                                                 console.error(
                                                     "Video failed to load:",
@@ -209,7 +209,7 @@ const WhySection = () => {
 
             {/* Mobile: Media at bottom - Full width outside container */}
             <div className="lg:hidden">
-                <div className="relative w-full h-[300px] md:h-[400px] overflow-hidden hover:scale-[1.02] transition-transform duration-300">
+                <div className="relative w-full h-[450px] md:h-[550px] lg:h-[650px] overflow-hidden hover:scale-[1.02] transition-transform duration-300">
                     {/* Check media type and display accordingly */}
                     {whyData?.media_type === "video" && whyData?.video_url ? (
                         <video
