@@ -271,16 +271,6 @@ const Header = () => {
                                             }
                                         />
                                         <NavItem
-                                            href="/cities"
-                                            label="CITIES"
-                                            isActive={
-                                                activeNavigation.type ===
-                                                    "right" &&
-                                                activeNavigation.key ===
-                                                    "cities"
-                                            }
-                                        />
-                                        <NavItem
                                             href="/contact-us"
                                             label="CONTACT US"
                                             isActive={
@@ -507,12 +497,12 @@ const Header = () => {
                                                         ></div>
                                                         <div className="relative group">
                                                             <SubNavItem
-                                                                href="/experience-dubai"
+                                                                href="/cities"
                                                                 label="TOP EXPO LOCATIONS"
                                                                 subLabel="Premier venues across Dubai & the region"
                                                                 isActive={
                                                                     pathname ===
-                                                                    "/experience-dubai"
+                                                                    "/cities"
                                                                 }
                                                             />
                                                         </div>
