@@ -1,47 +1,126 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { supabase } from "@/lib/supabase";
+import { useComponentLoading } from "@/hooks/use-minimal-loading";
+import type {
+    ConferenceManagementSection,
+    ConferenceManagementService,
+} from "@/types/conference-management-services";
 
 const ConferenceManagementServices = () => {
-    const services = [
-        {
-            title: "SYSTEMATIC PLANNING",
-            description:
-                "Make an impactful strategy covering all event components, ensuring high-rate success.",
-            color: "text-[#a5cd39]",
-        },
-        {
-            title: "VENUE SELECTION",
-            description:
-                "Help you find an easy-to-access location for the conference or meeting.",
-            color: "text-[#a5cd39]",
-        },
-        {
-            title: "REGISTRATION PROCESS",
-            description:
-                "As efficient event planners, we suggest user-friendly registration solutions reducing your workload.",
-            color: "text-[#a5cd39]",
-        },
-        {
-            title: "PRESENTATION MANAGEMENT",
-            description:
-                "Assign the responsibility of sharing the information to trained speakers & provide them with all the essential presentation-related guidelines.",
-            color: "text-[#a5cd39]",
-        },
-        {
-            title: "FOOD & BEVERAGE",
-            description:
-                "Take care of food needs & look after everything including menus, workforce, and other important elements.",
-            color: "text-[#a5cd39]",
-        },
-        {
-            title: "PROGRAM DESIGN",
-            description:
-                "Well aware of the latest trends & colour schemes needed to create a vibrant stage. Our powerful program designs are an assurance of success.",
-            color: "text-[#a5cd39]",
-        },
-    ];
+    const [sectionData, setSectionData] =
+        useState<ConferenceManagementSection | null>(null);
+    const [services, setServices] = useState<ConferenceManagementService[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    // Use minimal loading hook
+    useComponentLoading(loading);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // Fetch section data (get the most recent one)
+                const { data: sections, error: sectionError } = await supabase
+                    .from("conference_management_sections")
+                    .select("*")
+                    .eq("is_active", true)
+                    .order("created_at", { ascending: false })
+                    .limit(1);
+
+                if (sectionError) {
+                    setError(
+                        "Failed to load conference management section data",
+                    );
+                    return;
+                }
+
+                if (sections && sections.length > 0) {
+                    const section = sections[0];
+
+                    // If there's a main_image_id, get the active image
+                    let finalImageUrl = section.main_image_url;
+
+                    if (section.main_image_id) {
+                        const { data: imageData, error: imageError } =
+                            await supabase
+                                .from("conference_management_images")
+                                .select("file_path")
+                                .eq("id", section.main_image_id)
+                                .eq("is_active", true)
+                                .single();
+
+                        if (imageData && !imageError) {
+                            const { data: publicUrlData } = supabase.storage
+                                .from("conference-management-images")
+                                .getPublicUrl(imageData.file_path);
+                            finalImageUrl = publicUrlData.publicUrl;
+                        }
+                    }
+
+                    setSectionData({
+                        ...section,
+                        main_image_url: finalImageUrl,
+                    });
+                }
+
+                // Fetch services data
+                const { data: servicesData, error: servicesError } =
+                    await supabase
+                        .from("conference_management_services")
+                        .select("*")
+                        .eq("is_active", true)
+                        .order("display_order", { ascending: true });
+
+                if (servicesError) {
+                    setError("Failed to load conference management services");
+                    return;
+                }
+
+                if (servicesData) {
+                    setServices(servicesData);
+                }
+            } catch (err) {
+                setError("Failed to load conference management data");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    // Don't render anything if no data is available
+    if (!sectionData && !loading) {
+        return null;
+    }
+
+    // Show loading state
+    if (loading || !sectionData) {
+        return (
+            <section className="py-8 md:py-12 lg:py-16 bg-gray-50">
+                <div className="container mx-auto px-4">
+                    <div className="max-w-6xl mx-auto">
+                        <div className="animate-pulse">
+                            <div className="h-8 bg-gray-300 rounded mb-4 mx-auto max-w-2xl"></div>
+                            <div className="h-4 bg-gray-300 rounded mb-8 mx-auto max-w-4xl"></div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                {[...Array(6)].map((_, i) => (
+                                    <div key={i} className="space-y-4">
+                                        <div className="h-6 bg-gray-300 rounded"></div>
+                                        <div className="h-4 bg-gray-300 rounded"></div>
+                                        <div className="h-4 bg-gray-300 rounded"></div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+    }
 
     return (
         <section className="py-8 md:py-12 lg:py-16 bg-gray-50">
@@ -56,12 +135,10 @@ const ConferenceManagementServices = () => {
                         viewport={{ once: true }}
                     >
                         <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-8 uppercase tracking-wide">
-                            CONFERENCE MANAGEMENT SERVICES IN DUBAI
+                            {sectionData.main_heading}
                         </h2>
                         <p className="text-gray-600 text-lg max-w-4xl mx-auto leading-relaxed">
-                            We are specialized in planning, designing,
-                            organizing & managing all kinds of meetings,
-                            promotional events and conferences in Dubai, UAE.
+                            {sectionData.main_description}
                         </p>
                     </motion.div>
 
@@ -79,9 +156,7 @@ const ConferenceManagementServices = () => {
                                 }}
                                 viewport={{ once: true }}
                             >
-                                <h3
-                                    className={`text-xl font-bold mb-6 uppercase tracking-wide ${service.color}`}
-                                >
+                                <h3 className="text-xl font-bold mb-6 uppercase tracking-wide text-[#a5cd39]">
                                     {service.title}
                                 </h3>
                                 <p className="text-gray-700 text-base leading-relaxed">
@@ -90,6 +165,17 @@ const ConferenceManagementServices = () => {
                             </motion.div>
                         ))}
                     </div>
+
+                    {error && (
+                        <motion.div
+                            className="mt-8 p-4 bg-red-50 border border-red-200 rounded-md text-red-700 text-center"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.5 }}
+                        >
+                            {error}
+                        </motion.div>
+                    )}
                 </div>
             </div>
         </section>

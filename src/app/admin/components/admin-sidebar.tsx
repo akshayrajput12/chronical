@@ -18,6 +18,8 @@ import {
     Globe,
     LogOut,
     User,
+    Calendar,
+    Monitor,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import Logo from "@/components/layout/logo";
@@ -99,6 +101,8 @@ const AdminSidebar = () => {
     const [openSections, setOpenSections] = useState<Record<string, boolean>>({
         home: pathname.includes("/admin/pages/home"),
         about: pathname.includes("/admin/pages/about"),
+        conference: pathname.includes("/admin/pages/conference"),
+        kiosk: pathname.includes("/admin/pages/kiosk"),
     });
 
     // Fetch user data
@@ -303,6 +307,150 @@ const AdminSidebar = () => {
                                         isActive={
                                             pathname ===
                                             "/admin/pages/about/description"
+                                        }
+                                    />
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
+
+                {/* Conference Page */}
+                <div>
+                    <NavItem
+                        href="/admin/pages/conference"
+                        label="Conference"
+                        icon={<Calendar size={18} />}
+                        isActive={pathname.includes("/admin/pages/conference")}
+                        hasChildren={true}
+                        isOpen={openSections.conference}
+                        onClick={() => toggleSection("conference")}
+                    />
+
+                    <AnimatePresence>
+                        {openSections.conference && (
+                            <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: "auto", opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.2 }}
+                                className="overflow-hidden"
+                            >
+                                <div className="py-1 space-y-1">
+                                    <SubNavItem
+                                        href="/admin/pages/conference/hero"
+                                        label="Hero Section"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/conference/hero"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/conference/event-management-services"
+                                        label="Event Management Services"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/conference/event-management-services"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/conference/conference-management-services"
+                                        label="Conference Management Services"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/conference/conference-management-services"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/conference/communicate-section"
+                                        label="Communicate Section"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/conference/communicate-section"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/conference/virtual-events-section"
+                                        label="Virtual Events Section"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/conference/virtual-events-section"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/conference/conference-solution-section"
+                                        label="Conference Solution Section"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/conference/conference-solution-section"
+                                        }
+                                    />
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
+
+                {/* Kiosk Page */}
+                <div>
+                    <NavItem
+                        href="/admin/pages/kiosk"
+                        label="Kiosk"
+                        icon={<Monitor size={18} />}
+                        isActive={pathname.includes("/admin/pages/kiosk")}
+                        hasChildren={true}
+                        isOpen={openSections.kiosk}
+                        onClick={() => toggleSection("kiosk")}
+                    />
+
+                    <AnimatePresence>
+                        {openSections.kiosk && (
+                            <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: "auto", opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.2 }}
+                                className="overflow-hidden"
+                            >
+                                <div className="py-1 space-y-1">
+                                    <SubNavItem
+                                        href="/admin/pages/kiosk/hero"
+                                        label="Hero Section"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/kiosk/hero"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/kiosk/content"
+                                        label="Content Section"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/kiosk/content"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/kiosk/benefits"
+                                        label="Benefits Section"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/kiosk/benefits"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/kiosk/manufacturers"
+                                        label="Manufacturers Section"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/kiosk/manufacturers"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/kiosk/consultancy"
+                                        label="Consultancy Section"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/kiosk/consultancy"
                                         }
                                     />
                                 </div>
