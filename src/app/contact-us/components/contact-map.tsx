@@ -22,60 +22,22 @@ const ContactMap = () => {
                     </motion.div>
 
                     <motion.div
-                        className="relative bg-gray-100 rounded-lg overflow-hidden shadow-lg"
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.2 }}
+                        transition={{ duration: 0.6, delay: 0.4 }}
                         viewport={{ once: true }}
                     >
-                        {/* Map Container */}
-                        <div className="relative h-96">
-                            {/* Map Placeholder - Using a map-like background */}
-                            <div
-                                className="absolute inset-0 bg-cover bg-center"
-                                style={{
-                                    backgroundImage:
-                                        "url('https://images.unsplash.com/photo-1524661135-423995f22d0b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2074&q=80')",
-                                }}
-                            >
-                                {/* Map overlay to simulate actual map appearance */}
-                                <div className="absolute inset-0 bg-blue-100/70"></div>
-
-                                {/* Location marker */}
-                                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                                    <div className="relative">
-                                        {/* Marker pin */}
-                                        <div className="w-8 h-8 bg-red-500 rounded-full border-4 border-white shadow-lg relative">
-                                            <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-red-500"></div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Map controls simulation */}
-                                <div className="absolute top-4 right-4 space-y-2">
-                                    <div className="w-8 h-8 bg-white rounded shadow-md flex items-center justify-center text-gray-600 text-sm font-bold">
-                                        +
-                                    </div>
-                                    <div className="w-8 h-8 bg-white rounded shadow-md flex items-center justify-center text-gray-600 text-sm font-bold">
-                                        -
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* View on Google Maps Button */}
-                        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
-                            <Button
-                                className="bg-white hover:bg-gray-50 text-[#007bff] border border-[#007bff] px-4 py-2 text-sm font-medium transition-all duration-300 rounded-md shadow-md"
-                                onClick={() =>
-                                    window.open(
-                                        "https://maps.google.com",
-                                        "_blank",
-                                    )
-                                }
-                            >
-                                VIEW ON GOOGLE MAPS
-                            </Button>
+                        <div className="w-full h-[400px]">
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3607.5139890547107!2d55.38061577600814!3d25.28692967765328!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f42e5a9ddaf97%3A0x563a582dbda7f14c!2sChronicle%20Exhibition%20Organizing%20L.L.C%20%7C%20Exhibition%20Stand%20Builder%20in%20Dubai%2C%20UAE%20-%20Middle%20East!5e0!3m2!1sen!2sin!4v1750325309116!5m2!1sen!2sin"
+                                width="100%"
+                                height="100%"
+                                style={{ border: 0 }}
+                                allowFullScreen
+                                loading="lazy"
+                                referrerPolicy="no-referrer-when-downgrade"
+                                title="Dubai World Trade Centre Location"
+                            ></iframe>
                         </div>
                     </motion.div>
                 </div>

@@ -67,7 +67,7 @@ const WhySection = () => {
 
     return (
         <section
-            className="relative overflow-hidden w-full py-16 md:py-24 lg:py-40 -mt-32 md:-mt-48 lg:-mt-[300px] z-10 mb-8 md:mb-12 lg:mb-16"
+            className="relative overflow-hidden w-full py-16 md:py-24 lg:py-40 -mt-32 md:-mt-48 lg:-mt-[350px] 2xl:-mt-[500px] z-10"
             id="why-section"
             ref={ref}
         >
@@ -150,7 +150,7 @@ const WhySection = () => {
                                             loop
                                             muted
                                             playsInline
-                                            className="w-full h-full aspect-[818/460] 3xl:aspect-[900/505] object-cover"
+                                            className="w-full h-full object-cover"
                                             onError={e => {
                                                 console.error(
                                                     "Video failed to load:",

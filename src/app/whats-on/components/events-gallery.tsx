@@ -151,7 +151,7 @@ const EventsGallery = () => {
                     viewport={{ once: true }}
                 >
                     <div className="text-center sm:text-left flex-1 mb-4 sm:mb-0">
-                        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-2 font-serif">
+                        <h2 className=".whatson-heading font-rubik text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2">
                             Explore DWTC Events
                         </h2>
                     </div>
@@ -305,12 +305,7 @@ const EventsGallery = () => {
                                                     </div>
 
                                                     {/* Title */}
-                                                    <h2
-                                                        className="text-base sm:text-lg md:text-xl font-normal text-gray-900 mb-3 sm:mb-4 md:mb-5 leading-tight"
-                                                        style={{
-                                                            fontFamily: "serif",
-                                                        }}
-                                                    >
+                                                    <h2 className="text-base whatson-heading font-rubik font-normal sm:text-lg md:text-xl text-gray-900 mb-3 sm:mb-4 md:mb-5 leading-tight">
                                                         {event.title}
                                                     </h2>
 

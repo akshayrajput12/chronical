@@ -9,6 +9,8 @@ import { CheckCircle } from "lucide-react";
 
 const BoothRequirementsForm = () => {
     const [formData, setFormData] = useState({
+        name: "",
+        exhibitionName: "",
         companyName: "",
         email: "",
         phone: "",
@@ -49,6 +51,8 @@ const BoothRequirementsForm = () => {
         setTimeout(() => {
             setIsSubmitted(false);
             setFormData({
+                name: "",
+                exhibitionName: "",
                 companyName: "",
                 email: "",
                 phone: "",
@@ -142,13 +146,13 @@ const BoothRequirementsForm = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
                                     <Input
-                                        id="companyName"
+                                        id="name"
                                         type="text"
                                         placeholder="Enter your name"
-                                        value={formData.companyName}
+                                        value={formData.name}
                                         onChange={e =>
                                             handleInputChange(
-                                                "companyName",
+                                                "name",
                                                 e.target.value,
                                             )
                                         }
@@ -158,13 +162,13 @@ const BoothRequirementsForm = () => {
                                 </div>
                                 <div className="space-y-2">
                                     <Input
-                                        id="companyName"
+                                        id="exhibitionName"
                                         type="text"
-                                        placeholder="Enter company name"
-                                        value={formData.companyName}
+                                        placeholder="Enter Exhibition name"
+                                        value={formData.exhibitionName}
                                         onChange={e =>
                                             handleInputChange(
-                                                "companyName",
+                                                "exhibitionName",
                                                 e.target.value,
                                             )
                                         }
@@ -205,7 +209,22 @@ const BoothRequirementsForm = () => {
                                     />
                                 </div>
                             </div>
-
+                            <div className="space-y-2">
+                                <Input
+                                    id="companyName"
+                                    type="text"
+                                    placeholder="Enter Exhibition name"
+                                    value={formData.companyName}
+                                    onChange={e =>
+                                        handleInputChange(
+                                            "companyName",
+                                            e.target.value,
+                                        )
+                                    }
+                                    className="w-full h-12 px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md placeholder:text-gray-500 transition-all duration-200"
+                                    required
+                                />
+                            </div>
                             {/* Row 2: File Upload */}
                             <div className="space-y-2">
                                 <div className="relative">
@@ -288,7 +307,7 @@ const BoothRequirementsForm = () => {
                             </h3>
                             <div className="w-full h-[400px]">
                                 <iframe
-                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3610.1739405469!2d55.27218731501!3d25.197197083896!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f43496ad9c645%3A0xbde66e5084295162!2sDubai%20World%20Trade%20Centre!5e0!3m2!1sen!2sae!4v1639123456789!5m2!1sen!2sae"
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3607.5139890547107!2d55.38061577600814!3d25.28692967765328!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f42e5a9ddaf97%3A0x563a582dbda7f14c!2sChronicle%20Exhibition%20Organizing%20L.L.C%20%7C%20Exhibition%20Stand%20Builder%20in%20Dubai%2C%20UAE%20-%20Middle%20East!5e0!3m2!1sen!2sin!4v1750325309116!5m2!1sen!2sin"
                                     width="100%"
                                     height="100%"
                                     style={{ border: 0 }}
