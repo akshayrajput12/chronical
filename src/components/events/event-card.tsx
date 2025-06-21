@@ -51,7 +51,7 @@ const EventCard = ({
                 {/* Card Header */}
                 <div
                     className="relative px-3 sm:px-4 md:px-6 lg:px-8 pb-6 sm:pb-8 md:pb-10 lg:pb-12"
-                    style={{ minHeight: "180px" }}
+                    style={{ minHeight: "150px" }}
                 >
                     {/* Date */}
                     <div
@@ -79,7 +79,7 @@ const EventCard = ({
                 </div>
 
                 {/* Image */}
-                <div className="relative flex-1 overflow-hidden h-48 sm:h-56 md:h-64 lg:h-72">
+                <div className="relative flex-1 overflow-hidden h-40 sm:h-48 md:h-56 lg:h-64">
                     <Image
                         src={event.image}
                         alt={event.title}
