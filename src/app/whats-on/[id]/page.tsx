@@ -1,14 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import React from "react";
 import { useParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import {
     Calendar,
     MapPin,
-    MessageSquare,
     Building2,
-    Users,
     ChevronDown,
     ArrowLeft,
     ChevronLeft,
@@ -18,47 +16,61 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import { getEventById, getOtherEvents } from "../data/events";
+import EventGallery from "../components/event-gallery";
+import BlogCarousel from "@/components/blog/blog-carousel";
 
 export default function EventDetailPage() {
     const params = useParams();
     const router = useRouter();
     const eventId = params.id as string;
 
-    // Gallery carousel state
-    const [currentGalleryIndex, setCurrentGalleryIndex] = useState(0);
-
-    // Gallery images data
-    const galleryImages = [
-        {
-            id: 1,
-            src: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-            alt: "Exhibition Hall with Visitors",
-        },
-        {
-            id: 2,
-            src: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-            alt: "Auto Show Exhibition",
-        },
-        {
-            id: 3,
-            src: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-            alt: "Trade Show Event",
-        },
-        {
-            id: 4,
-            src: "https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-            alt: "Business Conference",
-        },
-        {
-            id: 5,
-            src: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-            alt: "Fashion Event",
-        },
-    ];
-
     // Get event data dynamically
     const event = getEventById(eventId);
     const otherEvents = getOtherEvents(eventId);
+
+    // Sample blog posts data - this would typically come from a CMS or API
+    const blogPosts = [
+        {
+            id: 1,
+            date: "21 MAY 2025",
+            title: "DWTC Hospitality Division Achieves Strong Performance in 2024, Catering to Nearly 1 Million Guests Across 2,400 Events",
+            image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+            excerpt:
+                "DWTC Hospitality division celebrates another landmark year serving prestigious large-scale events.",
+        },
+        {
+            id: 2,
+            date: "27 APR 2025",
+            title: "DWTC delivers AED22.35 billion in economic output in 2024, driven by record increase in large scale events",
+            image: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+            excerpt:
+                "Dubai World Trade Centre reports significant economic impact through successful large-scale events.",
+        },
+        {
+            id: 3,
+            date: "25 APR 2025",
+            title: "Capacity Crowds Mark Monumental Opening of GITEX ASIA x Ai Everything Singapore",
+            image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+            excerpt:
+                "GITEX ASIA x Ai Everything Singapore opens to capacity crowds, marking a new milestone for Asia's technology sector.",
+        },
+        {
+            id: 4,
+            date: "20 APR 2025",
+            title: "Innovation Summit 2025 Brings Together Global Tech Leaders",
+            image: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+            excerpt:
+                "Leading technology innovators gather to discuss the future of digital transformation.",
+        },
+        {
+            id: 5,
+            date: "15 APR 2025",
+            title: "Sustainable Technology Expo Showcases Green Innovation",
+            image: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2025&q=80",
+            excerpt:
+                "Discover the latest in sustainable technology solutions and environmental innovation.",
+        },
+    ];
 
     const handleOtherEventClick = (otherEventId: string) => {
         router.push(`/whats-on/${otherEventId}`);
@@ -199,29 +211,6 @@ export default function EventDetailPage() {
                                     <div className="h-0.5 md:h-1 w-8 md:w-10 lg:w-12 mx-auto bg-gray-200 my-1 md:my-2 lg:my-3"></div>
                                     <div className="text-black text-xs md:text-xs lg:text-sm font-medium">
                                         {event.industry}
-                                    </div>
-                                </div>
-                                <div className="border-l h-16 md:h-20 lg:h-24 border-gray-300"></div>
-                            </motion.div>
-
-                            {/* AUDIENCE */}
-                            <motion.div
-                                className="flex items-center gap-2 md:gap-4 lg:gap-6"
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.6, delay: 0.4 }}
-                                viewport={{ once: true }}
-                            >
-                                <div className="text-center px-1 md:px-2 lg:px-3">
-                                    <div className="text-2xl md:text-3xl lg:text-4xl text-[#a5cd39] mb-2 md:mb-3 lg:mb-4">
-                                        <Users className="w-6 h-6 md:w-8 h-8 lg:w-10 h-10 mx-auto" />
-                                    </div>
-                                    <div className="text-[#a5cd39] font-bold text-xs md:text-xs lg:text-sm uppercase tracking-wider">
-                                        AUDIENCE
-                                    </div>
-                                    <div className="h-0.5 md:h-1 w-8 md:w-10 lg:w-12 mx-auto bg-gray-200 my-1 md:my-2 lg:my-3"></div>
-                                    <div className="text-black text-xs md:text-xs lg:text-sm font-medium">
-                                        {event.audience}
                                     </div>
                                 </div>
                                 <div className="border-l h-16 md:h-20 lg:h-24 border-gray-300"></div>
@@ -389,104 +378,26 @@ export default function EventDetailPage() {
             </section>
 
             {/* Event Gallery Section */}
-            <section className="py-8 md:py-12 lg:py-16 bg-white">
+            <EventGallery eventId={eventId} />
+
+            {/* Related Blog Articles Section */}
+            <section
+                className="py-8 md:py-12 lg:py-16"
+                style={{ backgroundColor: "rgb(235, 235, 235)" }}
+            >
                 <div className="container mx-auto px-4">
                     <div className="max-w-6xl mx-auto">
-                        {/* Gallery Carousel */}
-                        <motion.div
-                            className="relative"
-                            initial={{ opacity: 0, y: 20 }}
+                        <motion.h2
+                            className="text-2xl font-medium text-center text-gray-700 mb-12"
+                            initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8 }}
                             viewport={{ once: true }}
                         >
-                            {/* Navigation Arrows */}
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white shadow-lg w-10 h-10 text-gray-600 hover:text-gray-900"
-                                onClick={() => {
-                                    setCurrentGalleryIndex(prev =>
-                                        prev === 0
-                                            ? galleryImages.length - 1
-                                            : prev - 1,
-                                    );
-                                }}
-                            >
-                                <ChevronLeft className="w-5 h-5" />
-                            </Button>
+                            Related Articles
+                        </motion.h2>
 
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white shadow-lg w-10 h-10 text-gray-600 hover:text-gray-900"
-                                onClick={() => {
-                                    setCurrentGalleryIndex(prev =>
-                                        prev === galleryImages.length - 1
-                                            ? 0
-                                            : prev + 1,
-                                    );
-                                }}
-                            >
-                                <ChevronRight className="w-5 h-5" />
-                            </Button>
-
-                            {/* Carousel Container */}
-                            <div className="overflow-hidden mx-12">
-                                <div
-                                    className="flex gap-2 md:gap-3 lg:gap-4 transition-transform duration-500 ease-in-out"
-                                    style={{
-                                        transform: `translateX(-${
-                                            currentGalleryIndex * 20
-                                        }%)`,
-                                        width: `${galleryImages.length * 20}%`,
-                                    }}
-                                >
-                                    {galleryImages.map((image, index) => (
-                                        <motion.div
-                                            key={image.id}
-                                            className="flex-none relative overflow-hidden group cursor-pointer"
-                                            style={{
-                                                width: "20%",
-                                                aspectRatio: "1/1",
-                                            }}
-                                            initial={{ opacity: 0, x: -20 }}
-                                            whileInView={{ opacity: 1, x: 0 }}
-                                            transition={{
-                                                duration: 0.6,
-                                                delay: index * 0.1,
-                                            }}
-                                            viewport={{ once: true }}
-                                        >
-                                            <Image
-                                                src={image.src}
-                                                alt={image.alt}
-                                                fill
-                                                className="object-cover transition-transform duration-300 group-hover:scale-105"
-                                                sizes="(max-width: 640px) 192px, (max-width: 768px) 224px, (max-width: 1024px) 256px, 288px"
-                                            />
-                                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300"></div>
-                                        </motion.div>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* Centered Button */}
-                            <motion.div
-                                className="flex justify-center mt-8 md:mt-10 lg:mt-12"
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.6, delay: 0.3 }}
-                                viewport={{ once: true }}
-                            >
-                                <Button
-                                    className="bg-[#a5cd39] hover:bg-[#8fb32a] text-white px-8 py-3 text-sm font-medium uppercase tracking-wider border-0"
-                                    style={{ border: "none" }}
-                                >
-                                    VIEW ALL GALLERY
-                                </Button>
-                            </motion.div>
-                        </motion.div>
+                        <BlogCarousel posts={blogPosts} />
                     </div>
                 </div>
             </section>
