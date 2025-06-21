@@ -14,6 +14,8 @@ import {
     Upload,
     Trash2,
     Image as ImageIcon,
+    Plus,
+    GripVertical,
 } from "lucide-react";
 import {
     Card,
@@ -29,14 +31,16 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/lib/supabase";
 import {
-    AboutDescriptionSection,
-    AboutDescriptionSectionInput,
-    AboutDescriptionImage,
-    AboutDescriptionImageInput,
-    AboutDescriptionNotification,
+    AboutDedicationSection,
+    AboutDedicationSectionInput,
+    AboutDedicationItem,
+    AboutDedicationItemInput,
+    AboutDedicationImage,
+    AboutDedicationImageInput,
+    AboutDedicationNotification,
 } from "@/types/about";
 
-const AboutDescriptionEditor = () => {
+const AboutDedicationEditor = () => {
     // Animation variants
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -53,32 +57,24 @@ const AboutDescriptionEditor = () => {
         visible: { opacity: 1, y: 0 },
     };
 
-    // State for description data
-    const [sectionData, setSectionData] =
-        useState<AboutDescriptionSectionInput>({
+    // State for dedication data
+    const [sectionData, setSectionData] = useState<AboutDedicationSectionInput>(
+        {
             section_heading: "",
             section_description: "",
-            background_color: "#f9f7f7",
-            service_1_title: "",
-            service_1_icon_url: "",
-            service_1_description: "",
-            service_2_title: "",
-            service_2_icon_url: "",
-            service_2_description: "",
-            service_3_title: "",
-            service_3_icon_url: "",
-            service_3_description: "",
             is_active: true,
-        });
+        },
+    );
 
-    const [images, setImages] = useState<AboutDescriptionImage[]>([]);
+    const [items, setItems] = useState<AboutDedicationItem[]>([]);
+    const [images, setImages] = useState<AboutDedicationImage[]>([]);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [uploading, setUploading] = useState(false);
 
     // Notification state
     const [notification, setNotification] =
-        useState<AboutDescriptionNotification>({
+        useState<AboutDedicationNotification>({
             show: false,
             type: "info",
             title: "",
@@ -106,19 +102,24 @@ const AboutDescriptionEditor = () => {
 
     // Load existing data
     useEffect(() => {
-        loadDescriptionData();
-        loadDescriptionImages();
+        loadDedicationData();
+        loadDedicationItems();
+        loadDedicationImages();
     }, []);
 
-    const loadDescriptionData = async () => {
+    const loadDedicationData = async () => {
         try {
             setLoading(true);
 
+            console.log("Loading dedication data...");
+
             // First, let's try to check if the table exists by querying directly
             const { data: tableCheck, error: tableError } = await supabase
-                .from("about_description_sections")
+                .from("about_dedication_sections")
                 .select("*")
                 .limit(1);
+
+            console.log("Table check result:", { tableCheck, tableError });
 
             if (tableError) {
                 console.error(
@@ -128,97 +129,138 @@ const AboutDescriptionEditor = () => {
                 showNotification(
                     "error",
                     "Database Error",
-                    "Database tables not found. Please run the description schema script first.",
+                    "Database tables not found. Please run the dedication schema script first.",
                 );
                 return;
             }
 
-            // Use the database function to get description data
+            // Use the database function to get dedication data
             const { data, error } = await supabase.rpc(
-                "get_about_description_section",
+                "get_about_dedication_section",
             );
 
+            console.log("RPC function result:", { data, error });
+
             if (error) {
-                console.error("Error fetching description data:", error);
+                console.error("Error fetching dedication data:", error);
                 showNotification(
                     "error",
                     "Database Error",
-                    `Failed to load description data: ${error.message}`,
+                    `Failed to load dedication data: ${error.message}`,
                 );
                 return;
             }
 
             if (data && data.length > 0) {
-                const descriptionSection = data[0];
+                const dedicationSection = data[0];
+                console.log("Found dedication section:", dedicationSection);
 
                 setSectionData({
-                    section_heading: descriptionSection.section_heading,
-                    section_description: descriptionSection.section_description,
-                    background_color:
-                        descriptionSection.background_color || "#f9f7f7",
-                    service_1_title: descriptionSection.service_1_title,
-                    service_1_icon_url: descriptionSection.service_1_icon_url,
-                    service_1_description:
-                        descriptionSection.service_1_description || "",
-                    service_2_title: descriptionSection.service_2_title,
-                    service_2_icon_url: descriptionSection.service_2_icon_url,
-                    service_2_description:
-                        descriptionSection.service_2_description || "",
-                    service_3_title: descriptionSection.service_3_title,
-                    service_3_icon_url: descriptionSection.service_3_icon_url,
-                    service_3_description:
-                        descriptionSection.service_3_description || "",
-                    is_active: descriptionSection.is_active,
+                    section_heading: dedicationSection.section_heading,
+                    section_description:
+                        dedicationSection.section_description || "",
+                    is_active: dedicationSection.is_active,
                 });
             } else {
+                console.log("No dedication section found, using default data");
                 // Fallback to default data if no data found
                 setSectionData({
-                    section_heading: "Computer Software and ITES:",
-                    section_description:
-                        "ESC has emerged as a prime institution spearheading interest of Electronics and IT industry in the country.",
-                    background_color: "#f9f7f7",
-                    service_1_title: "Customised Software Development",
-                    service_1_icon_url: "/icons/code.svg",
-                    service_1_description: "",
-                    service_2_title: "Software Products",
-                    service_2_icon_url: "/icons/computer.svg",
-                    service_2_description: "",
-                    service_3_title: "IT Enabled Services",
-                    service_3_icon_url: "/icons/gear.svg",
-                    service_3_description: "",
+                    section_heading: "DEDICATION TO QUALITY AND PRECISION",
+                    section_description: "",
                     is_active: true,
                 });
             }
         } catch (error) {
-            console.error("Error loading description data:", error);
+            console.error("Error loading dedication data:", error);
             showNotification(
                 "error",
                 "Error",
-                "Failed to load description data",
+                "Failed to load dedication data",
             );
         } finally {
             setLoading(false);
         }
     };
 
-    const loadDescriptionImages = async () => {
+    const loadDedicationItems = async () => {
+        try {
+            console.log("Loading dedication items...");
+
+            // First check if items table exists
+            const { data: itemsTableCheck, error: itemsTableError } =
+                await supabase
+                    .from("about_dedication_items")
+                    .select("*")
+                    .limit(1);
+
+            console.log("Items table check:", {
+                itemsTableCheck,
+                itemsTableError,
+            });
+
+            if (itemsTableError) {
+                console.error("Items table doesn't exist:", itemsTableError);
+                return;
+            }
+
+            // Use the database function to get dedication items
+            const { data, error } = await supabase.rpc(
+                "get_about_dedication_items",
+            );
+
+            console.log("Items RPC result:", { data, error });
+
+            if (error) {
+                console.error("Error fetching dedication items:", error);
+                return;
+            }
+
+            if (data) {
+                console.log("Found dedication items:", data);
+                // Construct proper image URLs for each item
+                const itemsWithUrls = data.map((item: AboutDedicationItem) => {
+                    let imageUrl = null;
+                    if (item.image_url) {
+                        const { data: urlData } = supabase.storage
+                            .from("about-dedication")
+                            .getPublicUrl(item.image_url);
+                        imageUrl = urlData.publicUrl;
+                    }
+
+                    return {
+                        ...item,
+                        image_url: imageUrl,
+                    };
+                });
+
+                setItems(itemsWithUrls);
+                console.log("Set items:", itemsWithUrls);
+            } else {
+                console.log("No dedication items found");
+            }
+        } catch (error) {
+            console.error("Error loading dedication items:", error);
+        }
+    };
+
+    const loadDedicationImages = async () => {
         try {
             // Use the database function to get images
             const { data, error } = await supabase.rpc(
-                "get_about_description_images",
+                "get_about_dedication_images",
             );
 
             if (error) {
-                console.error("Error fetching description images:", error);
+                console.error("Error fetching dedication images:", error);
                 return;
             }
 
             if (data) {
                 // Construct proper image URLs for each image
                 const imagesWithUrls = data.map(
-                    (image: AboutDescriptionImage) => {
+                    (image: AboutDedicationImage) => {
                         const { data: urlData } = supabase.storage
-                            .from("about-description")
+                            .from("about-dedication")
                             .getPublicUrl(image.file_path);
 
                         return {
@@ -231,11 +273,11 @@ const AboutDescriptionEditor = () => {
                 setImages(imagesWithUrls);
             }
         } catch (error) {
-            console.error("Error loading description images:", error);
+            console.error("Error loading dedication images:", error);
         }
     };
 
-    const saveDescriptionData = async () => {
+    const saveDedicationData = async () => {
         setSaving(true);
         try {
             // Validate required fields
@@ -248,66 +290,38 @@ const AboutDescriptionEditor = () => {
                 return;
             }
 
-            if (!sectionData.section_description.trim()) {
-                showNotification(
-                    "error",
-                    "Validation Error",
-                    "Section description is required",
-                );
-                return;
+            // Validate items
+            for (let i = 0; i < items.length; i++) {
+                const item = items[i];
+                if (!item.title.trim()) {
+                    showNotification(
+                        "error",
+                        "Validation Error",
+                        `Item ${i + 1}: Title is required`,
+                    );
+                    return;
+                }
+                if (!item.description.trim()) {
+                    showNotification(
+                        "error",
+                        "Validation Error",
+                        `Item ${i + 1}: Description is required`,
+                    );
+                    return;
+                }
             }
 
-            // Validate service titles
-            if (!sectionData.service_1_title.trim()) {
-                showNotification(
-                    "error",
-                    "Validation Error",
-                    "Service 1 title is required",
-                );
-                return;
-            }
-
-            if (!sectionData.service_2_title.trim()) {
-                showNotification(
-                    "error",
-                    "Validation Error",
-                    "Service 2 title is required",
-                );
-                return;
-            }
-
-            if (!sectionData.service_3_title.trim()) {
-                showNotification(
-                    "error",
-                    "Validation Error",
-                    "Service 3 title is required",
-                );
-                return;
-            }
-
-            // Prepare data for database
-            const dataToSave = {
+            // Prepare section data for database
+            const sectionDataToSave = {
                 section_heading: sectionData.section_heading.trim(),
-                section_description: sectionData.section_description.trim(),
-                background_color: sectionData.background_color || "#f9f7f7",
-                service_1_title: sectionData.service_1_title.trim(),
-                service_1_icon_url: sectionData.service_1_icon_url.trim(),
-                service_1_description:
-                    sectionData.service_1_description?.trim() || "",
-                service_2_title: sectionData.service_2_title.trim(),
-                service_2_icon_url: sectionData.service_2_icon_url.trim(),
-                service_2_description:
-                    sectionData.service_2_description?.trim() || "",
-                service_3_title: sectionData.service_3_title.trim(),
-                service_3_icon_url: sectionData.service_3_icon_url.trim(),
-                service_3_description:
-                    sectionData.service_3_description?.trim() || "",
+                section_description:
+                    sectionData.section_description?.trim() || null,
                 is_active: sectionData.is_active,
             };
 
-            // Check if record exists (get the most recent one)
+            // Check if section record exists (get the most recent one)
             const { data: existingData, error: fetchError } = await supabase
-                .from("about_description_sections")
+                .from("about_dedication_sections")
                 .select("id")
                 .eq("is_active", true)
                 .order("created_at", { ascending: false })
@@ -318,39 +332,84 @@ const AboutDescriptionEditor = () => {
                 throw fetchError;
             }
 
+            let sectionId: string;
+
             if (existingData && existingData.length > 0) {
-                // Update existing record
+                // Update existing section record
                 const { error } = await supabase
-                    .from("about_description_sections")
-                    .update(dataToSave)
+                    .from("about_dedication_sections")
+                    .update(sectionDataToSave)
                     .eq("id", existingData[0].id);
 
                 if (error) {
-                    console.error("Error updating data:", error);
+                    console.error("Error updating section data:", error);
                     throw error;
                 }
+                sectionId = existingData[0].id;
             } else {
-                // Insert new record
-                const { error } = await supabase
-                    .from("about_description_sections")
-                    .insert([dataToSave]);
+                // Insert new section record
+                const { data: newSection, error } = await supabase
+                    .from("about_dedication_sections")
+                    .insert([sectionDataToSave])
+                    .select()
+                    .single();
 
                 if (error) {
-                    console.error("Error inserting data:", error);
+                    console.error("Error inserting section data:", error);
                     throw error;
+                }
+                sectionId = newSection.id;
+            }
+
+            // Now save the dedication items
+            if (items.length > 0) {
+                // First, delete existing items for this section
+                const { error: deleteError } = await supabase
+                    .from("about_dedication_items")
+                    .delete()
+                    .eq("section_id", sectionId);
+
+                if (deleteError) {
+                    console.error(
+                        "Error deleting existing items:",
+                        deleteError,
+                    );
+                    throw deleteError;
+                }
+
+                // Prepare items data for database
+                const itemsToSave = items.map((item, index) => ({
+                    section_id: sectionId,
+                    title: item.title.trim(),
+                    description: item.description.trim(),
+                    image_id: item.image_id || null,
+                    fallback_image_url: item.fallback_image_url?.trim() || null,
+                    display_order: index + 1,
+                    is_active: true,
+                }));
+
+                // Insert new items
+                const { error: itemsError } = await supabase
+                    .from("about_dedication_items")
+                    .insert(itemsToSave);
+
+                if (itemsError) {
+                    console.error("Error inserting items:", itemsError);
+                    throw itemsError;
                 }
             }
 
             showNotification(
                 "success",
                 "Success!",
-                "Description section saved successfully!",
+                "Dedication section and items saved successfully!",
             );
 
             // Reload data to get the latest from database
-            await loadDescriptionData();
+            await loadDedicationData();
+            await loadDedicationItems();
         } catch (error) {
-            console.error("Error saving description data:", error);
+            console.error("Error saving dedication data:", error);
 
             let errorMessage = "Unknown error";
             if (error && typeof error === "object" && "message" in error) {
@@ -359,11 +418,11 @@ const AboutDescriptionEditor = () => {
                 // Check for common database issues
                 if (
                     errorMessage.includes(
-                        'relation "about_description_sections" does not exist',
+                        'relation "about_dedication_sections" does not exist',
                     )
                 ) {
                     errorMessage =
-                        "Database table not found. Please run the description schema script first.";
+                        "Database table not found. Please run the dedication schema script first.";
                 } else if (errorMessage.includes("violates check constraint")) {
                     errorMessage =
                         "Data validation failed. Please check your input and try again.";
@@ -376,7 +435,7 @@ const AboutDescriptionEditor = () => {
             showNotification(
                 "error",
                 "Error",
-                `Failed to save description section: ${errorMessage}`,
+                `Failed to save dedication section: ${errorMessage}`,
             );
         } finally {
             setSaving(false);
@@ -420,7 +479,7 @@ const AboutDescriptionEditor = () => {
 
                     // Upload to Supabase storage
                     const { error: uploadError } = await supabase.storage
-                        .from("about-description")
+                        .from("about-dedication")
                         .upload(filePath, file);
 
                     if (uploadError) {
@@ -434,18 +493,18 @@ const AboutDescriptionEditor = () => {
                     }
 
                     // Create image record in database
-                    const imageData: AboutDescriptionImageInput = {
+                    const imageData: AboutDedicationImageInput = {
                         file_name: file.name,
                         file_path: filePath,
                         file_size: file.size,
                         mime_type: file.type,
-                        alt_text: `Description image - ${file.name}`,
+                        alt_text: `Dedication image - ${file.name}`,
                         display_order: images.length,
                         is_active: true,
                     };
 
                     const { data: newImage, error: dbError } = await supabase
-                        .from("about_description_images")
+                        .from("about_dedication_images")
                         .insert([imageData])
                         .select()
                         .single();
@@ -462,7 +521,7 @@ const AboutDescriptionEditor = () => {
 
                     // Add proper URL to the new image
                     const { data: urlData } = supabase.storage
-                        .from("about-description")
+                        .from("about-dedication")
                         .getPublicUrl(newImage.file_path);
 
                     const imageWithUrl = {
@@ -500,7 +559,7 @@ const AboutDescriptionEditor = () => {
 
             // Delete from storage
             const { error: storageError } = await supabase.storage
-                .from("about-description")
+                .from("about-dedication")
                 .remove([imageToDelete.file_path]);
 
             if (storageError) {
@@ -509,7 +568,7 @@ const AboutDescriptionEditor = () => {
 
             // Delete from database
             const { error: dbError } = await supabase
-                .from("about_description_images")
+                .from("about_dedication_images")
                 .delete()
                 .eq("id", imageId);
 
@@ -526,6 +585,15 @@ const AboutDescriptionEditor = () => {
             // Remove from local state
             setImages(prev => prev.filter(img => img.id !== imageId));
 
+            // Clear image from items if it was being used
+            setItems(prev =>
+                prev.map(item =>
+                    item.image_id === imageId
+                        ? { ...item, image_id: undefined, image_url: undefined }
+                        : item,
+                ),
+            );
+
             showNotification(
                 "success",
                 "Image Deleted",
@@ -535,6 +603,43 @@ const AboutDescriptionEditor = () => {
             console.error("Error deleting image:", error);
             showNotification("error", "Delete Error", "Failed to delete image");
         }
+    };
+
+    // Add new dedication item
+    const addDedicationItem = () => {
+        const newItem: AboutDedicationItem = {
+            id: `temp-${Date.now()}`, // Temporary ID
+            title: "",
+            description: "",
+            image_id: undefined,
+            image_url: undefined,
+            image_alt: undefined,
+            fallback_image_url: "",
+            display_order: items.length + 1,
+            is_active: true,
+            section_id: "",
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+        };
+        setItems(prev => [...prev, newItem]);
+    };
+
+    // Remove dedication item
+    const removeDedicationItem = (index: number) => {
+        setItems(prev => prev.filter((_, i) => i !== index));
+    };
+
+    // Update dedication item
+    const updateDedicationItem = (
+        index: number,
+        field: string,
+        value: string | boolean | undefined,
+    ) => {
+        setItems(prev =>
+            prev.map((item, i) =>
+                i === index ? { ...item, [field]: value } : item,
+            ),
+        );
     };
 
     if (loading) {
@@ -614,10 +719,10 @@ const AboutDescriptionEditor = () => {
             >
                 <div>
                     <h1 className="text-3xl font-bold text-gray-900">
-                        About Description Section
+                        About Dedication Section
                     </h1>
                     <p className="text-gray-600 mt-1">
-                        Manage the description section of the about page
+                        Manage the dedication section of the about page
                     </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -629,7 +734,7 @@ const AboutDescriptionEditor = () => {
                         Preview
                     </Button>
                     <Button
-                        onClick={saveDescriptionData}
+                        onClick={saveDedicationData}
                         disabled={saving}
                         className="bg-[#a5cd39] hover:bg-[#94b933]"
                     >
@@ -668,8 +773,8 @@ const AboutDescriptionEditor = () => {
                             <CardHeader>
                                 <CardTitle>Section Header</CardTitle>
                                 <CardDescription>
-                                    Configure the main heading and description
-                                    for the description section
+                                    Configure the main heading for the
+                                    dedication section
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">
@@ -693,11 +798,14 @@ const AboutDescriptionEditor = () => {
 
                                 <div className="space-y-2">
                                     <Label htmlFor="section_description">
-                                        Section Description
+                                        Section Description (Optional)
                                     </Label>
                                     <Textarea
                                         id="section_description"
-                                        value={sectionData.section_description}
+                                        value={
+                                            sectionData.section_description ||
+                                            ""
+                                        }
                                         onChange={e =>
                                             setSectionData(prev => ({
                                                 ...prev,
@@ -705,28 +813,9 @@ const AboutDescriptionEditor = () => {
                                                     e.target.value,
                                             }))
                                         }
-                                        placeholder="Enter the section description"
-                                        rows={6}
+                                        placeholder="Enter an optional section description"
+                                        rows={3}
                                         className="resize-none"
-                                    />
-                                </div>
-
-                                <div className="space-y-2">
-                                    <Label htmlFor="background_color">
-                                        Background Color
-                                    </Label>
-                                    <Input
-                                        id="background_color"
-                                        type="color"
-                                        value={sectionData.background_color}
-                                        onChange={e =>
-                                            setSectionData(prev => ({
-                                                ...prev,
-                                                background_color:
-                                                    e.target.value,
-                                            }))
-                                        }
-                                        className="w-20 h-10"
                                     />
                                 </div>
 
@@ -752,192 +841,178 @@ const AboutDescriptionEditor = () => {
                             </CardContent>
                         </Card>
 
-                        {/* Services Section */}
+                        {/* Dedication Items */}
                         <Card>
                             <CardHeader>
-                                <CardTitle>Service Items</CardTitle>
-                                <CardDescription>
-                                    Configure the three service items displayed
-                                    in the section
-                                </CardDescription>
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <CardTitle>Dedication Items</CardTitle>
+                                        <CardDescription>
+                                            Manage the individual dedication
+                                            cards
+                                        </CardDescription>
+                                    </div>
+                                    <Button
+                                        onClick={addDedicationItem}
+                                        variant="outline"
+                                        size="sm"
+                                    >
+                                        <Plus className="w-4 h-4 mr-2" />
+                                        Add Item
+                                    </Button>
+                                </div>
                             </CardHeader>
-                            <CardContent className="space-y-6">
-                                {/* Service 1 */}
-                                <div className="border rounded-lg p-4 space-y-4">
-                                    <h4 className="text-lg font-semibold text-gray-900">
-                                        Service 1
-                                    </h4>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div className="space-y-2">
-                                            <Label>Title</Label>
-                                            <Input
-                                                value={
-                                                    sectionData.service_1_title
-                                                }
-                                                onChange={e =>
-                                                    setSectionData(prev => ({
-                                                        ...prev,
-                                                        service_1_title:
-                                                            e.target.value,
-                                                    }))
-                                                }
-                                                placeholder="Enter service 1 title"
-                                            />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <Label>Icon URL</Label>
-                                            <Input
-                                                value={
-                                                    sectionData.service_1_icon_url
-                                                }
-                                                onChange={e =>
-                                                    setSectionData(prev => ({
-                                                        ...prev,
-                                                        service_1_icon_url:
-                                                            e.target.value,
-                                                    }))
-                                                }
-                                                placeholder="/icons/code.svg"
-                                            />
-                                        </div>
+                            <CardContent className="space-y-4">
+                                {items.length === 0 ? (
+                                    <div className="text-center py-8">
+                                        <Info className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                                        <p className="text-gray-500">
+                                            No dedication items yet
+                                        </p>
+                                        <p className="text-sm text-gray-400">
+                                            Click "Add Item" to create your
+                                            first dedication card
+                                        </p>
                                     </div>
-                                    <div className="space-y-2">
-                                        <Label>Description (Optional)</Label>
-                                        <Textarea
-                                            value={
-                                                sectionData.service_1_description
-                                            }
-                                            onChange={e =>
-                                                setSectionData(prev => ({
-                                                    ...prev,
-                                                    service_1_description:
-                                                        e.target.value,
-                                                }))
-                                            }
-                                            placeholder="Enter service 1 description"
-                                            rows={2}
-                                            className="resize-none"
-                                        />
-                                    </div>
-                                </div>
+                                ) : (
+                                    <div className="space-y-4">
+                                        {items.map((item, index) => (
+                                            <div
+                                                key={index}
+                                                className="border rounded-lg p-4 space-y-4"
+                                            >
+                                                <div className="flex items-center justify-between">
+                                                    <div className="flex items-center space-x-2">
+                                                        <GripVertical className="w-4 h-4 text-gray-400" />
+                                                        <span className="text-sm font-medium text-gray-700">
+                                                            Item {index + 1}
+                                                        </span>
+                                                    </div>
+                                                    <Button
+                                                        onClick={() =>
+                                                            removeDedicationItem(
+                                                                index,
+                                                            )
+                                                        }
+                                                        variant="outline"
+                                                        size="sm"
+                                                        className="text-red-600 hover:text-red-700"
+                                                    >
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </Button>
+                                                </div>
 
-                                {/* Service 2 */}
-                                <div className="border rounded-lg p-4 space-y-4">
-                                    <h4 className="text-lg font-semibold text-gray-900">
-                                        Service 2
-                                    </h4>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div className="space-y-2">
-                                            <Label>Title</Label>
-                                            <Input
-                                                value={
-                                                    sectionData.service_2_title
-                                                }
-                                                onChange={e =>
-                                                    setSectionData(prev => ({
-                                                        ...prev,
-                                                        service_2_title:
-                                                            e.target.value,
-                                                    }))
-                                                }
-                                                placeholder="Enter service 2 title"
-                                            />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <Label>Icon URL</Label>
-                                            <Input
-                                                value={
-                                                    sectionData.service_2_icon_url
-                                                }
-                                                onChange={e =>
-                                                    setSectionData(prev => ({
-                                                        ...prev,
-                                                        service_2_icon_url:
-                                                            e.target.value,
-                                                    }))
-                                                }
-                                                placeholder="/icons/computer.svg"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label>Description (Optional)</Label>
-                                        <Textarea
-                                            value={
-                                                sectionData.service_2_description
-                                            }
-                                            onChange={e =>
-                                                setSectionData(prev => ({
-                                                    ...prev,
-                                                    service_2_description:
-                                                        e.target.value,
-                                                }))
-                                            }
-                                            placeholder="Enter service 2 description"
-                                            rows={2}
-                                            className="resize-none"
-                                        />
-                                    </div>
-                                </div>
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    <div className="space-y-2">
+                                                        <Label>Title</Label>
+                                                        <Input
+                                                            value={item.title}
+                                                            onChange={e =>
+                                                                updateDedicationItem(
+                                                                    index,
+                                                                    "title",
+                                                                    e.target
+                                                                        .value,
+                                                                )
+                                                            }
+                                                            placeholder="Enter item title"
+                                                        />
+                                                    </div>
 
-                                {/* Service 3 */}
-                                <div className="border rounded-lg p-4 space-y-4">
-                                    <h4 className="text-lg font-semibold text-gray-900">
-                                        Service 3
-                                    </h4>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div className="space-y-2">
-                                            <Label>Title</Label>
-                                            <Input
-                                                value={
-                                                    sectionData.service_3_title
-                                                }
-                                                onChange={e =>
-                                                    setSectionData(prev => ({
-                                                        ...prev,
-                                                        service_3_title:
-                                                            e.target.value,
-                                                    }))
-                                                }
-                                                placeholder="Enter service 3 title"
-                                            />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <Label>Icon URL</Label>
-                                            <Input
-                                                value={
-                                                    sectionData.service_3_icon_url
-                                                }
-                                                onChange={e =>
-                                                    setSectionData(prev => ({
-                                                        ...prev,
-                                                        service_3_icon_url:
-                                                            e.target.value,
-                                                    }))
-                                                }
-                                                placeholder="/icons/gear.svg"
-                                            />
-                                        </div>
+                                                    <div className="space-y-2">
+                                                        <Label>Image</Label>
+                                                        <select
+                                                            value={
+                                                                item.image_id ||
+                                                                ""
+                                                            }
+                                                            onChange={e => {
+                                                                const imageId =
+                                                                    e.target
+                                                                        .value ||
+                                                                    undefined;
+                                                                const selectedImage =
+                                                                    images.find(
+                                                                        img =>
+                                                                            img.id ===
+                                                                            imageId,
+                                                                    );
+                                                                updateDedicationItem(
+                                                                    index,
+                                                                    "image_id",
+                                                                    imageId,
+                                                                );
+                                                                updateDedicationItem(
+                                                                    index,
+                                                                    "image_url",
+                                                                    selectedImage?.file_url,
+                                                                );
+                                                            }}
+                                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#a5cd39]"
+                                                        >
+                                                            <option value="">
+                                                                Select an image
+                                                            </option>
+                                                            {images.map(
+                                                                image => (
+                                                                    <option
+                                                                        key={
+                                                                            image.id
+                                                                        }
+                                                                        value={
+                                                                            image.id
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            image.file_name
+                                                                        }
+                                                                    </option>
+                                                                ),
+                                                            )}
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div className="space-y-2">
+                                                    <Label>Description</Label>
+                                                    <Textarea
+                                                        value={item.description}
+                                                        onChange={e =>
+                                                            updateDedicationItem(
+                                                                index,
+                                                                "description",
+                                                                e.target.value,
+                                                            )
+                                                        }
+                                                        placeholder="Enter item description"
+                                                        rows={3}
+                                                        className="resize-none"
+                                                    />
+                                                </div>
+
+                                                <div className="space-y-2">
+                                                    <Label>
+                                                        Fallback Image URL
+                                                    </Label>
+                                                    <Input
+                                                        value={
+                                                            item.fallback_image_url ||
+                                                            ""
+                                                        }
+                                                        onChange={e =>
+                                                            updateDedicationItem(
+                                                                index,
+                                                                "fallback_image_url",
+                                                                e.target.value,
+                                                            )
+                                                        }
+                                                        placeholder="https://example.com/fallback-image.jpg"
+                                                    />
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
-                                    <div className="space-y-2">
-                                        <Label>Description (Optional)</Label>
-                                        <Textarea
-                                            value={
-                                                sectionData.service_3_description
-                                            }
-                                            onChange={e =>
-                                                setSectionData(prev => ({
-                                                    ...prev,
-                                                    service_3_description:
-                                                        e.target.value,
-                                                }))
-                                            }
-                                            placeholder="Enter service 3 description"
-                                            rows={2}
-                                            className="resize-none"
-                                        />
-                                    </div>
-                                </div>
+                                )}
                             </CardContent>
                         </Card>
                     </TabsContent>
@@ -948,8 +1023,8 @@ const AboutDescriptionEditor = () => {
                             <CardHeader>
                                 <CardTitle>Image Upload</CardTitle>
                                 <CardDescription>
-                                    Upload and manage images for description
-                                    section
+                                    Upload and manage images for dedication
+                                    items
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>
@@ -1004,7 +1079,7 @@ const AboutDescriptionEditor = () => {
                             <CardHeader>
                                 <CardTitle>Uploaded Images</CardTitle>
                                 <CardDescription>
-                                    Manage your uploaded description images
+                                    Manage your uploaded dedication images
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>
@@ -1079,127 +1154,75 @@ const AboutDescriptionEditor = () => {
                             <CardHeader>
                                 <CardTitle>Preview</CardTitle>
                                 <CardDescription>
-                                    Preview how the description section will
+                                    Preview how the dedication section will
                                     appear on the website
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>
                                 {sectionData.section_heading ? (
-                                    <div
-                                        className="p-8 rounded-lg"
-                                        style={{
-                                            backgroundColor:
-                                                sectionData.background_color,
-                                        }}
-                                    >
+                                    <div className="space-y-8">
                                         {/* Section Header Preview */}
-                                        <div className="text-center mb-12">
-                                            <p className="text-gray-700 leading-relaxed mb-8 text-center max-w-4xl mx-auto">
-                                                {
-                                                    sectionData.section_description
-                                                }
-                                            </p>
-                                            <h2 className="text-3xl font-bold text-gray-900 mb-10 relative inline-block">
+                                        <div className="text-center">
+                                            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
                                                 {sectionData.section_heading}
-                                                <span className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 h-1 bg-[#a5cd39] rounded-full w-1/2" />
                                             </h2>
+                                            {sectionData.section_description && (
+                                                <p className="text-gray-600 max-w-2xl mx-auto">
+                                                    {
+                                                        sectionData.section_description
+                                                    }
+                                                </p>
+                                            )}
                                         </div>
 
-                                        {/* Services Preview */}
-                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                                            {/* Service 1 */}
-                                            <div className="bg-white p-8 text-center rounded-lg border border-gray-100 shadow-sm">
-                                                <div className="flex justify-center mb-6">
-                                                    <div className="w-16 h-16 flex items-center justify-center bg-gray-100 rounded-full p-3">
-                                                        {sectionData.service_1_icon_url && (
+                                        {/* Items Preview */}
+                                        {items.length > 0 ? (
+                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                                {items.map((item, index) => (
+                                                    <div
+                                                        key={index}
+                                                        className="bg-white rounded-lg shadow-md overflow-hidden"
+                                                    >
+                                                        <div className="aspect-video relative">
                                                             <img
                                                                 src={
-                                                                    sectionData.service_1_icon_url
+                                                                    item.image_url ||
+                                                                    item.fallback_image_url ||
+                                                                    "https://via.placeholder.com/400x300"
                                                                 }
                                                                 alt={
-                                                                    sectionData.service_1_title
+                                                                    item.image_alt ||
+                                                                    item.title
                                                                 }
-                                                                className="w-12 h-12 object-contain"
+                                                                className="w-full h-full object-cover"
                                                             />
-                                                        )}
+                                                        </div>
+                                                        <div className="p-6">
+                                                            <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                                                                {item.title ||
+                                                                    "Item Title"}
+                                                            </h3>
+                                                            <p className="text-gray-600 text-sm leading-relaxed">
+                                                                {item.description ||
+                                                                    "Item description will appear here..."}
+                                                            </p>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                                                    {
-                                                        sectionData.service_1_title
-                                                    }
-                                                </h3>
-                                                {sectionData.service_1_description && (
-                                                    <p className="text-gray-600 text-sm">
-                                                        {
-                                                            sectionData.service_1_description
-                                                        }
-                                                    </p>
-                                                )}
+                                                ))}
                                             </div>
-
-                                            {/* Service 2 */}
-                                            <div className="bg-white p-8 text-center rounded-lg border border-gray-100 shadow-sm">
-                                                <div className="flex justify-center mb-6">
-                                                    <div className="w-16 h-16 flex items-center justify-center bg-gray-100 rounded-full p-3">
-                                                        {sectionData.service_2_icon_url && (
-                                                            <img
-                                                                src={
-                                                                    sectionData.service_2_icon_url
-                                                                }
-                                                                alt={
-                                                                    sectionData.service_2_title
-                                                                }
-                                                                className="w-12 h-12 object-contain"
-                                                            />
-                                                        )}
-                                                    </div>
-                                                </div>
-                                                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                                                    {
-                                                        sectionData.service_2_title
-                                                    }
-                                                </h3>
-                                                {sectionData.service_2_description && (
-                                                    <p className="text-gray-600 text-sm">
-                                                        {
-                                                            sectionData.service_2_description
-                                                        }
-                                                    </p>
-                                                )}
+                                        ) : (
+                                            <div className="text-center py-8">
+                                                <Info className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                                                <p className="text-gray-500">
+                                                    No dedication items to
+                                                    preview
+                                                </p>
+                                                <p className="text-sm text-gray-400">
+                                                    Add some dedication items to
+                                                    see the preview
+                                                </p>
                                             </div>
-
-                                            {/* Service 3 */}
-                                            <div className="bg-white p-8 text-center rounded-lg border border-gray-100 shadow-sm">
-                                                <div className="flex justify-center mb-6">
-                                                    <div className="w-16 h-16 flex items-center justify-center bg-gray-100 rounded-full p-3">
-                                                        {sectionData.service_3_icon_url && (
-                                                            <img
-                                                                src={
-                                                                    sectionData.service_3_icon_url
-                                                                }
-                                                                alt={
-                                                                    sectionData.service_3_title
-                                                                }
-                                                                className="w-12 h-12 object-contain"
-                                                            />
-                                                        )}
-                                                    </div>
-                                                </div>
-                                                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                                                    {
-                                                        sectionData.service_3_title
-                                                    }
-                                                </h3>
-                                                {sectionData.service_3_description && (
-                                                    <p className="text-gray-600 text-sm">
-                                                        {
-                                                            sectionData.service_3_description
-                                                        }
-                                                    </p>
-                                                )}
-                                            </div>
-                                        </div>
+                                        )}
                                     </div>
                                 ) : (
                                     <div className="text-center py-12">
@@ -1241,4 +1264,4 @@ const AboutDescriptionEditor = () => {
     );
 };
 
-export default AboutDescriptionEditor;
+export default AboutDedicationEditor;

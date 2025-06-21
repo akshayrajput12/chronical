@@ -1,8 +1,12 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { motion, useAnimation, useInView } from "framer-motion";
+import { supabase } from "@/lib/supabase";
+import {
+    AboutDedicationSectionData,
+    AboutDedicationItemData,
+} from "@/types/about";
 
 interface FeatureCardProps {
     title: string;
@@ -12,118 +16,293 @@ interface FeatureCardProps {
 }
 
 const DedicationSection = () => {
-    const controls = useAnimation();
-    const ref = useRef(null);
-    const isInView = useInView(ref, { once: false, amount: 0.2 });
+    // State for dynamic data
+    const [sectionData, setSectionData] = useState<AboutDedicationSectionData>({
+        id: "",
+        section_heading: "DEDICATION TO QUALITY AND PRECISION",
+        section_description: undefined,
+        is_active: true,
+        created_at: "",
+        updated_at: "",
+    });
 
-    React.useEffect(() => {
-        if (isInView) {
-            controls.start("visible");
+    const [items, setItems] = useState<AboutDedicationItemData[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    // Load data on component mount
+    useEffect(() => {
+        loadDedicationData();
+    }, []);
+
+    const loadDedicationData = async () => {
+        try {
+            setLoading(true);
+            setError(null);
+
+            console.log("Frontend: Loading dedication data...");
+
+            // First check if tables exist
+            const { data: tableCheck, error: tableError } = await supabase
+                .from("about_dedication_sections")
+                .select("*")
+                .limit(1);
+
+            console.log("Frontend: Table check result:", {
+                tableCheck,
+                tableError,
+            });
+
+            if (tableError) {
+                console.warn(
+                    "Frontend: Database tables not found, no data will be shown:",
+                    tableError,
+                );
+                setLoading(false);
+                return;
+            }
+
+            // Try to load section data
+            const { data: sectionResponse, error: sectionError } =
+                await supabase.rpc("get_about_dedication_section");
+
+            console.log("Frontend: Section RPC result:", {
+                sectionResponse,
+                sectionError,
+            });
+
+            if (sectionError) {
+                console.warn(
+                    "Frontend: Database function not found, no data will be shown:",
+                    sectionError,
+                );
+                // Don't show any data if database function doesn't exist
+                setLoading(false);
+                return;
+            }
+
+            if (sectionResponse && sectionResponse.length > 0) {
+                console.log(
+                    "Frontend: Found section data:",
+                    sectionResponse[0],
+                );
+                setSectionData(sectionResponse[0]);
+            } else {
+                console.log("Frontend: No section data found");
+            }
+
+            // Try to load items data
+            const { data: itemsResponse, error: itemsError } =
+                await supabase.rpc("get_about_dedication_items");
+
+            console.log("Frontend: Items RPC result:", {
+                itemsResponse,
+                itemsError,
+            });
+
+            if (itemsError) {
+                console.warn(
+                    "Frontend: Database function not found for items:",
+                    itemsError,
+                );
+                setLoading(false);
+                return;
+            }
+
+            if (itemsResponse) {
+                console.log("Frontend: Found items data:", itemsResponse);
+                // Construct proper image URLs for each item
+                const itemsWithUrls = itemsResponse.map(
+                    (item: AboutDedicationItemData) => {
+                        let imageUrl = null;
+                        if (item.image_url) {
+                            const { data: urlData } = supabase.storage
+                                .from("about-dedication")
+                                .getPublicUrl(item.image_url);
+                            imageUrl = urlData.publicUrl;
+                        }
+
+                        return {
+                            ...item,
+                            image_url: imageUrl,
+                        };
+                    },
+                );
+
+                setItems(itemsWithUrls);
+                console.log("Frontend: Set items:", itemsWithUrls);
+            } else {
+                console.log("Frontend: No items data found");
+            }
+        } catch (error) {
+            console.warn(
+                "Frontend: Error loading dedication data, no data will be shown:",
+                error,
+            );
+            // Don't show any data on error - only dynamic data
+        } finally {
+            setLoading(false);
         }
-    }, [controls, isInView]);
-
-    const containerVariants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.2,
-                delayChildren: 0.3,
-            },
-        },
     };
 
-    const itemVariants = {
-        hidden: { y: 20, opacity: 0 },
-        visible: {
-            y: 0,
-            opacity: 1,
-            transition: { duration: 0.5 },
-        },
-    };
+    // Show loading state
+    if (loading) {
+        return (
+            <section className="py-8 md:py-12 lg:py-16 bg-white text-black overflow-hidden relative">
+                <div className="container mx-auto px-4 relative z-10">
+                    <div className="max-w-6xl mx-auto">
+                        <div className="animate-pulse">
+                            <div className="text-center mb-12">
+                                <div className="h-8 bg-gray-300 rounded mb-4 mx-auto max-w-md"></div>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                                {[1, 2, 3].map(i => (
+                                    <div
+                                        key={i}
+                                        className="border rounded-lg p-4"
+                                    >
+                                        <div className="h-48 bg-gray-300 rounded mb-4"></div>
+                                        <div className="h-4 bg-gray-300 rounded mb-2"></div>
+                                        <div className="h-20 bg-gray-300 rounded"></div>
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {[1, 2].map(i => (
+                                    <div
+                                        key={i}
+                                        className="border rounded-lg p-4"
+                                    >
+                                        <div className="h-48 bg-gray-300 rounded mb-4"></div>
+                                        <div className="h-4 bg-gray-300 rounded mb-2"></div>
+                                        <div className="h-20 bg-gray-300 rounded"></div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+    }
 
-    const features = [
-        {
-            title: "INNOVATION",
-            description:
-                "At Chronicle Exhibits, we believe in pushing the boundaries of creativity and technology to design trade show booths that captivate and inspire. Our commitment to innovation ensures that we deliver cutting-edge solutions tailored to our clients' unique needs.",
-            image: "https://images.unsplash.com/photo-1600881333168-2ef49b341f30?q=80&w=1470&auto=format&fit=crop",
-        },
-        {
-            title: "QUALITY",
-            description:
-                "Quality is at the heart of everything we do. From the materials we choose to the craftsmanship we employ, Chronicle Exhibits is dedicated to delivering exceptional booths that stand the test of time and make a lasting impression.",
-            image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=1470&auto=format&fit=crop",
-        },
-        {
-            title: "CUSTOMER FOCUS",
-            description:
-                "Our clients are our top priority. We work closely with each client to understand their vision and objectives, ensuring that every booth we create not only meets but exceeds their expectations. Your success is our success.",
-            image: "https://images.unsplash.com/photo-1599642080669-0e7eaa5a2e18?q=80&w=1470&auto=format&fit=crop",
-        },
-        {
-            title: "SUSTAINABILITY",
-            description:
-                "We are committed to environmentally responsible practices. Chronicle Exhibits strives to minimize our ecological footprint by using sustainable materials and processes, contributing to a greener future for the trade show industry.",
-            image: "https://images.unsplash.com/photo-1582037928769-351659e8b8ba?q=80&w=1470&auto=format&fit=crop",
-        },
-        {
-            title: "COLLABORATION",
-            description:
-                "Teamwork and collaboration are essential to our process. By fostering a collaborative environment, we harness the diverse talents of our team to deliver exceptional results for our clients.",
-            image: "https://images.unsplash.com/photo-1566737236500-c8ac43014a67?q=80&w=1470&auto=format&fit=crop",
-        },
-    ];
+    // Don't render if section is not active
+    if (!sectionData.is_active) {
+        return null;
+    }
+
+    // Don't render if no items are loaded from database - only show dynamic data
+    if (items.length === 0) {
+        return null;
+    }
 
     return (
         <section
-            ref={ref}
             className="py-8 md:py-12 lg:py-16 bg-white text-black overflow-hidden relative"
             aria-label="Our Core Values"
         >
             <div className="container mx-auto px-4 relative z-10">
-                <motion.div
-                    className="max-w-6xl mx-auto"
-                    variants={containerVariants}
-                    initial="hidden"
-                    animate={controls}
-                >
+                <div className="max-w-6xl mx-auto">
                     {/* Section Title */}
-                    <motion.div
-                        className="text-center mb-12"
-                        variants={itemVariants}
-                    >
+                    <div className="text-center mb-12">
                         <h2 className="text-3xl md:text-4xl font-rubik font-bold mb-2 text-[#333333]">
-                            DEDICATION TO QUALITY AND PRECISION
+                            {sectionData.section_heading}
                         </h2>
-                    </motion.div>
-
-                    {/* Top Row - 3 cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                        {features.slice(0, 3).map((feature, index) => (
-                            <FeatureCard
-                                key={index}
-                                title={feature.title}
-                                description={feature.description}
-                                image={feature.image}
-                                index={index}
-                            />
-                        ))}
+                        {sectionData.section_description && (
+                            <p className="text-gray-600 mt-4 max-w-2xl mx-auto">
+                                {sectionData.section_description}
+                            </p>
+                        )}
                     </div>
 
-                    {/* Bottom Row - 2 cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mx-auto">
-                        {features.slice(3, 5).map((feature, index) => (
-                            <FeatureCard
-                                key={index + 3}
-                                title={feature.title}
-                                description={feature.description}
-                                image={feature.image}
-                                index={index + 3}
-                            />
-                        ))}
-                    </div>
-                </motion.div>
+                    {/* Dynamic Layout Based on Item Count */}
+                    {items.length <= 3 ? (
+                        // Single row for 3 or fewer items
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            {items.map((item, index) => (
+                                <FeatureCard
+                                    key={item.id}
+                                    title={item.title}
+                                    description={item.description}
+                                    image={
+                                        item.image_url ||
+                                        item.fallback_image_url ||
+                                        "https://via.placeholder.com/400x300"
+                                    }
+                                    index={index}
+                                />
+                            ))}
+                        </div>
+                    ) : items.length === 4 ? (
+                        // 2x2 grid for 4 items
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {items.map((item, index) => (
+                                <FeatureCard
+                                    key={item.id}
+                                    title={item.title}
+                                    description={item.description}
+                                    image={
+                                        item.image_url ||
+                                        item.fallback_image_url ||
+                                        "https://via.placeholder.com/400x300"
+                                    }
+                                    index={index}
+                                />
+                            ))}
+                        </div>
+                    ) : items.length === 5 ? (
+                        // Original layout: 3 on top, 2 on bottom
+                        <>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                                {items.slice(0, 3).map((item, index) => (
+                                    <FeatureCard
+                                        key={item.id}
+                                        title={item.title}
+                                        description={item.description}
+                                        image={
+                                            item.image_url ||
+                                            item.fallback_image_url ||
+                                            "https://via.placeholder.com/400x300"
+                                        }
+                                        index={index}
+                                    />
+                                ))}
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mx-auto">
+                                {items.slice(3, 5).map((item, index) => (
+                                    <FeatureCard
+                                        key={item.id}
+                                        title={item.title}
+                                        description={item.description}
+                                        image={
+                                            item.image_url ||
+                                            item.fallback_image_url ||
+                                            "https://via.placeholder.com/400x300"
+                                        }
+                                        index={index + 3}
+                                    />
+                                ))}
+                            </div>
+                        </>
+                    ) : (
+                        // Grid layout for 6+ items
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {items.map((item, index) => (
+                                <FeatureCard
+                                    key={item.id}
+                                    title={item.title}
+                                    description={item.description}
+                                    image={
+                                        item.image_url ||
+                                        item.fallback_image_url ||
+                                        "https://via.placeholder.com/400x300"
+                                    }
+                                    index={index}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </div>
             </div>
         </section>
     );
@@ -135,34 +314,8 @@ const FeatureCard = ({
     image,
     index,
 }: FeatureCardProps) => {
-    const controls = useAnimation();
-    const ref = useRef(null);
-    const isInView = useInView(ref, { once: false, amount: 0.2 });
-
-    React.useEffect(() => {
-        if (isInView) {
-            controls.start("visible");
-        }
-    }, [controls, isInView]);
-
-    const itemVariants = {
-        hidden: { y: 20, opacity: 0 },
-        visible: {
-            y: 0,
-            opacity: 1,
-            transition: { duration: 0.5, delay: index * 0.1 },
-        },
-    };
-
     return (
-        <motion.div
-            ref={ref}
-            className="flex flex-col h-full group border border-transparent hover:border-[#a5cd39] p-3 rounded-sm transition-all duration-300"
-            variants={itemVariants}
-            initial="hidden"
-            animate={controls}
-            transition={{ duration: 0.3 }}
-        >
+        <div className="flex flex-col h-full group border border-transparent hover:border-[#a5cd39] p-3 rounded-sm transition-all duration-300">
             {/* Image */}
             <div className="relative h-48 md:h-56 lg:h-64 overflow-hidden mb-3 rounded-sm shadow-sm group-hover:shadow-md transition-all duration-300">
                 <Image
@@ -183,7 +336,7 @@ const FeatureCard = ({
                     {description}
                 </p>
             </div>
-        </motion.div>
+        </div>
     );
 };
 

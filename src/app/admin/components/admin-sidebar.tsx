@@ -294,6 +294,22 @@ const AdminSidebar = () => {
                             >
                                 <div className="py-1 space-y-1">
                                     <SubNavItem
+                                        href="/admin/pages/about/hero"
+                                        label="Hero Section"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/about/hero"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/about/dedication"
+                                        label="Dedication Section"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/about/dedication"
+                                        }
+                                    />
+                                    <SubNavItem
                                         href="/admin/pages/about/main"
                                         label="About Us Main"
                                         isActive={
