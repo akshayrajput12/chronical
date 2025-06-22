@@ -35,40 +35,35 @@ export default function EventDetailPage() {
             date: "21 MAY 2025",
             title: "DWTC Hospitality Division Achieves Strong Performance in 2024, Catering to Nearly 1 Million Guests Across 2,400 Events",
             image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-            excerpt:
-                "DWTC Hospitality division celebrates another landmark year serving prestigious large-scale events.",
+            excerpt: "HOSPITALITY, EVENTS, BUSINESS",
         },
         {
             id: 2,
             date: "27 APR 2025",
             title: "DWTC delivers AED22.35 billion in economic output in 2024, driven by record increase in large scale events",
             image: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-            excerpt:
-                "Dubai World Trade Centre reports significant economic impact through successful large-scale events.",
+            excerpt: "ECONOMICS, TRADE, DUBAI",
         },
         {
             id: 3,
             date: "25 APR 2025",
             title: "Capacity Crowds Mark Monumental Opening of GITEX ASIA x Ai Everything Singapore",
             image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-            excerpt:
-                "GITEX ASIA x Ai Everything Singapore opens to capacity crowds, marking a new milestone for Asia's technology sector.",
+            excerpt: "TECHNOLOGY, AI, SINGAPORE",
         },
         {
             id: 4,
             date: "20 APR 2025",
             title: "Innovation Summit 2025 Brings Together Global Tech Leaders",
             image: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-            excerpt:
-                "Leading technology innovators gather to discuss the future of digital transformation.",
+            excerpt: "INNOVATION, TECHNOLOGY, LEADERSHIP",
         },
         {
             id: 5,
             date: "15 APR 2025",
             title: "Sustainable Technology Expo Showcases Green Innovation",
             image: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2025&q=80",
-            excerpt:
-                "Discover the latest in sustainable technology solutions and environmental innovation.",
+            excerpt: "SUSTAINABILITY, GREEN TECH, ENVIRONMENT",
         },
     ];
 
@@ -378,7 +373,9 @@ export default function EventDetailPage() {
             </section>
 
             {/* Event Gallery Section */}
-            <EventGallery eventId={eventId} />
+            <section className="py-8 md:py-12 lg:py-16 bg-white">
+                <EventGallery eventId={eventId} />
+            </section>
 
             {/* Related Blog Articles Section */}
             <section

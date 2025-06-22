@@ -34,6 +34,12 @@ const BlogCard = ({
         }
     };
 
+    // Extract category tags from excerpt (assuming they're comma-separated)
+    const categoryTags = post.excerpt
+        .split(",")
+        .map(tag => tag.trim())
+        .slice(0, 3);
+
     return (
         <motion.div
             className={`flex-none ${className}`}
@@ -44,7 +50,7 @@ const BlogCard = ({
             viewport={{ once: true }}
         >
             <div
-                className="bg-white cursor-pointer mb-8 sm:mb-12 md:mb-16 lg:mb-20 pt-6 sm:pt-8 md:pt-10 lg:pt-12 transition-all duration-500 hover:shadow-lg group rounded-lg"
+                className="bg-white cursor-pointer transition-all duration-500 hover:shadow-lg group flex flex-col h-full"
                 onClick={handleClick}
                 style={{
                     width: "100%",
@@ -52,48 +58,39 @@ const BlogCard = ({
                     border: "0px",
                     backgroundColor: "rgb(255, 255, 255)",
                     position: "relative",
-                    fontFamily:
-                        "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
                 }}
             >
-                {/* Green accent bar - positioned at very top of card */}
-                <div
-                    className="absolute top-0 left-0 w-8 sm:w-12 md:w-16 h-1 transition-all duration-300 group-hover:w-12 sm:group-hover:w-16 md:group-hover:w-20"
-                    style={{ backgroundColor: "#a5cd39", zIndex: 10 }}
-                ></div>
-
-                {/* Card Header */}
-                <div
-                    className="relative px-3 sm:px-4 md:px-6 lg:px-8 pb-6 sm:pb-8 md:pb-10 lg:pb-12"
-                    style={{ minHeight: "150px" }}
-                >
-                    {/* Date */}
-                    <div
-                        className="text-xs sm:text-xs md:text-xs text-gray-700 uppercase mb-3 sm:mb-4 md:mb-5 mt-2 sm:mt-3 md:mt-4 font-medium transition-colors duration-300 group-hover:text-[#a5cd39]"
-                        style={{ letterSpacing: "1px" }}
-                    >
-                        {post.date}
+                {/* Content Section */}
+                <div className="p-6 flex-1 flex flex-col justify-between">
+                    {/* Article Label */}
+                    <div className="mb-4">
+                        <span className="text-xs font-medium text-gray-600 uppercase tracking-wider">
+                            ARTICLE
+                        </span>
                     </div>
 
                     {/* Title */}
-                    <h3
-                        className="text-base sm:text-lg md:text-xl font-normal text-gray-900 mb-3 sm:mb-4 md:mb-5 leading-tight transition-colors duration-300 group-hover:text-gray-700"
-                        style={{ fontFamily: "serif" }}
-                    >
-                        {post.title}
-                    </h3>
+                    <div className="flex-1 mb-6">
+                        <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 leading-tight mb-4 group-hover:text-gray-700 transition-colors duration-300">
+                            {post.title}
+                        </h3>
+                    </div>
 
-                    {/* Category/Excerpt */}
-                    <p
-                        className="text-xs sm:text-xs md:text-xs text-gray-700 uppercase font-medium transition-colors duration-300 group-hover:text-[#a5cd39] line-clamp-2"
-                        style={{ letterSpacing: "1px" }}
-                    >
-                        {post.excerpt}
-                    </p>
+                    {/* Category Tags */}
+                    <div className="flex flex-wrap gap-2 mb-4">
+                        {categoryTags.map((tag, tagIndex) => (
+                            <span
+                                key={tagIndex}
+                                className="px-3 py-1 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider rounded-sm"
+                            >
+                                {tag}
+                            </span>
+                        ))}
+                    </div>
                 </div>
 
-                {/* Image */}
-                <div className="relative flex-1 overflow-hidden h-40 sm:h-48 md:h-56 lg:h-64">
+                {/* Image Section with Button Overlay */}
+                <div className="relative h-48 sm:h-56 md:h-64 overflow-hidden">
                     <Image
                         src={post.image}
                         alt={post.title}
@@ -101,6 +98,13 @@ const BlogCard = ({
                         className="object-cover transition-transform duration-300 group-hover:scale-105"
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     />
+
+                    {/* Green Button Overlay - Permanently Visible */}
+                    <div className="absolute inset-0 flex items-end justify-center pb-6">
+                        <div className="bg-[#a5cd39] text-white px-6 py-3 text-sm font-medium uppercase tracking-wider hover:bg-[#8fb32a] transition-colors duration-300">
+                            FIND OUT MORE
+                        </div>
+                    </div>
                 </div>
 
                 {/* Link overlay for navigation */}

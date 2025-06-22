@@ -38,8 +38,7 @@ const blogPosts = [
 
             <p>The division's affiliate catering managed by over 155,000 guests in 1,500 external events in 2024, reflecting an impressive 27% year-on-year growth. Key events included the Dubai International Boat Show, the Dubai World Cup, Dubai Food Fest, Dubai Boat Fair, GITEX China Plus, the Middle East and North Africa Business Aviation Association (MEBAA), and several large-scale private events. This remarkable growth demonstrates the division's capacity was strategically enhanced, allowing the team to cater to up to 60,000 guests per day while maintaining exceptional service standards.</p>
         `,
-        excerpt:
-            "DWTC Hospitality division celebrates another landmark year serving prestigious large-scale events, catering to nearly 1 million guests across 2,400 events in 2024.",
+        excerpt: "HOSPITALITY, EVENTS, BUSINESS",
     },
     {
         id: 2,
@@ -58,8 +57,7 @@ const blogPosts = [
 
             <p>DWTC's success in 2024 underscores Dubai's position as a global business hub and its commitment to supporting economic diversification through the events and exhibitions sector. The venue continues to play a crucial role in attracting international businesses and fostering trade relationships.</p>
         `,
-        excerpt:
-            "Dubai World Trade Centre reports significant economic impact through successful large-scale events and exhibitions.",
+        excerpt: "ECONOMICS, TRADE, DUBAI",
     },
     // Add more blog posts as needed
 ];
