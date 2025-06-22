@@ -172,7 +172,7 @@ const EventGallery: React.FC<EventGalleryProps> = ({ eventId }) => {
                 {/* Slider Container */}
                 <div
                     ref={sliderRef}
-                    className="flex gap-4 md:gap-6 lg:gap-8 overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing pb-4 scroll-smooth"
+                    className="flex gap-2 md:gap-3 lg:gap-4 overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing pb-4 scroll-smooth"
                     style={{
                         scrollbarWidth: "none",
                         msOverflowStyle: "none",
@@ -219,7 +219,7 @@ const EventGallery: React.FC<EventGalleryProps> = ({ eventId }) => {
                 </div>
 
                 {/* Scroll Indicator Dots */}
-                <div className="flex justify-center mt-6 gap-2">
+                <div className="flex justify-center mt-6 gap-1">
                     {galleryImages.map((_, index) => (
                         <button
                             key={index}

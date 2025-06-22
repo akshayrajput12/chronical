@@ -308,32 +308,42 @@ export default function EventDetailPage() {
                             viewport={{ once: true }}
                         >
                             {/* Left Side - Add to Calendar Button */}
-                            <div className="flex-shrink-0">
-                                <Button className="bg-[#a5cd39] hover:bg-[#8fb32a] text-white px-6 py-3 text-sm font-medium uppercase tracking-wider rounded-full">
-                                    ADD TO MY CALENDAR
+                            <div className="flex-shrink-0 w-full sm:w-auto">
+                                <Button className="bg-[#a5cd39] hover:bg-[#8fb32a] text-white px-4 sm:px-6 py-3 text-xs sm:text-sm font-medium uppercase tracking-wider rounded-full w-full sm:w-auto">
+                                    <span className="hidden sm:inline">
+                                        ADD TO MY CALENDAR
+                                    </span>
+                                    <span className="sm:hidden">
+                                        ADD TO CALENDAR
+                                    </span>
                                 </Button>
                             </div>
 
                             {/* Right Side - Visit Website Button and Social Icons */}
-                            <div className="flex items-center gap-6">
+                            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 sm:gap-6 w-full sm:w-auto">
                                 {/* Visit Event Website Button */}
                                 <Button
                                     variant="outline"
-                                    className="border-2 border-[#a5cd39] text-[#a5cd39] hover:border-[#8fb32a] hover:text-[#8fb32a] px-6 py-3 text-sm font-medium uppercase tracking-wider rounded-full bg-white"
+                                    className="border-2 border-[#a5cd39] text-[#a5cd39] hover:border-[#8fb32a] hover:text-[#8fb32a] px-4 sm:px-6 py-3 text-xs sm:text-sm font-medium uppercase tracking-wider rounded-full bg-white w-full sm:w-auto"
                                 >
-                                    VISIT EVENT WEBSITE
+                                    <span className="hidden sm:inline">
+                                        VISIT EVENT WEBSITE
+                                    </span>
+                                    <span className="sm:hidden">
+                                        VISIT WEBSITE
+                                    </span>
                                 </Button>
 
                                 {/* Follow Event Text and Social Icons */}
-                                <div className="flex items-center gap-3">
-                                    <span className="text-gray-600 text-sm font-medium uppercase tracking-wider">
+                                <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-3">
+                                    <span className="text-gray-600 text-xs sm:text-sm font-medium uppercase tracking-wider text-center sm:text-left">
                                         FOLLOW EVENT
                                     </span>
 
                                     {/* Social Media Icons */}
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex items-center justify-center gap-2">
                                         {/* Facebook */}
-                                        <div className="w-8 h-8 bg-blue-600 rounded flex items-center justify-center cursor-pointer hover:bg-blue-700 transition-colors">
+                                        <div className="w-8 h-8 sm:w-8 sm:h-8 bg-blue-600 rounded flex items-center justify-center cursor-pointer hover:bg-blue-700 transition-colors">
                                             <svg
                                                 className="w-4 h-4 text-white"
                                                 fill="currentColor"
@@ -344,7 +354,7 @@ export default function EventDetailPage() {
                                         </div>
 
                                         {/* Instagram */}
-                                        <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded flex items-center justify-center cursor-pointer hover:from-purple-600 hover:to-pink-600 transition-colors">
+                                        <div className="w-8 h-8 sm:w-8 sm:h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded flex items-center justify-center cursor-pointer hover:from-purple-600 hover:to-pink-600 transition-colors">
                                             <svg
                                                 className="w-4 h-4 text-white"
                                                 fill="currentColor"
@@ -355,7 +365,7 @@ export default function EventDetailPage() {
                                         </div>
 
                                         {/* YouTube */}
-                                        <div className="w-8 h-8 bg-red-600 rounded flex items-center justify-center cursor-pointer hover:bg-red-700 transition-colors">
+                                        <div className="w-8 h-8 sm:w-8 sm:h-8 bg-red-600 rounded flex items-center justify-center cursor-pointer hover:bg-red-700 transition-colors">
                                             <svg
                                                 className="w-4 h-4 text-white"
                                                 fill="currentColor"

@@ -30,11 +30,14 @@ const EventCard = ({
             viewport={{ once: true }}
         >
             <div
-                className="bg-white cursor-pointer mb-8 sm:mb-12 md:mb-16 lg:mb-20 pt-6 sm:pt-8 md:pt-10 lg:pt-12 transition-all duration-500 hover:shadow-lg group rounded-lg"
+                className="bg-white cursor-pointer mb-8 sm:mb-12 md:mb-16 lg:mb-20 pt-6 sm:pt-8 md:pt-10 lg:pt-12 transition-all duration-500 hover:shadow-lg group rounded-lg flex flex-col"
                 onClick={() => onClick(event.id)}
                 style={{
                     width: "100%",
-                    height: "auto",
+                    // Responsive height maintaining 380:520 aspect ratio
+                    height: style?.width
+                        ? `${(parseInt(style.width.toString()) * 520) / 380}px`
+                        : "520px",
                     border: "0px",
                     backgroundColor: "rgb(255, 255, 255)",
                     position: "relative",
@@ -79,7 +82,7 @@ const EventCard = ({
                 </div>
 
                 {/* Image */}
-                <div className="relative flex-1 overflow-hidden h-40 sm:h-48 md:h-56 lg:h-64">
+                <div className="relative flex-1 overflow-hidden">
                     <Image
                         src={event.image}
                         alt={event.title}

@@ -29,18 +29,23 @@ const BlogCarousel = ({ posts }: BlogCarouselProps) => {
     useEffect(() => {
         const handleResize = () => {
             const width = window.innerWidth;
+            const padding = 32; // Account for container padding (px-4 = 16px each side, doubled for safety)
+
             if (width < 640) {
-                // Mobile
+                // Mobile - single card with proper viewport constraint
                 setCardsToShow(1);
-                setCardWidth(280);
+                const availableWidth = width - padding - 32; // Extra margin for mobile
+                setCardWidth(Math.min(280, Math.max(240, availableWidth)));
             } else if (width < 1024) {
-                // Tablet
+                // Tablet - two cards with gap
                 setCardsToShow(2);
-                setCardWidth(300);
+                const availableWidth = (width - padding - 16) / 2; // Account for gap between cards
+                setCardWidth(Math.min(320, Math.max(260, availableWidth)));
             } else {
-                // Desktop
+                // Desktop - three cards with gaps
                 setCardsToShow(3);
-                setCardWidth(320);
+                const availableWidth = (width - padding - 32) / 3; // Account for gaps between cards
+                setCardWidth(Math.min(340, Math.max(280, availableWidth)));
             }
         };
 
@@ -83,12 +88,14 @@ const BlogCarousel = ({ posts }: BlogCarouselProps) => {
     }
 
     return (
-        <div className="relative mx-2 sm:mx-4 md:mx-8 lg:mx-12 xl:mx-16">
-            {/* Visible area for exactly 3 cards */}
+        <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Responsive visible area container */}
             <div
-                className="overflow-hidden"
+                className="overflow-hidden w-full"
                 style={{
-                    width: `${3 * cardWidth + 2 * 16}px`, // 3 cards + 2 gaps
+                    maxWidth: `${
+                        cardsToShow * cardWidth + (cardsToShow - 1) * 16
+                    }px`, // Dynamic cards + gaps
                     margin: "0 auto", // Center the container
                 }}
             >
@@ -99,7 +106,7 @@ const BlogCarousel = ({ posts }: BlogCarouselProps) => {
                             variant="ghost"
                             size="icon"
                             onClick={prevSlide}
-                            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-gray-100/80 hover:bg-gray-200/80 shadow-lg rounded-full w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 transition-all duration-300 text-gray-500 hover:text-gray-600"
+                            className="absolute -left-4 sm:-left-6 top-1/2 -translate-y-1/2 z-10 bg-gray-100/80 hover:bg-gray-200/80 shadow-lg rounded-full w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 transition-all duration-300 text-gray-500 hover:text-gray-600"
                         >
                             <ChevronLeft className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />
                         </Button>
@@ -108,7 +115,7 @@ const BlogCarousel = ({ posts }: BlogCarouselProps) => {
                             variant="ghost"
                             size="icon"
                             onClick={nextSlide}
-                            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-gray-100/80 hover:bg-gray-200/80 shadow-lg rounded-full w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 transition-all duration-300 text-gray-500 hover:text-gray-600"
+                            className="absolute -right-4 sm:-right-6 top-1/2 -translate-y-1/2 z-10 bg-gray-100/80 hover:bg-gray-200/80 shadow-lg rounded-full w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 transition-all duration-300 text-gray-500 hover:text-gray-600"
                         >
                             <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />
                         </Button>

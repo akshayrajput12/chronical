@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -28,6 +28,21 @@ const BlogCard = ({
     className = "",
     style,
 }: BlogCardProps) => {
+    const [isMobile, setIsMobile] = useState(false);
+
+    // Handle responsive detection safely
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 640);
+        };
+
+        // Initial check
+        handleResize();
+
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
     const handleClick = () => {
         if (onClick) {
             onClick(post.id.toString());
@@ -50,11 +65,21 @@ const BlogCard = ({
             viewport={{ once: true }}
         >
             <div
-                className="bg-white cursor-pointer transition-all duration-500 hover:shadow-lg group flex flex-col h-full"
+                className="bg-white cursor-pointer transition-all duration-500 hover:shadow-lg group flex flex-col"
                 onClick={handleClick}
                 style={{
                     width: "100%",
-                    height: "auto",
+                    // Responsive height with increased height for mobile
+                    height: style?.width
+                        ? (() => {
+                              const cardWidth = parseInt(
+                                  style.width.toString(),
+                              );
+                              // Use taller aspect ratio for mobile (1:1.8 instead of 380:520)
+                              const aspectRatio = isMobile ? 1.8 : 520 / 380;
+                              return `${cardWidth * aspectRatio}px`;
+                          })()
+                        : "520px",
                     border: "0px",
                     backgroundColor: "rgb(255, 255, 255)",
                     position: "relative",
@@ -89,8 +114,8 @@ const BlogCard = ({
                     </div>
                 </div>
 
-                {/* Image Section with Button Overlay */}
-                <div className="relative h-48 sm:h-56 md:h-64 overflow-hidden">
+                {/* Image Section */}
+                <div className="relative h-48 overflow-hidden">
                     <Image
                         src={post.image}
                         alt={post.title}
@@ -98,12 +123,12 @@ const BlogCard = ({
                         className="object-cover transition-transform duration-300 group-hover:scale-105"
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     />
+                </div>
 
-                    {/* Green Button Overlay - Permanently Visible */}
-                    <div className="absolute inset-0 flex items-end justify-center pb-6">
-                        <div className="bg-[#a5cd39] text-white px-6 py-3 text-sm font-medium uppercase tracking-wider hover:bg-[#8fb32a] transition-colors duration-300">
-                            FIND OUT MORE
-                        </div>
+                {/* Full-Width Blue Button - Covering Card Bottom */}
+                <div className="relative">
+                    <div className="bg-[#a5cd39] text-white py-4 text-center text-sm font-medium uppercase tracking-wider hover:bg-[#357ABD] transition-colors duration-300 cursor-pointer">
+                        FIND OUT MORE
                     </div>
                 </div>
 
