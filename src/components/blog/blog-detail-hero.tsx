@@ -4,13 +4,21 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Calendar, Eye, User } from "lucide-react";
 
 interface BlogDetailHeroProps {
     title: string;
-    subtitle: string;
+    subtitle?: string;
     date: string;
-    heroImage: string;
+    heroImage?: string;
+    category?: {
+        name: string;
+        color: string;
+        slug: string;
+    };
+    tags?: string[];
+    viewCount?: number;
+    author?: string;
 }
 
 const BlogDetailHero = ({
@@ -18,7 +26,14 @@ const BlogDetailHero = ({
     subtitle,
     date,
     heroImage,
+    category,
+    tags = [],
+    viewCount = 0,
+    author,
 }: BlogDetailHeroProps) => {
+    // Default hero image if none provided
+    const defaultHeroImage =
+        "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2072&q=80";
     return (
         <section className="w-full bg-white">
             {/* Full width hero container with background image */}
@@ -26,7 +41,7 @@ const BlogDetailHero = ({
                 {/* Background Image */}
                 <div className="absolute inset-0 z-0">
                     <Image
-                        src={heroImage}
+                        src={heroImage || defaultHeroImage}
                         alt={title}
                         fill
                         className="object-cover"
@@ -40,16 +55,39 @@ const BlogDetailHero = ({
                 <div className="relative z-10 px-4 sm:px-6 md:px-8 lg:px-12 text-center text-white w-full">
                     <div className="max-w-7xl mx-auto">
                         <div className="max-w-4xl mx-auto">
-                            {/* Press Release Label */}
+                            {/* Category Label and Tags */}
                             <motion.div
-                                className="mb-4 sm:mb-6"
+                                className="mb-4 sm:mb-6 flex flex-wrap justify-center items-center gap-2"
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.6 }}
                             >
-                                <span className="inline-block bg-white/20 backdrop-blur-sm text-white text-xs font-medium uppercase tracking-wider px-4 py-2 rounded-full border border-white/30">
-                                    Press Release
-                                </span>
+                                {category ? (
+                                    <span
+                                        className="inline-block text-white text-xs font-medium uppercase tracking-wider px-4 py-2 rounded-full border border-white/30"
+                                        style={{
+                                            backgroundColor: `${category.color}80`,
+                                        }}
+                                    >
+                                        {category.name}
+                                    </span>
+                                ) : (
+                                    <span className="inline-block bg-white/20 backdrop-blur-sm text-white text-xs font-medium uppercase tracking-wider px-4 py-2 rounded-full border border-white/30">
+                                        Article
+                                    </span>
+                                )}
+                                {/* Tags next to category */}
+                                {tags &&
+                                    tags.length > 0 &&
+                                    tags.map((tag, index) => (
+                                        <span
+                                            key={index}
+                                            className="px-3 py-1 bg-gray-100 text-gray-700 text-xs font-medium uppercase tracking-wider rounded-sm hover:bg-gray-200 transition-colors"
+                                            style={{ marginLeft: "0.5rem" }}
+                                        >
+                                            {tag}
+                                        </span>
+                                    ))}
                             </motion.div>
 
                             {/* Title */}
@@ -62,16 +100,35 @@ const BlogDetailHero = ({
                                 {title}
                             </motion.h1>
 
-                            {/* Date */}
+                            {/* Metadata */}
                             <motion.div
-                                className="mb-4"
+                                className="mb-4 flex flex-wrap justify-center items-center gap-4 text-white/90"
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.6, delay: 0.3 }}
                             >
-                                <span className="text-white/90 text-sm sm:text-base md:text-lg lg:text-xl font-light max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-3xl mx-auto leading-relaxed tracking-wide">
-                                    {date}
-                                </span>
+                                <div className="flex items-center gap-2">
+                                    <Calendar className="w-4 h-4" />
+                                    <span className="text-sm sm:text-base">
+                                        {date}
+                                    </span>
+                                </div>
+                                {viewCount > 0 && (
+                                    <div className="flex items-center gap-2">
+                                        <Eye className="w-4 h-4" />
+                                        <span className="text-sm sm:text-base">
+                                            {viewCount} views
+                                        </span>
+                                    </div>
+                                )}
+                                {author && (
+                                    <div className="flex items-center gap-2">
+                                        <User className="w-4 h-4" />
+                                        <span className="text-sm sm:text-base">
+                                            {author}
+                                        </span>
+                                    </div>
+                                )}
                             </motion.div>
                         </div>
                     </div>
@@ -94,23 +151,6 @@ const BlogDetailHero = ({
                                 <ArrowLeft className="w-4 h-4" />
                                 BACK TO OUR NEWS
                             </Link>
-                        </motion.div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Subtitle Section */}
-            <div className="bg-white pb-8 md:pb-12">
-                <div className="container mx-auto px-4">
-                    <div className="max-w-6xl mx-auto">
-                        <motion.div
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, delay: 0.5 }}
-                        >
-                            <h3 className="text-gray-800 font-markazi-text text-xl md:text-2xl lg:text-3xl font-normal leading-relaxed text-center">
-                                {subtitle}
-                            </h3>
                         </motion.div>
                     </div>
                 </div>

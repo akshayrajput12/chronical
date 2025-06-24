@@ -6,17 +6,10 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import BlogCard from "./blog-card";
 import { useRouter } from "next/navigation";
-
-interface BlogPost {
-    id: number;
-    date: string;
-    title: string;
-    image: string;
-    excerpt: string;
-}
+import { BlogPostSummary } from "@/types/blog";
 
 interface BlogCarouselProps {
-    posts: BlogPost[];
+    posts: BlogPostSummary[];
 }
 
 const BlogCarousel = ({ posts }: BlogCarouselProps) => {
@@ -75,8 +68,8 @@ const BlogCarousel = ({ posts }: BlogCarouselProps) => {
         }
     };
 
-    const handlePostClick = (postId: string) => {
-        router.push(`/blog/${postId}`);
+    const handlePostClick = (slug: string) => {
+        router.push(`/blog/${slug}`);
     };
 
     if (posts.length === 0) {

@@ -3,17 +3,10 @@
 import React from "react";
 import { motion } from "framer-motion";
 import BlogCard from "./blog-card";
-
-interface BlogPost {
-    id: number;
-    date: string;
-    title: string;
-    image: string;
-    excerpt: string;
-}
+import { BlogPostSummary } from "@/types/blog";
 
 interface BlogPostsSectionProps {
-    blogPosts: BlogPost[];
+    blogPosts: BlogPostSummary[];
 }
 
 const BlogPostsSection = ({ blogPosts }: BlogPostsSectionProps) => {

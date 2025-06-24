@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import {
@@ -18,6 +18,7 @@ import Image from "next/image";
 import { getEventById, getOtherEvents } from "../data/events";
 import EventGallery from "../components/event-gallery";
 import BlogCarousel from "@/components/blog/blog-carousel";
+import BlogPostsSection from "@/components/blog/blog-posts-section";
 
 export default function EventDetailPage() {
     const params = useParams();
@@ -28,44 +29,24 @@ export default function EventDetailPage() {
     const event = getEventById(eventId);
     const otherEvents = getOtherEvents(eventId);
 
-    // Sample blog posts data - this would typically come from a CMS or API
-    const blogPosts = [
-        {
-            id: 1,
-            date: "21 MAY 2025",
-            title: "DWTC Hospitality Division Achieves Strong Performance in 2024, Catering to Nearly 1 Million Guests Across 2,400 Events",
-            image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-            excerpt: "HOSPITALITY, EVENTS, BUSINESS",
-        },
-        {
-            id: 2,
-            date: "27 APR 2025",
-            title: "DWTC delivers AED22.35 billion in economic output in 2024, driven by record increase in large scale events",
-            image: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-            excerpt: "ECONOMICS, TRADE, DUBAI",
-        },
-        {
-            id: 3,
-            date: "25 APR 2025",
-            title: "Capacity Crowds Mark Monumental Opening of GITEX ASIA x Ai Everything Singapore",
-            image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-            excerpt: "TECHNOLOGY, AI, SINGAPORE",
-        },
-        {
-            id: 4,
-            date: "20 APR 2025",
-            title: "Innovation Summit 2025 Brings Together Global Tech Leaders",
-            image: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-            excerpt: "INNOVATION, TECHNOLOGY, LEADERSHIP",
-        },
-        {
-            id: 5,
-            date: "15 APR 2025",
-            title: "Sustainable Technology Expo Showcases Green Innovation",
-            image: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2025&q=80",
-            excerpt: "SUSTAINABILITY, GREEN TECH, ENVIRONMENT",
-        },
-    ];
+    // Dynamic blog posts state
+    const [blogPosts, setBlogPosts] = useState([]);
+    const [loadingBlogs, setLoadingBlogs] = useState(true);
+    useEffect(() => {
+        const fetchBlogs = async () => {
+            setLoadingBlogs(true);
+            try {
+                const res = await fetch("/api/blog/posts");
+                const data = await res.json();
+                setBlogPosts(data.posts || []);
+            } catch (err) {
+                setBlogPosts([]);
+            } finally {
+                setLoadingBlogs(false);
+            }
+        };
+        fetchBlogs();
+    }, []);
 
     const handleOtherEventClick = (otherEventId: string) => {
         router.push(`/whats-on/${otherEventId}`);
@@ -404,7 +385,13 @@ export default function EventDetailPage() {
                             Related Articles
                         </motion.h2>
 
-                        <BlogCarousel posts={blogPosts} />
+                        {loadingBlogs ? (
+                            <div className="text-center py-8 text-gray-500">
+                                Loading blog articles...
+                            </div>
+                        ) : (
+                            <BlogCarousel posts={blogPosts} />
+                        )}
                     </div>
                 </div>
             </section>
