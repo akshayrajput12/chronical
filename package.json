@@ -22,7 +22,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "embla-carousel-react": "^8.6.0",
-    "framer-motion": "^12.11.3",
+    "framer-motion": "^12.19.1",
     "gsap": "^3.13.0",
     "lucide-react": "^0.510.0",
     "mongoose": "^8.14.3",

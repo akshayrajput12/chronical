@@ -103,6 +103,7 @@ const AdminSidebar = () => {
         about: pathname.includes("/admin/pages/about"),
         conference: pathname.includes("/admin/pages/conference"),
         kiosk: pathname.includes("/admin/pages/kiosk"),
+        blog: pathname.includes("/admin/pages/blog"),
     });
 
     // Fetch user data
@@ -475,13 +476,73 @@ const AdminSidebar = () => {
                     </AnimatePresence>
                 </div>
 
+                {/* Blog Page */}
+                <div>
+                    <NavItem
+                        href="/admin/pages/blog"
+                        label="Blog"
+                        icon={<FileText size={18} />}
+                        isActive={pathname.includes("/admin/pages/blog")}
+                        hasChildren={true}
+                        isOpen={openSections.blog}
+                        onClick={() => toggleSection("blog")}
+                    />
+
+                    <AnimatePresence>
+                        {openSections.blog && (
+                            <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: "auto", opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.2 }}
+                                className="overflow-hidden"
+                            >
+                                <div className="py-1 space-y-1">
+                                    <SubNavItem
+                                        href="/admin/pages/blog"
+                                        label="All Posts"
+                                        isActive={
+                                            pathname === "/admin/pages/blog"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/blog/new"
+                                        label="Create Post"
+                                        isActive={
+                                            pathname === "/admin/pages/blog/new"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/blog/categories"
+                                        label="Categories"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/blog/categories"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/blog/tags"
+                                        label="Tags"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/blog/tags"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/blog/media"
+                                        label="Blog Media"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/blog/media"
+                                        }
+                                    />
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
+
                 {/* Other Pages */}
-                <NavItem
-                    href="/admin/pages/blog"
-                    label="Blog"
-                    icon={<FileText size={18} />}
-                    isActive={pathname.includes("/admin/pages/blog")}
-                />
 
                 <NavItem
                     href="/admin/pages/contact"
