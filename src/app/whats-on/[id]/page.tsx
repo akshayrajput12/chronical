@@ -368,34 +368,6 @@ export default function EventDetailPage() {
                 <EventGallery eventId={eventId} />
             </section>
 
-            {/* Related Blog Articles Section */}
-            <section
-                className="py-8 md:py-12 lg:py-16"
-                style={{ backgroundColor: "rgb(235, 235, 235)" }}
-            >
-                <div className="container mx-auto px-4">
-                    <div className="max-w-6xl mx-auto">
-                        <motion.h2
-                            className="text-2xl font-medium text-center text-gray-700 mb-12"
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8 }}
-                            viewport={{ once: true }}
-                        >
-                            Related Articles
-                        </motion.h2>
-
-                        {loadingBlogs ? (
-                            <div className="text-center py-8 text-gray-500">
-                                Loading blog articles...
-                            </div>
-                        ) : (
-                            <BlogCarousel posts={blogPosts} />
-                        )}
-                    </div>
-                </div>
-            </section>
-
             {/* Other Events Section */}
             <section className="py-16 bg-gray-100">
                 <div className="container mx-auto px-4">
