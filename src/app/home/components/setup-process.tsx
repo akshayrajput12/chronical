@@ -78,7 +78,7 @@ const SetupProcess = () => {
                 console.log("Fetching setup process data...");
                 const data = await getSetupProcessData();
                 console.log("Setup process data received:", data);
-                
+
                 if (data) {
                     setSetupData(data);
                 } else {

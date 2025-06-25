@@ -155,7 +155,7 @@ const EventGallery: React.FC<EventGalleryProps> = ({ eventId }) => {
                 transition={{ duration: 0.6 }}
                 viewport={{ once: true }}
             >
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4">
+                <h2 className="text-3xl sm:text-4xl font-rubik font-bold text-center mb-4">
                     Event Gallery
                 </h2>
                 <div className="w-16 h-1 bg-[#a5cd39] mx-auto"></div>
@@ -207,13 +207,6 @@ const EventGallery: React.FC<EventGalleryProps> = ({ eventId }) => {
                                 draggable={false}
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-                            {/* Image overlay with title */}
-                            <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                                <p className="text-sm font-medium drop-shadow-lg">
-                                    {image.alt}
-                                </p>
-                            </div>
                         </motion.div>
                     ))}
                 </div>

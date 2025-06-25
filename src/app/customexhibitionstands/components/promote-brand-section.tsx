@@ -1,10 +1,33 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 
 const PromoteBrandSection = () => {
+    const buttonVariants: Variants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                duration: 0.6,
+                ease: "easeOut",
+                delay: 0.2,
+            },
+        },
+        hover: {
+            scale: 1.05,
+            backgroundColor: "#8aaa30",
+            boxShadow: "0px 5px 15px rgba(165,205,57,0.4)",
+            transition: {
+                duration: 0.3,
+                type: "spring",
+                stiffness: 300,
+            },
+        },
+    };
     return (
         <section className="py-8 md:py-12 lg:py-16 bg-white">
             <div className="container mx-auto px-4">
@@ -58,6 +81,15 @@ const PromoteBrandSection = () => {
                                         on the relevant brand message to the
                                         clients.
                                     </p>
+                                    <Link href={"#"}>
+                                        <motion.button
+                                            className="bg-[#a5cd39] font-noto-kufi-arabic text-sm leading-[24px] text-white py-3 px-8 rounded-md font-medium"
+                                            variants={buttonVariants}
+                                            whileHover="hover"
+                                        >
+                                            Request Quotation
+                                        </motion.button>
+                                    </Link>
                                 </div>
                             </div>
                         </motion.div>
@@ -70,12 +102,6 @@ const PromoteBrandSection = () => {
                             transition={{ duration: 0.8 }}
                             viewport={{ once: true }}
                         >
-                            {/* Green Background */}
-                            <div
-                                className="absolute -bottom-6 -right-6 w-full h-full z-0"
-                                style={{ backgroundColor: "#a5cd39" }}
-                            ></div>
-
                             {/* Image Container */}
                             <div className="relative h-64 sm:h-80 md:h-96 lg:h-[400px] overflow-hidden z-10">
                                 <Image

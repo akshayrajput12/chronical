@@ -261,7 +261,7 @@ const EventsGallery = () => {
                                             viewport={{ once: true }}
                                         >
                                             <div
-                                                className="bg-white cursor-pointer mb-8 sm:mb-12 md:mb-16 lg:mb-20 pt-6 sm:pt-8 md:pt-10 lg:pt-12 transition-all duration-500 hover:shadow-lg rounded-lg"
+                                                className="bg-white cursor-pointer mb-8 sm:mb-12 md:mb-16 lg:mb-20  transition-all duration-500 hover:shadow-lg rounded-lg"
                                                 onClick={() =>
                                                     handleEventClick(event.id)
                                                 }
@@ -286,6 +286,16 @@ const EventsGallery = () => {
                                                     }}
                                                 ></div>
 
+                                                {/* Image */}
+                                                <div className="relative flex-1 overflow-hidden h-48 sm:h-56 md:h-64 lg:h-72">
+                                                    <Image
+                                                        src={event.image}
+                                                        alt={event.title}
+                                                        fill
+                                                        className="object-cover transition-transform duration-300 hover:scale-105"
+                                                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                                                    />
+                                                </div>
                                                 {/* Card Header */}
                                                 <div
                                                     className="relative px-3 sm:px-4 md:px-6 lg:px-8 pb-6 sm:pb-8 md:pb-10 lg:pb-12"
@@ -319,17 +329,6 @@ const EventsGallery = () => {
                                                     >
                                                         {event.category}
                                                     </p>
-                                                </div>
-
-                                                {/* Image */}
-                                                <div className="relative flex-1 overflow-hidden h-48 sm:h-56 md:h-64 lg:h-72">
-                                                    <Image
-                                                        src={event.image}
-                                                        alt={event.title}
-                                                        fill
-                                                        className="object-cover transition-transform duration-300 hover:scale-105"
-                                                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                                                    />
                                                 </div>
                                             </div>
                                         </motion.div>

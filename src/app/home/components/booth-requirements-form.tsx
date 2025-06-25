@@ -213,7 +213,7 @@ const BoothRequirementsForm = () => {
                                 <Input
                                     id="companyName"
                                     type="text"
-                                    placeholder="Enter Exhibition name"
+                                    placeholder="Enter Company name"
                                     value={formData.companyName}
                                     onChange={e =>
                                         handleInputChange(

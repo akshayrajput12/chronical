@@ -123,7 +123,7 @@ const AboutUsMain = () => {
         sectionData.logo_image_url || sectionData.logo_fallback_url;
 
     return (
-        <section className="pt-36 md:pt-48 lg:pt-56 pb-8 md:pb-12 lg:pb-16 bg-white overflow-hidden">
+        <section className="pt-36 md:pt-32 lg:pt-42 pb-8 md:pb-12 lg:pb-16 bg-white overflow-hidden">
             <div className="container mx-auto px-4">
                 <div className="max-w-6xl mx-auto">
                     <div className="relative">

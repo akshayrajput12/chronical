@@ -188,7 +188,7 @@ const WhySection = () => {
                                             className="object-cover"
                                         />
                                     )}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-[#000000cc] to-transparent flex items-end p-6">
+                                    {/* <div className="absolute inset-0 bg-gradient-to-t from-[#000000cc] to-transparent flex items-end p-6">
                                         <div className="text-white">
                                             <h3 className="text-3xl font-rubik font-bold mb-1">
                                                 {whyData?.image_overlay_heading ||
@@ -199,7 +199,7 @@ const WhySection = () => {
                                                     "PREMIUM COMMERCIAL OFFICES"}
                                             </p>
                                         </div>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>

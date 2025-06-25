@@ -20,7 +20,7 @@ const AboutHero = () => {
         overlay_opacity: 0.3,
         overlay_color: "black",
         text_color: "white",
-        height_class: "h-[80vh]",
+        height_class: "h-[60vh]",
         show_scroll_indicator: true,
         is_active: true,
         created_at: "",
@@ -43,6 +43,8 @@ const AboutHero = () => {
             const { data, error } = await supabase.rpc(
                 "get_about_hero_section",
             );
+
+            console.log(data);
 
             if (error) {
                 console.error("Error fetching about hero data:", error);
@@ -82,7 +84,7 @@ const AboutHero = () => {
                     overlay_opacity: 0.3,
                     overlay_color: "black",
                     text_color: "white",
-                    height_class: "h-[80vh]",
+                    height_class: "h-[75vh]",
                     show_scroll_indicator: true,
                     is_active: true,
                     created_at: "",
@@ -106,7 +108,7 @@ const AboutHero = () => {
                 overlay_opacity: 0.3,
                 overlay_color: "black",
                 text_color: "white",
-                height_class: "h-[80vh]",
+                height_class: "h-[60vh]",
                 show_scroll_indicator: true,
                 is_active: true,
                 created_at: "",
@@ -120,7 +122,7 @@ const AboutHero = () => {
     // Show loading state
     if (loading) {
         return (
-            <section className="relative h-[80vh] flex items-center justify-center overflow-hidden">
+            <section className="relative h-[60vh] flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0 bg-gray-200 animate-pulse" />
                 <div className="relative z-10 text-center w-full px-4 sm:px-6 md:px-8 lg:px-12">
                     <div className="animate-pulse">
@@ -143,7 +145,7 @@ const AboutHero = () => {
 
     return (
         <section
-            className={`relative ${heroData.height_class} flex items-center justify-center overflow-hidden`}
+            className={`relative h-[75vh] 2xl:h-[60vh] flex items-center justify-center overflow-hidden`}
         >
             {/* Background Image */}
             <div
@@ -164,7 +166,7 @@ const AboutHero = () => {
 
             {/* Content */}
             <div
-                className="relative z-10 text-center w-full px-4 sm:px-6 md:px-8 lg:px-12"
+                className="relative z-10 text-center w-full mt-16 px-4 sm:px-6 md:px-8 lg:px-12"
                 style={{ color: heroData.text_color }}
             >
                 <motion.h1
@@ -189,7 +191,7 @@ const AboutHero = () => {
             {/* Scroll Down Indicator */}
             {heroData.show_scroll_indicator && (
                 <motion.div
-                    className="absolute bottom-8 left-1/2 transform -translate-x-1/2 cursor-pointer"
+                    className="absolute bottom-4 left-1/2 transform -translate-x-1/2 cursor-pointer"
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.6 }}

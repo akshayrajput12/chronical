@@ -250,7 +250,7 @@ export default function EventDetailPage() {
                                 <div className="text-center">
                                     {/* Event Logo */}
                                     <div className="mb-6">
-                                        <h2 className="text-6xl font-bold text-gray-800 mb-2">
+                                        <h2 className="text-6xl font-bold mb-2">
                                             {event.logoText || "CBBC"}
                                         </h2>
                                         <p className="text-sm text-gray-600 uppercase tracking-wider font-medium">
@@ -264,7 +264,7 @@ export default function EventDetailPage() {
                                         <p className="text-xs text-gray-500 mb-2 uppercase tracking-wider">
                                             Organised By
                                         </p>
-                                        <p className="font-semibold text-gray-800 text-base">
+                                        <p className="font-semibold text-base">
                                             {event.organizer ||
                                                 "EXCELLENT BRANDS & U"}
                                         </p>
@@ -386,35 +386,12 @@ export default function EventDetailPage() {
             <section className="py-8 md:py-12 lg:py-16 bg-white">
                 <EventGallery eventId={eventId} />
             </section>
-
-            {/* Related Blog Articles Section */}
-            <section
-                className="py-8 md:py-12 lg:py-16"
-                style={{ backgroundColor: "rgb(235, 235, 235)" }}
-            >
-                <div className="container mx-auto px-4">
-                    <div className="max-w-6xl mx-auto">
-                        <motion.h2
-                            className="text-2xl font-medium text-center text-gray-700 mb-12"
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8 }}
-                            viewport={{ once: true }}
-                        >
-                            Related Articles
-                        </motion.h2>
-
-                        <BlogCarousel posts={blogPosts} />
-                    </div>
-                </div>
-            </section>
-
             {/* Other Events Section */}
             <section className="py-16 bg-gray-100">
                 <div className="container mx-auto px-4">
                     <div className="max-w-6xl mx-auto">
                         <motion.h2
-                            className="text-2xl font-medium text-center text-gray-700 mb-12"
+                            className="text-3xl sm:text-4xl font-rubik font-bold text-center mb-12"
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8 }}
@@ -486,6 +463,27 @@ export default function EventDetailPage() {
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </section>
+            {/* Related Blog Articles Section */}
+            <section
+                className="py-8 md:py-12 lg:py-16"
+                style={{ backgroundColor: "rgb(235, 235, 235)" }}
+            >
+                <div className="container mx-auto px-4">
+                    <div className="max-w-6xl mx-auto">
+                        <motion.h2
+                            className="text-3xl sm:text-4xl font-rubik font-bold text-center mb-12"
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8 }}
+                            viewport={{ once: true }}
+                        >
+                            Related Articles
+                        </motion.h2>
+
+                        <BlogCarousel posts={blogPosts} />
                     </div>
                 </div>
             </section>

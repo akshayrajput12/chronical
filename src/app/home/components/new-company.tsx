@@ -272,10 +272,10 @@ const NewCompany = () => {
             className="bg-white overflow-hidden"
             id="new-company"
         >
-            <div className="lg:pl-32 lg:px-0 px-6 w-full">
+            <div className="lg:pl-48 lg:px-0 px-6 w-full">
                 <div className="flex flex-col lg:flex-row w-full items-center justify-between">
                     <motion.div
-                        className="lg:w-1/2 lg:pr-16 mb-10 lg:mb-0"
+                        className="lg:w-[45%] lg:pr-12 mb-10 lg:mb-0"
                         initial="hidden"
                         animate={controls}
                         variants={containerVariants}
@@ -319,7 +319,7 @@ const NewCompany = () => {
                     </motion.div>
 
                     <motion.div
-                        className="w-full lg:w-1/2 mt-10 lg:mt-0"
+                        className="w-full lg:w-[45%] mt-10 lg:mt-0"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.8, delay: 0.3 }}
