@@ -92,12 +92,16 @@ const SubNavItem: React.FC<SubNavItemProps> = ({ href, label, isActive }) => {
     );
 };
 
-const AdminSidebar = () => {
+const AdminSidebar = ({
+    user,
+    isSignedIn,
+}: {
+    user: SupabaseUser | null;
+    isSignedIn: boolean;
+}) => {
     const pathname = usePathname();
     const router = useRouter();
     const supabase = createClient();
-    const [user, setUser] = useState<SupabaseUser | null>(null);
-    const [isSignedIn, setIsSignedIn] = useState(false);
     const [openSections, setOpenSections] = useState<Record<string, boolean>>({
         home: pathname.includes("/admin/pages/home"),
         about: pathname.includes("/admin/pages/about"),
@@ -105,22 +109,6 @@ const AdminSidebar = () => {
         kiosk: pathname.includes("/admin/pages/kiosk"),
         blog: pathname.includes("/admin/pages/blog"),
     });
-
-    // Fetch user data
-    useEffect(() => {
-        const fetchUser = async () => {
-            const {
-                data: { user },
-                error,
-            } = await supabase.auth.getUser();
-            if (user && !error) {
-                setUser(user);
-                setIsSignedIn(true);
-            }
-        };
-
-        fetchUser();
-    }, [supabase.auth]);
 
     const toggleSection = (section: string) => {
         setOpenSections(prev => ({
