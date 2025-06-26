@@ -183,7 +183,10 @@ const DynamicCell = () => {
         visible: {
             scale: 1,
             opacity: 1,
-            transition: { duration: 1.2, ease: "easeOut" },
+            transition: {
+                duration: 1.2,
+                ease: "Easing" as "Easing | Easing[] | undefined",
+            },
         },
     };
 
