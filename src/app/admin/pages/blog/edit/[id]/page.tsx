@@ -23,6 +23,7 @@ import {
     BlogPost,
     UpdateBlogPostRequest,
 } from "@/types/blog";
+import TiptapEditor from "@/components/admin/TiptapEditor";
 
 type BlogFormData = {
     title: string;
@@ -460,21 +461,19 @@ const EditBlogPostPage = () => {
                         >
                             Content *
                         </Label>
-                        <Textarea
-                            id="content"
-                            value={formData.content}
-                            onChange={e =>
+                        <TiptapEditor
+                            content={formData.content}
+                            onChange={(content) =>
                                 setFormData(prev => ({
                                     ...prev,
-                                    content: e.target.value,
+                                    content,
                                 }))
                             }
                             placeholder="Write your post content here..."
-                            rows={15}
-                            className="font-mono"
+                            blogPostId={postId}
                         />
                         <p className="text-sm text-gray-500 mt-2">
-                            You can use HTML and Markdown formatting
+                            Rich text editor with formatting options
                         </p>
                     </div>
 

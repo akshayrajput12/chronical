@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase";
+import { deleteBlogPostImages, deleteFeaturedAndHeroImages } from "@/services/blog-image.service";
 
 // GET /api/blog/posts/[slug] - Fetch a single blog post by slug
 export async function GET(
@@ -220,10 +221,10 @@ export async function DELETE(
         const supabase = await createClient();
         const { slug } = params;
 
-        // Check if post exists
+        // Check if post exists and get image URLs
         const { data: existingPost, error: fetchError } = await supabase
             .from("blog_posts")
-            .select("id")
+            .select("id, featured_image_url, hero_image_url")
             .eq("slug", slug)
             .single();
 
@@ -241,6 +242,23 @@ export async function DELETE(
             );
         }
 
+        // Delete associated images from storage and database
+        const imageCleanupResult = await deleteBlogPostImages(existingPost.id);
+
+        // Delete featured and hero images
+        const featuredHeroCleanupResult = await deleteFeaturedAndHeroImages(
+            existingPost.featured_image_url,
+            existingPost.hero_image_url
+        );
+
+        // Log image cleanup results
+        if (!imageCleanupResult.success || !featuredHeroCleanupResult.success) {
+            console.warn("Image cleanup warnings:", {
+                blogImages: imageCleanupResult.errors,
+                featuredHero: featuredHeroCleanupResult.errors
+            });
+        }
+
         // Delete the post (cascade will handle related records)
         const { error: deleteError } = await supabase
             .from("blog_posts")
@@ -255,7 +273,10 @@ export async function DELETE(
             );
         }
 
-        return NextResponse.json({ message: "Post deleted successfully" });
+        return NextResponse.json({
+            message: "Post deleted successfully",
+            imagesDeleted: imageCleanupResult.deletedImages + featuredHeroCleanupResult.deletedImages
+        });
     } catch (error) {
         console.error("API error:", error);
         return NextResponse.json(

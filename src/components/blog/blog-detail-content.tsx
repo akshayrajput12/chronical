@@ -3,6 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { BlogImage } from "@/types/blog";
+import BlogContent from "./BlogContent";
 
 interface BlogDetailContentProps {
     content: string;
@@ -15,10 +16,6 @@ const BlogDetailContent = ({
     images = [],
     excerpt,
 }: BlogDetailContentProps) => {
-    // Split content by double newlines for paragraphs
-    const paragraphs = content
-        ? content.split(/\n{2,}/).filter(p => p.trim() !== "")
-        : [];
 
     return (
         <>
@@ -47,20 +44,7 @@ const BlogDetailContent = ({
                     <div className="max-w-6xl mx-auto">
                         <div className="w-full">
                             {/* Main Content */}
-                            <div className="prose prose-lg max-w-none">
-                                {paragraphs.map((para, idx) => (
-                                    <p
-                                        key={idx}
-                                        style={{
-                                            whiteSpace: "pre-line",
-                                            marginBottom: "1.5rem",
-                                            textAlign: "justify",
-                                        }}
-                                    >
-                                        {para}
-                                    </p>
-                                ))}
-                            </div>
+                            <BlogContent content={content} />
                             {/* Blog Images Gallery */}
                             {images && images.length > 0 && (
                                 <motion.div

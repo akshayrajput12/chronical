@@ -55,40 +55,7 @@ const BlogDetailHero = ({
                 <div className="relative z-10 px-4 sm:px-6 md:px-8 lg:px-12 text-center text-white w-full">
                     <div className="max-w-7xl mx-auto">
                         <div className="max-w-4xl mx-auto">
-                            {/* Category Label and Tags */}
-                            <motion.div
-                                className="mb-4 sm:mb-6 flex flex-wrap justify-center items-center gap-2"
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.6 }}
-                            >
-                                {category ? (
-                                    <span
-                                        className="inline-block text-white text-xs font-medium uppercase tracking-wider px-4 py-2 rounded-full border border-white/30"
-                                        style={{
-                                            backgroundColor: `${category.color}80`,
-                                        }}
-                                    >
-                                        {category.name}
-                                    </span>
-                                ) : (
-                                    <span className="inline-block bg-white/20 backdrop-blur-sm text-white text-xs font-medium uppercase tracking-wider px-4 py-2 rounded-full border border-white/30">
-                                        Article
-                                    </span>
-                                )}
-                                {/* Tags next to category */}
-                                {tags &&
-                                    tags.length > 0 &&
-                                    tags.map((tag, index) => (
-                                        <span
-                                            key={index}
-                                            className="px-3 py-1 bg-gray-100 text-gray-700 text-xs font-medium uppercase tracking-wider rounded-sm hover:bg-gray-200 transition-colors"
-                                            style={{ marginLeft: "0.5rem" }}
-                                        >
-                                            {tag}
-                                        </span>
-                                    ))}
-                            </motion.div>
+
 
                             {/* Title */}
                             <motion.h1

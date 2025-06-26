@@ -22,7 +22,6 @@ const BlogCard = ({
     style,
 }: BlogCardProps) => {
     const [isMobile, setIsMobile] = useState(false);
-    const [showAllTags, setShowAllTags] = useState(false);
 
     // Handle responsive detection safely
     useEffect(() => {
@@ -43,15 +42,7 @@ const BlogCard = ({
         }
     };
 
-    // Use tags from the post data or extract from excerpt as fallback
-    const categoryTags =
-        post.tags && post.tags.length > 0
-            ? post.tags.slice(0, 3)
-            : (post.excerpt || "")
-                  .split(",")
-                  .map(tag => tag.trim())
-                  .slice(0, 3)
-                  .filter(tag => tag.length > 0);
+
 
     // Format date for display in card header
     const formatCardDate = (dateString: string) => {
@@ -78,26 +69,17 @@ const BlogCard = ({
                 onClick={handleClick}
                 style={{
                     width: "100%",
-                    // Increased height for card
-                    height: style?.width
-                        ? (() => {
-                              const cardWidth = parseInt(
-                                  style.width.toString(),
-                              );
-                              // Slightly taller aspect ratio for all devices
-                              const aspectRatio = isMobile ? 2.0 : 1.45; // was 1.8/1.37
-                              return `${cardWidth * aspectRatio}px`;
-                          })()
-                        : "560px", // was 520px
+                    // Fixed height for consistent card size
+                    height: "500px", // Fixed height regardless of content
                     border: "0px",
                     backgroundColor: "rgb(255, 255, 255)",
                     position: "relative",
                 }}
             >
-                {/* Content Section */}
-                <div className="p-6 flex-1 flex flex-col justify-between">
+                {/* Content Section - Fixed height */}
+                <div className="p-4 flex flex-col" style={{ height: "240px" }}>
                     {/* Article Label and Date */}
-                    <div className="mb-4 flex justify-between items-center">
+                    <div className="mb-3 flex justify-between items-center">
                         <span className="text-xs font-medium text-gray-600 uppercase tracking-wider">
                             ARTICLE
                         </span>
@@ -108,76 +90,21 @@ const BlogCard = ({
                         )}
                     </div>
 
-                    {/* Title and Excerpt */}
-                    <div className="flex-1 mb-6">
-                        <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 leading-tight mb-2 group-hover:text-gray-700 transition-colors duration-300">
+                    {/* Title and Excerpt - Fixed space */}
+                    <div className="flex-1 overflow-hidden">
+                        <h3 className="text-sm sm:text-base font-bold text-gray-900 leading-tight mb-2 group-hover:text-gray-700 transition-colors duration-300 line-clamp-3">
                             {post.title}
                         </h3>
                         {post.excerpt && (
-                            <p className="text-sm text-gray-600 line-clamp-2 mb-2">
+                            <p className="text-xs text-gray-600 line-clamp-3">
                                 {post.excerpt}
                             </p>
                         )}
                     </div>
-
-                    {/* Category and Tags in one row */}
-                    <div className="flex items-center gap-2 flex-wrap">
-                        {post.category_name && (
-                            <span
-                                className="px-2 py-1 rounded-full text-xs font-medium text-white"
-                                style={{
-                                    backgroundColor:
-                                        post.category_color || "#a5cd39",
-                                }}
-                            >
-                                {post.category_name}
-                            </span>
-                        )}
-                        {post.tags && post.tags.length > 0 && (
-                            <>
-                                {(showAllTags
-                                    ? post.tags
-                                    : post.tags.slice(0, 2)
-                                ).map((tag, tagIndex) => (
-                                    <span
-                                        key={tagIndex}
-                                        className="px-3 py-1 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider rounded-sm"
-                                        style={{ marginLeft: "0.5rem" }}
-                                    >
-                                        {tag}
-                                    </span>
-                                ))}
-                                {post.tags.length > 2 && !showAllTags && (
-                                    <button
-                                        className="px-2 py-1 text-xs font-medium text-gray-500 bg-gray-100 rounded-sm hover:bg-gray-200 focus:outline-none"
-                                        style={{ marginLeft: "0.5rem" }}
-                                        onClick={e => {
-                                            e.stopPropagation();
-                                            setShowAllTags(true);
-                                        }}
-                                    >
-                                        ...
-                                    </button>
-                                )}
-                                {post.tags.length > 2 && showAllTags && (
-                                    <button
-                                        className="px-2 py-1 text-xs font-medium text-gray-500 bg-gray-100 rounded-sm hover:bg-gray-200 focus:outline-none"
-                                        style={{ marginLeft: "0.5rem" }}
-                                        onClick={e => {
-                                            e.stopPropagation();
-                                            setShowAllTags(false);
-                                        }}
-                                    >
-                                        Show less
-                                    </button>
-                                )}
-                            </>
-                        )}
-                    </div>
                 </div>
 
-                {/* Image Section */}
-                <div className="relative h-48 overflow-hidden">
+                {/* Image Section - Fixed height */}
+                <div className="relative overflow-hidden" style={{ height: "220px" }}>
                     {post.featured_image_url ? (
                         <Image
                             src={post.featured_image_url}
@@ -195,9 +122,9 @@ const BlogCard = ({
                     )}
                 </div>
 
-                {/* Full-Width Blue Button - Covering Card Bottom */}
-                <div className="relative">
-                    <div className="bg-[#a5cd39] text-white py-4 text-center text-sm font-medium uppercase tracking-wider hover:bg-[#357ABD] transition-colors duration-300 cursor-pointer">
+                {/* Full-Width Blue Button - Fixed height */}
+                <div className="relative" style={{ height: "40px" }}>
+                    <div className="bg-[#a5cd39] text-white h-full flex items-center justify-center text-xs font-medium uppercase tracking-wider hover:bg-[#357ABD] transition-colors duration-300 cursor-pointer">
                         FIND OUT MORE
                     </div>
                 </div>

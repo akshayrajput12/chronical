@@ -201,16 +201,6 @@ const BlogDetailPage = () => {
                     heroImage={
                         blogPost.hero_image_url || blogPost.featured_image_url
                     }
-                    category={
-                        blogPost.category_name
-                            ? {
-                                  name: blogPost.category_name,
-                                  color: blogPost.category_color || "#a5cd39",
-                                  slug: blogPost.category_slug || "",
-                              }
-                            : undefined
-                    }
-                    tags={blogPost.tags || []}
                     viewCount={blogPost.view_count}
                     author={blogPost.author_id ? "Admin" : undefined}
                 />

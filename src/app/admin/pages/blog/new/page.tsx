@@ -17,6 +17,11 @@ import {
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { BlogCategory, BlogTag, CreateBlogPostRequest } from "@/types/blog";
+import TiptapEditor from "@/components/admin/TiptapEditor";
+import DeferredImageUpload, {
+  DeferredImageData,
+  createEmptyDeferredImage
+} from "@/components/admin/DeferredImageUpload";
 
 const CreateBlogPostPage = () => {
     const router = useRouter();
@@ -25,10 +30,12 @@ const CreateBlogPostPage = () => {
     const [categories, setCategories] = useState<BlogCategory[]>([]);
     const [tags, setTags] = useState<BlogTag[]>([]);
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
-    const [featuredImageFile, setFeaturedImageFile] = useState<File | null>(
-        null,
+    const [featuredImage, setFeaturedImage] = useState<DeferredImageData>(
+        createEmptyDeferredImage()
     );
-    const [heroImageFile, setHeroImageFile] = useState<File | null>(null);
+    const [heroImage, setHeroImage] = useState<DeferredImageData>(
+        createEmptyDeferredImage()
+    );
 
     const [formData, setFormData] = useState({
         title: "",
@@ -126,21 +133,12 @@ const CreateBlogPostPage = () => {
         }
     };
 
-    // Handle image upload
-    const handleImageUpload = async (file: File, type: "featured" | "hero") => {
-        const bucket =
-            type === "featured" ? "blog-featured-images" : "blog-images";
-        const url = await uploadImage(file, bucket);
+    // Handle deferred image upload (uploads to Supabase during publish)
+    const uploadDeferredImage = async (imageData: DeferredImageData, bucket: string): Promise<string | null> => {
+        if (!imageData.file) return null;
 
-        if (url) {
-            if (type === "featured") {
-                setFormData(prev => ({ ...prev, featured_image_url: url }));
-                setFeaturedImageFile(null);
-            } else {
-                setFormData(prev => ({ ...prev, hero_image_url: url }));
-                setHeroImageFile(null);
-            }
-        }
+        const url = await uploadImage(imageData.file, bucket);
+        return url;
     };
 
     // Handle form submission
@@ -148,17 +146,23 @@ const CreateBlogPostPage = () => {
         try {
             setLoading(true);
 
-            // Upload images if selected
-            if (featuredImageFile) {
-                await handleImageUpload(featuredImageFile, "featured");
+            // Upload deferred images if they exist
+            let featuredImageUrl = formData.featured_image_url;
+            let heroImageUrl = formData.hero_image_url;
+
+            if (featuredImage.file && !featuredImage.uploaded) {
+                featuredImageUrl = await uploadDeferredImage(featuredImage, "blog-featured-images") || "";
             }
-            if (heroImageFile) {
-                await handleImageUpload(heroImageFile, "hero");
+
+            if (heroImage.file && !heroImage.uploaded) {
+                heroImageUrl = await uploadDeferredImage(heroImage, "blog-images") || "";
             }
 
             // Prepare post data
             const postData: CreateBlogPostRequest = {
                 ...formData,
+                featured_image_url: featuredImageUrl,
+                hero_image_url: heroImageUrl,
                 status,
                 tag_ids: selectedTags,
             };
@@ -325,21 +329,18 @@ const CreateBlogPostPage = () => {
                         >
                             Content *
                         </Label>
-                        <Textarea
-                            id="content"
-                            value={formData.content}
-                            onChange={e =>
+                        <TiptapEditor
+                            content={formData.content}
+                            onChange={(content) =>
                                 setFormData(prev => ({
                                     ...prev,
-                                    content: e.target.value,
+                                    content,
                                 }))
                             }
                             placeholder="Write your post content here..."
-                            rows={15}
-                            className="font-mono"
                         />
                         <p className="text-sm text-gray-500 mt-2">
-                            You can use HTML and Markdown formatting
+                            Rich text editor with formatting options
                         </p>
                     </div>
 
@@ -496,72 +497,15 @@ const CreateBlogPostPage = () => {
 
                     {/* Featured Image */}
                     <div className="bg-white rounded-lg shadow-sm border p-6">
-                        <h3 className="text-lg font-medium text-gray-900 mb-4">
-                            Featured Image
-                        </h3>
-                        {formData.featured_image_url ? (
-                            <div className="relative">
-                                <img
-                                    src={formData.featured_image_url}
-                                    alt="Featured"
-                                    className="w-full h-32 object-cover rounded"
-                                />
-                                <button
-                                    onClick={() =>
-                                        setFormData(prev => ({
-                                            ...prev,
-                                            featured_image_url: "",
-                                        }))
-                                    }
-                                    className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1"
-                                >
-                                    <X className="w-4 h-4" />
-                                </button>
-                            </div>
-                        ) : (
-                            <div>
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={e => {
-                                        const file = e.target.files?.[0];
-                                        if (file) setFeaturedImageFile(file);
-                                    }}
-                                    className="hidden"
-                                    id="featured-image"
-                                />
-                                <label
-                                    htmlFor="featured-image"
-                                    className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:bg-gray-50"
-                                >
-                                    <ImageIcon className="w-8 h-8 text-gray-400 mb-2" />
-                                    <span className="text-sm text-gray-500">
-                                        Upload featured image
-                                    </span>
-                                </label>
-                            </div>
-                        )}
-                        {featuredImageFile && (
-                            <div className="mt-2">
-                                <p className="text-sm text-gray-600">
-                                    Selected: {featuredImageFile.name}
-                                </p>
-                                <Button
-                                    size="sm"
-                                    onClick={() =>
-                                        handleImageUpload(
-                                            featuredImageFile,
-                                            "featured",
-                                        )
-                                    }
-                                    className="mt-2"
-                                >
-                                    <Upload className="w-4 h-4 mr-2" />
-                                    Upload
-                                </Button>
-                            </div>
-                        )}
-                        {formData.featured_image_url && (
+                        <DeferredImageUpload
+                            label="Featured Image"
+                            value={featuredImage}
+                            onChange={setFeaturedImage}
+                            placeholder="Upload featured image (will upload on publish)"
+                            maxSize={10}
+                        />
+
+                        {(featuredImage.previewUrl || formData.featured_image_url) && (
                             <div className="mt-4">
                                 <Label
                                     htmlFor="featured_alt"
