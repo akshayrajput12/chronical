@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Easing } from "framer-motion";
 
 interface LogoLoaderProps {
     isVisible: boolean;
@@ -31,7 +31,10 @@ const LogoLoader: React.FC<LogoLoaderProps> = ({
                             animate={{ scale: 1, opacity: 1, rotateY: 0 }}
                             transition={{
                                 duration: 1.2,
-                                ease: "easeOut",
+                                ease: "easeOut" as
+                                    | Easing
+                                    | Easing[]
+                                    | undefined,
                                 delay: 0.2,
                             }}
                         >

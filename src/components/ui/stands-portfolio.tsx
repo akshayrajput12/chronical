@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { motion } from "framer-motion";
+import { Easing, motion } from "framer-motion";
 
 const PortfolioGrid = () => {
     // Sample portfolio images - replace with your actual images
@@ -57,7 +57,7 @@ const PortfolioGrid = () => {
             y: 0,
             transition: {
                 duration: 0.8,
-                ease: "easeOut",
+                ease: "easeOut" as Easing | Easing[] | undefined,
             },
         },
     };
@@ -73,7 +73,7 @@ const PortfolioGrid = () => {
             transition: {
                 duration: 0.8,
                 delay: 0.2,
-                ease: "easeOut",
+                ease: "easeOut" as Easing | Easing[] | undefined,
             },
         },
     };
@@ -89,7 +89,7 @@ const PortfolioGrid = () => {
             transition: {
                 duration: 0.5,
                 delay: 0.8,
-                ease: "easeOut",
+                ease: "easeOut" as Easing | Easing[] | undefined,
             },
         },
         hover: {

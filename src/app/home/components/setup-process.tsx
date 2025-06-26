@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState, useMemo } from "react";
 import {
     AnimationGeneratorType,
+    Easing,
     motion,
     useAnimation,
     Variants,
@@ -147,7 +148,7 @@ const SetupProcess = () => {
             y: 0,
             transition: {
                 duration: 0.7,
-                ease: "easeOut",
+                ease: "easeOut" as Easing | Easing[] | undefined,
             },
         },
     };
@@ -158,7 +159,7 @@ const SetupProcess = () => {
             width: "100px",
             transition: {
                 duration: 0.8,
-                ease: "easeOut",
+                ease: "easeOut" as Easing | Easing[] | undefined,
             },
         },
     };
@@ -170,7 +171,7 @@ const SetupProcess = () => {
             y: 0,
             transition: {
                 duration: 0.6,
-                ease: "easeOut",
+                ease: "easeOut" as Easing | Easing[] | undefined,
             },
         },
     };
