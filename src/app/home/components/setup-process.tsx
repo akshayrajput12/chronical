@@ -1,7 +1,12 @@
 "use client";
 
 import React, { useEffect, useRef, useState, useMemo } from "react";
-import { motion, useAnimation, Variants } from "framer-motion";
+import {
+    AnimationGeneratorType,
+    motion,
+    useAnimation,
+    Variants,
+} from "framer-motion";
 import { getSetupProcessData } from "@/services/setup-process.service";
 import {
     SetupProcessDisplayData,
@@ -178,7 +183,7 @@ const SetupProcess = () => {
             transition: {
                 delay: i * 0.15,
                 duration: 0.6,
-                type: "spring",
+                type: "spring" as AnimationGeneratorType | undefined,
                 stiffness: 100,
             },
         }),
@@ -192,7 +197,7 @@ const SetupProcess = () => {
             transition: {
                 delay: i * 0.15,
                 duration: 0.6,
-                type: "spring",
+                type: "spring" as AnimationGeneratorType | undefined,
                 stiffness: 200,
                 damping: 10,
             },
@@ -202,7 +207,7 @@ const SetupProcess = () => {
             boxShadow: "0px 0px 12px rgba(165,205,57,0.7)",
             transition: {
                 duration: 0.3,
-                type: "spring",
+                type: "spring" as AnimationGeneratorType | undefined,
                 stiffness: 300,
             },
         },
@@ -216,7 +221,7 @@ const SetupProcess = () => {
             transition: {
                 delay: i * 0.15,
                 duration: 0.6,
-                type: "spring",
+                type: "spring" as AnimationGeneratorType | undefined,
                 stiffness: 200,
                 damping: 10,
             },
@@ -226,7 +231,7 @@ const SetupProcess = () => {
             boxShadow: "0px 0px 12px rgba(255,255,255,0.7)",
             transition: {
                 duration: 0.3,
-                type: "spring",
+                type: "spring" as AnimationGeneratorType | undefined,
                 stiffness: 300,
             },
         },

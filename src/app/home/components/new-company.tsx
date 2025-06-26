@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion, useAnimation, Variants } from "framer-motion";
 import ImageScrollGrid from "./image-scroll-grid";
+import { AnimationGeneratorType } from "framer-motion";
 import Link from "next/link";
 import { NewCompanyService } from "@/services/new-company.service";
 import { NewCompanySection, NewCompanyImage } from "@/types/new-company";
@@ -136,7 +137,7 @@ const NewCompany = () => {
             boxShadow: "0px 5px 15px rgba(165,205,57,0.4)",
             transition: {
                 duration: 0.3,
-                type: "spring",
+                type: "spring" as AnimationGeneratorType | undefined,
                 stiffness: 300,
             },
         },

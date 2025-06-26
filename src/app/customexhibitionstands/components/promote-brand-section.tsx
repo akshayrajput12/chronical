@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion, Variants } from "framer-motion";
+import { AnimationGeneratorType, motion, Variants } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -23,7 +23,7 @@ const PromoteBrandSection = () => {
             boxShadow: "0px 5px 15px rgba(165,205,57,0.4)",
             transition: {
                 duration: 0.3,
-                type: "spring",
+                type: "spring" as AnimationGeneratorType | undefined,
                 stiffness: 300,
             },
         },

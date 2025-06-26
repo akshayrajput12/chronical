@@ -191,7 +191,9 @@ const KeyBenefits = () => {
             y: 0,
             opacity: 1,
             transition: {
-                type: "spring" as AnimationGeneratorType | undefined,
+                type: "spring" as AnimationGeneratorType | undefined as
+                    | AnimationGeneratorType
+                    | undefined,
                 stiffness: 100,
                 damping: 10,
                 duration: 0.7,
@@ -205,7 +207,9 @@ const KeyBenefits = () => {
             scale: 1,
             rotate: 0,
             transition: {
-                type: "spring",
+                type: "spring" as AnimationGeneratorType | undefined as
+                    | AnimationGeneratorType
+                    | undefined,
                 stiffness: 260,
                 damping: 20,
                 duration: 0.8,
