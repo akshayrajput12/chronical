@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
-import { motion, useInView, useAnimation } from "framer-motion";
+import { motion, useInView, useAnimation, Easing } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import { DynamicCellDisplayData } from "@/types/dynamic-cell";
 
@@ -185,7 +185,7 @@ const DynamicCell = () => {
             opacity: 1,
             transition: {
                 duration: 1.2,
-                ease: "Easing" as "Easing | Easing[] | undefined",
+                ease: "easeOut" as Easing | Easing[] | undefined,
             },
         },
     };
