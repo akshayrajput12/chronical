@@ -42,7 +42,7 @@ const PortfolioGrid = () => {
             scale: 1,
             transition: {
                 duration: 0.6,
-                ease: [0.25, 0.46, 0.45, 0.94],
+                ease: [0.25, 0.46, 0.45, 0.94] as Easing | Easing[] | undefined,
             },
         },
     };
@@ -96,7 +96,7 @@ const PortfolioGrid = () => {
             scale: 1.05,
             transition: {
                 duration: 0.2,
-                ease: "easeInOut",
+                ease: "easeInOut" as Easing | Easing[] | undefined,
             },
         },
         tap: {

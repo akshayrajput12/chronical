@@ -38,7 +38,7 @@ const InitialLoader: React.FC<InitialLoaderProps> = ({ isVisible }) => {
                             transition={{
                                 duration: 2,
                                 repeat: Infinity,
-                                ease: "linear",
+                                ease: "linear" as Easing | Easing[] | undefined,
                             }}
                         />
 
@@ -51,7 +51,10 @@ const InitialLoader: React.FC<InitialLoaderProps> = ({ isVisible }) => {
                             transition={{
                                 duration: 2,
                                 repeat: Infinity,
-                                ease: "easeInOut",
+                                ease: "easeInOut" as
+                                    | Easing
+                                    | Easing[]
+                                    | undefined,
                             }}
                         >
                             <Image
