@@ -18,7 +18,6 @@ const StrikingCustomizedSection = () => {
                             transition={{ duration: 0.8 }}
                             viewport={{ once: true }}
                         >
-                            {/* Green Background */}
                             <div
                                 className="absolute -bottom-6 -left-6 w-full h-full z-0"
                                 style={{ backgroundColor: "#a5cd39" }}

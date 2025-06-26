@@ -3,13 +3,12 @@ import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase";
 
 // GET /api/blog/posts/[slug] - Fetch a single blog post by slug
-export async function GET(
-    request: NextRequest,
-    { params }: { params: { slug: string } },
-) {
+export async function GET(request: NextRequest) {
     try {
         const supabase = await createClient();
-        const { slug } = params;
+        // Extract slug from the URL
+        const { pathname } = new URL(request.url);
+        const slug = pathname.split("/").pop();
 
         // Fetch post with related data
         const { data: post, error } = await supabase
@@ -99,13 +98,12 @@ export async function GET(
 }
 
 // PUT /api/blog/posts/[slug] - Update a blog post
-export async function PUT(
-    request: NextRequest,
-    { params }: { params: { slug: string } },
-) {
+export async function PUT(request: NextRequest) {
     try {
         const supabase = createServiceClient();
-        const { slug } = params;
+        // Extract slug from the URL
+        const { pathname } = new URL(request.url);
+        const slug = pathname.split("/").pop();
         const body = await request.json();
 
         // Check if post exists
@@ -212,13 +210,12 @@ export async function PUT(
 }
 
 // DELETE /api/blog/posts/[slug] - Delete a blog post
-export async function DELETE(
-    request: NextRequest,
-    { params }: { params: { slug: string } },
-) {
+export async function DELETE(request: NextRequest) {
     try {
         const supabase = await createClient();
-        const { slug } = params;
+        // Extract slug from the URL
+        const { pathname } = new URL(request.url);
+        const slug = pathname.split("/").pop();
 
         // Check if post exists
         const { data: existingPost, error: fetchError } = await supabase

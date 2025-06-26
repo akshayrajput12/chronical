@@ -7,7 +7,7 @@ import Image from "next/image";
 
 const BlogHero = () => {
     return (
-        <section className="relative h-[80vh] flex items-center justify-center overflow-hidden">
+        <section className="relative 2xl:h-[60vh] h-[75vh] flex items-center justify-center overflow-hidden">
             {/* Background Image - Modern Architecture */}
             <div className="absolute inset-0 z-0">
                 <Image
@@ -22,7 +22,7 @@ const BlogHero = () => {
             </div>
 
             {/* Content */}
-            <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
+            <div className="relative z-10 md:mt-20 text-center text-white px-4 max-w-4xl mx-auto">
                 <motion.h1
                     className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold mb-4 sm:mb-6 leading-tight"
                     initial={{ opacity: 0, y: 30 }}

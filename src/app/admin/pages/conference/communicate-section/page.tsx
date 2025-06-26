@@ -824,7 +824,6 @@ const CommunicateSectionEditor = () => {
                                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
                                             {/* Left Image with Colored Background */}
                                             <div className="order-2 lg:order-1 relative">
-                                                {/* Green Background */}
                                                 <div
                                                     className="absolute -bottom-6 -left-6 w-full h-full z-0"
                                                     style={{

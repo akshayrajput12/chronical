@@ -853,7 +853,6 @@ const VirtualEventsSectionEditor = () => {
 
                                             {/* Right Image with Colored Background */}
                                             <div className="order-2 lg:order-2 relative">
-                                                {/* Green Background */}
                                                 <div
                                                     className="absolute -bottom-6 -right-6 w-full h-full z-0"
                                                     style={{

@@ -4,7 +4,8 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowLeft, Calendar, Eye, User } from "lucide-react";
+import { ArrowLeft, Calendar, ChevronDown, Eye, User } from "lucide-react";
+import { BlogTag } from "@/types/blog";
 
 interface BlogDetailHeroProps {
     title: string;
@@ -16,7 +17,7 @@ interface BlogDetailHeroProps {
         color: string;
         slug: string;
     };
-    tags?: string[];
+    tags?: BlogTag[];
     viewCount?: number;
     author?: string;
 }
@@ -37,7 +38,7 @@ const BlogDetailHero = ({
     return (
         <section className="w-full bg-white">
             {/* Full width hero container with background image */}
-            <div className="relative w-full h-[80vh] overflow-hidden flex items-center justify-center">
+            <div className="relative w-full 2xl:h-[50vh] h-[65vh] overflow-hidden flex items-center justify-center">
                 {/* Background Image */}
                 <div className="absolute inset-0 z-0">
                     <Image
@@ -56,7 +57,7 @@ const BlogDetailHero = ({
                     <div className="max-w-7xl mx-auto">
                         <div className="max-w-4xl mx-auto">
                             {/* Category Label and Tags */}
-                            <motion.div
+                            {/* <motion.div
                                 className="mb-4 sm:mb-6 flex flex-wrap justify-center items-center gap-2"
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
@@ -76,7 +77,6 @@ const BlogDetailHero = ({
                                         Article
                                     </span>
                                 )}
-                                {/* Tags next to category */}
                                 {tags &&
                                     tags.length > 0 &&
                                     tags.map((tag, index) => (
@@ -88,11 +88,11 @@ const BlogDetailHero = ({
                                             {tag}
                                         </span>
                                     ))}
-                            </motion.div>
+                            </motion.div> */}
 
                             {/* Title */}
                             <motion.h1
-                                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold text-white mb-4 sm:mb-6 leading-tight"
+                                className="text-3xl md:mt-12  mt-0 sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold text-white mb-4 sm:mb-6 leading-tight"
                                 initial={{ opacity: 0, y: 30 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8, delay: 0.2 }}
@@ -133,6 +133,16 @@ const BlogDetailHero = ({
                         </div>
                     </div>
                 </div>
+                {/* Scroll Down Indicator */}
+                <motion.div
+                    className="absolute bottom-0 left-1/2 transform -translate-x-1/2 cursor-pointer"
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.6 }}
+                    whileHover={{ y: 5 }}
+                >
+                    <ChevronDown className="w-8 h-8 text-white animate-bounce" />
+                </motion.div>
             </div>
 
             {/* Back to News Link - Outside the hero container */}

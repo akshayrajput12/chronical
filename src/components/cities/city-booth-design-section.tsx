@@ -52,12 +52,6 @@ const CityBoothDesignSection = ({ city }: CityBoothDesignSectionProps) => {
                             transition={{ duration: 0.8 }}
                             viewport={{ once: true }}
                         >
-                            {/* Green Background */}
-                            <div
-                                className="absolute -bottom-6 -right-6 w-full h-full z-0"
-                                style={{ backgroundColor: "#a5cd39" }}
-                            ></div>
-
                             {/* Image Container */}
                             <div className="relative h-64 sm:h-80 md:h-96 lg:h-[400px] overflow-hidden z-10">
                                 <Image

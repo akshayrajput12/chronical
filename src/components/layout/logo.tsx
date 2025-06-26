@@ -29,9 +29,9 @@ const Logo = ({
             <Image
                 src={shouldUseDarkLogo ? "/logo-dark.png" : "/logo.png"}
                 alt="Chronicle Exhibits Logo"
-                width={150}
-                height={50}
-                className="h-auto w-auto"
+                width={120}
+                height={70}
+                className="h-auto min-h-[70px] w-auto"
                 priority
             />
         </Link>

@@ -880,7 +880,6 @@ const EventManagementServicesEditor = () => {
 
                                                 {/* Right Image */}
                                                 <div className="relative">
-                                                    {/* Green Background */}
                                                     <div
                                                         className="absolute -bottom-3 -right-3 w-full h-full z-0"
                                                         style={{

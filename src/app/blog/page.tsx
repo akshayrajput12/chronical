@@ -16,7 +16,9 @@ const BlogPage = () => {
         const fetchBlogPosts = async () => {
             try {
                 setLoading(true);
-                const response = await fetch("/api/blog/posts?status=published&page_size=20");
+                const response = await fetch(
+                    "/api/blog/posts?status=published&page_size=20",
+                );
 
                 if (!response.ok) {
                     throw new Error("Failed to fetch blog posts");
@@ -31,10 +33,12 @@ const BlogPage = () => {
                 setBlogPosts([
                     {
                         id: "1",
-                        title: "DWTC Hospitality Division Achieves Strong Performance in 2024, Catering to Nearly 1 Million Guests Across 2,400 Events",
+                        title: "DWTC delivers AED22.35 billion in economic output in 2024, driven by record increase in large scale events",
                         slug: "dwtc-hospitality-division-achieves-strong-performance-2024",
-                        excerpt: "DWTC's hospitality division continues to excel with outstanding performance metrics.",
-                        featured_image_url: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+                        excerpt:
+                            "DWTC's hospitality division continues to excel with outstanding performance metrics.",
+                        featured_image_url:
+                            "https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
                         published_at: "2025-05-21T00:00:00Z",
                         category_name: "Business",
                         category_color: "#3b82f6",
@@ -45,8 +49,10 @@ const BlogPage = () => {
                         id: "2",
                         title: "DWTC delivers AED22.35 billion in economic output in 2024, driven by record increase in large scale events",
                         slug: "dwtc-delivers-aed22-35-billion-economic-output-2024",
-                        excerpt: "Record increase in large scale events drives significant economic impact.",
-                        featured_image_url: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+                        excerpt:
+                            "Record increase in large scale events drives significant economic impact.",
+                        featured_image_url:
+                            "https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
                         published_at: "2025-04-27T00:00:00Z",
                         category_name: "Business",
                         category_color: "#3b82f6",
@@ -70,7 +76,9 @@ const BlogPage = () => {
                     <div className="container mx-auto px-4">
                         <div className="max-w-6xl mx-auto text-center">
                             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#a5cd39] mx-auto"></div>
-                            <p className="text-gray-600 mt-4">Loading blog posts...</p>
+                            <p className="text-gray-600 mt-4">
+                                Loading blog posts...
+                            </p>
                         </div>
                     </div>
                 </div>

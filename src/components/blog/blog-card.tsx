@@ -78,29 +78,33 @@ const BlogCard = ({
                 onClick={handleClick}
                 style={{
                     width: "100%",
-                    // Increased height for card
-                    height: style?.width
-                        ? (() => {
-                              const cardWidth = parseInt(
-                                  style.width.toString(),
-                              );
-                              // Slightly taller aspect ratio for all devices
-                              const aspectRatio = isMobile ? 2.0 : 1.45; // was 1.8/1.37
-                              return `${cardWidth * aspectRatio}px`;
-                          })()
-                        : "560px", // was 520px
                     border: "0px",
                     backgroundColor: "rgb(255, 255, 255)",
                     position: "relative",
                 }}
             >
+                {/* Image Section */}
+                <div className="relative h-48 overflow-hidden">
+                    {post.featured_image_url ? (
+                        <Image
+                            src={post.featured_image_url}
+                            alt={post.featured_image_alt || post.title}
+                            fill
+                            className="object-cover transition-transform duration-300 group-hover:scale-105"
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        />
+                    ) : (
+                        <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                            <span className="text-gray-400 text-sm">
+                                No image
+                            </span>
+                        </div>
+                    )}
+                </div>
                 {/* Content Section */}
-                <div className="p-6 flex-1 flex flex-col justify-between">
+                <div className="p-6 flex flex-col">
                     {/* Article Label and Date */}
-                    <div className="mb-4 flex justify-between items-center">
-                        <span className="text-xs font-medium text-gray-600 uppercase tracking-wider">
-                            ARTICLE
-                        </span>
+                    <div className="flex items-center">
                         {post.published_at && (
                             <span className="text-xs text-gray-500 font-medium">
                                 {formatCardDate(post.published_at)}
@@ -109,19 +113,14 @@ const BlogCard = ({
                     </div>
 
                     {/* Title and Excerpt */}
-                    <div className="flex-1 mb-6">
+                    <div className="my-6">
                         <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 leading-tight mb-2 group-hover:text-gray-700 transition-colors duration-300">
                             {post.title}
                         </h3>
-                        {post.excerpt && (
-                            <p className="text-sm text-gray-600 line-clamp-2 mb-2">
-                                {post.excerpt}
-                            </p>
-                        )}
                     </div>
 
                     {/* Category and Tags in one row */}
-                    <div className="flex items-center gap-2 flex-wrap">
+                    {/* <div className="flex items-center gap-2 flex-wrap">
                         {post.category_name && (
                             <span
                                 className="px-2 py-1 rounded-full text-xs font-medium text-white"
@@ -173,26 +172,7 @@ const BlogCard = ({
                                 )}
                             </>
                         )}
-                    </div>
-                </div>
-
-                {/* Image Section */}
-                <div className="relative h-48 overflow-hidden">
-                    {post.featured_image_url ? (
-                        <Image
-                            src={post.featured_image_url}
-                            alt={post.featured_image_alt || post.title}
-                            fill
-                            className="object-cover transition-transform duration-300 group-hover:scale-105"
-                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        />
-                    ) : (
-                        <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                            <span className="text-gray-400 text-sm">
-                                No image
-                            </span>
-                        </div>
-                    )}
+                    </div> */}
                 </div>
 
                 {/* Full-Width Blue Button - Covering Card Bottom */}
