@@ -52,6 +52,27 @@ export default function EventDetailPage() {
         router.push(`/whats-on/${otherEventId}`);
     };
 
+    // Add formData state for the form fields
+    const [formData, setFormData] = useState({
+        name: "",
+        exhibitionName: "",
+        companyName: "",
+        email: "",
+        phone: "",
+        budget: "",
+        message: "",
+        file: null as File | null,
+    });
+
+    // Handler for file input change
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0] || null;
+        setFormData(prev => ({
+            ...prev,
+            file,
+        }));
+    };
+
     if (!event) {
         return <div>Event not found</div>;
     }
@@ -63,7 +84,7 @@ export default function EventDetailPage() {
     return (
         <div className="min-h-screen bg-gray-100">
             {/* Hero Section - Full Width */}
-            <section className="relative h-[80vh] w-full overflow-hidden">
+            <section className="relative h-[75vh] 2xl:h-[60vh] flex flex-col items-center justify-center w-full overflow-hidden">
                 {/* Background Image - Same as Event Card */}
                 <Image
                     src={event.image}
@@ -84,7 +105,7 @@ export default function EventDetailPage() {
                 <div className="absolute inset-0 bg-black/40 z-5"></div>
 
                 {/* Centered Title */}
-                <div className="relative z-20 flex items-center justify-center h-full text-center text-white px-4 sm:px-6 md:px-8 lg:px-12">
+                <div className="relative z-20 md:mt-20 mt-0 flex flex-col items-center justify-center h-full text-center text-white px-4 sm:px-6 md:px-8 lg:px-12">
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -94,7 +115,7 @@ export default function EventDetailPage() {
                         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold leading-tight mb-4 sm:mb-6">
                             {event.title}
                         </h1>
-                        <div className="mt-4 sm:mt-8">
+                        <div className="mt-4 absolute bottom-0 left-[50%] sm:mt-8">
                             <ChevronDown className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 mx-auto animate-bounce opacity-70" />
                         </div>
                     </motion.div>
@@ -231,13 +252,10 @@ export default function EventDetailPage() {
                                 <div className="text-center">
                                     {/* Event Logo */}
                                     <div className="mb-6">
-                                        <h2 className="text-6xl font-bold mb-2">
-                                            {event.logoText || "CBBC"}
-                                        </h2>
-                                        <p className="text-sm text-gray-600 uppercase tracking-wider font-medium">
-                                            {event.logoSubtext ||
-                                                "CONCEPT BIG BRANDS CARNIVAL"}
-                                        </p>
+                                        <img
+                                            src={event.logoImage}
+                                            alt={event.logoText}
+                                        />
                                     </div>
 
                                     {/* Organizer Info */}
@@ -259,13 +277,13 @@ export default function EventDetailPage() {
 
                             {/* Right Column - Description (70%) */}
                             <motion.div
-                                className="w-full lg:w-[70%]"
+                                className="w-full lg:w-[70%] self-center flex flex-col justify-center"
                                 initial={{ opacity: 0, x: 30 }}
                                 whileInView={{ opacity: 1, x: 0 }}
                                 transition={{ duration: 0.8 }}
                                 viewport={{ once: true }}
                             >
-                                <div>
+                                <div className=" flex flex-col justify-center my-auto">
                                     <p className="text-gray-700 leading-relaxed text-base">
                                         {event.description ||
                                             "The CBBC brand sale brings exclusive deals, showcasing over 300 fashion and luxury brands with discounts of up to 75%."}
@@ -280,85 +298,93 @@ export default function EventDetailPage() {
             {/* Action Buttons Section */}
             <section className="py-16 bg-gray-100">
                 <div className="container mx-auto px-4">
-                    <div className="max-w-6xl mx-auto">
-                        <motion.div
-                            className="flex flex-col md:flex-row items-center justify-between gap-6"
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6 }}
-                            viewport={{ once: true }}
-                        >
-                            {/* Left Side - Add to Calendar Button */}
-                            <div className="flex-shrink-0 w-full sm:w-auto">
-                                <Button className="bg-[#a5cd39] hover:bg-[#8fb32a] text-white px-4 sm:px-6 py-3 text-xs sm:text-sm font-medium uppercase tracking-wider rounded-full w-full sm:w-auto">
-                                    <span className="hidden sm:inline">
-                                        ADD TO MY CALENDAR
-                                    </span>
-                                    <span className="sm:hidden">
-                                        ADD TO CALENDAR
-                                    </span>
-                                </Button>
+                    <div className="max-w-6xl mx-auto bg-white rounded-lg shadow p-6">
+                        <form className="space-y-4">
+                            {/* Simple responsive grid for all main fields */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <input
+                                    type="text"
+                                    placeholder="Name"
+                                    className="h-8 px-2 py-1 text-xs border border-gray-300 rounded-md w-full focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] placeholder:text-gray-500 transition-all duration-200"
+                                    required
+                                />
+                                <input
+                                    type="text"
+                                    placeholder="Exhibition Name"
+                                    className="h-8 px-2 py-1 text-xs border border-gray-300 rounded-md w-full focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] placeholder:text-gray-500 transition-all duration-200"
+                                    required
+                                />
+                                <input
+                                    type="text"
+                                    placeholder="Company Name"
+                                    className="h-8 px-2 py-1 text-xs border border-gray-300 rounded-md w-full focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] placeholder:text-gray-500 transition-all duration-200"
+                                    required
+                                />
+                                <input
+                                    type="email"
+                                    placeholder="Email"
+                                    className="h-8 px-2 py-1 text-xs border border-gray-300 rounded-md w-full focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] placeholder:text-gray-500 transition-all duration-200"
+                                    required
+                                />
+                                <input
+                                    type="tel"
+                                    placeholder="Phone (with country code)"
+                                    className="h-8 px-2 py-1 text-xs border border-gray-300 rounded-md w-full focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] placeholder:text-gray-500 transition-all duration-200"
+                                    required
+                                />
+                                <input
+                                    type="text"
+                                    placeholder="Budget"
+                                    className="h-8 px-2 py-1 text-xs border border-gray-300 rounded-md w-full focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] placeholder:text-gray-500 transition-all duration-200"
+                                />
                             </div>
-
-                            {/* Right Side - Visit Website Button and Social Icons */}
-                            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 sm:gap-6 w-full sm:w-auto">
-                                {/* Visit Event Website Button */}
-                                <Button
-                                    variant="outline"
-                                    className="border-2 border-[#a5cd39] text-[#a5cd39] hover:border-[#8fb32a] hover:text-[#8fb32a] px-4 sm:px-6 py-3 text-xs sm:text-sm font-medium uppercase tracking-wider rounded-full bg-white w-full sm:w-auto"
-                                >
-                                    <span className="hidden sm:inline">
-                                        VISIT EVENT WEBSITE
-                                    </span>
-                                    <span className="sm:hidden">
-                                        VISIT WEBSITE
-                                    </span>
-                                </Button>
-
-                                {/* Follow Event Text and Social Icons */}
-                                <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-3">
-                                    <span className="text-gray-600 text-xs sm:text-sm font-medium uppercase tracking-wider text-center sm:text-left">
-                                        FOLLOW EVENT
-                                    </span>
-
-                                    {/* Social Media Icons */}
-                                    <div className="flex items-center justify-center gap-2">
-                                        {/* Facebook */}
-                                        <div className="w-8 h-8 sm:w-8 sm:h-8 bg-blue-600 rounded flex items-center justify-center cursor-pointer hover:bg-blue-700 transition-colors">
-                                            <svg
-                                                className="w-4 h-4 text-white"
-                                                fill="currentColor"
-                                                viewBox="0 0 24 24"
-                                            >
-                                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                                            </svg>
-                                        </div>
-
-                                        {/* Instagram */}
-                                        <div className="w-8 h-8 sm:w-8 sm:h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded flex items-center justify-center cursor-pointer hover:from-purple-600 hover:to-pink-600 transition-colors">
-                                            <svg
-                                                className="w-4 h-4 text-white"
-                                                fill="currentColor"
-                                                viewBox="0 0 24 24"
-                                            >
-                                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-                                            </svg>
-                                        </div>
-
-                                        {/* YouTube */}
-                                        <div className="w-8 h-8 sm:w-8 sm:h-8 bg-red-600 rounded flex items-center justify-center cursor-pointer hover:bg-red-700 transition-colors">
-                                            <svg
-                                                className="w-4 h-4 text-white"
-                                                fill="currentColor"
-                                                viewBox="0 0 24 24"
-                                            >
-                                                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-                                            </svg>
-                                        </div>
+                            {/* File upload full width */}
+                            <div className="space-y-2">
+                                <div className="relative">
+                                    <input
+                                        type="file"
+                                        id="file-upload"
+                                        onChange={handleFileChange}
+                                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                        accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                                        title="Upload File (PDF, DOC, JPG, PNG)"
+                                    />
+                                    <div className="flex items-center justify-between w-full h-12 px-4 py-2 text-sm bg-white border border-gray-300 hover:border-[#a5cd39] focus-within:border-[#a5cd39] rounded-md cursor-pointer transition-all duration-200">
+                                        <span
+                                            className={`${
+                                                formData.file
+                                                    ? "text-gray-700 font-noto-kufi-arabic"
+                                                    : "text-gray-500 font-noto-kufi-arabic"
+                                            }`}
+                                        >
+                                            {formData.file
+                                                ? formData.file.name
+                                                : "Choose files (PDF, DOC, JPG, PNG)"}
+                                        </span>
+                                        <span className="text-xs text-gray-600 font-noto-kufi-arabic bg-gray-200 px-3 py-1 rounded-sm font-medium">
+                                            BROWSE
+                                        </span>
                                     </div>
                                 </div>
                             </div>
-                        </motion.div>
+                            {/* Textarea full width */}
+                            <div>
+                                <textarea
+                                    placeholder="Describe your booth requirements, design preferences, special features, or any specific customizations you need..."
+                                    className="min-h-[40px] h-16 px-2 py-1 text-xs border border-gray-300 rounded-md w-full focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] placeholder:text-gray-500 transition-all duration-200 resize-none"
+                                    required
+                                />
+                            </div>
+                            {/* Submit button centered */}
+                            <div className="flex justify-center pt-2">
+                                <button
+                                    type="submit"
+                                    className="bg-[#a5cd39] hover:bg-[#8fb32a] text-black px-6 py-2 text-xs font-semibold rounded-md transition-all duration-200 shadow-sm hover:shadow-md uppercase tracking-wider min-w-[100px]"
+                                >
+                                    Submit
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </section>

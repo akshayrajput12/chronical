@@ -179,7 +179,11 @@ const BlogDetailPage = () => {
                 )}
                 {blogPost.tags &&
                     blogPost.tags.map(tag => (
-                        <meta key={tag} property="article:tag" content={tag} />
+                        <meta
+                            key={tag.id}
+                            property="article:tag"
+                            content={tag.name}
+                        />
                     ))}
 
                 {/* Canonical URL */}

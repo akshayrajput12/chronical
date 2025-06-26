@@ -16,7 +16,7 @@ const CityDetailHero = ({ cityName, heroImage }: CityDetailHeroProps) => {
     return (
         <section className="w-full bg-white">
             {/* Full width hero container with background image */}
-            <div className="relative w-full h-[80vh] overflow-hidden flex items-center justify-center">
+            <div className="relative w-full 2xl:h-[50vh] h-[65vh] overflow-hidden flex items-center justify-center">
                 {/* Background Image */}
                 <div className="absolute inset-0 z-0">
                     <Image
@@ -31,7 +31,7 @@ const CityDetailHero = ({ cityName, heroImage }: CityDetailHeroProps) => {
                 </div>
 
                 {/* Content - matching the reference image design */}
-                <div className="relative z-10 px-4 sm:px-6 md:px-8 lg:px-12 text-center text-white w-full">
+                <div className="relative z-10 md:mt-20  mt-0 px-4 sm:px-6 md:px-8 lg:px-12 text-center text-white w-full">
                     <div className="max-w-7xl mx-auto">
                         <div className="max-w-5xl mx-auto">
                             {/* Main Heading - exactly matching the reference image */}
@@ -41,9 +41,8 @@ const CityDetailHero = ({ cityName, heroImage }: CityDetailHeroProps) => {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8 }}
                             >
-                                EXHIBITION STAND DESIGN BUILDER &<br />
-                                CONTRACTOR COMPANY IN {cityName.toUpperCase()},
-                                UAE.
+                                EXHIBITION STAND DESIGN BUILDER <br />
+                                IN {cityName.toUpperCase()}, UAE.
                             </motion.h1>
 
                             {/* Description Text - matching the reference image */}

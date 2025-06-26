@@ -6,7 +6,7 @@ import { ChevronDown } from "lucide-react";
 
 const ContactHero = () => {
     return (
-        <section className="relative h-[80vh] flex items-center justify-center overflow-hidden">
+        <section className="relative 2xl:h-[60vh] h-[75vh] flex items-center justify-center overflow-hidden">
             {/* Background Image - Glass/Metal Structure */}
             <div
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -20,7 +20,7 @@ const ContactHero = () => {
             <div className="absolute inset-0 bg-black/30" />
 
             {/* Content */}
-            <div className="relative z-10 text-center text-white w-full px-4 sm:px-6 md:px-8 lg:px-12">
+            <div className="relative z-10 md:mt-20 mt-0 text-center text-white w-full px-4 sm:px-6 md:px-8 lg:px-12">
                 <motion.h1
                     className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-rubik font-bold mb-4 sm:mb-6 leading-tight"
                     initial={{ opacity: 0, y: 30 }}

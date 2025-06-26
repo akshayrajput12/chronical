@@ -1,7 +1,12 @@
 "use client";
 
 import React from "react";
-import { motion, Variants } from "framer-motion";
+import {
+    AnimationGeneratorType,
+    Easing,
+    motion,
+    Variants,
+} from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -13,7 +18,7 @@ const PromoteBrandSection = () => {
             y: 0,
             transition: {
                 duration: 0.6,
-                ease: "easeOut",
+                ease: "easeOut" as Easing | Easing[] | undefined,
                 delay: 0.2,
             },
         },
@@ -23,7 +28,7 @@ const PromoteBrandSection = () => {
             boxShadow: "0px 5px 15px rgba(165,205,57,0.4)",
             transition: {
                 duration: 0.3,
-                type: "spring",
+                type: "spring" as AnimationGeneratorType | undefined,
                 stiffness: 300,
             },
         },

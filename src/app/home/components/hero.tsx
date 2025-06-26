@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
 import { getHeroSection } from "@/services/hero.service";
+import { AnimationGeneratorType, Variants } from "framer-motion";
 import { HeroSection as HeroSectionType } from "@/types/hero";
 import { useComponentLoading } from "@/hooks/use-minimal-loading";
 
@@ -136,7 +137,9 @@ const HeroSection: React.FC = () => {
                             transition={{
                                 duration: 0.8,
                                 delay: 0.4,
-                                type: "spring",
+                                type: "spring" as
+                                    | AnimationGeneratorType
+                                    | undefined,
                                 stiffness: 100,
                             }}
                         >

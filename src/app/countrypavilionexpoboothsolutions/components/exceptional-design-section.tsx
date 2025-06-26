@@ -107,12 +107,6 @@ const ExceptionalDesignSection = () => {
                                 transition={{ duration: 0.8 }}
                                 viewport={{ once: true }}
                             >
-                                {/* Green Background */}
-                                <div
-                                    className="absolute -bottom-6 -left-6 w-full h-full z-0"
-                                    style={{ backgroundColor: "#a5cd39" }}
-                                ></div>
-
                                 {/* Image Container */}
                                 <div className="relative h-64 sm:h-80 md:h-96 lg:h-[400px] overflow-hidden z-10">
                                     <Image
@@ -125,28 +119,6 @@ const ExceptionalDesignSection = () => {
                                 </div>
                             </motion.div>
                         </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Ready to Showcase Section with Gray Background */}
-            <section className="py-8 md:py-12 lg:py-16 bg-gray-100">
-                <div className="container mx-auto px-4">
-                    <div className="max-w-6xl mx-auto">
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8 }}
-                            viewport={{ once: true }}
-                        >
-                            <p className="text-base leading-relaxed text-justify text-gray-700">
-                                Ready to showcase your country&apos;s excellence
-                                on the world stage? Contact us today to discuss
-                                your requirements and see how we can help you
-                                make a lasting impact with our country pavilion
-                                exhibition stands in Dubai.
-                            </p>
-                        </motion.div>
                     </div>
                 </div>
             </section>

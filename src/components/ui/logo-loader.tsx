@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Easing } from "framer-motion";
 
 interface LogoLoaderProps {
     isVisible: boolean;
@@ -31,7 +31,10 @@ const LogoLoader: React.FC<LogoLoaderProps> = ({
                             animate={{ scale: 1, opacity: 1, rotateY: 0 }}
                             transition={{
                                 duration: 1.2,
-                                ease: "easeOut",
+                                ease: "easeOut" as
+                                    | Easing
+                                    | Easing[]
+                                    | undefined,
                                 delay: 0.2,
                             }}
                         >
@@ -47,7 +50,10 @@ const LogoLoader: React.FC<LogoLoaderProps> = ({
                                 transition={{
                                     duration: 2,
                                     repeat: Infinity,
-                                    ease: "linear",
+                                    ease: "linear" as
+                                        | Easing
+                                        | Easing[]
+                                        | undefined,
                                 }}
                             />
 
@@ -61,7 +67,10 @@ const LogoLoader: React.FC<LogoLoaderProps> = ({
                                 transition={{
                                     duration: 2.5,
                                     repeat: Infinity,
-                                    ease: "easeInOut",
+                                    ease: "easeInOut" as
+                                        | Easing
+                                        | Easing[]
+                                        | undefined,
                                 }}
                             />
 
@@ -75,7 +84,10 @@ const LogoLoader: React.FC<LogoLoaderProps> = ({
                                 transition={{
                                     duration: 1.8,
                                     repeat: Infinity,
-                                    ease: "easeInOut",
+                                    ease: "easeInOut" as
+                                        | Easing
+                                        | Easing[]
+                                        | undefined,
                                     delay: 0.5,
                                 }}
                             />
@@ -94,7 +106,10 @@ const LogoLoader: React.FC<LogoLoaderProps> = ({
                                 transition={{
                                     duration: 3,
                                     repeat: Infinity,
-                                    ease: "easeInOut",
+                                    ease: "easeInOut" as
+                                        | Easing
+                                        | Easing[]
+                                        | undefined,
                                 }}
                             >
                                 <Image
@@ -136,7 +151,10 @@ const LogoLoader: React.FC<LogoLoaderProps> = ({
                                             duration: 1.5,
                                             repeat: Infinity,
                                             delay: index * 0.2,
-                                            ease: "easeInOut",
+                                            ease: "easeInOut" as
+                                                | Easing
+                                                | Easing[]
+                                                | undefined,
                                         }}
                                     />
                                 ))}
@@ -162,7 +180,10 @@ const LogoLoader: React.FC<LogoLoaderProps> = ({
                                     transition={{
                                         duration: 4,
                                         repeat: Infinity,
-                                        ease: "easeInOut",
+                                        ease: "easeInOut" as
+                                            | Easing
+                                            | Easing[]
+                                            | undefined,
                                     }}
                                 >
                                     {/* Shimmer effect */}
@@ -172,7 +193,10 @@ const LogoLoader: React.FC<LogoLoaderProps> = ({
                                         transition={{
                                             duration: 1.5,
                                             repeat: Infinity,
-                                            ease: "linear",
+                                            ease: "linear" as
+                                                | Easing
+                                                | Easing[]
+                                                | undefined,
                                         }}
                                     />
                                 </motion.div>
@@ -185,7 +209,10 @@ const LogoLoader: React.FC<LogoLoaderProps> = ({
                                 transition={{
                                     duration: 2,
                                     repeat: Infinity,
-                                    ease: "easeInOut",
+                                    ease: "easeInOut" as
+                                        | Easing
+                                        | Easing[]
+                                        | undefined,
                                 }}
                             >
                                 Loading...

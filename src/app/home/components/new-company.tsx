@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { motion, useAnimation, Variants } from "framer-motion";
+import { Easing, motion, useAnimation, Variants } from "framer-motion";
 import ImageScrollGrid from "./image-scroll-grid";
+import { AnimationGeneratorType } from "framer-motion";
 import Link from "next/link";
 import { NewCompanyService } from "@/services/new-company.service";
 import { NewCompanySection, NewCompanyImage } from "@/types/new-company";
@@ -90,7 +91,7 @@ const NewCompany = () => {
             y: 0,
             transition: {
                 duration: 0.7,
-                ease: "easeOut",
+                ease: "easeOut" as Easing | Easing[] | undefined,
             },
         },
     };
@@ -101,7 +102,7 @@ const NewCompany = () => {
             width: "6rem",
             transition: {
                 duration: 0.8,
-                ease: "easeOut",
+                ease: "easeOut" as Easing | Easing[] | undefined,
                 delay: 0.3,
             },
         },
@@ -114,7 +115,7 @@ const NewCompany = () => {
             y: 0,
             transition: {
                 duration: 0.6,
-                ease: "easeOut",
+                ease: "easeOut" as Easing | Easing[] | undefined,
             },
         },
     };
@@ -126,7 +127,7 @@ const NewCompany = () => {
             y: 0,
             transition: {
                 duration: 0.6,
-                ease: "easeOut",
+                ease: "easeOut" as Easing | Easing[] | undefined,
                 delay: 0.2,
             },
         },
@@ -136,7 +137,7 @@ const NewCompany = () => {
             boxShadow: "0px 5px 15px rgba(165,205,57,0.4)",
             transition: {
                 duration: 0.3,
-                type: "spring",
+                type: "spring" as AnimationGeneratorType | undefined,
                 stiffness: 300,
             },
         },

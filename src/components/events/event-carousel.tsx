@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { AnimationGeneratorType, Variants } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Event } from "@/app/whats-on/data/events";
@@ -119,7 +120,9 @@ const EventCarousel = ({ events, onEventClick }: EventCarouselProps) => {
                             }px)`,
                         }}
                         transition={{
-                            type: "spring",
+                            type: "spring" as
+                                | AnimationGeneratorType
+                                | undefined,
                             stiffness: 300,
                             damping: 30,
                             duration: 0.8,

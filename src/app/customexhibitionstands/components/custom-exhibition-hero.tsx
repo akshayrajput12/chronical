@@ -6,7 +6,7 @@ import Image from "next/image";
 
 const CustomExhibitionHero = () => {
     return (
-        <section className="relative h-[80vh] overflow-hidden">
+        <section className="relative 2xl:h-[60vh] h-[75vh] overflow-hidden">
             {/* Background Image */}
             <div className="absolute inset-0">
                 <Image
@@ -22,7 +22,7 @@ const CustomExhibitionHero = () => {
             </div>
 
             {/* Content */}
-            <div className="relative z-10 h-full flex items-center">
+            <div className="relative z-10 md:mt-20  mt-0 h-full flex items-center">
                 <div className="container mx-auto px-4">
                     <div className="max-w-6xl mx-auto text-center text-white">
                         <motion.div

@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+
+import { AnimationGeneratorType, Variants } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -241,7 +243,9 @@ const EventsGallery = () => {
                                         }px)`,
                                     }}
                                     transition={{
-                                        type: "spring",
+                                        type: "spring" as
+                                            | AnimationGeneratorType
+                                            | undefined,
                                         stiffness: 300,
                                         damping: 30,
                                         duration: 0.8,
