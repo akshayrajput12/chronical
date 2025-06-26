@@ -11,9 +11,9 @@ import TableCell from '@tiptap/extension-table-cell'
 import Placeholder from '@tiptap/extension-placeholder'
 import TextAlign from '@tiptap/extension-text-align'
 import { useCallback, useState } from 'react'
-import ImageUploadModal from './modals/ImageUploadModal'
-import LinkModal from './modals/LinkModal'
-import TableModal from './modals/TableModal'
+import ImageUploadModal from './modals/image-upload-modal'
+import LinkModal from './modals/link-modal'
+import TableModal from './modals/table-modal'
 import { 
   Bold, 
   Italic, 
@@ -123,8 +123,7 @@ export default function TiptapEditor({
     if (editor) {
       editor.chain().focus().setImage({
         src: imageUrl,
-        alt: altText,
-        class: 'max-w-full h-auto rounded-lg my-4'
+        alt: altText
       }).run()
     }
   }, [editor])

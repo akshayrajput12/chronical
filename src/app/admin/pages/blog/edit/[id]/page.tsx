@@ -23,7 +23,7 @@ import {
     BlogPost,
     UpdateBlogPostRequest,
 } from "@/types/blog";
-import TiptapEditor from "@/components/admin/TiptapEditor";
+import TiptapEditor from "@/components/admin/tiptap-editor";
 
 type BlogFormData = {
     title: string;
@@ -163,6 +163,7 @@ const EditBlogPostPage = () => {
         if (postId) {
             fetchData();
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [postId]);
 
     // Upload image to Supabase storage

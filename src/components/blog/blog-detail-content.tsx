@@ -3,7 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { BlogImage } from "@/types/blog";
-import BlogContent from "./BlogContent";
+import BlogContent from "./blog-content";
 
 interface BlogDetailContentProps {
     content: string;

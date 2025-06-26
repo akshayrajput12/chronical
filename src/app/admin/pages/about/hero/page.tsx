@@ -105,6 +105,7 @@ const AboutHeroEditor = () => {
     useEffect(() => {
         loadAboutHeroData();
         loadAboutHeroImages();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const loadAboutHeroData = async () => {

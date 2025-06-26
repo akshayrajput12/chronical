@@ -56,6 +56,7 @@ const BlogCategoriesPage = () => {
 
     useEffect(() => {
         fetchCategories();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // Generate slug from name

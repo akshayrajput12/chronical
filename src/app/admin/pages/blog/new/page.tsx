@@ -17,11 +17,11 @@ import {
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { BlogCategory, BlogTag, CreateBlogPostRequest } from "@/types/blog";
-import TiptapEditor from "@/components/admin/TiptapEditor";
+import TiptapEditor from "@/components/admin/tiptap-editor";
 import DeferredImageUpload, {
   DeferredImageData,
   createEmptyDeferredImage
-} from "@/components/admin/DeferredImageUpload";
+} from "@/components/admin/deferred-image-upload";
 
 const CreateBlogPostPage = () => {
     const router = useRouter();
@@ -78,6 +78,7 @@ const CreateBlogPostPage = () => {
         };
 
         fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // Generate slug from title

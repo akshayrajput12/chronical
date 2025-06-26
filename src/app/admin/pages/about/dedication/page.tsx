@@ -105,6 +105,7 @@ const AboutDedicationEditor = () => {
         loadDedicationData();
         loadDedicationItems();
         loadDedicationImages();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const loadDedicationData = async () => {

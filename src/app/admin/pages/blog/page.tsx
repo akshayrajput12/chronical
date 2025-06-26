@@ -86,6 +86,7 @@ const BlogAdminPage = () => {
 
     useEffect(() => {
         fetchPosts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [statusFilter, searchTerm]);
 
     // Delete post

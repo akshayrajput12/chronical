@@ -108,6 +108,7 @@ const AboutDescriptionEditor = () => {
     useEffect(() => {
         loadDescriptionData();
         loadDescriptionImages();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const loadDescriptionData = async () => {
