@@ -1,52 +1,69 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
-
-interface FAQItem {
-    question: string;
-    answer: string;
-    listItems?: string[];
-}
-
-const faqData: FAQItem[] = [
-    {
-        question:
-            "What is the time it will take to create and construct an exhibition stand that is custom-designed?",
-        answer: "The time needed to create the custom display stand will depend on the dimensions and demands. The process of creating a custom display a skill; The method and plan for designing and constructing a custom display stand must be explained.",
-    },
-    {
-        question:
-            "Can I reuse my custom-designed exhibition stand in different shows?",
-        answer: "Yes, you can! There are many benefits to reuse of custom-designed exhibition stands at the upcoming shows in Europe the most significant is that it will make you cost. A lot of companies and brands both small and large continue to believe that purchasing disposable displays is the most effective option to make the perfect impression. Also, invest in reusable exhibit stands.",
-    },
-    {
-        question:
-            "What is the cost to employ an expert builder of exhibition stands?",
-        answer: "Cost of hiring an experienced builder of exhibition stands is contingent upon a variety of elements. However, Chronicle Exhibition offers cost-effective exhibition services.",
-    },
-    {
-        question:
-            "How can I measure the performance of my custom exhibit stand at an exhibition?",
-        answer: "Going to an exhibition can be costly. Expos are often a major amount of an organization's budget, which can include travel expenses and exhibiting costs along with branding items, stand design and build. What is the best way to measure the ROI of your investment? Every brand is unique and a company's worth of exhibiting may differ from other. But, in order to calculate his ROI from an show, here are a few indicators that can be used across all types of exhibitions:",
-        listItems: [
-            "The feedback from the visitor",
-            "Survey",
-            "ROI (ROI) Cost: Show the cost divided by the revenue that is generated.",
-            "Offers and Sales",
-            "After exhibit engagement",
-            "The result of the leads and contacts",
-        ],
-    },
-];
+import {
+    getCustomExhibitionFAQSection,
+    getCustomExhibitionFAQItems,
+    CustomExhibitionFAQSection,
+    CustomExhibitionFAQItem
+} from "@/services/custom-exhibition-stands.service";
 
 const FAQSection = () => {
+    const [faqSection, setFaqSection] = useState<CustomExhibitionFAQSection | null>(null);
+    const [faqItems, setFaqItems] = useState<CustomExhibitionFAQItem[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
     const [openIndex, setOpenIndex] = useState<number | null>(0);
+
+    useEffect(() => {
+        loadFAQData();
+    }, []);
+
+    const loadFAQData = async () => {
+        try {
+            const [sectionData, itemsData] = await Promise.all([
+                getCustomExhibitionFAQSection(),
+                getCustomExhibitionFAQItems(),
+            ]);
+
+            setFaqSection(sectionData);
+            setFaqItems(itemsData);
+        } catch (error) {
+            console.error('Error loading FAQ data:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     const toggleFAQ = (index: number) => {
         setOpenIndex(openIndex === index ? null : index);
     };
+
+    // Don't render if no data exists
+    if ((!faqSection || !faqItems.length) && !isLoading) {
+        return null;
+    }
+
+    if (isLoading) {
+        return (
+            <section className="py-8 md:py-12 lg:py-16 bg-white">
+                <div className="container mx-auto px-4">
+                    <div className="max-w-4xl mx-auto animate-pulse">
+                        <div className="h-8 bg-gray-300 rounded mb-8 max-w-md mx-auto"></div>
+                        <div className="space-y-4">
+                            {[1, 2, 3, 4].map((i) => (
+                                <div key={i} className="border border-gray-200 rounded-lg p-4">
+                                    <div className="h-6 bg-gray-300 rounded mb-2"></div>
+                                    <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+    }
 
     return (
         <section className="py-8 md:py-12 lg:py-16 bg-white">
@@ -59,16 +76,16 @@ const FAQSection = () => {
                         viewport={{ once: true }}
                     >
                         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 uppercase tracking-wide mb-8">
-                            FREQUENTLY ASKED QUESTION (FAQ)
+                            {faqSection?.title}
                         </h2>
 
                         <div
                             className="border-2 rounded-lg overflow-hidden"
                             style={{ borderColor: "#a5cd39" }}
                         >
-                            {faqData.map((faq, index) => (
+                            {faqItems.map((faq, index) => (
                                 <div
-                                    key={index}
+                                    key={faq.id || index}
                                     className="border-b last:border-b-0"
                                     style={{ borderColor: "#a5cd39" }}
                                 >
@@ -108,9 +125,9 @@ const FAQSection = () => {
                                                         {faq.answer}
                                                     </p>
 
-                                                    {faq.listItems && (
+                                                    {faq.list_items && faq.list_items.length > 0 && (
                                                         <ul className="space-y-2">
-                                                            {faq.listItems.map(
+                                                            {faq.list_items.map(
                                                                 (
                                                                     item,
                                                                     itemIndex,

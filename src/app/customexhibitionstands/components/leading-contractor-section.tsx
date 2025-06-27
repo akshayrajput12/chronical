@@ -1,9 +1,54 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { getCustomExhibitionLeadingContractor, CustomExhibitionLeadingContractor } from "@/services/custom-exhibition-stands.service";
 
 const LeadingContractorSection = () => {
+    const [data, setData] = useState<CustomExhibitionLeadingContractor | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        loadData();
+    }, []);
+
+    const loadData = async () => {
+        try {
+            const result = await getCustomExhibitionLeadingContractor();
+            setData(result);
+        } catch (error) {
+            console.error('Error loading leading contractor data:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    // Don't render if no data exists
+    if (!data && !isLoading) {
+        return null;
+    }
+
+    if (isLoading) {
+        return (
+            <section className="py-8 md:py-12 lg:py-16 bg-white">
+                <div className="container mx-auto px-4">
+                    <div className="max-w-6xl mx-auto">
+                        <div className="text-center animate-pulse">
+                            <div className="h-8 bg-gray-300 rounded mb-8 max-w-2xl mx-auto"></div>
+                            <div className="space-y-4 max-w-5xl mx-auto">
+                                <div className="h-4 bg-gray-300 rounded"></div>
+                                <div className="h-4 bg-gray-300 rounded"></div>
+                                <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+                                <div className="h-4 bg-gray-300 rounded"></div>
+                                <div className="h-4 bg-gray-300 rounded w-5/6"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+    }
+
     return (
         <section className="py-8 md:py-12 lg:py-16 bg-white">
             <div className="container mx-auto px-4">
@@ -16,30 +61,16 @@ const LeadingContractorSection = () => {
                         viewport={{ once: true }}
                     >
                         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-8 uppercase tracking-wide">
-                            LEADING CONTRACTOR FOR CUSTOM EXHIBITION STANDS
+                            {data?.title}
                         </h2>
 
                         <div className="space-y-6 text-gray-700 max-w-5xl mx-auto">
                             <p className="text-base leading-relaxed text-justify">
-                                The ultimate destination for bespoke,
-                                eye-catching, and innovative custom exhibition
-                                stands in Dubai that catapult your brand
-                                presence to new heights. Chronicle Exhibits is
-                                the leading provider of customized exhibition
-                                solutions in Dubai, we excel in crafting
-                                unforgettable experiences that catch the
-                                audiences and leave a lasting impression.
+                                {data?.paragraph_1}
                             </p>
 
                             <p className="text-base leading-relaxed text-justify">
-                                At Custom Exhibition Stands, we recognize the
-                                uniqueness of every brand and commit ourselves
-                                to transforming your vision into reality.
-                                Whether you&apos;re gearing up for a trade show,
-                                conference, or any other event, our team
-                                actively collaborate with you to conceive and
-                                construct tailor-made exhibition stands that
-                                mirror your brand identity and objectives.
+                                {data?.paragraph_2}
                             </p>
                         </div>
                     </motion.div>

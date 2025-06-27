@@ -3,10 +3,8 @@ import { Metadata } from "next";
 import DoubleDeckerHero from "./components/double-decker-hero";
 import UniqueQualitySection from "./components/unique-quality-section";
 import EffectiveCommunicationSection from "./components/effective-communication-section";
-import LookingForDoubleStoreySection from "./components/looking-for-double-storey-section";
-import ReasonsToSelectSection from "./components/reasons-to-select-section";
 import BoothRequirementsForm from "../home/components/booth-requirements-form";
-import PortfolioGrid from "@/components/ui/stands-portfolio";
+import DoubleDeckersPortfolio from "./components/double-decker-portfolio";
 
 export const metadata: Metadata = {
     title: "Double Decker Exhibition Stands Dubai | Chronicle Exhibits",
@@ -28,7 +26,7 @@ function DoubleDeckerExhibitionStandsPage() {
             <DoubleDeckerHero />
             <UniqueQualitySection />
             <EffectiveCommunicationSection />
-            <PortfolioGrid />
+            <DoubleDeckersPortfolio />
             <BoothRequirementsForm />
         </div>
     );

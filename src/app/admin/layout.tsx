@@ -43,7 +43,7 @@ export default function AdminLayout({
         };
 
         checkAuth();
-    }, []);
+    }, [router, supabase.auth]);
 
     // Show loading state while checking authentication
     if (isLoading || !isAuthenticated) {

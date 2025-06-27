@@ -1,0 +1,202 @@
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { Save, Eye, ArrowLeft } from 'lucide-react';
+import { toast } from 'sonner';
+import Link from 'next/link';
+import {
+  getCustomExhibitionReasonsToChoose,
+  saveCustomExhibitionReasonsToChoose,
+  CustomExhibitionReasonsToChoose,
+} from '@/services/custom-exhibition-stands.service';
+
+const CustomStandReasonsToChooseEditor = () => {
+  const [data, setData] = useState<CustomExhibitionReasonsToChoose>({
+    title: 'REASONS TO CHOOSE OUR CUSTOM EXHIBITION STAND SERVICES',
+    paragraph_1: 'As your dedicated custom exhibition stand builder, we focus on combining creativity and functionality seamlessly. Our expert designers create stands that reflect your brand identity, ensuring a perfect balance of aesthetics and branding.',
+    paragraph_2: 'Elevate your expo experience with our exceptional craftsmanship and attention to detail. Explore our services to discover why we are the most trusted provider of impressive custom trade show displays in the UAE.',
+    is_active: true,
+  });
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const loadData = async () => {
+    try {
+      const result = await getCustomExhibitionReasonsToChoose();
+      if (result) {
+        setData(result);
+      }
+    } catch (error) {
+      console.error('Error loading reasons to choose data:', error);
+      toast.error('Failed to load reasons to choose section data');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      const success = await saveCustomExhibitionReasonsToChoose(data);
+      if (success) {
+        toast.success('Reasons to choose section saved successfully!');
+      } else {
+        toast.error('Failed to save reasons to choose section');
+      }
+    } catch (error) {
+      console.error('Error saving reasons to choose data:', error);
+      toast.error('Failed to save reasons to choose section');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleInputChange = (field: keyof CustomExhibitionReasonsToChoose, value: string) => {
+    setData(prev => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading reasons to choose section...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="mb-8"
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <Link
+                href="/admin/pages/custom-stand"
+                className="p-2 hover:bg-gray-200 rounded-lg transition-colors"
+              >
+                <ArrowLeft className="w-5 h-5" />
+              </Link>
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900">Reasons to Choose Section</h1>
+                <p className="text-gray-600">Manage the reasons to choose our services content</p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-4">
+              <Link
+                href="/customexhibitionstands"
+                target="_blank"
+                className="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+              >
+                <Eye className="w-4 h-4 mr-2" />
+                Preview
+              </Link>
+              <button
+                onClick={handleSave}
+                disabled={isSaving}
+                className="inline-flex items-center px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
+              >
+                <Save className="w-4 h-4 mr-2" />
+                {isSaving ? 'Saving...' : 'Save Changes'}
+              </button>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Form */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
+        >
+          <div className="space-y-6">
+            {/* Title */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Section Title
+              </label>
+              <input
+                type="text"
+                value={data.title}
+                onChange={(e) => handleInputChange('title', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="Enter section title"
+              />
+            </div>
+
+            {/* First Paragraph */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                First Paragraph
+              </label>
+              <textarea
+                value={data.paragraph_1}
+                onChange={(e) => handleInputChange('paragraph_1', e.target.value)}
+                rows={4}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="Enter first paragraph content"
+              />
+              <p className="text-sm text-gray-500 mt-1">
+                This paragraph explains the company's approach to combining creativity and functionality.
+              </p>
+            </div>
+
+            {/* Second Paragraph */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Second Paragraph
+              </label>
+              <textarea
+                value={data.paragraph_2}
+                onChange={(e) => handleInputChange('paragraph_2', e.target.value)}
+                rows={4}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="Enter second paragraph content"
+              />
+              <p className="text-sm text-gray-500 mt-1">
+                This paragraph highlights the company's craftsmanship and reputation.
+              </p>
+            </div>
+          </div>
+
+          {/* Preview */}
+          <div className="mt-8 p-6 bg-gray-50 rounded-lg">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Preview</h3>
+            <div className="text-center space-y-8">
+              <h2 className="text-2xl font-bold text-gray-800 uppercase tracking-wide">
+                {data.title}
+              </h2>
+              <div className="space-y-6 text-gray-700 max-w-5xl mx-auto">
+                <p className="text-base leading-relaxed text-justify">
+                  {data.paragraph_1}
+                </p>
+                <p className="text-base leading-relaxed text-justify">
+                  {data.paragraph_2}
+                </p>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  );
+};
+
+export default CustomStandReasonsToChooseEditor;

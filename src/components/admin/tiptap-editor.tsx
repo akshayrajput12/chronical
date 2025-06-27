@@ -10,6 +10,9 @@ import TableHeader from '@tiptap/extension-table-header'
 import TableCell from '@tiptap/extension-table-cell'
 import Placeholder from '@tiptap/extension-placeholder'
 import TextAlign from '@tiptap/extension-text-align'
+import ListItem from '@tiptap/extension-list-item'
+import BulletList from '@tiptap/extension-bullet-list'
+import OrderedList from '@tiptap/extension-ordered-list'
 import { useCallback, useState } from 'react'
 import ImageUploadModal from './modals/image-upload-modal'
 import LinkModal from './modals/link-modal'
@@ -59,13 +62,29 @@ export default function TiptapEditor({
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
-        bulletList: {
-          keepMarks: true,
-          keepAttributes: false,
+        // Disable the built-in list extensions to use our custom ones
+        bulletList: false,
+        orderedList: false,
+        listItem: false,
+      }),
+      // Explicitly add list extensions with proper configuration
+      ListItem.configure({
+        HTMLAttributes: {
+          class: 'my-1',
         },
-        orderedList: {
-          keepMarks: true,
-          keepAttributes: false,
+      }),
+      BulletList.configure({
+        keepMarks: true,
+        keepAttributes: false,
+        HTMLAttributes: {
+          class: 'list-disc pl-6 space-y-1 my-4',
+        },
+      }),
+      OrderedList.configure({
+        keepMarks: true,
+        keepAttributes: false,
+        HTMLAttributes: {
+          class: 'list-decimal pl-6 space-y-1 my-4',
         },
       }),
       Image.configure({
@@ -113,7 +132,7 @@ export default function TiptapEditor({
     },
     editorProps: {
       attributes: {
-        class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-xl mx-auto focus:outline-none min-h-[400px] p-6 max-w-none',
+        class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-xl mx-auto focus:outline-none min-h-[400px] p-6 max-w-none prose-ul:list-disc prose-ol:list-decimal prose-li:my-1',
       },
     },
   })
@@ -187,6 +206,26 @@ export default function TiptapEditor({
 
   return (
     <div className={`border rounded-lg bg-white ${className}`}>
+      {/* Custom styles for lists */}
+      <style jsx>{`
+        .ProseMirror ul {
+          list-style-type: disc;
+          padding-left: 1.5rem;
+          margin: 1rem 0;
+        }
+        .ProseMirror ol {
+          list-style-type: decimal;
+          padding-left: 1.5rem;
+          margin: 1rem 0;
+        }
+        .ProseMirror li {
+          margin: 0.25rem 0;
+          line-height: 1.6;
+        }
+        .ProseMirror li p {
+          margin: 0;
+        }
+      `}</style>
       {/* Toolbar */}
       <div className="border-b p-3 flex flex-wrap gap-1 bg-gray-50">
         {/* Text Formatting */}
@@ -264,19 +303,19 @@ export default function TiptapEditor({
         <div className="flex gap-1 border-r pr-2 mr-2">
           <button
             onClick={() => editor.chain().focus().toggleBulletList().run()}
-            className={`p-2 rounded hover:bg-gray-200 ${
-              editor.isActive('bulletList') ? 'bg-gray-300' : ''
+            className={`p-2 rounded hover:bg-gray-200 transition-colors ${
+              editor.isActive('bulletList') ? 'bg-blue-200 text-blue-800' : ''
             }`}
-            title="Bullet List"
+            title="Bullet List (Ctrl+Shift+8)"
           >
             <List className="w-4 h-4" />
           </button>
           <button
             onClick={() => editor.chain().focus().toggleOrderedList().run()}
-            className={`p-2 rounded hover:bg-gray-200 ${
-              editor.isActive('orderedList') ? 'bg-gray-300' : ''
+            className={`p-2 rounded hover:bg-gray-200 transition-colors ${
+              editor.isActive('orderedList') ? 'bg-blue-200 text-blue-800' : ''
             }`}
-            title="Numbered List"
+            title="Numbered List (Ctrl+Shift+7)"
           >
             <ListOrdered className="w-4 h-4" />
           </button>

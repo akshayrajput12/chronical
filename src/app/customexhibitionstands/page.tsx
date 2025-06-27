@@ -8,7 +8,7 @@ import ReasonsToChooseSection from "./components/reasons-to-choose-section";
 import FAQSection from "./components/faq-section";
 import LookingForStandsSection from "./components/looking-for-stands-section";
 import BoothRequirementsForm from "../home/components/booth-requirements-form";
-import PortfolioGrid from "@/components/ui/stands-portfolio";
+import PortfolioSection from "./components/portfolio-section";
 
 export const metadata: Metadata = {
     title: "Custom Exhibition Stands Dubai | Chronicle Exhibits - Leading Contractor",
@@ -30,8 +30,11 @@ function CustomExhibitionStandsPage() {
             <CustomExhibitionHero />
             <LeadingContractorSection />
             <PromoteBrandSection />
+            <StrikingCustomizedSection />
+            <ReasonsToChooseSection />
             <FAQSection />
-            <PortfolioGrid />
+            <PortfolioSection />
+            <LookingForStandsSection />
             <BoothRequirementsForm />
         </div>
     );

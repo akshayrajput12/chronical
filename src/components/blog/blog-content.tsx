@@ -23,9 +23,9 @@ export default function BlogContent({ content, className = "" }: BlogContentProp
         prose-code:bg-gray-100 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:text-sm prose-code:font-mono
         prose-pre:bg-gray-900 prose-pre:text-gray-100 prose-pre:p-4 prose-pre:rounded-lg prose-pre:overflow-x-auto
         prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:text-gray-600
-        prose-ul:list-disc prose-ul:pl-6 prose-ul:mb-4
-        prose-ol:list-decimal prose-ol:pl-6 prose-ol:mb-4
-        prose-li:mb-2 prose-li:text-gray-700
+        prose-ul:list-disc prose-ul:pl-6 prose-ul:mb-4 prose-ul:space-y-2
+        prose-ol:list-decimal prose-ol:pl-6 prose-ol:mb-4 prose-ol:space-y-2
+        prose-li:mb-1 prose-li:text-gray-700 prose-li:leading-relaxed
         prose-img:rounded-lg prose-img:shadow-md prose-img:my-6
         prose-table:border-collapse prose-table:border-2 prose-table:border-gray-400 prose-table:my-6 prose-table:w-full prose-table:bg-white prose-table:shadow-sm
         prose-th:border prose-th:border-gray-400 prose-th:bg-gray-100 prose-th:px-4 prose-th:py-3 prose-th:font-bold prose-th:text-left prose-th:text-gray-900
@@ -58,9 +58,9 @@ export function SafeBlogContent({ content, className = "" }: BlogContentProps) {
         prose-code:bg-gray-100 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:text-sm prose-code:font-mono
         prose-pre:bg-gray-900 prose-pre:text-gray-100 prose-pre:p-4 prose-pre:rounded-lg prose-pre:overflow-x-auto
         prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:text-gray-600
-        prose-ul:list-disc prose-ul:pl-6 prose-ul:mb-4
-        prose-ol:list-decimal prose-ol:pl-6 prose-ol:mb-4
-        prose-li:mb-2 prose-li:text-gray-700
+        prose-ul:list-disc prose-ul:pl-6 prose-ul:mb-4 prose-ul:space-y-2
+        prose-ol:list-decimal prose-ol:pl-6 prose-ol:mb-4 prose-ol:space-y-2
+        prose-li:mb-1 prose-li:text-gray-700 prose-li:leading-relaxed
         prose-img:rounded-lg prose-img:shadow-md prose-img:my-6
         prose-table:border-collapse prose-table:border-2 prose-table:border-gray-400 prose-table:my-6 prose-table:w-full prose-table:bg-white prose-table:shadow-sm
         prose-th:border prose-th:border-gray-400 prose-th:bg-gray-100 prose-th:px-4 prose-th:py-3 prose-th:font-bold prose-th:text-left prose-th:text-gray-900

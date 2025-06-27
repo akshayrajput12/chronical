@@ -20,6 +20,7 @@ import {
     User,
     Calendar,
     Monitor,
+    Building2,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import Logo from "@/components/layout/logo";
@@ -108,6 +109,9 @@ const AdminSidebar = ({
         conference: pathname.includes("/admin/pages/conference"),
         kiosk: pathname.includes("/admin/pages/kiosk"),
         blog: pathname.includes("/admin/pages/blog"),
+        customStand: pathname.includes("/admin/pages/custom-stand"),
+        doubleDeckerStand: pathname.includes("/admin/pages/double-decker-stand"),
+        expoPavilionStand: pathname.includes("/admin/pages/expo-pavilion-stand"),
     });
 
     const toggleSection = (section: string) => {
@@ -522,6 +526,218 @@ const AdminSidebar = ({
                                         isActive={
                                             pathname ===
                                             "/admin/pages/blog/media"
+                                        }
+                                    />
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
+
+                {/* Custom Stand Page */}
+                <div>
+                    <NavItem
+                        href="/admin/pages/custom-stand"
+                        label="Custom Stand"
+                        icon={<Building2 size={18} />}
+                        isActive={pathname.includes("/admin/pages/custom-stand")}
+                        hasChildren={true}
+                        isOpen={openSections.customStand}
+                        onClick={() => toggleSection("customStand")}
+                    />
+
+                    <AnimatePresence>
+                        {openSections.customStand && (
+                            <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: "auto", opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.2 }}
+                                className="overflow-hidden"
+                            >
+                                <div className="py-1 space-y-1">
+                                    <SubNavItem
+                                        href="/admin/pages/custom-stand/hero"
+                                        label="Hero Section"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/custom-stand/hero"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/custom-stand/leading-contractor"
+                                        label="Leading Contractor"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/custom-stand/leading-contractor"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/custom-stand/promote-brand"
+                                        label="Promote Brand"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/custom-stand/promote-brand"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/custom-stand/striking-customized"
+                                        label="Striking Customized"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/custom-stand/striking-customized"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/custom-stand/reasons-to-choose"
+                                        label="Reasons to Choose"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/custom-stand/reasons-to-choose"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/custom-stand/faq"
+                                        label="FAQ Section"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/custom-stand/faq"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/custom-stand/looking-for-stands"
+                                        label="Looking for Stands"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/custom-stand/looking-for-stands"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/custom-stand/portfolio"
+                                        label="Portfolio Section"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/custom-stand/portfolio"
+                                        }
+                                    />
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
+
+                {/* Double Decker Stand Page */}
+                <div>
+                    <NavItem
+                        href="/admin/pages/double-decker-stand"
+                        label="Double Decker Stand"
+                        icon={<Building2 size={18} />}
+                        isActive={pathname.includes("/admin/pages/double-decker-stand")}
+                        hasChildren={true}
+                        isOpen={openSections.doubleDeckerStand}
+                        onClick={() => toggleSection("doubleDeckerStand")}
+                    />
+
+                    <AnimatePresence>
+                        {openSections.doubleDeckerStand && (
+                            <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: "auto", opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.2 }}
+                                className="overflow-hidden"
+                            >
+                                <div className="py-1 space-y-1">
+                                    <SubNavItem
+                                        href="/admin/pages/double-decker-stand/hero"
+                                        label="Hero Section"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/double-decker-stand/hero"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/double-decker-stand/unique-quality"
+                                        label="Unique Quality Section"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/double-decker-stand/unique-quality"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/double-decker-stand/communication"
+                                        label="Communication Section"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/double-decker-stand/communication"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/double-decker-stand/portfolio"
+                                        label="Portfolio Section"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/double-decker-stand/portfolio"
+                                        }
+                                    />
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
+
+                {/* Expo Pavilion Stand Page */}
+                <div>
+                    <NavItem
+                        href="/admin/pages/expo-pavilion-stand"
+                        label="Expo Pavilion Stand"
+                        icon={<Building2 size={18} />}
+                        isActive={pathname.includes("/admin/pages/expo-pavilion-stand")}
+                        hasChildren={true}
+                        isOpen={openSections.expoPavilionStand}
+                        onClick={() => toggleSection("expoPavilionStand")}
+                    />
+
+                    <AnimatePresence>
+                        {openSections.expoPavilionStand && (
+                            <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: "auto", opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.2 }}
+                                className="overflow-hidden"
+                            >
+                                <div className="py-1 space-y-1">
+                                    <SubNavItem
+                                        href="/admin/pages/expo-pavilion-stand/hero"
+                                        label="Hero Section"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/expo-pavilion-stand/hero"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/expo-pavilion-stand/intro"
+                                        label="Intro Section"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/expo-pavilion-stand/intro"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/expo-pavilion-stand/exceptional-design"
+                                        label="Exceptional Design"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/expo-pavilion-stand/exceptional-design"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/expo-pavilion-stand/portfolio"
+                                        label="Portfolio Section"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/expo-pavilion-stand/portfolio"
                                         }
                                     />
                                 </div>

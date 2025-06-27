@@ -1,10 +1,58 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { getCustomExhibitionStrikingCustomized, CustomExhibitionStrikingCustomized } from "@/services/custom-exhibition-stands.service";
 
 const StrikingCustomizedSection = () => {
+    const [data, setData] = useState<CustomExhibitionStrikingCustomized | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        loadData();
+    }, []);
+
+    const loadData = async () => {
+        try {
+            const result = await getCustomExhibitionStrikingCustomized();
+            setData(result);
+        } catch (error) {
+            console.error('Error loading striking customized data:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    // Don't render if no data exists
+    if (!data && !isLoading) {
+        return null;
+    }
+
+    if (isLoading) {
+        return (
+            <section className="py-8 md:py-12 lg:py-16 bg-white">
+                <div className="container mx-auto px-4">
+                    <div className="max-w-6xl mx-auto">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start animate-pulse">
+                            <div className="order-1 lg:order-1">
+                                <div className="h-64 sm:h-80 md:h-96 lg:h-[400px] bg-gray-300 rounded"></div>
+                            </div>
+                            <div className="order-2 lg:order-2 space-y-6">
+                                <div className="h-8 bg-gray-300 rounded"></div>
+                                <div className="space-y-4">
+                                    <div className="h-4 bg-gray-300 rounded"></div>
+                                    <div className="h-4 bg-gray-300 rounded w-5/6"></div>
+                                    <div className="h-4 bg-gray-300 rounded w-4/5"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+    }
+
     return (
         <section className="py-8 md:py-12 lg:py-16 bg-white">
             <div className="container mx-auto px-4">
@@ -24,15 +72,17 @@ const StrikingCustomizedSection = () => {
                             ></div>
 
                             {/* Image Container */}
-                            <div className="relative h-64 sm:h-80 md:h-96 lg:h-[400px] overflow-hidden z-10">
-                                <Image
-                                    src="https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-                                    alt="Striking customized exhibition stands"
-                                    fill
-                                    className="object-cover"
-                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
-                                />
-                            </div>
+                            {data?.image_url && (
+                                <div className="relative h-64 sm:h-80 md:h-96 lg:h-[400px] overflow-hidden z-10">
+                                    <Image
+                                        src={data.image_url}
+                                        alt={data.image_alt || 'Striking customized exhibition stands'}
+                                        fill
+                                        className="object-cover"
+                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
+                                    />
+                                </div>
+                            )}
                         </motion.div>
 
                         {/* Right Content */}
@@ -45,39 +95,16 @@ const StrikingCustomizedSection = () => {
                         >
                             <div className="space-y-6">
                                 <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 uppercase tracking-wide text-center">
-                                    STRIKING CUSTOMIZED EXHIBITION STANDS
+                                    {data?.title}
                                 </h3>
 
                                 <div className="space-y-4 text-gray-700">
                                     <p className="text-base leading-relaxed text-justify">
-                                        Interactive displays and eye-catching
-                                        designs will help you communicate your
-                                        company&apos;s message effectively and
-                                        convincingly. From materials and colors,
-                                        to dimensions, shapes and design, your
-                                        display is completely tailored to your
-                                        brand and business which allows you to
-                                        present your services and products in
-                                        the most effective and appealing manner
-                                        possible.
+                                        {data?.paragraph_1}
                                     </p>
 
                                     <p className="text-base leading-relaxed text-justify">
-                                        You can use our custom exhibit stands
-                                        for various branding and exhibit needs,
-                                        such as portable fitting rooms, entry
-                                        spaces, custom workspaces, and pop-up
-                                        stores. The distinctive stand designed
-                                        by Chronicle creates an unforgettable
-                                        impression on the people who visit your
-                                        stand. As more than 50% of business
-                                        decision makers would like sales
-                                        representatives to visit their business
-                                        following the event, you&apos;ll need a
-                                        stand to showcase your product in the
-                                        best way possible. Our stand is distinct
-                                        and appealing design which is sure to
-                                        draw attention.
+                                        {data?.paragraph_2}
                                     </p>
                                 </div>
                             </div>

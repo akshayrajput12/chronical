@@ -1,17 +1,67 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { createClient } from "@/lib/supabase/client";
+
+interface HeroData {
+    main_heading: string;
+    description: string;
+    background_image_url: string | null;
+    background_image_alt: string | null;
+}
 
 const DoubleDeckerHero = () => {
+    const [heroData, setHeroData] = useState<HeroData | null>(null);
+    const [loading, setLoading] = useState(true);
+    const supabase = createClient();
+
+    useEffect(() => {
+        const loadHeroData = async () => {
+            try {
+                const { data, error } = await supabase.rpc('get_double_decker_hero_section');
+
+                if (error) {
+                    console.error('Error loading hero data:', error);
+                    return;
+                }
+
+                if (data) {
+                    setHeroData(data);
+                }
+            } catch (error) {
+                console.error('Error loading hero data:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadHeroData();
+    }, [supabase]);
+
+    if (loading) {
+        return (
+            <section className="relative 2xl:h-[60vh] h-[75vh] overflow-hidden">
+                <div className="absolute inset-0 bg-gray-200 animate-pulse"></div>
+                <div className="relative z-10 h-full flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white"></div>
+                </div>
+            </section>
+        );
+    }
+
+    if (!heroData) {
+        return null;
+    }
+
     return (
         <section className="relative 2xl:h-[60vh] h-[75vh] overflow-hidden">
             {/* Background Image */}
             <div className="absolute inset-0">
                 <Image
-                    src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-                    alt="Double Decker Exhibition Stands"
+                    src={heroData.background_image_url || "https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"}
+                    alt={heroData.background_image_alt || "Double Decker Exhibition Stands"}
                     fill
                     className="object-cover"
                     priority
@@ -31,13 +81,10 @@ const DoubleDeckerHero = () => {
                             transition={{ duration: 0.8 }}
                         >
                             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 uppercase tracking-wide leading-tight">
-                                DOUBLE DECKER EXHIBITION STANDS
+                                {heroData.main_heading}
                             </h1>
                             <h3 className="text-sm sm:text-base lg:text-lg max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-3xl mx-auto leading-relaxed font-markazi-text tracking-wide">
-                                Make your exhibit stand out and step up with our
-                                smartly created Double Decker Exhibition Stands.
-                                Engage your visitors with our stunning and
-                                innovative double-decker booths. Make the most
+                                {heroData.description} Make the most
                                 of your space, and do not compromise in design.
                                 Impress your guests during trade shows and
                                 special events by incorporating these.
