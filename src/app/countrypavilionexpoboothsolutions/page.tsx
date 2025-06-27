@@ -1,12 +1,10 @@
 import React from "react";
 import { Metadata } from "next";
-import CountryPavilionHero from "./components/country-pavilion-hero";
-import CountryPavilionIntroSection from "./components/country-pavilion-intro-section";
-import ExceptionalDesignSection from "./components/exceptional-design-section";
-import ReasonsToSelectSection from "./components/reasons-to-select-section";
-import LookingForPavilionSection from "./components/looking-for-pavilion-section";
+import DynamicCountryPavilionHero from "./components/dynamic-country-pavilion-hero";
+import DynamicCountryPavilionIntroSection from "./components/dynamic-country-pavilion-intro-section";
+import DynamicExceptionalDesignSection from "./components/dynamic-exceptional-design-section";
+import DynamicPortfolioGrid from "./components/dynamic-portfolio-grid";
 import BoothRequirementsForm from "../home/components/booth-requirements-form";
-import PortfolioGrid from "@/components/ui/stands-portfolio";
 
 export const metadata: Metadata = {
     title: "Country Pavilion Expo Booth Design UAE | Chronicle Exhibits",
@@ -23,10 +21,10 @@ export const metadata: Metadata = {
 function CountryPavilionExpoBoothSolutionsPage() {
     return (
         <div className="flex flex-col relative">
-            <CountryPavilionHero />
-            <CountryPavilionIntroSection />
-            <ExceptionalDesignSection />
-            <PortfolioGrid />
+            <DynamicCountryPavilionHero />
+            <DynamicCountryPavilionIntroSection />
+            <DynamicExceptionalDesignSection />
+            <DynamicPortfolioGrid />
             <BoothRequirementsForm />
         </div>
     );

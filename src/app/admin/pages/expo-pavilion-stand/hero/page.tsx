@@ -23,13 +23,7 @@ interface ExpoPavilionHero {
 }
 
 const ExpoPavilionHeroEditor = () => {
-    const [heroData, setHeroData] = useState<ExpoPavilionHero>({
-        title: 'COUNTRY PAVILION EXPO BOOTH DESIGN IN UAE',
-        subtitle: 'Chronicle Exhibition Organizing LLC masters the art of designing for country pavilion expo booth. Let your brand shine at international events by using our unique country pavilion exhibition stands. Explore stunning designs that captivate and engage.',
-        background_image_url: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-        background_image_alt: 'Country Pavilion Expo Booth Design',
-        is_active: true,
-    });
+    const [heroData, setHeroData] = useState<ExpoPavilionHero | null>(null);
 
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
@@ -55,6 +49,22 @@ const ExpoPavilionHeroEditor = () => {
 
             if (data) {
                 setHeroData(data);
+            } else {
+                // Create default entry if none exists
+                const { data: newData, error: insertError } = await supabase
+                    .from("expo_pavilion_hero")
+                    .insert({
+                        title: 'COUNTRY PAVILION EXPO BOOTH DESIGN IN UAE',
+                        subtitle: 'Chronicle Exhibition Organizing LLC masters the art of designing for country pavilion expo booth. Let your brand shine at international events by using our unique country pavilion exhibition stands. Explore stunning designs that captivate and engage.',
+                        background_image_url: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+                        background_image_alt: 'Country Pavilion Expo Booth Design',
+                        is_active: true,
+                    })
+                    .select()
+                    .single();
+
+                if (insertError) throw insertError;
+                setHeroData(newData);
             }
         } catch (error) {
             console.error("Error loading hero data:", error);
@@ -67,6 +77,8 @@ const ExpoPavilionHeroEditor = () => {
     const handleSave = async () => {
         setIsSaving(true);
         try {
+            if (!heroData) return;
+
             const { data, error } = await supabase
                 .from("expo_pavilion_hero")
                 .upsert(heroData, { onConflict: "id" })
@@ -105,10 +117,12 @@ const ExpoPavilionHeroEditor = () => {
                 .from('expo-pavilion-images')
                 .getPublicUrl(filePath);
 
-            setHeroData(prev => ({
-                ...prev,
-                background_image_url: publicUrl
-            }));
+            if (heroData) {
+                setHeroData(prev => prev ? ({
+                    ...prev,
+                    background_image_url: publicUrl
+                }) : null);
+            }
 
             toast.success("Image uploaded successfully!");
         } catch (error) {
@@ -119,7 +133,7 @@ const ExpoPavilionHeroEditor = () => {
         }
     };
 
-    if (isLoading) {
+    if (isLoading || !heroData) {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="text-center">
@@ -200,10 +214,10 @@ const ExpoPavilionHeroEditor = () => {
                                         id="title"
                                         value={heroData.title}
                                         onChange={(e) =>
-                                            setHeroData(prev => ({
+                                            setHeroData(prev => prev ? ({
                                                 ...prev,
                                                 title: e.target.value
-                                            }))
+                                            }) : null)
                                         }
                                         placeholder="Enter hero title"
                                         className="mt-1"
@@ -216,10 +230,10 @@ const ExpoPavilionHeroEditor = () => {
                                         id="subtitle"
                                         value={heroData.subtitle}
                                         onChange={(e) =>
-                                            setHeroData(prev => ({
+                                            setHeroData(prev => prev ? ({
                                                 ...prev,
                                                 subtitle: e.target.value
-                                            }))
+                                            }) : null)
                                         }
                                         placeholder="Enter hero subtitle"
                                         rows={4}
@@ -233,10 +247,10 @@ const ExpoPavilionHeroEditor = () => {
                                         id="background_image_url"
                                         value={heroData.background_image_url}
                                         onChange={(e) =>
-                                            setHeroData(prev => ({
+                                            setHeroData(prev => prev ? ({
                                                 ...prev,
                                                 background_image_url: e.target.value
-                                            }))
+                                            }) : null)
                                         }
                                         placeholder="Enter image URL"
                                         className="mt-1"
@@ -249,10 +263,10 @@ const ExpoPavilionHeroEditor = () => {
                                         id="background_image_alt"
                                         value={heroData.background_image_alt}
                                         onChange={(e) =>
-                                            setHeroData(prev => ({
+                                            setHeroData(prev => prev ? ({
                                                 ...prev,
                                                 background_image_alt: e.target.value
-                                            }))
+                                            }) : null)
                                         }
                                         placeholder="Enter image alt text"
                                         className="mt-1"
@@ -281,10 +295,10 @@ const ExpoPavilionHeroEditor = () => {
                                         id="is_active"
                                         checked={heroData.is_active}
                                         onCheckedChange={(checked) =>
-                                            setHeroData(prev => ({
+                                            setHeroData(prev => prev ? ({
                                                 ...prev,
                                                 is_active: checked
-                                            }))
+                                            }) : null)
                                         }
                                     />
                                     <Label htmlFor="is_active">Active</Label>

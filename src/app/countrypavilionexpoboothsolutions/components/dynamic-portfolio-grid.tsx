@@ -4,79 +4,80 @@ import React, { useState, useEffect } from "react";
 import { Easing, motion } from "framer-motion";
 import { createClient } from "@/lib/supabase/client";
 
-interface PortfolioData {
-    section: {
-        main_heading: string;
-        description: string | null;
-        cta_button_text: string;
-        cta_button_url: string;
-    } | null;
-    items: Array<{
-        id: string;
-        title: string | null;
-        description: string | null;
-        alt_text: string;
-        image_url: string;
-        display_order: number;
-    }> | null;
+interface ExpoPavilionPortfolioSection {
+    id: string;
+    main_heading: string;
+    sub_heading: string;
+    description: string;
+    cta_button_text: string;
+    cta_button_url: string;
+    is_active: boolean;
 }
 
-const DoubleDeckersPortfolio = () => {
-    const [portfolioData, setPortfolioData] = useState<PortfolioData | null>(null);
-    const [loading, setLoading] = useState(true);
+interface PortfolioItem {
+    id: string;
+    title: string;
+    description?: string;
+    image_url: string;
+    image_alt: string;
+    project_url?: string;
+    display_order: number;
+    is_featured: boolean;
+    is_active: boolean;
+}
+
+const DynamicPortfolioGrid = () => {
+    const [sectionData, setSectionData] = useState<ExpoPavilionPortfolioSection | null>(null);
+    const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+
     const supabase = createClient();
 
     useEffect(() => {
-        const loadPortfolioData = async () => {
-            try {
-                const { data, error } = await supabase.rpc('get_double_decker_portfolio_data');
-                
-                if (error) {
-                    console.error('Error loading portfolio data:', error);
-                    return;
-                }
+        loadData();
+    }, []);
 
-                if (data) {
-                    setPortfolioData(data);
-                }
-            } catch (error) {
-                console.error('Error loading portfolio data:', error);
-            } finally {
-                setLoading(false);
+    const loadData = async () => {
+        try {
+            // Load portfolio section data
+            const { data: sectionData, error: sectionError } = await supabase
+                .from("expo_pavilion_portfolio_sections")
+                .select("*")
+                .eq("is_active", true)
+                .single();
+
+            if (sectionError && sectionError.code !== 'PGRST116') {
+                console.error("Error loading section data:", sectionError);
+            } else if (sectionData) {
+                setSectionData(sectionData);
             }
-        };
 
-        loadPortfolioData();
-    }, [supabase]);
+            // Load portfolio items
+            const { data: itemsData, error: itemsError } = await supabase
+                .from("expo_pavilion_portfolio_items")
+                .select("*")
+                .eq("is_active", true)
+                .order("display_order")
+                .limit(6); // Limit to 6 items to match original design
 
-    if (loading) {
-        return (
-            <div className="relative">
-                {/* Split background: top black, bottom white */}
-                <div className="absolute inset-0 w-full h-full pointer-events-none z-0">
-                    <div className="h-[65%] bg-black w-full" />
-                    <div className="h-[35%] bg-white w-full" />
-                </div>
-                <div className="relative z-10 px-4 max-w-7xl mx-auto pt-12 pb-12">
-                    <div className="text-center mb-12">
-                        <div className="h-8 bg-gray-700 rounded w-1/2 mx-auto mb-4 animate-pulse"></div>
-                        <div className="h-4 bg-gray-700 rounded w-1/3 mx-auto animate-pulse"></div>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {[...Array(6)].map((_, index) => (
-                            <div key={index} className="h-52 bg-gray-700 rounded-lg animate-pulse"></div>
-                        ))}
-                    </div>
-                </div>
-            </div>
-        );
-    }
+            if (itemsError) {
+                console.error("Error loading portfolio items:", itemsError);
+            } else if (itemsData) {
+                setPortfolioItems(itemsData);
+            }
+        } catch (error) {
+            console.error("Error loading data:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
-    if (!portfolioData || !portfolioData.section) {
+    // Return null if no data is loaded
+    if (!sectionData) {
         return null;
     }
 
-    // Animation variants (exact same as custom stand)
+    // Animation variants (same as original)
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
@@ -162,6 +163,29 @@ const DoubleDeckersPortfolio = () => {
         },
     };
 
+    if (isLoading) {
+        return (
+            <div className="relative">
+                <div className="absolute inset-0 w-full h-full pointer-events-none z-0">
+                    <div className="h-[65%] bg-gray-200 w-full animate-pulse" />
+                    <div className="h-[35%] bg-gray-100 w-full animate-pulse" />
+                </div>
+                <div className="relative z-10 px-4 max-w-7xl mx-auto pt-12 pb-12">
+                    <div className="text-center mb-12">
+                        <div className="h-6 bg-gray-300 rounded mb-4 animate-pulse"></div>
+                        <div className="h-8 bg-gray-300 rounded mb-4 animate-pulse"></div>
+                        <div className="h-4 bg-gray-300 rounded animate-pulse"></div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {[...Array(6)].map((_, index) => (
+                            <div key={index} className="h-52 bg-gray-300 rounded-lg animate-pulse"></div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="relative">
             {/* Split background: top black, bottom white */}
@@ -178,7 +202,7 @@ const DoubleDeckersPortfolio = () => {
                         initial="hidden"
                         animate="visible"
                     >
-                        PORTFOLIO
+                        {sectionData.sub_heading}
                     </motion.h2>
 
                     <motion.h1
@@ -188,19 +212,17 @@ const DoubleDeckersPortfolio = () => {
                         animate="visible"
                         transition={{ delay: 0.1 }}
                     >
-                        {portfolioData.section.main_heading}
+                        {sectionData.main_heading}
                     </motion.h1>
 
-                    {portfolioData.section.description && (
-                        <motion.p
-                            className="text-gray-300 text-lg max-w-4xl mx-auto leading-relaxed"
-                            variants={textVariants}
-                            initial="hidden"
-                            animate="visible"
-                        >
-                            {portfolioData.section.description}
-                        </motion.p>
-                    )}
+                    <motion.p
+                        className="text-gray-300 text-lg max-w-4xl mx-auto leading-relaxed"
+                        variants={textVariants}
+                        initial="hidden"
+                        animate="visible"
+                    >
+                        {sectionData.description}
+                    </motion.p>
                 </div>
 
                 {/* Animated Portfolio Grid */}
@@ -210,7 +232,7 @@ const DoubleDeckersPortfolio = () => {
                     initial="hidden"
                     animate="visible"
                 >
-                    {portfolioData.items?.map((item, index) => (
+                    {portfolioItems.map((item, index) => (
                         <motion.div
                             key={item.id}
                             className="group"
@@ -227,7 +249,7 @@ const DoubleDeckersPortfolio = () => {
                             >
                                 <motion.img
                                     src={item.image_url}
-                                    alt={item.alt_text}
+                                    alt={item.image_alt}
                                     className="w-full h-52 object-cover"
                                     whileHover={{ scale: 1.1 }}
                                     transition={{ duration: 0.4 }}
@@ -244,25 +266,21 @@ const DoubleDeckersPortfolio = () => {
 
                 {/* Animated Call to Action */}
                 <div className="text-center mt-12">
-                    <motion.button
-                        className="bg-[#a5cd39] text-white px-8 py-3 rounded-lg font-semibold shadow-lg"
+                    <motion.a
+                        href={sectionData.cta_button_url}
+                        className="bg-[#a5cd39] text-white px-8 py-3 rounded-lg font-semibold shadow-lg inline-block"
                         variants={buttonVariants}
                         initial="hidden"
                         animate="visible"
                         whileHover="hover"
                         whileTap="tap"
-                        onClick={() => {
-                            if (portfolioData.section?.cta_button_url && portfolioData.section.cta_button_url !== '#') {
-                                window.open(portfolioData.section.cta_button_url, '_blank');
-                            }
-                        }}
                     >
-                        {portfolioData.section?.cta_button_text}
-                    </motion.button>
+                        {sectionData.cta_button_text}
+                    </motion.a>
                 </div>
             </div>
         </div>
     );
 };
 
-export default DoubleDeckersPortfolio;
+export default DynamicPortfolioGrid;

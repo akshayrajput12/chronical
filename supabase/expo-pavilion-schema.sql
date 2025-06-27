@@ -219,13 +219,14 @@ INSERT INTO expo_pavilion_hero (
     background_image_url,
     background_image_alt,
     is_active
-) VALUES (
+)
+SELECT
     'COUNTRY PAVILION EXPO BOOTH DESIGN IN UAE',
     'Chronicle Exhibition Organizing LLC masters the art of designing for country pavilion expo booth. Let your brand shine at international events by using our unique country pavilion exhibition stands. Explore stunning designs that captivate and engage.',
     'https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
     'Country Pavilion Expo Booth Design',
     true
-) ON CONFLICT DO NOTHING;
+WHERE NOT EXISTS (SELECT 1 FROM expo_pavilion_hero WHERE is_active = true);
 
 -- Insert default intro section data
 INSERT INTO expo_pavilion_intro (
@@ -233,12 +234,13 @@ INSERT INTO expo_pavilion_intro (
     paragraph_1,
     paragraph_2,
     is_active
-) VALUES (
+)
+SELECT
     'COUNTRY PAVILION EXPO BOOTH',
     'Top choice for showcasing national excellence on a global stage. As the premier provider of country pavilion expo booth in Dubai, we specialize in creating immersive and impactful spaces that highlight the unique offerings of your nation. Our booths offer unparalleled visibility and serve as powerful platforms for promoting your country''s culture, industry, and innovation.',
     'With Chronicle Exhibits Dubai comprehensive services and attention to detail, you can trust us to elevate your country''s presence at any event. Whether you''re promoting trade, tourism, investment opportunities, our country pavilion exhibition booths provide the perfect platform for showcasing the best of what your nation has to offer.',
     true
-) ON CONFLICT DO NOTHING;
+WHERE NOT EXISTS (SELECT 1 FROM expo_pavilion_intro WHERE is_active = true);
 
 -- Insert default exceptional design section data
 INSERT INTO expo_pavilion_exceptional_design (
@@ -248,29 +250,36 @@ INSERT INTO expo_pavilion_exceptional_design (
     image_url,
     image_alt,
     is_active
-) VALUES (
+)
+SELECT
     'EXCEPTIONAL DESIGN SERVICES FOR PAVILION BOOTHS',
     'Country Pavilion Expo Booth reflects a particular nation''s culture, religion & way of living. It is a chain of small exhibition stands where you can display your products with the member exhibitors of your country. Explore companies across the globe pick out pavilion booths to promote their brand & sell out their products.',
     'Pavilion booths are highly beneficial for promoting brands & products. Let''s quickly look into its pros →',
     'https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
     'Country Pavilion Exhibition Booth',
     true
-) ON CONFLICT DO NOTHING;
+WHERE NOT EXISTS (SELECT 1 FROM expo_pavilion_exceptional_design WHERE is_active = true);
 
 -- Insert design benefits (bullet points)
 INSERT INTO expo_pavilion_design_benefits (design_section_id, benefit_text, display_order, is_active)
 SELECT
-    (SELECT id FROM expo_pavilion_exceptional_design WHERE is_active = true LIMIT 1),
+    design_section.id,
     benefit_text,
     display_order,
     true
-FROM (VALUES
+FROM expo_pavilion_exceptional_design design_section,
+(VALUES
     ('You can target a vast number of potential consumers.', 1),
     ('Enrich brand value by creating positive brand awareness.', 2),
     ('Gives you an excellent chance to interact with new consumers who may become your future clients.', 3),
     ('Allow you to make strong business networks and discover the latest business ideas.', 4)
 ) AS benefits(benefit_text, display_order)
-ON CONFLICT DO NOTHING;
+WHERE design_section.is_active = true
+AND NOT EXISTS (
+    SELECT 1 FROM expo_pavilion_design_benefits
+    WHERE design_section_id = design_section.id
+    AND is_active = true
+);
 
 -- Insert default portfolio section configuration
 INSERT INTO expo_pavilion_portfolio_sections (
@@ -280,25 +289,28 @@ INSERT INTO expo_pavilion_portfolio_sections (
     cta_button_text,
     cta_button_url,
     is_active
-) VALUES (
+)
+SELECT
     'OUR RECENT WORK',
     'PORTFOLIO',
     'Check out our portfolio for the success stories of brands that trusted us as their custom exhibition stand contractor. Our recent work includes a diverse range of custom stand designs.',
     'View All Projects',
     '/portfolio',
     true
-) ON CONFLICT DO NOTHING;
+WHERE NOT EXISTS (SELECT 1 FROM expo_pavilion_portfolio_sections WHERE is_active = true);
 
 -- Insert sample portfolio items
 INSERT INTO expo_pavilion_portfolio_items (title, description, image_url, image_alt, display_order, is_featured, is_active)
-VALUES
+SELECT title, description, image_url, image_alt, display_order, is_featured, is_active
+FROM (VALUES
     ('Modern Exhibition Stand', 'Contemporary design for tech company', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyr2IcenNve1bBD7AhPlYHBiEsIR5UjqzcEw&s', 'Modern Exhibition Stand Design', 1, true, true),
     ('Country Pavilion Design', 'National pavilion for international expo', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyr2IcenNve1bBD7AhPlYHBiEsIR5UjqzcEw&s', 'Country Pavilion Design', 2, true, true),
     ('Corporate Exhibition Booth', 'Professional booth for business expo', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyr2IcenNve1bBD7AhPlYHBiEsIR5UjqzcEw&s', 'Corporate Exhibition Booth', 3, true, true),
     ('Interactive Display Stand', 'Engaging interactive exhibition space', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyr2IcenNve1bBD7AhPlYHBiEsIR5UjqzcEw&s', 'Interactive Display Stand', 4, true, true),
     ('Luxury Brand Pavilion', 'Premium pavilion for luxury brands', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyr2IcenNve1bBD7AhPlYHBiEsIR5UjqzcEw&s', 'Luxury Brand Pavilion', 5, true, true),
     ('Trade Show Booth', 'Professional trade show exhibition stand', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyr2IcenNve1bBD7AhPlYHBiEsIR5UjqzcEw&s', 'Trade Show Booth', 6, true, true)
-ON CONFLICT DO NOTHING;
+) AS portfolio_data(title, description, image_url, image_alt, display_order, is_featured, is_active)
+WHERE NOT EXISTS (SELECT 1 FROM expo_pavilion_portfolio_items WHERE is_active = true);
 
 -- Insert optional sections (currently not used on page)
 INSERT INTO expo_pavilion_reasons_to_select (
@@ -306,12 +318,13 @@ INSERT INTO expo_pavilion_reasons_to_select (
     paragraph_1,
     paragraph_2,
     is_active
-) VALUES (
+)
+SELECT
     'REASONS TO SELECT OUR SERVICES FOR COUNTRY PAVILION EXPO BOOTH',
     'In Chronicle Exhibition Organizing LLC, we go beyond the traditional exhibition stand We create experiences. Our pavilions for country events are carefully designed to reflect the distinctiveness of your nation. With a singular emphasis on the richness of culture and contemporary design Our pavilions make an impression that lasts.',
     'Let us make your vision an unforgettable reality on the world stage. Attract the maximum amount of attention and guarantee an effective presence at events and trade fairs in the UAE by partnering with us.',
     false
-) ON CONFLICT DO NOTHING;
+WHERE NOT EXISTS (SELECT 1 FROM expo_pavilion_reasons_to_select);
 
 INSERT INTO expo_pavilion_looking_for_cta (
     title,
@@ -320,14 +333,15 @@ INSERT INTO expo_pavilion_looking_for_cta (
     cta_text,
     background_color,
     is_active
-) VALUES (
+)
+SELECT
     'LOOKING FOR COUNTRY PAVILION EXPO BOOTH SOLUTIONS IN DUBAI',
     '+971543474645',
     'Call +971 (543) 47-4645',
     'or submit enquiry form below',
     '#a5cd39',
     false
-) ON CONFLICT DO NOTHING;
+WHERE NOT EXISTS (SELECT 1 FROM expo_pavilion_looking_for_cta);
 
 -- =====================================================
 -- DATABASE FUNCTIONS

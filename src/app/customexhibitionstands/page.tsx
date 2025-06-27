@@ -6,7 +6,6 @@ import PromoteBrandSection from "./components/promote-brand-section";
 import StrikingCustomizedSection from "./components/striking-customized-section";
 import ReasonsToChooseSection from "./components/reasons-to-choose-section";
 import FAQSection from "./components/faq-section";
-import LookingForStandsSection from "./components/looking-for-stands-section";
 import BoothRequirementsForm from "../home/components/booth-requirements-form";
 import PortfolioSection from "./components/portfolio-section";
 
@@ -34,7 +33,6 @@ function CustomExhibitionStandsPage() {
             <ReasonsToChooseSection />
             <FAQSection />
             <PortfolioSection />
-            <LookingForStandsSection />
             <BoothRequirementsForm />
         </div>
     );
