@@ -42,8 +42,6 @@ const BlogCard = ({
         }
     };
 
-
-
     // Format date for display in card header
     const formatCardDate = (dateString: string) => {
         return new Date(dateString)
@@ -76,6 +74,27 @@ const BlogCard = ({
                     position: "relative",
                 }}
             >
+                {/* Image Section - Fixed height */}
+                <div
+                    className="relative overflow-hidden"
+                    style={{ height: "220px" }}
+                >
+                    {post.featured_image_url ? (
+                        <Image
+                            src={post.featured_image_url}
+                            alt={post.featured_image_alt || post.title}
+                            fill
+                            className="object-cover transition-transform duration-300 group-hover:scale-105"
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        />
+                    ) : (
+                        <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                            <span className="text-gray-400 text-sm">
+                                No image
+                            </span>
+                        </div>
+                    )}
+                </div>
                 {/* Content Section - Fixed height */}
                 <div className="p-4 flex flex-col" style={{ height: "240px" }}>
                     {/* Article Label and Date */}
@@ -101,25 +120,6 @@ const BlogCard = ({
                             </p>
                         )}
                     </div>
-                </div>
-
-                {/* Image Section - Fixed height */}
-                <div className="relative overflow-hidden" style={{ height: "220px" }}>
-                    {post.featured_image_url ? (
-                        <Image
-                            src={post.featured_image_url}
-                            alt={post.featured_image_alt || post.title}
-                            fill
-                            className="object-cover transition-transform duration-300 group-hover:scale-105"
-                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        />
-                    ) : (
-                        <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                            <span className="text-gray-400 text-sm">
-                                No image
-                            </span>
-                        </div>
-                    )}
                 </div>
 
                 {/* Full-Width Blue Button - Fixed height */}
