@@ -83,6 +83,14 @@ const CustomStandAdminPage = () => {
       href: '/admin/pages/custom-stand/portfolio',
       color: 'bg-purple-500',
     },
+    {
+      id: 'paragraph-section',
+      title: 'Paragraph Section',
+      description: 'Manage the paragraph content section',
+      icon: <MessageSquare className="w-6 h-6" />,
+      href: '/admin/pages/custom-stand/paragraph-section',
+      color: 'bg-gray-500',
+    },
   ];
 
   const containerVariants = {

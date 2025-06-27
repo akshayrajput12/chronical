@@ -51,6 +51,15 @@ const ExpoPavilionStandAdminPage = () => {
             lastUpdated: "Recently updated",
             status: "Active",
         },
+        {
+            id: "paragraph-section",
+            title: "Paragraph Section",
+            description: "Manage the paragraph content section",
+            icon: <FileText size={24} className="text-gray-500" />,
+            href: "/admin/pages/expo-pavilion-stand/paragraph-section",
+            lastUpdated: "Recently updated",
+            status: "Active",
+        },
     ];
 
     const containerVariants = {

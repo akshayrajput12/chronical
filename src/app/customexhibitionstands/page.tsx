@@ -8,6 +8,7 @@ import ReasonsToChooseSection from "./components/reasons-to-choose-section";
 import FAQSection from "./components/faq-section";
 import BoothRequirementsForm from "../home/components/booth-requirements-form";
 import PortfolioSection from "./components/portfolio-section";
+import CustomParagraphSection from "./components/custom-paragraph-section";
 
 export const metadata: Metadata = {
     title: "Custom Exhibition Stands Dubai | Chronicle Exhibits - Leading Contractor",
@@ -33,7 +34,9 @@ function CustomExhibitionStandsPage() {
             <ReasonsToChooseSection />
             <FAQSection />
             <PortfolioSection />
+            <CustomParagraphSection />
             <BoothRequirementsForm />
+            
         </div>
     );
 }

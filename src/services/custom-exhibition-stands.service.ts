@@ -79,6 +79,14 @@ export interface CustomExhibitionLookingForStands {
   is_active: boolean;
 }
 
+export interface CustomExhibitionParagraphSection {
+  id?: string;
+  paragraph_content: string;
+  is_active: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
 export interface CustomExhibitionImage {
   id?: string;
   filename: string;
@@ -513,6 +521,39 @@ export const uploadCustomExhibitionImage = async (
   } catch (error) {
     console.error('Error in uploadCustomExhibitionImage:', error);
     return null;
+  }
+};
+
+// Paragraph Section Services
+export const getCustomExhibitionParagraphSection = async (): Promise<CustomExhibitionParagraphSection | null> => {
+  const { data, error } = await supabase
+    .rpc('get_custom_exhibition_paragraph_section')
+    .single();
+
+  if (error) {
+    console.error('Error fetching custom exhibition paragraph section:', error);
+    return null;
+  }
+
+  return data as CustomExhibitionParagraphSection | null;
+};
+
+export const saveCustomExhibitionParagraphSection = async (paragraphContent: string): Promise<boolean> => {
+  try {
+    const { error } = await supabase
+      .rpc('save_custom_exhibition_paragraph_section', {
+        p_paragraph_content: paragraphContent
+      });
+
+    if (error) {
+      console.error('Error saving custom exhibition paragraph section:', error);
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Error in saveCustomExhibitionParagraphSection:', error);
+    return false;
   }
 };
 

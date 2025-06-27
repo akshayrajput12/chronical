@@ -9,7 +9,7 @@ interface BlogContentProps {
 
 export default function BlogContent({ content, className = "" }: BlogContentProps) {
   return (
-    <div 
+    <div
       className={`
         prose prose-lg max-w-none
         prose-headings:text-gray-900 prose-headings:font-bold
@@ -32,6 +32,9 @@ export default function BlogContent({ content, className = "" }: BlogContentProp
         prose-td:border prose-td:border-gray-400 prose-td:px-4 prose-td:py-3 prose-td:text-gray-700 prose-td:align-top
         ${className}
       `}
+      style={{
+        whiteSpace: 'pre-wrap', // Preserve whitespace and line breaks
+      }}
       dangerouslySetInnerHTML={{ __html: content }}
     />
   )
@@ -42,9 +45,9 @@ export function SafeBlogContent({ content, className = "" }: BlogContentProps) {
   // You can add DOMPurify here if needed for extra security
   // import DOMPurify from 'dompurify'
   // const sanitizedContent = DOMPurify.sanitize(content)
-  
+
   return (
-    <div 
+    <div
       className={`
         prose prose-lg max-w-none
         prose-headings:text-gray-900 prose-headings:font-bold
@@ -67,6 +70,9 @@ export function SafeBlogContent({ content, className = "" }: BlogContentProps) {
         prose-td:border prose-td:border-gray-400 prose-td:px-4 prose-td:py-3 prose-td:text-gray-700 prose-td:align-top
         ${className}
       `}
+      style={{
+        whiteSpace: 'pre-wrap', // Preserve whitespace and line breaks
+      }}
       dangerouslySetInnerHTML={{ __html: content }}
     />
   )

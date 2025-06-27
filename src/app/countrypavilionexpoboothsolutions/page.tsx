@@ -5,6 +5,7 @@ import DynamicCountryPavilionIntroSection from "./components/dynamic-country-pav
 import DynamicExceptionalDesignSection from "./components/dynamic-exceptional-design-section";
 import DynamicPortfolioGrid from "./components/dynamic-portfolio-grid";
 import BoothRequirementsForm from "../home/components/booth-requirements-form";
+import ExpoPavilionParagraphSection from "./components/expo-pavilion-paragraph-section";
 
 export const metadata: Metadata = {
     title: "Country Pavilion Expo Booth Design UAE | Chronicle Exhibits",
@@ -25,6 +26,7 @@ function CountryPavilionExpoBoothSolutionsPage() {
             <DynamicCountryPavilionIntroSection />
             <DynamicExceptionalDesignSection />
             <DynamicPortfolioGrid />
+            <ExpoPavilionParagraphSection />
             <BoothRequirementsForm />
         </div>
     );

@@ -5,6 +5,7 @@ import UniqueQualitySection from "./components/unique-quality-section";
 import EffectiveCommunicationSection from "./components/effective-communication-section";
 import BoothRequirementsForm from "../home/components/booth-requirements-form";
 import DoubleDeckersPortfolio from "./components/double-decker-portfolio";
+import DoubleDeckerParagraphSection from "./components/double-decker-paragraph-section";
 
 export const metadata: Metadata = {
     title: "Double Decker Exhibition Stands Dubai | Chronicle Exhibits",
@@ -27,6 +28,7 @@ function DoubleDeckerExhibitionStandsPage() {
             <UniqueQualitySection />
             <EffectiveCommunicationSection />
             <DoubleDeckersPortfolio />
+            <DoubleDeckerParagraphSection />
             <BoothRequirementsForm />
         </div>
     );

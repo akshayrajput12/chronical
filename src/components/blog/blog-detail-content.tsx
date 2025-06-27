@@ -20,6 +20,7 @@ const BlogDetailContent = ({
     return (
         <>
             {/* Excerpt Section - positioned right after back link */}
+            {/* COMMENTED OUT: Excerpt section removed from blog detail page
             {excerpt && (
                 <section className="bg-white pb-4 md:pb-12">
                     <div className="container mx-auto px-4">
@@ -37,6 +38,7 @@ const BlogDetailContent = ({
                     </div>
                 </section>
             )}
+            */}
 
             {/* Main Content Section */}
             <section className="py-8 md:py-12 lg:py-16 bg-white">

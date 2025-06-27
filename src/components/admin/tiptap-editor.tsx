@@ -13,18 +13,19 @@ import TextAlign from '@tiptap/extension-text-align'
 import ListItem from '@tiptap/extension-list-item'
 import BulletList from '@tiptap/extension-bullet-list'
 import OrderedList from '@tiptap/extension-ordered-list'
+import HardBreak from '@tiptap/extension-hard-break'
 import { useCallback, useState } from 'react'
 import ImageUploadModal from './modals/image-upload-modal'
 import LinkModal from './modals/link-modal'
 import TableModal from './modals/table-modal'
-import { 
-  Bold, 
-  Italic, 
-  Underline, 
-  Strikethrough, 
-  Code, 
-  Heading1, 
-  Heading2, 
+import {
+  Bold,
+  Italic,
+  Underline,
+  Strikethrough,
+  Code,
+  Heading1,
+  Heading2,
   Heading3,
   List,
   ListOrdered,
@@ -36,7 +37,10 @@ import {
   AlignCenter,
   AlignRight,
   Undo,
-  Redo
+  Redo,
+  CornerDownLeft,
+  FileText,
+  Eye
 } from 'lucide-react'
 
 interface TiptapEditorProps {
@@ -46,6 +50,8 @@ interface TiptapEditorProps {
   className?: string
   blogPostId?: string
 }
+
+type EditorMode = 'visual' | 'html'
 
 export default function TiptapEditor({
   content,
@@ -59,6 +65,10 @@ export default function TiptapEditor({
   const [linkModalOpen, setLinkModalOpen] = useState(false)
   const [tableModalOpen, setTableModalOpen] = useState(false)
   const [linkData, setLinkData] = useState({ url: '', text: '', isEditing: false })
+
+  // Editor mode state
+  const [editorMode, setEditorMode] = useState<EditorMode>('visual')
+  const [htmlContent, setHtmlContent] = useState(content)
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -66,6 +76,15 @@ export default function TiptapEditor({
         bulletList: false,
         orderedList: false,
         listItem: false,
+        // Configure hard break to preserve line breaks
+        hardBreak: false, // We'll use our custom HardBreak extension
+      }),
+      // Add HardBreak extension for proper line breaks
+      HardBreak.configure({
+        keepMarks: true,
+        HTMLAttributes: {
+          class: 'hard-break',
+        },
       }),
       // Explicitly add list extensions with proper configuration
       ListItem.configure({
@@ -128,12 +147,17 @@ export default function TiptapEditor({
     ],
     content,
     onUpdate: ({ editor }) => {
-      onChange(editor.getHTML())
+      const html = editor.getHTML()
+      setHtmlContent(html)
+      onChange(html)
     },
     editorProps: {
       attributes: {
         class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-xl mx-auto focus:outline-none min-h-[400px] p-6 max-w-none prose-ul:list-disc prose-ol:list-decimal prose-li:my-1',
       },
+    },
+    parseOptions: {
+      preserveWhitespace: 'full',
     },
   })
 
@@ -200,6 +224,28 @@ export default function TiptapEditor({
     setTableModalOpen(true)
   }, [])
 
+  // Line break handler
+  const handleLineBreak = useCallback(() => {
+    if (editor) {
+      editor.chain().focus().setHardBreak().run()
+    }
+  }, [editor])
+
+  // HTML editor mode handlers
+  const handleModeSwitch = useCallback((mode: EditorMode) => {
+    if (mode === 'html' && editor) {
+      setHtmlContent(editor.getHTML())
+    } else if (mode === 'visual' && editor) {
+      editor.commands.setContent(htmlContent, false, { preserveWhitespace: 'full' })
+    }
+    setEditorMode(mode)
+  }, [editor, htmlContent])
+
+  const handleHtmlChange = useCallback((value: string) => {
+    setHtmlContent(value)
+    onChange(value)
+  }, [onChange])
+
   if (!editor) {
     return <div className="min-h-[400px] bg-gray-50 animate-pulse rounded-lg"></div>
   }
@@ -226,10 +272,44 @@ export default function TiptapEditor({
           margin: 0;
         }
       `}</style>
-      {/* Toolbar */}
-      <div className="border-b p-3 flex flex-wrap gap-1 bg-gray-50">
-        {/* Text Formatting */}
-        <div className="flex gap-1 border-r pr-2 mr-2">
+      {/* Mode Switcher */}
+      <div className="border-b p-2 bg-gray-50 flex justify-between items-center">
+        <div className="flex gap-1">
+          <button
+            onClick={() => handleModeSwitch('visual')}
+            className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
+              editorMode === 'visual'
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            }`}
+            title="Visual Editor"
+          >
+            <Eye className="w-4 h-4 inline mr-1" />
+            Visual
+          </button>
+          <button
+            onClick={() => handleModeSwitch('html')}
+            className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
+              editorMode === 'html'
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            }`}
+            title="HTML Editor"
+          >
+            <FileText className="w-4 h-4 inline mr-1" />
+            HTML
+          </button>
+        </div>
+        <div className="text-sm text-gray-500">
+          {editorMode === 'visual' ? 'Rich Text Editor' : 'HTML Source Editor'}
+        </div>
+      </div>
+
+      {/* Toolbar - Only show in visual mode */}
+      {editorMode === 'visual' && (
+        <div className="border-b p-3 flex flex-wrap gap-1 bg-gray-50">
+          {/* Text Formatting */}
+          <div className="flex gap-1 border-r pr-2 mr-2">
           <button
             onClick={() => editor.chain().focus().toggleBold().run()}
             className={`p-2 rounded hover:bg-gray-200 ${
@@ -388,6 +468,17 @@ export default function TiptapEditor({
           </button>
         </div>
 
+        {/* Line Break */}
+        <div className="flex gap-1 border-r pr-2 mr-2">
+          <button
+            onClick={handleLineBreak}
+            className="p-2 rounded hover:bg-gray-200"
+            title="Insert Line Break (Shift+Enter)"
+          >
+            <CornerDownLeft className="w-4 h-4" />
+          </button>
+        </div>
+
         {/* Undo/Redo */}
         <div className="flex gap-1">
           <button
@@ -407,11 +498,27 @@ export default function TiptapEditor({
             <Redo className="w-4 h-4" />
           </button>
         </div>
-      </div>
+        </div>
+      )}
 
       {/* Editor Content */}
       <div className="min-h-[400px]">
-        <EditorContent editor={editor} />
+        {editorMode === 'visual' ? (
+          <EditorContent editor={editor} />
+        ) : (
+          <div className="p-4">
+            <textarea
+              value={htmlContent}
+              onChange={(e) => handleHtmlChange(e.target.value)}
+              className="w-full min-h-[400px] p-4 border rounded font-mono text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter HTML content here..."
+              spellCheck={false}
+            />
+            <div className="mt-2 text-xs text-gray-500">
+              HTML Editor - You can edit the raw HTML content here. Switch back to Visual mode to see the rendered result.
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Modals */}
