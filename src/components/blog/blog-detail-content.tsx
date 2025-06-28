@@ -16,7 +16,6 @@ const BlogDetailContent = ({
     images = [],
     excerpt,
 }: BlogDetailContentProps) => {
-
     return (
         <>
             {/* Excerpt Section - positioned right after back link */}
@@ -41,7 +40,7 @@ const BlogDetailContent = ({
             */}
 
             {/* Main Content Section */}
-            <section className="py-8 md:py-12 lg:py-16 bg-white">
+            <section className="lg:w-[70%] w-full bg-white">
                 <div className="container mx-auto px-4">
                     <div className="max-w-6xl mx-auto">
                         <div className="w-full">
