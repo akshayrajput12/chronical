@@ -2,11 +2,11 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { LegacyCity } from "@/types/cities";
+import { City } from "@/types/cities";
 import PortfolioGallery from "@/app/portfolio/components/portfolio-gallery";
 
 interface CityPortfolioSectionProps {
-    city: LegacyCity;
+    city: City;
 }
 
 const CityPortfolioSection = ({ city }: CityPortfolioSectionProps) => {

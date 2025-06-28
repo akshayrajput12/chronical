@@ -21,7 +21,6 @@ import {
     Calendar,
     Monitor,
     Building2,
-    MapPin,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import Logo from "@/components/layout/logo";
@@ -110,7 +109,6 @@ const AdminSidebar = ({
         conference: pathname.includes("/admin/pages/conference"),
         kiosk: pathname.includes("/admin/pages/kiosk"),
         blog: pathname.includes("/admin/pages/blog"),
-        cities: pathname.includes("/admin/pages/cities"),
         customStand: pathname.includes("/admin/pages/custom-stand"),
         doubleDeckerStand: pathname.includes("/admin/pages/double-decker-stand"),
         expoPavilionStand: pathname.includes("/admin/pages/expo-pavilion-stand"),
@@ -528,49 +526,6 @@ const AdminSidebar = ({
                                         isActive={
                                             pathname ===
                                             "/admin/pages/blog/media"
-                                        }
-                                    />
-                                </div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-                </div>
-
-                {/* Cities Page */}
-                <div>
-                    <NavItem
-                        href="/admin/pages/cities"
-                        label="Cities"
-                        icon={<MapPin size={18} />}
-                        isActive={pathname.includes("/admin/pages/cities")}
-                        hasChildren={true}
-                        isOpen={openSections.cities}
-                        onClick={() => toggleSection("cities")}
-                    />
-
-                    <AnimatePresence>
-                        {openSections.cities && (
-                            <motion.div
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: "auto", opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
-                                transition={{ duration: 0.2 }}
-                                className="overflow-hidden"
-                            >
-                                <div className="py-1 space-y-1">
-                                    <SubNavItem
-                                        href="/admin/pages/cities"
-                                        label="All Cities"
-                                        isActive={
-                                            pathname === "/admin/pages/cities"
-                                        }
-                                    />
-                                    <SubNavItem
-                                        href="/admin/pages/cities/create"
-                                        label="Create City"
-                                        isActive={
-                                            pathname ===
-                                            "/admin/pages/cities/create"
                                         }
                                     />
                                 </div>

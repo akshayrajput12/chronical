@@ -2,22 +2,13 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { LegacyCity } from "@/types/cities";
+import { City } from "@/types/cities";
 
 interface CityRoleSectionProps {
-    city: LegacyCity;
+    city: City;
 }
 
 const CityRoleSection = ({ city }: CityRoleSectionProps) => {
-    // Get role section data
-    const roleSection = city.contentSections?.find(section => section.section_type === 'role');
-
-    // Fallback to default content if no dynamic content is available
-    const title = roleSection?.title || `ROLE OF EXHIBITION BOOTH DESIGN ${city.name.toUpperCase()}`;
-    const content = roleSection?.content || `Today most business entrepreneurs around the world take part in trade shows for their brand expansion. Exhibitions are an ideal platform for taking businesses on the path to success. Trade shows provide you with an opportunity to build long-term business connections & also to influence future clients. So it is more than necessary to have an impressive booth design as it works as the face of your brand at the show.
-
-The Exhibition booth design should be such that it prompts the visitors to notice your products & services. The booth should be visually charming to catch the hopeful attention of the customers. It should be spacious to accommodate all your business activities.`;
-
     return (
         <section className="py-8 md:py-12 lg:py-16 bg-white">
             <div className="container mx-auto px-4">
@@ -30,7 +21,8 @@ The Exhibition booth design should be such that it prompts the visitors to notic
                         transition={{ duration: 0.8 }}
                         viewport={{ once: true }}
                     >
-                        {title}
+                        ROLE OF EXHIBITION BOOTH DESIGN{" "}
+                        {city.name.toUpperCase()}
                     </motion.h2>
 
                     {/* Content Paragraphs */}
@@ -41,21 +33,29 @@ The Exhibition booth design should be such that it prompts the visitors to notic
                         transition={{ duration: 0.8, delay: 0.2 }}
                         viewport={{ once: true }}
                     >
-                        {content.split('\n\n').map((paragraph, index) => (
-                            <p key={index} className="text-base md:text-lg leading-relaxed text-justify">
-                                {paragraph.includes('Exhibition booth design') ? (
-                                    <>
-                                        {paragraph.split('Exhibition booth design')[0]}
-                                        <span className="font-semibold">
-                                            Exhibition booth design
-                                        </span>
-                                        {paragraph.split('Exhibition booth design')[1]}
-                                    </>
-                                ) : (
-                                    paragraph
-                                )}
-                            </p>
-                        ))}
+                        <p className="text-base md:text-lg leading-relaxed text-justify">
+                            Today most business entrepreneurs around the world
+                            take part in trade shows for their brand expansion.
+                            Exhibitions are an ideal platform for taking
+                            businesses on the path to success. Trade shows
+                            provide you with an opportunity to build long-term
+                            business connections & also to influence future
+                            clients. So it is more than necessary to have an
+                            impressive booth design as it works as the face of
+                            your brand at the show.
+                        </p>
+
+                        <p className="text-base md:text-lg leading-relaxed text-justify">
+                            The{" "}
+                            <span className="font-semibold">
+                                Exhibition booth design
+                            </span>{" "}
+                            should be such that it prompts the visitors to
+                            notice your products & services. The booth should be
+                            visually charming to catch the hopeful attention of
+                            the customers. It should be spacious to accommodate
+                            all your business activities.
+                        </p>
                     </motion.div>
                 </div>
             </div>
