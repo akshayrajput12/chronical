@@ -116,19 +116,22 @@ const BoothRequirementsForm = () => {
                 <div className="absolute inset-0 bg-black/70" />
             </div>
 
-            <div className="relative z-10 container mx-auto px-4">
+            <div className="relative z-10 mx-auto px-4">
                 <div className="max-w-7xl mx-auto">
                     {/* Title */}
                     <motion.div
-                        className="text-center mb-8"
+                        className="text-center"
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
                         viewport={{ once: true }}
                     >
-                        <h2 className="text-xl leading-[44px] md:text-3xl lg:text-4xl font-rubik font-bold text-white uppercase tracking-wide text-center">
-                            DESCRIBE YOUR TRADE SHOW BOOTH REQUIREMENTS
+                        <h2 className="text-xl leading-[44px] md:text-3xl lg:text-4xl font-rubik font-bold text-white tracking-wide text-center">
+                            Describe Your Trade Show Booth Requirements
                         </h2>
+                        <div className="flex !mb-2 justify-center">
+                            <div className="h-1 bg-[#a5cd39] w-16 mt-2 mb-6"></div>
+                        </div>
                     </motion.div>
 
                     {/* Form and Map Grid */}
@@ -136,7 +139,7 @@ const BoothRequirementsForm = () => {
                         {/* Form Section */}
                         <motion.form
                             onSubmit={handleSubmit}
-                            className="space-y-4 mt-10"
+                            className="space-y-4"
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6, delay: 0.2 }}
@@ -156,7 +159,7 @@ const BoothRequirementsForm = () => {
                                                 e.target.value,
                                             )
                                         }
-                                        className="w-full h-12 px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md placeholder:text-gray-500 transition-all duration-200"
+                                        className="w-full h-10 px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md placeholder:text-gray-500 transition-all duration-200"
                                         required
                                     />
                                 </div>
@@ -172,7 +175,7 @@ const BoothRequirementsForm = () => {
                                                 e.target.value,
                                             )
                                         }
-                                        className="w-full h-12 px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md placeholder:text-gray-500 transition-all duration-200"
+                                        className="w-full h-10 px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md placeholder:text-gray-500 transition-all duration-200"
                                         required
                                     />
                                 </div>
@@ -188,7 +191,7 @@ const BoothRequirementsForm = () => {
                                                 e.target.value,
                                             )
                                         }
-                                        className="w-full h-12 px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md placeholder:text-gray-500 transition-all duration-200"
+                                        className="w-full h-10 px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md placeholder:text-gray-500 transition-all duration-200"
                                         required
                                     />
                                 </div>
@@ -204,7 +207,7 @@ const BoothRequirementsForm = () => {
                                                 e.target.value,
                                             )
                                         }
-                                        className="w-full h-12 px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md placeholder:text-gray-500 transition-all duration-200"
+                                        className="w-full h-10 px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md placeholder:text-gray-500 transition-all duration-200"
                                         required
                                     />
                                 </div>
@@ -221,7 +224,7 @@ const BoothRequirementsForm = () => {
                                             e.target.value,
                                         )
                                     }
-                                    className="w-full h-12 px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md placeholder:text-gray-500 transition-all duration-200"
+                                    className="w-full h-10 px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md placeholder:text-gray-500 transition-all duration-200"
                                     required
                                 />
                             </div>
@@ -235,7 +238,7 @@ const BoothRequirementsForm = () => {
                                         className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                                         accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                                     />
-                                    <div className="flex items-center justify-between w-full h-12 px-4 py-2 text-sm bg-white border border-gray-300 hover:border-[#a5cd39] focus-within:border-[#a5cd39] rounded-md cursor-pointer transition-all duration-200">
+                                    <div className="flex items-center justify-between w-full h-10 px-4 py-2 text-sm bg-white border border-gray-300 hover:border-[#a5cd39] focus-within:border-[#a5cd39] rounded-md cursor-pointer transition-all duration-200">
                                         <span
                                             className={`${
                                                 formData.file
@@ -288,10 +291,10 @@ const BoothRequirementsForm = () => {
                                     )}
                                 </Button>
                                 {/* show this message on form submit */}
-                                <p className="text-white/90 text-2xl font-markazi-text mt-4 max-w-lg mx-auto leading-relaxed">
+                                {/* <p className="text-white/90 text-2xl font-markazi-text mt-4 max-w-lg mx-auto leading-relaxed">
                                     Our team will review your requirements and
                                     provide a detailed proposal within 24 hours.
-                                </p>
+                                </p> */}
                             </div>
                         </motion.form>
 
@@ -302,9 +305,6 @@ const BoothRequirementsForm = () => {
                             transition={{ duration: 0.6, delay: 0.4 }}
                             viewport={{ once: true }}
                         >
-                            <h3 className="text-xl font-rubik font-bold text-white mb-4 text-center">
-                                Visit Our Location
-                            </h3>
                             <div className="w-full h-[400px]">
                                 <iframe
                                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3607.5139890547107!2d55.38061577600814!3d25.28692967765328!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f42e5a9ddaf97%3A0x563a582dbda7f14c!2sChronicle%20Exhibition%20Organizing%20L.L.C%20%7C%20Exhibition%20Stand%20Builder%20in%20Dubai%2C%20UAE%20-%20Middle%20East!5e0!3m2!1sen!2sin!4v1750325309116!5m2!1sen!2sin"

@@ -21,8 +21,13 @@ export const EventsForm = () => {
         }));
     };
     return (
-        <section className="py-16 bg-gray-100">
+        <section className="py-16 bg-black/60">
             <div className="container mx-auto px-4">
+                <h2 className="text-3xl sm:text-4xl font-rubik font-bold text-center text-white mb-4">
+                    Event Gallery
+                    <div className="w-16 h-1 my-2 bg-[#a5cd39] mx-auto"></div>
+                </h2>
+
                 <div className="max-w-6xl mx-auto bg-white rounded-lg shadow p-6">
                     <form className="space-y-4">
                         {/* Simple responsive grid for all main fields */}
@@ -104,7 +109,7 @@ export const EventsForm = () => {
                         <div className="flex justify-center pt-2">
                             <button
                                 type="submit"
-                                className="bg-[#a5cd39] hover:bg-[#8fb32a] text-black px-6 py-2 text-xs font-semibold rounded-md transition-all duration-200 shadow-sm hover:shadow-md uppercase tracking-wider min-w-[100px]"
+                                className="bg-[#a5cd39] text-white px-6 py-2 rounded-md font-medium hover:bg-[#94b933] transition-colors duration-300 uppercase font-noto-kufi-arabic text-sm"
                             >
                                 Submit
                             </button>

@@ -27,7 +27,8 @@ interface PortfolioItem {
 }
 
 const DynamicPortfolioGrid = () => {
-    const [sectionData, setSectionData] = useState<ExpoPavilionPortfolioSection | null>(null);
+    const [sectionData, setSectionData] =
+        useState<ExpoPavilionPortfolioSection | null>(null);
     const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -46,7 +47,7 @@ const DynamicPortfolioGrid = () => {
                 .eq("is_active", true)
                 .single();
 
-            if (sectionError && sectionError.code !== 'PGRST116') {
+            if (sectionError && sectionError.code !== "PGRST116") {
                 console.error("Error loading section data:", sectionError);
             } else if (sectionData) {
                 setSectionData(sectionData);
@@ -178,7 +179,10 @@ const DynamicPortfolioGrid = () => {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {[...Array(6)].map((_, index) => (
-                            <div key={index} className="h-52 bg-gray-300 rounded-lg animate-pulse"></div>
+                            <div
+                                key={index}
+                                className="h-52 bg-gray-300 rounded-lg animate-pulse"
+                            ></div>
                         ))}
                     </div>
                 </div>
@@ -190,22 +194,13 @@ const DynamicPortfolioGrid = () => {
         <div className="relative">
             {/* Split background: top black, bottom white */}
             <div className="absolute inset-0 w-full h-full pointer-events-none z-0">
-                <div className="h-[65%] bg-black w-full" />
+                <div className="h-[65%] bg-black/60 w-full" />
                 <div className="h-[35%] bg-white w-full" />
             </div>
             <div className="relative z-10 px-4 max-w-7xl mx-auto pt-12 pb-12">
                 {/* Animated Header Section */}
                 <div className="text-center mb-12">
                     <motion.h2
-                        className="text-[#a5cd39] text-xl font-semibold tracking-wider mb-4"
-                        variants={headerVariants}
-                        initial="hidden"
-                        animate="visible"
-                    >
-                        {sectionData.sub_heading}
-                    </motion.h2>
-
-                    <motion.h1
                         className="text-white text-3xl md:text-4xl font-rubik font-bold mb-4"
                         variants={headerVariants}
                         initial="hidden"
@@ -213,10 +208,13 @@ const DynamicPortfolioGrid = () => {
                         transition={{ delay: 0.1 }}
                     >
                         {sectionData.main_heading}
-                    </motion.h1>
+                    </motion.h2>
+                    <div className="flex justify-center">
+                        <div className="h-1 bg-[#a5cd39] w-16 mt-2 mb-6"></div>
+                    </div>
 
                     <motion.p
-                        className="text-gray-300 text-lg max-w-4xl mx-auto leading-relaxed"
+                        className="text-white font-markazi-text! !text-2xl max-w-3xl mx-auto"
                         variants={textVariants}
                         initial="hidden"
                         animate="visible"
@@ -268,7 +266,7 @@ const DynamicPortfolioGrid = () => {
                 <div className="text-center mt-12">
                     <motion.a
                         href={sectionData.cta_button_url}
-                        className="bg-[#a5cd39] text-white px-8 py-3 rounded-lg font-semibold shadow-lg inline-block"
+                        className="bg-[#a5cd39] text-white px-6 py-1 rounded-md font-medium hover:bg-[#94b933] transition-colors duration-300 uppercase font-noto-kufi-arabic text-sm"
                         variants={buttonVariants}
                         initial="hidden"
                         animate="visible"

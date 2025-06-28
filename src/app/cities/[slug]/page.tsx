@@ -14,6 +14,7 @@ import CityLookingForContractorsSection from "@/components/cities/city-looking-f
 import CityServicesSection from "@/components/cities/city-services-section";
 import { useCity } from "@/hooks/use-cities";
 import { useComponentLoading } from "@/hooks/use-minimal-loading";
+import { ServicesGrid } from "./services-grid";
 
 interface CityDetailPageProps {
     params: Promise<{
@@ -88,15 +89,11 @@ const CityDetailPage = ({ params }: CityDetailPageProps) => {
     return (
         <div className="min-h-screen bg-white mt-16 md:mt-20 lg:mt-24">
             <CityDetailHero cityName={city.name} heroImage={city.heroImage} />
+            <ServicesGrid />
             <CityContentSection city={city} />
-            <CityServicesSection city={city} />
-            <CityRoleSection city={city} />
-            <CityBoothDesignSection city={city} />
             <CityComponentsSection city={city} />
             <CityPortfolioSection city={city} />
             <CityWhyBestSection city={city} />
-            <CityPreferredChoiceSection city={city} />
-            <CityLookingForContractorsSection city={city} />
         </div>
     );
 };

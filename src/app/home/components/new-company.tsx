@@ -310,7 +310,7 @@ const NewCompany = () => {
 
                         <Link href={sectionData.button_url}>
                             <motion.button
-                                className="bg-[#a5cd39] font-noto-kufi-arabic text-sm leading-[24px] text-white py-3 px-8 rounded-md font-medium"
+                                className="bg-[#a5cd39] text-white px-6 py-2 rounded-md font-medium hover:bg-[#94b933] transition-colors duration-300 uppercase font-noto-kufi-arabic text-sm"
                                 variants={buttonVariants}
                                 whileHover="hover"
                             >

@@ -134,12 +134,6 @@ const KioskMain = () => {
                 >
                     {heroData.heading}
                 </motion.h1>
-                <motion.div
-                    className="w-24 h-1 bg-[#a5cd39] mx-auto"
-                    initial={{ width: 0 }}
-                    animate={{ width: 96 }}
-                    transition={{ duration: 1, delay: 0.5 }}
-                />
             </div>
         </section>
     );

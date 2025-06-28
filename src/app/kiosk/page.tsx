@@ -4,6 +4,7 @@ import KioskContent from "./components/kiosk-content";
 import KioskBenefits from "./components/kiosk-benefits";
 import KioskManufacturers from "./components/kiosk-manufacturers";
 import KioskConsultancy from "./components/kiosk-consultancy";
+import BoothRequirementsForm from "../home/components/booth-requirements-form";
 
 function KioskPage() {
     return (
@@ -12,7 +13,7 @@ function KioskPage() {
             <KioskContent />
             <KioskBenefits />
             <KioskManufacturers />
-            <KioskConsultancy />
+            <BoothRequirementsForm />
         </div>
     );
 }

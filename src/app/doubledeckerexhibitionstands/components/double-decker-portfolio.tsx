@@ -22,17 +22,21 @@ interface PortfolioData {
 }
 
 const DoubleDeckersPortfolio = () => {
-    const [portfolioData, setPortfolioData] = useState<PortfolioData | null>(null);
+    const [portfolioData, setPortfolioData] = useState<PortfolioData | null>(
+        null,
+    );
     const [loading, setLoading] = useState(true);
     const supabase = createClient();
 
     useEffect(() => {
         const loadPortfolioData = async () => {
             try {
-                const { data, error } = await supabase.rpc('get_double_decker_portfolio_data');
-                
+                const { data, error } = await supabase.rpc(
+                    "get_double_decker_portfolio_data",
+                );
+
                 if (error) {
-                    console.error('Error loading portfolio data:', error);
+                    console.error("Error loading portfolio data:", error);
                     return;
                 }
 
@@ -40,7 +44,7 @@ const DoubleDeckersPortfolio = () => {
                     setPortfolioData(data);
                 }
             } catch (error) {
-                console.error('Error loading portfolio data:', error);
+                console.error("Error loading portfolio data:", error);
             } finally {
                 setLoading(false);
             }
@@ -64,7 +68,10 @@ const DoubleDeckersPortfolio = () => {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {[...Array(6)].map((_, index) => (
-                            <div key={index} className="h-52 bg-gray-700 rounded-lg animate-pulse"></div>
+                            <div
+                                key={index}
+                                className="h-52 bg-gray-700 rounded-lg animate-pulse"
+                            ></div>
                         ))}
                     </div>
                 </div>
@@ -166,22 +173,13 @@ const DoubleDeckersPortfolio = () => {
         <div className="relative">
             {/* Split background: top black, bottom white */}
             <div className="absolute inset-0 w-full h-full pointer-events-none z-0">
-                <div className="h-[65%] bg-black w-full" />
+                <div className="h-[65%] bg-black/60 w-full" />
                 <div className="h-[35%] bg-white w-full" />
             </div>
             <div className="relative z-10 px-4 max-w-7xl mx-auto pt-12 pb-12">
                 {/* Animated Header Section */}
                 <div className="text-center mb-12">
                     <motion.h2
-                        className="text-[#a5cd39] text-xl font-semibold tracking-wider mb-4"
-                        variants={headerVariants}
-                        initial="hidden"
-                        animate="visible"
-                    >
-                        PORTFOLIO
-                    </motion.h2>
-
-                    <motion.h1
                         className="text-white text-3xl md:text-4xl font-rubik font-bold mb-4"
                         variants={headerVariants}
                         initial="hidden"
@@ -189,17 +187,19 @@ const DoubleDeckersPortfolio = () => {
                         transition={{ delay: 0.1 }}
                     >
                         {portfolioData.section.main_heading}
-                    </motion.h1>
-
+                    </motion.h2>
+                    <div className="flex justify-center">
+                        <div className="h-1 bg-[#a5cd39] w-16 mt-2 mb-6"></div>
+                    </div>
                     {portfolioData.section.description && (
-                        <motion.p
-                            className="text-gray-300 text-lg max-w-4xl mx-auto leading-relaxed"
+                        <motion.span
+                            className="text-white font-markazi-text! !text-2xl inline-block max-w-3xl mx-auto"
                             variants={textVariants}
                             initial="hidden"
                             animate="visible"
                         >
                             {portfolioData.section.description}
-                        </motion.p>
+                        </motion.span>
                     )}
                 </div>
 
@@ -245,15 +245,21 @@ const DoubleDeckersPortfolio = () => {
                 {/* Animated Call to Action */}
                 <div className="text-center mt-12">
                     <motion.button
-                        className="bg-[#a5cd39] text-white px-8 py-3 rounded-lg font-semibold shadow-lg"
+                        className="bg-[#a5cd39] text-white px-6 py-1 rounded-md font-medium hover:bg-[#94b933] transition-colors duration-300 uppercase font-noto-kufi-arabic text-sm"
                         variants={buttonVariants}
                         initial="hidden"
                         animate="visible"
                         whileHover="hover"
                         whileTap="tap"
                         onClick={() => {
-                            if (portfolioData.section?.cta_button_url && portfolioData.section.cta_button_url !== '#') {
-                                window.open(portfolioData.section.cta_button_url, '_blank');
+                            if (
+                                portfolioData.section?.cta_button_url &&
+                                portfolioData.section.cta_button_url !== "#"
+                            ) {
+                                window.open(
+                                    portfolioData.section.cta_button_url,
+                                    "_blank",
+                                );
                             }
                         }}
                     >

@@ -123,7 +123,7 @@ const ConferenceManagementServices = () => {
     }
 
     return (
-        <section className="py-8 md:py-12 lg:py-16 bg-gray-50">
+        <section className="py-8 md:py-12 lg:py-16 bg-white">
             <div className="container mx-auto px-4">
                 <div className="max-w-6xl mx-auto">
                     {/* Header */}
@@ -134,9 +134,12 @@ const ConferenceManagementServices = () => {
                         transition={{ duration: 0.8 }}
                         viewport={{ once: true }}
                     >
-                        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-8 uppercase tracking-wide">
+                        <h2 className="text-3xl text-center md:text-4xl font-rubik font-bold mb-2">
                             {sectionData.main_heading}
                         </h2>
+                        <div className="flex justify-center">
+                            <div className="h-1 bg-[#a5cd39] w-16 mt-2 mb-6"></div>
+                        </div>
                         <p className="text-gray-600 text-lg max-w-4xl mx-auto leading-relaxed">
                             {sectionData.main_description}
                         </p>
@@ -156,7 +159,7 @@ const ConferenceManagementServices = () => {
                                 }}
                                 viewport={{ once: true }}
                             >
-                                <h3 className="text-xl font-bold mb-6 uppercase tracking-wide text-[#a5cd39]">
+                                <h3 className="text-xl !font-bold mb-6 uppercase tracking-wide text-[#a5cd39]">
                                     {service.title}
                                 </h3>
                                 <p className="text-gray-700 text-base leading-relaxed">

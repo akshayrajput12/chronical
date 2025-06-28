@@ -122,89 +122,100 @@ const EventManagementServices = () => {
     }
 
     return (
-        <section className="py-8 md:py-12 lg:py-16 bg-white">
-            <div className="container mx-auto px-4">
-                <div className="max-w-6xl mx-auto">
-                    {/* Top Section - EVENT MANAGEMENT SERVICES IN DUBAI, UAE */}
+        <>
+            <section className="py-8 md:py-12 lg:py-16 bg-white">
+                <div className="container mx-auto px-4">
+                    <div className="max-w-6xl mx-auto">
+                        {/* Top Section - EVENT MANAGEMENT SERVICES IN DUBAI, UAE */}
+                        <motion.div
+                            className="text-center mb-12"
+                            initial={{ opacity: 0, y: -30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8 }}
+                            viewport={{ once: true }}
+                        >
+                            <h2 className="text-3xl md:text-4xl font-rubik font-bold mb-2">
+                                {sectionData.main_heading}
+                            </h2>
+                            <div className="flex justify-center">
+                                <div className="h-1 bg-[#a5cd39] w-16 mt-2 mb-6"></div>
+                            </div>
+                            <p className="text-base text-gray-700 leading-relaxed text-justify max-w-4xl mx-auto">
+                                {sectionData.main_description}
+                            </p>
+                        </motion.div>
+
+                        {error && (
+                            <motion.div
+                                className="mt-8 p-4 bg-red-50 border border-red-200 rounded-md text-red-700 text-center"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ duration: 0.5 }}
+                            >
+                                {error}
+                            </motion.div>
+                        )}
+                    </div>
+                </div>
+            </section>
+            {/* Bottom Section - Two Column Layout */}
+            <section className="py-20 bg-gray-100 overflow-hidden relative">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto lg:gap-12 items-center">
+                    {/* Left Content */}
                     <motion.div
-                        className="text-center mb-12"
-                        initial={{ opacity: 0, y: -30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
+                        className="order-2 lg:order-1"
+                        initial={{ opacity: 0, x: -30 }}
+                        whileInView={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.8 }}
                         viewport={{ once: true }}
                     >
-                        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-6 uppercase tracking-wide">
-                            {sectionData.main_heading}
-                        </h2>
-                        <p className="text-base text-gray-700 leading-relaxed text-justify max-w-4xl mx-auto">
-                            {sectionData.main_description}
-                        </p>
+                        <div className="space-y-6">
+                            <h2 className="text-3xl md:text-4xl text-center font-rubik font-bold mb-2">
+                                {sectionData.secondary_heading}
+                            </h2>
+                            <div className="flex !mb-0 justify-center">
+                                <div className="h-1 bg-[#a5cd39] w-16 mt-2 mb-6"></div>
+                            </div>
+                            <div className="space-y-4 text-gray-700">
+                                <p className="text-base leading-relaxed text-justify">
+                                    {sectionData.first_paragraph}
+                                </p>
+
+                                <p className="text-base leading-relaxed text-justify">
+                                    {sectionData.second_paragraph}
+                                </p>
+                            </div>
+                            <button className="bg-[#a5cd39] mt-4 text-white px-6 py-2 rounded-md font-medium hover:bg-[#94b933] transition-colors duration-300 uppercase w-max font-noto-kufi-arabic text-sm">
+                                Request Quotation
+                            </button>
+                        </div>
                     </motion.div>
 
-                    {/* Bottom Section - Two Column Layout */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-                        {/* Left Content */}
-                        <motion.div
-                            className="order-2 lg:order-1"
-                            initial={{ opacity: 0, x: -30 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.8 }}
-                            viewport={{ once: true }}
-                        >
-                            <div className="space-y-6">
-                                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 uppercase tracking-wide text-center">
-                                    {sectionData.secondary_heading}
-                                </h3>
-
-                                <div className="space-y-4 text-gray-700">
-                                    <p className="text-base leading-relaxed text-justify">
-                                        {sectionData.first_paragraph}
-                                    </p>
-
-                                    <p className="text-base leading-relaxed text-justify">
-                                        {sectionData.second_paragraph}
-                                    </p>
-                                </div>
-                            </div>
-                        </motion.div>
-
-                        {/* Right Image with Colored Background */}
-                        <motion.div
-                            className="order-1 lg:order-2 relative"
-                            initial={{ opacity: 0, x: 30 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.8 }}
-                            viewport={{ once: true }}
-                        >
-                            {/* Image Container */}
-                            <div className="relative h-64 sm:h-80 md:h-96 lg:h-[400px] overflow-hidden z-10">
-                                <Image
-                                    src={
-                                        sectionData.main_image_url ||
-                                        "https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-                                    }
-                                    alt={sectionData.main_image_alt}
-                                    fill
-                                    className="object-cover"
-                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
-                                />
-                            </div>
-                        </motion.div>
-                    </div>
-
-                    {error && (
-                        <motion.div
-                            className="mt-8 p-4 bg-red-50 border border-red-200 rounded-md text-red-700 text-center"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ duration: 0.5 }}
-                        >
-                            {error}
-                        </motion.div>
-                    )}
+                    {/* Right Image with Colored Background */}
+                    <motion.div
+                        className="order-1 lg:order-2 relative"
+                        initial={{ opacity: 0, x: 30 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.8 }}
+                        viewport={{ once: true }}
+                    >
+                        {/* Image Container */}
+                        <div className="relative h-64 sm:h-80 md:h-96 lg:h-[400px] overflow-hidden z-10">
+                            <Image
+                                src={
+                                    sectionData.main_image_url ||
+                                    "https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                                }
+                                alt={sectionData.main_image_alt}
+                                fill
+                                className="object-cover rounded-lg"
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
+                            />
+                        </div>
+                    </motion.div>
                 </div>
-            </div>
-        </section>
+            </section>
+        </>
     );
 };
 

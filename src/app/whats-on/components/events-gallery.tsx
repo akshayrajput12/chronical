@@ -157,13 +157,6 @@ const EventsGallery = () => {
                             Explore DWTC Events
                         </h2>
                     </div>
-                    <Button
-                        variant="ghost"
-                        className="hidden lg:flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-all duration-300 text-sm font-medium"
-                    >
-                        VIEW ALL
-                        <ArrowRight className="w-4 h-4" />
-                    </Button>
                 </motion.div>
 
                 {/* Filter Tabs */}

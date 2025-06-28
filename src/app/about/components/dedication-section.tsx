@@ -19,7 +19,7 @@ const DedicationSection = () => {
     // State for dynamic data
     const [sectionData, setSectionData] = useState<AboutDedicationSectionData>({
         id: "",
-        section_heading: "DEDICATION TO QUALITY AND PRECISION",
+        section_heading: "Dedication To Quality And Precision",
         section_description: undefined,
         is_active: true,
         created_at: "",
@@ -205,7 +205,7 @@ const DedicationSection = () => {
                 <div className="max-w-6xl mx-auto">
                     {/* Section Title */}
                     <div className="text-center mb-12">
-                        <h2 className="text-3xl md:text-4xl font-rubik font-bold mb-2 text-[#333333]">
+                        <h2 className="text-3xl md:text-4xl font-rubik font-bold mb-2">
                             {sectionData.section_heading}
                         </h2>
                         {sectionData.section_description && (
@@ -329,7 +329,7 @@ const FeatureCard = ({
 
             {/* Content */}
             <div className="p-0">
-                <h3 className="text-base font-markazi font-bold mb-2 text-[#a5cd39]">
+                <h3 className="text-base font-markazi !font-bold mb-2 text-[#a5cd39]">
                     {title}
                 </h3>
                 <p className="text-gray-700 text-sm leading-relaxed font-nunito">

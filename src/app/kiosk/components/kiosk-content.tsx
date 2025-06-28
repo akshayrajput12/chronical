@@ -156,108 +156,123 @@ const KioskContent = () => {
     };
 
     return (
-        <section className="py-8 md:py-12 lg:py-16 bg-white">
-            <div className="container mx-auto px-4">
-                <div className="max-w-6xl mx-auto">
-                    {/* First Section - Dynamic Content */}
-                    <div className="mb-16">
-                        {/* Section Title */}
-                        <motion.div
-                            className="text-center mb-8"
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.5 }}
-                        >
-                            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#333333]">
-                                {contentData.first_section_heading}
-                            </h2>
-                        </motion.div>
-
-                        {/* Content */}
-                        <motion.div
-                            className="max-w-4xl mx-auto"
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.5, delay: 0.2 }}
-                        >
-                            <p className="text-gray-700 text-center">
-                                {renderContentWithHighlight(
-                                    contentData.first_section_content,
-                                    contentData.first_section_highlight_text,
-                                )}
-                            </p>
-                        </motion.div>
-                    </div>
-
-                    {/* Second Section - Dynamic Content */}
-                    <div>
-                        {/* Section Title */}
-                        <motion.div
-                            className="mb-8"
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.5 }}
-                        >
-                            <h2 className="text-3xl font-bold mb-4 text-[#333333]">
-                                {contentData.second_section_heading}
-                            </h2>
-                        </motion.div>
-
-                        {/* Content Sections */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                            {/* Left Column - Text */}
+        <>
+            <section className="py-8 md:py-12 lg:py-16 bg-white">
+                <div className="container mx-auto px-4">
+                    <div className="max-w-6xl mx-auto">
+                        {/* First Section - Dynamic Content */}
+                        <div className="mb-16">
+                            {/* Section Title */}
                             <motion.div
-                                className="flex flex-col justify-center"
-                                initial={{ opacity: 0, x: -20 }}
-                                whileInView={{ opacity: 1, x: 0 }}
+                                className="text-center mb-6"
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.5 }}
                             >
-                                <p className="text-gray-700 mb-6">
-                                    {contentData.second_section_paragraph_1}
-                                </p>
-                                <p className="text-gray-700">
-                                    {contentData.second_section_paragraph_2}
-                                </p>
+                                <h2 className="text-3xl md:text-4xl font-rubik font-bold mb-4">
+                                    {contentData.first_section_heading}
+                                </h2>
+                                <motion.div
+                                    className="w-24 h-1 bg-[#a5cd39] mx-auto"
+                                    initial={{ width: 0 }}
+                                    animate={{ width: 96 }}
+                                    transition={{ duration: 1, delay: 0.5 }}
+                                />
                             </motion.div>
 
-                            {/* Right Column - Image */}
+                            {/* Content */}
                             <motion.div
-                                className="relative h-[400px] rounded-md overflow-hidden"
-                                initial={{ opacity: 0, x: 20 }}
-                                whileInView={{ opacity: 1, x: 0 }}
+                                className="max-w-4xl mx-auto"
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.5, delay: 0.2 }}
                             >
-                                {contentData.main_image_url ? (
-                                    <Image
-                                        src={contentData.main_image_url}
-                                        alt={
-                                            contentData.main_image_alt ||
-                                            "Custom Kiosk Solutions"
-                                        }
-                                        fill
-                                        className="object-cover"
-                                    />
-                                ) : (
-                                    <div className="flex items-center justify-center h-full bg-gray-100">
-                                        <div className="text-center">
-                                            <div className="w-12 h-12 bg-gray-300 rounded mx-auto mb-2"></div>
-                                            <p className="text-gray-500 text-sm">
-                                                No image available
-                                            </p>
-                                        </div>
-                                    </div>
-                                )}
+                                <p className="text-gray-700 text-center">
+                                    {renderContentWithHighlight(
+                                        contentData.first_section_content,
+                                        contentData.first_section_highlight_text,
+                                    )}
+                                </p>
                             </motion.div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+            {/* Second Section - Dynamic Content */}
+            <section className="bg-gray-100 w-full py-8 md:py-12 lg:py-16">
+                {/* Section Title */}
+                <div className="max-w-6xl mx-auto">
+                    <motion.div
+                        className=""
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5 }}
+                    >
+                        <h2 className="text-3xl md:text-4xl font-rubik w-max font-bold mb-2">
+                            {contentData.second_section_heading}
+                            <div className="flex justify-center">
+                                <div className="h-1 bg-[#a5cd39] w-16 mt-2 mb-6"></div>
+                            </div>
+                        </h2>
+                    </motion.div>
+
+                    {/* Content Sections */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                        {/* Left Column - Text */}
+                        <motion.div
+                            className="flex flex-col justify-start"
+                            initial={{ opacity: 0, x: -20 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.5 }}
+                        >
+                            <p className="text-gray-700 mb-6">
+                                {contentData.second_section_paragraph_1}
+                            </p>
+                            <p className="text-gray-700">
+                                {contentData.second_section_paragraph_2}
+                            </p>
+                            <button className="bg-[#a5cd39] mt-6 text-white px-6 py-2 rounded-md font-medium hover:bg-[#94b933] transition-colors duration-300 uppercase w-max font-noto-kufi-arabic text-sm">
+                                Request Quotation
+                            </button>
+                        </motion.div>
+
+                        {/* Right Column - Image */}
+                        <motion.div
+                            className="relative h-[400px] rounded-md overflow-hidden"
+                            initial={{ opacity: 0, x: 20 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.5, delay: 0.2 }}
+                        >
+                            {contentData.main_image_url ? (
+                                <Image
+                                    src={contentData.main_image_url}
+                                    alt={
+                                        contentData.main_image_alt ||
+                                        "Custom Kiosk Solutions"
+                                    }
+                                    fill
+                                    className="object-cover"
+                                />
+                            ) : (
+                                <div className="flex items-center justify-center h-full bg-gray-100">
+                                    <div className="text-center">
+                                        <div className="w-12 h-12 bg-gray-300 rounded mx-auto mb-2"></div>
+                                        <p className="text-gray-500 text-sm">
+                                            No image available
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
+                        </motion.div>
+                    </div>
+                </div>
+            </section>
+        </>
     );
 };
 

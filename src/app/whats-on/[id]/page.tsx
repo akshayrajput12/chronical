@@ -293,6 +293,7 @@ export default function EventDetailPage() {
                             viewport={{ once: true }}
                         >
                             Other events happening in Dubai
+                            <div className="w-16 h-1 mt-6 bg-[#a5cd39] mx-auto"></div>
                         </motion.h2>
 
                         {/* Horizontal Carousel */}
@@ -376,6 +377,7 @@ export default function EventDetailPage() {
                             viewport={{ once: true }}
                         >
                             Related Articles
+                            <div className="w-16 h-1 mt-6 bg-[#a5cd39] mx-auto"></div>
                         </motion.h2>
 
                         <BlogCarousel posts={blogPosts} />

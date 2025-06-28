@@ -2,10 +2,15 @@
 
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { getCustomExhibitionLeadingContractor, CustomExhibitionLeadingContractor } from "@/services/custom-exhibition-stands.service";
+import {
+    getCustomExhibitionLeadingContractor,
+    CustomExhibitionLeadingContractor,
+} from "@/services/custom-exhibition-stands.service";
 
 const LeadingContractorSection = () => {
-    const [data, setData] = useState<CustomExhibitionLeadingContractor | null>(null);
+    const [data, setData] = useState<CustomExhibitionLeadingContractor | null>(
+        null,
+    );
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -17,7 +22,7 @@ const LeadingContractorSection = () => {
             const result = await getCustomExhibitionLeadingContractor();
             setData(result);
         } catch (error) {
-            console.error('Error loading leading contractor data:', error);
+            console.error("Error loading leading contractor data:", error);
         } finally {
             setIsLoading(false);
         }
@@ -60,10 +65,12 @@ const LeadingContractorSection = () => {
                         transition={{ duration: 0.8 }}
                         viewport={{ once: true }}
                     >
-                        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-8 uppercase tracking-wide">
+                        <h2 className="text-3xl md:text-4xl text-center font-rubik font-bold mb-2">
                             {data?.title}
                         </h2>
-
+                        <div className="flex !mb-2 justify-center">
+                            <div className="h-1 bg-[#a5cd39] w-16 mt-2 mb-6"></div>
+                        </div>
                         <div className="space-y-6 text-gray-700 max-w-5xl mx-auto">
                             <p className="text-base leading-relaxed text-justify">
                                 {data?.paragraph_1}

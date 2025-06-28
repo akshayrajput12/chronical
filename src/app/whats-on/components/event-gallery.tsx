@@ -248,7 +248,7 @@ const EventGallery: React.FC<EventGalleryProps> = ({ eventId }) => {
                     viewport={{ once: true }}
                 >
                     <Button
-                        className="bg-[#a5cd39] hover:bg-[#8fb32a] text-white px-8 py-3 text-sm font-medium uppercase tracking-wider border-0 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                        className="bg-[#a5cd39] text-white px-6 py-2 rounded-md font-medium hover:bg-[#94b933] transition-colors duration-300 uppercase font-noto-kufi-arabic text-sm"
                         style={{ border: "none" }}
                     >
                         VIEW ALL GALLERY

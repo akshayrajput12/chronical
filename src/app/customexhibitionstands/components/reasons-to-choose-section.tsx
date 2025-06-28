@@ -2,10 +2,15 @@
 
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { getCustomExhibitionReasonsToChoose, CustomExhibitionReasonsToChoose } from "@/services/custom-exhibition-stands.service";
+import {
+    getCustomExhibitionReasonsToChoose,
+    CustomExhibitionReasonsToChoose,
+} from "@/services/custom-exhibition-stands.service";
 
 const ReasonsToChooseSection = () => {
-    const [data, setData] = useState<CustomExhibitionReasonsToChoose | null>(null);
+    const [data, setData] = useState<CustomExhibitionReasonsToChoose | null>(
+        null,
+    );
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -17,7 +22,7 @@ const ReasonsToChooseSection = () => {
             const result = await getCustomExhibitionReasonsToChoose();
             setData(result);
         } catch (error) {
-            console.error('Error loading reasons to choose data:', error);
+            console.error("Error loading reasons to choose data:", error);
         } finally {
             setIsLoading(false);
         }
@@ -30,7 +35,7 @@ const ReasonsToChooseSection = () => {
 
     if (isLoading) {
         return (
-            <section className="py-8 md:py-12 lg:py-16 bg-gray-50">
+            <section className="py-8 md:py-12 lg:py-16 bg-white">
                 <div className="container mx-auto px-4">
                     <div className="max-w-6xl mx-auto">
                         <div className="text-center space-y-8 animate-pulse">
@@ -48,7 +53,7 @@ const ReasonsToChooseSection = () => {
     }
 
     return (
-        <section className="py-8 md:py-12 lg:py-16 bg-gray-50">
+        <section className="py-8 md:py-12 lg:py-16 bg-white">
             <div className="container mx-auto px-4">
                 <div className="max-w-6xl mx-auto">
                     <motion.div
@@ -58,10 +63,12 @@ const ReasonsToChooseSection = () => {
                         transition={{ duration: 0.8 }}
                         viewport={{ once: true }}
                     >
-                        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 uppercase tracking-wide">
+                        <h2 className="!text-3xl md:!text-4xl mx-auto !font-rubik !font-bold mb-4">
                             {data?.title}
                         </h2>
-
+                        <div className="flex !mb-2 justify-center">
+                            <div className="h-1 bg-[#a5cd39] w-16 mt-2 mb-4"></div>
+                        </div>
                         <div className="space-y-6 text-gray-700 max-w-5xl mx-auto">
                             <p className="text-base sm:text-lg leading-relaxed text-justify">
                                 {data?.paragraph_1}

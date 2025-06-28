@@ -30,7 +30,7 @@ const DynamicCountryPavilionIntroSection = () => {
                 .eq("is_active", true)
                 .single();
 
-            if (error && error.code !== 'PGRST116') {
+            if (error && error.code !== "PGRST116") {
                 console.error("Error loading intro data:", error);
                 return;
             }
@@ -72,53 +72,59 @@ const DynamicCountryPavilionIntroSection = () => {
 
     return (
         <section className="py-8 md:py-12 lg:py-16 bg-white">
-            <div className="container mx-auto px-4">
+            <div className="mx-auto px-4">
                 <div className="max-w-6xl mx-auto">
                     {/* Heading */}
                     <motion.div
-                        className="mb-12"
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
                         viewport={{ once: true }}
                     >
-                        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 uppercase tracking-wide mb-8 text-center">
+                        <h2 className="text-3xl text-center md:text-4xl font-rubik font-bold mb-2">
                             {introData.heading}
                         </h2>
                     </motion.div>
-
+                    <div className="flex !mb-3 justify-center">
+                        <div className="h-1 bg-[#a5cd39] w-16 mt-1 mb-0"></div>
+                    </div>
                     {/* Content */}
                     <motion.div
-                        className="space-y-6"
+                        className="space-y-6 text-gray-700"
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.2 }}
                         viewport={{ once: true }}
                     >
                         <p className="text-base leading-relaxed text-justify">
-                            {introData.paragraph_1.split('country pavilion expo booth in Dubai').map((part, index, array) => (
-                                <React.Fragment key={index}>
-                                    {part}
-                                    {index < array.length - 1 && (
-                                        <span className="text-[#a5cd39] font-medium">
-                                            country pavilion expo booth in Dubai
-                                        </span>
-                                    )}
-                                </React.Fragment>
-                            ))}
+                            {introData.paragraph_1
+                                .split("country pavilion expo booth in Dubai")
+                                .map((part, index, array) => (
+                                    <React.Fragment key={index}>
+                                        {part}
+                                        {index < array.length - 1 && (
+                                            <span className="text-[#a5cd39] font-medium">
+                                                country pavilion expo booth in
+                                                Dubai
+                                            </span>
+                                        )}
+                                    </React.Fragment>
+                                ))}
                         </p>
 
                         <p className="text-base leading-relaxed text-justify">
-                            {introData.paragraph_2.split('Chronicle Exhibits Dubai').map((part, index, array) => (
-                                <React.Fragment key={index}>
-                                    {part}
-                                    {index < array.length - 1 && (
-                                        <span className="text-[#a5cd39] font-medium">
-                                            Chronicle Exhibits Dubai
-                                        </span>
-                                    )}
-                                </React.Fragment>
-                            ))}
+                            {introData.paragraph_2
+                                .split("Chronicle Exhibits Dubai")
+                                .map((part, index, array) => (
+                                    <React.Fragment key={index}>
+                                        {part}
+                                        {index < array.length - 1 && (
+                                            <span className="text-[#a5cd39] font-medium">
+                                                Chronicle Exhibits Dubai
+                                            </span>
+                                        )}
+                                    </React.Fragment>
+                                ))}
                         </p>
                     </motion.div>
                 </div>

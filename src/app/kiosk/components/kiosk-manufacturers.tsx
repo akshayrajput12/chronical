@@ -163,7 +163,7 @@ const KioskManufacturers = () => {
     };
 
     return (
-        <section className="py-8 md:py-12 lg:py-16 bg-white">
+        <section className="py-8 md:py-12 lg:py-16 bg-gray-100">
             <div className="container mx-auto px-4">
                 <div className="max-w-6xl mx-auto">
                     {/* Section Title */}
@@ -174,10 +174,10 @@ const KioskManufacturers = () => {
                         viewport={{ once: true }}
                         transition={{ duration: 0.5 }}
                     >
-                        <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#333333]">
+                        <h2 className="text-3xl md:text-4xl font-rubik font-bold mb-6">
                             {manufacturersData.section_heading}
                         </h2>
-                        <div className="w-24 h-1 bg-[#a5cd39] mx-auto mb-6"></div>
+                        <div className="w-24 h-1 bg-[#a5cd39] mx-auto mb-4"></div>
                     </motion.div>
 
                     {/* Content Sections */}

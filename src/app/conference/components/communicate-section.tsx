@@ -110,11 +110,6 @@ const CommunicateSection = () => {
                             transition={{ duration: 0.8 }}
                             viewport={{ once: true }}
                         >
-                            <div
-                                className="absolute -bottom-6 -left-6 w-full h-full z-0"
-                                style={{ backgroundColor: "#a5cd39" }}
-                            ></div>
-
                             {/* Image Container */}
                             <div className="relative h-64 sm:h-80 md:h-96 lg:h-[400px] overflow-hidden z-10">
                                 <Image
@@ -124,7 +119,7 @@ const CommunicateSection = () => {
                                     }
                                     alt={sectionData.main_image_alt}
                                     fill
-                                    className="object-cover"
+                                    className="object-cover rounded-lg"
                                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
                                 />
                             </div>
@@ -139,10 +134,12 @@ const CommunicateSection = () => {
                             viewport={{ once: true }}
                         >
                             <div className="space-y-6">
-                                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 uppercase tracking-wide text-center">
+                                <h2 className="text-3xl text-center md:text-4xl font-rubik font-bold mb-2">
                                     {sectionData.main_heading}
                                 </h2>
-
+                                <div className="flex !mb-0 justify-center">
+                                    <div className="h-1 bg-[#a5cd39] w-16 mt-2 mb-6"></div>
+                                </div>
                                 <div className="space-y-4 text-gray-700">
                                     <p className="text-base leading-relaxed text-justify">
                                         <span

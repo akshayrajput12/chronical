@@ -7,11 +7,12 @@ import {
     getCustomExhibitionFAQSection,
     getCustomExhibitionFAQItems,
     CustomExhibitionFAQSection,
-    CustomExhibitionFAQItem
+    CustomExhibitionFAQItem,
 } from "@/services/custom-exhibition-stands.service";
 
 const FAQSection = () => {
-    const [faqSection, setFaqSection] = useState<CustomExhibitionFAQSection | null>(null);
+    const [faqSection, setFaqSection] =
+        useState<CustomExhibitionFAQSection | null>(null);
     const [faqItems, setFaqItems] = useState<CustomExhibitionFAQItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [openIndex, setOpenIndex] = useState<number | null>(0);
@@ -30,7 +31,7 @@ const FAQSection = () => {
             setFaqSection(sectionData);
             setFaqItems(itemsData);
         } catch (error) {
-            console.error('Error loading FAQ data:', error);
+            console.error("Error loading FAQ data:", error);
         } finally {
             setIsLoading(false);
         }
@@ -52,8 +53,11 @@ const FAQSection = () => {
                     <div className="max-w-4xl mx-auto animate-pulse">
                         <div className="h-8 bg-gray-300 rounded mb-8 max-w-md mx-auto"></div>
                         <div className="space-y-4">
-                            {[1, 2, 3, 4].map((i) => (
-                                <div key={i} className="border border-gray-200 rounded-lg p-4">
+                            {[1, 2, 3, 4].map(i => (
+                                <div
+                                    key={i}
+                                    className="border border-gray-200 rounded-lg p-4"
+                                >
                                     <div className="h-6 bg-gray-300 rounded mb-2"></div>
                                     <div className="h-4 bg-gray-300 rounded w-3/4"></div>
                                 </div>
@@ -66,7 +70,7 @@ const FAQSection = () => {
     }
 
     return (
-        <section className="py-8 md:py-12 lg:py-16 bg-white">
+        <section className="py-8 md:py-12 lg:py-16 bg-gray-100">
             <div className="container mx-auto px-4">
                 <div className="max-w-4xl mx-auto">
                     <motion.div
@@ -75,9 +79,12 @@ const FAQSection = () => {
                         transition={{ duration: 0.8 }}
                         viewport={{ once: true }}
                     >
-                        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 uppercase tracking-wide mb-8">
+                        <h2 className="!text-3xl text-center md:!text-4xl mx-auto !font-rubik !font-bold mb-4">
                             {faqSection?.title}
                         </h2>
+                        <div className="flex !mb-2 justify-center">
+                            <div className="h-1 bg-[#a5cd39] w-16 mt-2 mb-4"></div>
+                        </div>
 
                         <div
                             className="border-2 rounded-lg overflow-hidden"
@@ -93,7 +100,7 @@ const FAQSection = () => {
                                         onClick={() => toggleFAQ(index)}
                                         className="w-full px-6 py-4 text-left bg-white hover:bg-gray-50 transition-colors duration-200 flex items-center justify-between"
                                     >
-                                        <span className="text-[#a5cd39] font-medium text-base pr-4">
+                                        <span className="text-[#a5cd39] text-base !font-bold pr-4">
                                             ▶ {faq.question}
                                         </span>
                                         <ChevronDown
@@ -125,32 +132,34 @@ const FAQSection = () => {
                                                         {faq.answer}
                                                     </p>
 
-                                                    {faq.list_items && faq.list_items.length > 0 && (
-                                                        <ul className="space-y-2">
-                                                            {faq.list_items.map(
-                                                                (
-                                                                    item,
-                                                                    itemIndex,
-                                                                ) => (
-                                                                    <li
-                                                                        key={
-                                                                            itemIndex
-                                                                        }
-                                                                        className="flex items-start"
-                                                                    >
-                                                                        <span className="text-gray-700 mr-2">
-                                                                            •
-                                                                        </span>
-                                                                        <span className="text-gray-700 text-base">
-                                                                            {
-                                                                                item
+                                                    {faq.list_items &&
+                                                        faq.list_items.length >
+                                                            0 && (
+                                                            <ul className="space-y-2">
+                                                                {faq.list_items.map(
+                                                                    (
+                                                                        item,
+                                                                        itemIndex,
+                                                                    ) => (
+                                                                        <li
+                                                                            key={
+                                                                                itemIndex
                                                                             }
-                                                                        </span>
-                                                                    </li>
-                                                                ),
-                                                            )}
-                                                        </ul>
-                                                    )}
+                                                                            className="flex items-start"
+                                                                        >
+                                                                            <span className="text-gray-700 mr-2">
+                                                                                •
+                                                                            </span>
+                                                                            <span className="text-gray-700 text-base">
+                                                                                {
+                                                                                    item
+                                                                                }
+                                                                            </span>
+                                                                        </li>
+                                                                    ),
+                                                                )}
+                                                            </ul>
+                                                        )}
                                                 </div>
                                             </motion.div>
                                         )}

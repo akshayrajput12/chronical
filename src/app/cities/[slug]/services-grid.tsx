@@ -1,0 +1,177 @@
+import { supabase } from "@/lib/supabase";
+import {
+    AboutDescriptionSectionData,
+    AboutDescriptionService,
+} from "@/types/about";
+import Image from "next/image";
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+
+export const ServicesGrid = () => {
+    const [sectionData, setSectionData] = useState<AboutDescriptionSectionData>(
+        {
+            id: "",
+            section_heading: "Computer Software and ITES:",
+            section_description:
+                "ESC has emerged as a prime institution spearheading interest of Electronics and IT industry in the country. The Council proactively engages with the Government, both at the Centre and in States, to create a policy and regulatory environment conducive to growth of industry. Council also works in close coordination with India's Diplomatic Missions in various countries and Missions of various countries in India. ESC has an extensive network of like-minded organizations world over that helps in linking member companies with their counterparts in these economies. Significantly, ESC acts as the implementing agency for Government schemes to promote electronics and IT exports from India. Sectors covered by the Council include:",
+            background_color: "#f9f7f7",
+            service_1_title: "Customised Software Development",
+            service_1_icon_url: "/icons/code.svg",
+            service_1_description: "",
+            service_2_title: "Software Products",
+            service_2_icon_url: "/icons/computer.svg",
+            service_2_description: "",
+            service_3_title: "IT Enabled Services",
+            service_3_icon_url: "/icons/gear.svg",
+            service_3_description: "",
+            is_active: true,
+            created_at: "",
+            updated_at: "",
+        },
+    );
+
+    const [loading, setLoading] = useState(false); // Start with false to show content immediately
+
+    // Load data on component mount (non-blocking)
+    useEffect(() => {
+        loadDescriptionData();
+    }, []);
+
+    const loadDescriptionData = async () => {
+        try {
+            // Try to load section data from database
+            const { data: sectionResponse, error: sectionError } =
+                await supabase.rpc("get_about_description_section");
+
+            // If successful and data exists, update the state
+            if (
+                !sectionError &&
+                sectionResponse &&
+                sectionResponse.length > 0
+            ) {
+                console.log(
+                    "Frontend: Loaded description data from database:",
+                    sectionResponse[0],
+                );
+                setSectionData(sectionResponse[0]);
+            } else {
+                console.log("Frontend: Using default description data");
+            }
+        } catch (error) {
+            console.log(
+                "Frontend: Using default description data due to error:",
+                error,
+            );
+        }
+    };
+
+    // Convert section data to services array for easier mapping
+    const services: AboutDescriptionService[] = [
+        {
+            title: sectionData.service_1_title,
+            icon_url: sectionData.service_1_icon_url,
+            description: sectionData.service_1_description,
+        },
+        {
+            title: sectionData.service_2_title,
+            icon_url: sectionData.service_2_icon_url,
+            description: sectionData.service_2_description,
+        },
+        {
+            title: sectionData.service_3_title,
+            icon_url: sectionData.service_3_icon_url,
+            description: sectionData.service_3_description,
+        },
+    ];
+
+    // Don't render if section is not active
+    if (!sectionData.is_active) {
+        return null;
+    }
+    return (
+        <>
+            <section className="py-8 md:py-12 lg:py-16 bg-white">
+                <div className="container mx-auto px-4">
+                    <div className="max-w-6xl mx-auto text-center">
+                        {/* Section Title */}
+                        <motion.h2
+                            className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 uppercase tracking-wide leading-tight mb-8 md:mb-12"
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8 }}
+                            viewport={{ once: true }}
+                        >
+                            ROLE OF EXHIBITION BOOTH DESIGN
+                        </motion.h2>
+
+                        {/* Content Paragraphs */}
+                        <motion.div
+                            className="space-y-6 text-gray-700"
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.2 }}
+                            viewport={{ once: true }}
+                        >
+                            <p className="text-base md:text-lg leading-relaxed text-justify">
+                                Today most business entrepreneurs around the
+                                world take part in trade shows for their brand
+                                expansion. Exhibitions are an ideal platform for
+                                taking businesses on the path to success. Trade
+                                shows provide you with an opportunity to build
+                                long-term business connections & also to
+                                influence future clients. So it is more than
+                                necessary to have an impressive booth design as
+                                it works as the face of your brand at the show.
+                            </p>
+
+                            <p className="text-base md:text-lg leading-relaxed text-justify">
+                                The{" "}
+                                <span className="font-semibold">
+                                    Exhibition booth design
+                                </span>{" "}
+                                should be such that it prompts the visitors to
+                                notice your products & services. The booth
+                                should be visually charming to catch the hopeful
+                                attention of the customers. It should be
+                                spacious to accommodate all your business
+                                activities.
+                            </p>
+                        </motion.div>
+                    </div>
+                </div>
+            </section>
+            <div className="grid grid-cols-1 md:grid-cols-3 max-w-6xl mx-auto gap-8">
+                {services.map((service, index) => (
+                    <div
+                        key={index}
+                        className="bg-white p-8 text-center rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 hover:border-[#a5cd39]/30 group"
+                    >
+                        <div className="flex justify-center mb-6">
+                            <div className="w-16 h-16 flex items-center justify-center bg-[#f9f7f7] rounded-full p-3 group-hover:bg-[#a5cd39]/10 transition-colors duration-300">
+                                {service.icon_url && (
+                                    <Image
+                                        src={service.icon_url}
+                                        alt={service.title}
+                                        width={48}
+                                        height={48}
+                                        className="object-contain"
+                                        loading="lazy"
+                                        priority={false}
+                                    />
+                                )}
+                            </div>
+                        </div>
+                        <h3 className="text-xl font-semibold text-gray-900 group-hover:text-[#a5cd39] transition-colors duration-300">
+                            {service.title}
+                        </h3>
+                        {service.description && (
+                            <p className="text-gray-600 text-sm mt-2">
+                                {service.description}
+                            </p>
+                        )}
+                    </div>
+                ))}
+            </div>
+        </>
+    );
+};

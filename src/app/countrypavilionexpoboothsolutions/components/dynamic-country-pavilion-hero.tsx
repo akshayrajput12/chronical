@@ -32,7 +32,7 @@ const DynamicCountryPavilionHero = () => {
                 .eq("is_active", true)
                 .single();
 
-            if (error && error.code !== 'PGRST116') {
+            if (error && error.code !== "PGRST116") {
                 console.error("Error loading hero data:", error);
                 return;
             }
@@ -97,9 +97,9 @@ const DynamicCountryPavilionHero = () => {
                             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 uppercase tracking-wide">
                                 {heroData.title}
                             </h1>
-                            <p className="text-base sm:text-lg md:text-xl lg:text-2xl max-w-4xl mx-auto leading-relaxed">
+                            <h3 className="text-sm sm:text-base lg:text-lg max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-3xl mx-auto leading-relaxed font-markazi-text tracking-wide">
                                 {heroData.subtitle}
-                            </p>
+                            </h3>
                         </motion.div>
                     </div>
                 </div>

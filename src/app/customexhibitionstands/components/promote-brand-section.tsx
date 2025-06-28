@@ -9,7 +9,10 @@ import {
 } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { getCustomExhibitionPromoteBrand, CustomExhibitionPromoteBrand } from "@/services/custom-exhibition-stands.service";
+import {
+    getCustomExhibitionPromoteBrand,
+    CustomExhibitionPromoteBrand,
+} from "@/services/custom-exhibition-stands.service";
 
 const PromoteBrandSection = () => {
     const [data, setData] = useState<CustomExhibitionPromoteBrand | null>(null);
@@ -24,7 +27,7 @@ const PromoteBrandSection = () => {
             const result = await getCustomExhibitionPromoteBrand();
             setData(result);
         } catch (error) {
-            console.error('Error loading promote brand data:', error);
+            console.error("Error loading promote brand data:", error);
         } finally {
             setIsLoading(false);
         }
@@ -84,7 +87,7 @@ const PromoteBrandSection = () => {
     }
 
     return (
-        <section className="py-8 md:py-12 lg:py-16 bg-white">
+        <section className="py-8 md:py-12 lg:py-16 bg-gray-100">
             <div className="container mx-auto px-4">
                 <div className="max-w-6xl mx-auto">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
@@ -97,10 +100,12 @@ const PromoteBrandSection = () => {
                             viewport={{ once: true }}
                         >
                             <div className="space-y-6">
-                                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 uppercase tracking-wide text-center">
+                                <h3 className="!text-3xl md:!text-4xl !font-rubik text-center !font-bold mb-2">
                                     {data?.title}
                                 </h3>
-
+                                <div className="flex !mb-3 justify-center">
+                                    <div className="h-1 bg-[#a5cd39] w-16 mt-2 mb-0"></div>
+                                </div>
                                 <div className="space-y-4 text-gray-700">
                                     <p className="text-base leading-relaxed text-justify">
                                         {data?.paragraph_1}
@@ -115,7 +120,7 @@ const PromoteBrandSection = () => {
                                     </p>
                                     <Link href={data?.cta_url || "#"}>
                                         <motion.button
-                                            className="bg-[#a5cd39] font-noto-kufi-arabic text-sm leading-[24px] text-white py-3 px-8 rounded-md font-medium"
+                                            className="bg-[#a5cd39] text-white px-6 py-2 rounded-md font-medium hover:bg-[#94b933] transition-colors duration-300 uppercase font-noto-kufi-arabic text-sm"
                                             variants={buttonVariants}
                                             whileHover="hover"
                                         >
@@ -139,9 +144,12 @@ const PromoteBrandSection = () => {
                                 <div className="relative h-64 sm:h-80 md:h-96 lg:h-[400px] overflow-hidden z-10">
                                     <Image
                                         src={data.image_url}
-                                        alt={data.image_alt || 'Promote your brand exhibition stand'}
+                                        alt={
+                                            data.image_alt ||
+                                            "Promote your brand exhibition stand"
+                                        }
                                         fill
-                                        className="object-cover"
+                                        className="object-cover rounded-lg"
                                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
                                     />
                                 </div>

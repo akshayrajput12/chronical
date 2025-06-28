@@ -8,6 +8,7 @@ import VirtualEventsSection from "./components/virtual-events-section";
 import PortfolioGalleryHeading from "./components/portfolio-gallery-heading";
 import PortfolioGallery from "../portfolio/components/portfolio-gallery";
 import ConferenceSolutionSection from "./components/conference-solution-section";
+import BoothRequirementsForm from "../home/components/booth-requirements-form";
 
 export const metadata: Metadata = {
     title: "Conference Organizers in Dubai | Chronicle Exhibits - Event Management Services",
@@ -33,7 +34,7 @@ function ConferencePage() {
             <VirtualEventsSection />
             <PortfolioGalleryHeading />
             <PortfolioGallery />
-            <ConferenceSolutionSection />
+            <BoothRequirementsForm />
         </div>
     );
 }

@@ -30,13 +30,11 @@ function CustomExhibitionStandsPage() {
             <CustomExhibitionHero />
             <LeadingContractorSection />
             <PromoteBrandSection />
-            <StrikingCustomizedSection />
             <ReasonsToChooseSection />
             <FAQSection />
             <PortfolioSection />
             <CustomParagraphSection />
             <BoothRequirementsForm />
-            
         </div>
     );
 }

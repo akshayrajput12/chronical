@@ -217,14 +217,14 @@ const AboutUsMain = () => {
                             <div className="w-full ml-0 sm:ml-[40px] md:ml-[60px] lg:ml-[80px] md:w-[500px] lg:w-[550px] pt-8 md:pt-0">
                                 <div>
                                     <div
-                                        className="uppercase tracking-wider mb-3 font-medium font-markazi"
+                                        className=" tracking-wider mb-3 font-medium font-markazi"
                                         style={{
                                             color: sectionData.primary_color,
                                         }}
                                     >
                                         {sectionData.section_label}
                                     </div>
-                                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-rubik font-bold text-gray-900 mb-6 leading-tight">
+                                    <h2 className="text-3xl md:text-4xl font-rubik font-bold mb-2">
                                         {sectionData.main_heading}
                                     </h2>
                                 </div>
@@ -236,7 +236,7 @@ const AboutUsMain = () => {
                                 <div className="mt-8">
                                     <a
                                         href={sectionData.cta_url}
-                                        className="inline-block text-white py-3 px-8 rounded-md hover:opacity-90 transition-opacity"
+                                        className="bg-[#a5cd39] text-white px-6 py-1 rounded-md font-medium hover:bg-[#94b933] transition-colors duration-300 uppercase font-noto-kufi-arabic text-sm"
                                         style={{
                                             backgroundColor:
                                                 sectionData.primary_color,

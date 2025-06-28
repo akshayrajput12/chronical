@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { Easing, motion } from "framer-motion";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
+import Link from "next/link";
 
 interface ExpoPavilionExceptionalDesign {
     id: string;
@@ -23,7 +24,8 @@ interface DesignBenefit {
 }
 
 const DynamicExceptionalDesignSection = () => {
-    const [designData, setDesignData] = useState<ExpoPavilionExceptionalDesign | null>(null);
+    const [designData, setDesignData] =
+        useState<ExpoPavilionExceptionalDesign | null>(null);
     const [benefits, setBenefits] = useState<DesignBenefit[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -32,6 +34,32 @@ const DynamicExceptionalDesignSection = () => {
     useEffect(() => {
         loadData();
     }, []);
+
+    const buttonVariants = {
+        hidden: {
+            opacity: 0,
+            scale: 0.8,
+        },
+        visible: {
+            opacity: 1,
+            scale: 1,
+            transition: {
+                duration: 0.5,
+                delay: 0.8,
+                ease: "easeOut" as Easing | Easing[] | undefined,
+            },
+        },
+        hover: {
+            scale: 1.05,
+            transition: {
+                duration: 0.2,
+                ease: "easeInOut" as Easing | Easing[] | undefined,
+            },
+        },
+        tap: {
+            scale: 0.95,
+        },
+    };
 
     const loadData = async () => {
         try {
@@ -42,7 +70,7 @@ const DynamicExceptionalDesignSection = () => {
                 .eq("is_active", true)
                 .single();
 
-            if (designError && designError.code !== 'PGRST116') {
+            if (designError && designError.code !== "PGRST116") {
                 console.error("Error loading design data:", designError);
                 return;
             }
@@ -51,15 +79,19 @@ const DynamicExceptionalDesignSection = () => {
                 setDesignData(designSection);
 
                 // Load benefits for this section
-                const { data: benefitsData, error: benefitsError } = await supabase
-                    .from("expo_pavilion_design_benefits")
-                    .select("*")
-                    .eq("design_section_id", designSection.id)
-                    .eq("is_active", true)
-                    .order("display_order");
+                const { data: benefitsData, error: benefitsError } =
+                    await supabase
+                        .from("expo_pavilion_design_benefits")
+                        .select("*")
+                        .eq("design_section_id", designSection.id)
+                        .eq("is_active", true)
+                        .order("display_order");
 
                 if (benefitsError) {
-                    console.error("Error loading benefits data:", benefitsError);
+                    console.error(
+                        "Error loading benefits data:",
+                        benefitsError,
+                    );
                 } else if (benefitsData) {
                     setBenefits(benefitsData);
                 }
@@ -104,7 +136,7 @@ const DynamicExceptionalDesignSection = () => {
 
     return (
         <>
-            <section className="py-8 md:py-12 lg:py-16 bg-white">
+            <section className="py-8 md:py-12 lg:py-16 bg-gray-100">
                 <div className="container mx-auto px-4">
                     <div className="max-w-6xl mx-auto">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
@@ -117,40 +149,59 @@ const DynamicExceptionalDesignSection = () => {
                                 viewport={{ once: true }}
                             >
                                 <div className="space-y-6">
-                                    <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 uppercase tracking-wide text-center">
+                                    <h2 className="text-3xl md:text-4xl text-center font-rubik font-bold mb-2">
                                         {designData.heading}
-                                    </h3>
-
-                                    <div className="space-y-4 text-gray-700">
+                                    </h2>
+                                    <div className="flex !mb-1 justify-center">
+                                        <div className="h-1 bg-[#a5cd39] w-16 mt-2 mb-6"></div>
+                                    </div>
+                                    <div className="space-y-4 !mt-0 text-gray-700">
                                         <p className="text-base leading-relaxed text-justify">
-                                            {designData.paragraph_1.split('Country Pavilion Expo Booth').map((part, index, array) => (
-                                                <React.Fragment key={index}>
-                                                    {part}
-                                                    {index < array.length - 1 && (
-                                                        <span className="text-[#a5cd39] font-medium">
-                                                            Country Pavilion Expo Booth
-                                                        </span>
-                                                    )}
-                                                </React.Fragment>
-                                            ))}
+                                            {designData.paragraph_1
+                                                .split(
+                                                    "Country Pavilion Expo Booth",
+                                                )
+                                                .map((part, index, array) => (
+                                                    <React.Fragment key={index}>
+                                                        {part}
+                                                        {index <
+                                                            array.length -
+                                                                1 && (
+                                                            <span className="text-[#a5cd39] font-medium">
+                                                                Country Pavilion
+                                                                Expo Booth
+                                                            </span>
+                                                        )}
+                                                    </React.Fragment>
+                                                ))}
                                         </p>
 
                                         <p className="text-base leading-relaxed text-justify">
-                                            {designData.paragraph_2.split('quickly look into its pros').map((part, index, array) => (
-                                                <React.Fragment key={index}>
-                                                    {part}
-                                                    {index < array.length - 1 && (
-                                                        <span className="text-[#a5cd39] font-medium">
-                                                            quickly look into its pros
-                                                        </span>
-                                                    )}
-                                                </React.Fragment>
-                                            ))}
+                                            {designData.paragraph_2
+                                                .split(
+                                                    "quickly look into its pros",
+                                                )
+                                                .map((part, index, array) => (
+                                                    <React.Fragment key={index}>
+                                                        {part}
+                                                        {index <
+                                                            array.length -
+                                                                1 && (
+                                                            <span className="text-[#a5cd39] font-medium">
+                                                                quickly look
+                                                                into its pros
+                                                            </span>
+                                                        )}
+                                                    </React.Fragment>
+                                                ))}
                                         </p>
 
                                         <ul className="space-y-3 ml-6">
-                                            {benefits.map((benefit) => (
-                                                <li key={benefit.id} className="flex items-start">
+                                            {benefits.map(benefit => (
+                                                <li
+                                                    key={benefit.id}
+                                                    className="flex items-start"
+                                                >
                                                     <span className="text-[#a5cd39] mr-2">
                                                         •
                                                     </span>
@@ -161,6 +212,15 @@ const DynamicExceptionalDesignSection = () => {
                                             ))}
                                         </ul>
                                     </div>
+                                    <Link href={"#"}>
+                                        <motion.button
+                                            className="bg-[#a5cd39] text-white px-6 py-2 rounded-md font-medium hover:bg-[#94b933] transition-colors duration-300 uppercase font-noto-kufi-arabic text-sm"
+                                            variants={buttonVariants}
+                                            whileHover="hover"
+                                        >
+                                            Request Quotation
+                                        </motion.button>
+                                    </Link>
                                 </div>
                             </motion.div>
 
@@ -178,7 +238,7 @@ const DynamicExceptionalDesignSection = () => {
                                         src={designData.image_url}
                                         alt={designData.image_alt}
                                         fill
-                                        className="object-cover"
+                                        className="object-cover rounded-lg"
                                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
                                     />
                                 </div>

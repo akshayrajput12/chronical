@@ -104,7 +104,8 @@ const AboutUsDescription = () => {
                         <p className="text-gray-700 leading-relaxed mb-8 text-center max-w-4xl mx-auto text-sm leading-[24px]">
                             {sectionData.section_description}
                         </p>
-                        <h2 className="text-3xl font-bold text-gray-900 mb-10 relative inline-block">
+
+                        <h2 className="text-3xl md:text-4xl font-rubik font-bold mb-2">
                             {sectionData.section_heading}
                             <span className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 h-1 bg-[#a5cd39] rounded-full w-1/2" />
                         </h2>

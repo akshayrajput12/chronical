@@ -21,7 +21,8 @@
 
 /* 1. Hero Section Heading - H1 use Rubik 48px/60px, Weight 700 */
 /* Exclude home page routes: /, /home, footer component and header component */
-body:not(.home-page) h1:not(footer h1):not(footer * h1):not(header h1):not(header * h1) {
+body:not(.home-page)
+    h1:not(footer h1):not(footer * h1):not(header h1):not(header * h1) {
     font-family: var(--font-rubik), "Rubik", sans-serif !important;
     font-size: 48px !important; /* Hero section heading size */
     font-weight: 700 !important; /* Bold weight */
@@ -41,10 +42,14 @@ body:not(.home-page)
 
 /* 4. Section Subheadings - H3, H4, H5, H6 use Markazi Text 24px/32px, Weight 400 */
 /* Exclude home page routes: /, /home, footer component and header component */
-body:not(.home-page) h3:not(footer h3):not(footer * h3):not(header h3):not(header * h3),
-body:not(.home-page) h4:not(footer h4):not(footer * h4):not(header h4):not(header * h4),
-body:not(.home-page) h5:not(footer h5):not(footer * h5):not(header h5):not(header * h5),
-body:not(.home-page) h6:not(footer h6):not(footer * h6):not(header h6):not(header * h6) {
+body:not(.home-page)
+    h3:not(footer h3):not(footer * h3):not(header h3):not(header * h3),
+body:not(.home-page)
+    h4:not(footer h4):not(footer * h4):not(header h4):not(header * h4),
+body:not(.home-page)
+    h5:not(footer h5):not(footer * h5):not(header h5):not(header * h5),
+body:not(.home-page)
+    h6:not(footer h6):not(footer * h6):not(header h6):not(header * h6) {
     font-family: var(--font-markazi-text), "Markazi Text", serif !important;
     font-size: 24px !important; /* Section subheadings size */
     font-weight: 400 !important; /* Regular weight */
@@ -53,14 +58,26 @@ body:not(.home-page) h6:not(footer h6):not(footer * h6):not(header h6):not(heade
 
 /* 3. Body Text/Paragraphs/General Text - use Noto Kufi Arabic 14px/24px, Weight Regular */
 /* Exclude home page routes: /, /home, footer component and header component */
-body:not(.home-page) p:not(footer p):not(footer * p):not(header p):not(header * p),
-body:not(.home-page) span:not(footer span):not(footer * span):not(header span):not(header * span),
-body:not(.home-page) div:not(footer div):not(footer * div):not(header div):not(header * div),
-body:not(.home-page) a:not(footer a):not(footer * a):not(header a):not(header * a),
-body:not(.home-page) li:not(footer li):not(footer * li):not(header li):not(header * li),
-body:not(.home-page) td:not(footer td):not(footer * td):not(header td):not(header * td),
-body:not(.home-page) th:not(footer th):not(footer * th):not(header th):not(header * th),
-body:not(.home-page) label:not(footer label):not(footer * label):not(header label):not(header * label) {
+body:not(.home-page)
+    p:not(footer p):not(footer * p):not(header p):not(header * p),
+body:not(.home-page)
+    span:not(footer span):not(footer * span):not(header span):not(
+        header * span
+    ),
+body:not(.home-page)
+    div:not(footer div):not(footer * div):not(header div):not(header * div),
+body:not(.home-page)
+    a:not(footer a):not(footer * a):not(header a):not(header * a),
+body:not(.home-page)
+    li:not(footer li):not(footer * li):not(header li):not(header * li),
+body:not(.home-page)
+    td:not(footer td):not(footer * td):not(header td):not(header * td),
+body:not(.home-page)
+    th:not(footer th):not(footer * th):not(header th):not(header * th),
+body:not(.home-page)
+    label:not(footer label):not(footer * label):not(header label):not(
+        header * label
+    ) {
     font-family: var(--font-noto-kufi-arabic), "Noto Kufi Arabic", sans-serif !important;
     font-size: 14px !important; /* Body text size */
     font-weight: 400 !important; /* Regular weight (default) */
@@ -69,9 +86,18 @@ body:not(.home-page) label:not(footer label):not(footer * label):not(header labe
 
 /* Form Elements - Input, textarea, button use Noto Kufi Arabic 14px/24px */
 /* Exclude home page routes: /, /home, footer component and header component */
-body:not(.home-page) input:not(footer input):not(footer * input):not(header input):not(header * input),
-body:not(.home-page) textarea:not(footer textarea):not(footer * textarea):not(header textarea):not(header * textarea),
-body:not(.home-page) button:not(footer button):not(footer * button):not(header button):not(header * button) {
+body:not(.home-page)
+    input:not(footer input):not(footer * input):not(header input):not(
+        header * input
+    ),
+body:not(.home-page)
+    textarea:not(footer textarea):not(footer * textarea):not(
+        header textarea
+    ):not(header * textarea),
+body:not(.home-page)
+    button:not(footer button):not(footer * button):not(header button):not(
+        header * button
+    ) {
     font-family: var(--font-noto-kufi-arabic), "Noto Kufi Arabic", sans-serif !important;
     font-size: 14px !important; /* Body text size for form elements */
     font-weight: 400 !important; /* Regular weight for form elements */

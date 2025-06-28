@@ -153,13 +153,6 @@ const ConferenceHero = () => {
                     {heroData.heading}
                 </motion.h1>
 
-                <motion.div
-                    className="w-24 h-1 bg-[#a5cd39] mx-auto"
-                    initial={{ width: 0 }}
-                    animate={{ width: 96 }}
-                    transition={{ duration: 1, delay: 0.5 }}
-                />
-
                 {error && (
                     <motion.div
                         className="mt-4 p-3 bg-red-500/20 border border-red-500/30 rounded-md text-red-200 text-sm"
