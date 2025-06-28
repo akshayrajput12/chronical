@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { CitiesService } from "@/services/cities.service";
-import { City, CityQueryParams, CityError } from "@/types/cities";
+import { LegacyCity, CityQueryParams, CityError } from "@/types/cities";
 
 /**
  * Custom hook for fetching cities data
  * Provides loading states, error handling, and caching
  */
 export const useCities = (params?: CityQueryParams) => {
-    const [cities, setCities] = useState<City[]>([]);
+    const [cities, setCities] = useState<LegacyCity[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<CityError | null>(null);
     const [total, setTotal] = useState(0);
@@ -55,7 +55,7 @@ export const useCities = (params?: CityQueryParams) => {
  * Custom hook for fetching a single city by slug
  */
 export const useCity = (slug: string) => {
-    const [city, setCity] = useState<City | null>(null);
+    const [city, setCity] = useState<LegacyCity | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<CityError | null>(null);
 

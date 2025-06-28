@@ -1,12 +1,16 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Download, ChevronRight, MessageSquare, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SocialIcons from "./social-icons";
+import { useCities } from "@/hooks/use-cities";
 
 const Footer = () => {
+    // Fetch cities for dynamic locations
+    const { cities, isLoading } = useCities({ limit: 10, is_active: true });
+
     return (
         <footer className="bg-[#2C2C2C] text-white relative">
             <div className="flex flex-col lg:flex-row">
@@ -38,24 +42,38 @@ const Footer = () => {
                             </ul>
                         </div>
 
-                        {/* Column 2: Locations */}
+                        {/* Column 2: Locations - Dynamic */}
                         <div>
                             <h3 className="font-markazi font-semibold uppercase mb-3 text-white text-base">
                                 LOCATIONS
                             </h3>
                             <ul className="space-y-1.5 text-sm">
-                                <FooterLink
-                                    href="/saudi-arabia"
-                                    label="Saudi Arabia"
-                                />
-                                <FooterLink
-                                    href="/abu-dhabi"
-                                    label="Abu Dhabi"
-                                />
-                                <FooterLink href="/qatar" label="Qatar" />
-                                <FooterLink href="/turkey" label="Turkey" />
-                                <FooterLink href="/kuwait" label="Kuwait" />
-                                <FooterLink href="/jordan" label="Jordan" />
+                                {isLoading ? (
+                                    // Loading state
+                                    <>
+                                        <li className="text-gray-400 text-sm">Loading locations...</li>
+                                    </>
+                                ) : cities.length > 0 ? (
+                                    // Dynamic cities from database
+                                    <>
+                                        {cities.slice(0, 6).map((city) => (
+                                            <FooterLink
+                                                key={city.id}
+                                                href={`/cities/${city.slug}`}
+                                                label={city.name}
+                                            />
+                                        ))}
+                                        {cities.length > 6 && (
+                                            <FooterLink
+                                                href="/cities"
+                                                label="View All Locations"
+                                            />
+                                        )}
+                                    </>
+                                ) : (
+                                    // Fallback if no cities
+                                    <li className="text-gray-400 text-sm">No locations available</li>
+                                )}
                             </ul>
                         </div>
 
