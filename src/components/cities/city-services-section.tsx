@@ -4,10 +4,10 @@ import React from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { City } from "@/types/cities";
+import { LegacyCity } from "@/types/cities";
 
 interface CityServicesSectionProps {
-    city: City;
+    city: LegacyCity;
 }
 
 const CityServicesSection = ({ city }: CityServicesSectionProps) => {

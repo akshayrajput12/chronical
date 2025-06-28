@@ -2,17 +2,21 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { City } from "@/types/cities";
+import { LegacyCity } from "@/types/cities";
 import { Check } from "lucide-react";
 
 interface CityPreferredChoiceSectionProps {
-    city: City;
+    city: LegacyCity;
 }
 
 const CityPreferredChoiceSection = ({
     city,
 }: CityPreferredChoiceSectionProps) => {
-    const services = [
+    // Get preferred choice section data
+    const preferredChoiceSection = city.contentSections?.find(section => section.section_type === 'preferred_choice');
+
+    // Get services from database or fallback to default
+    const services = city.preferredServices?.map(service => service.service_text) || [
         "Take care of stand fabrication, assembling & installing stands.",
         "Offer all services related to booth production under a single roof.",
         "On-site support",
@@ -21,6 +25,12 @@ const CityPreferredChoiceSection = ({
         "Ensure timely delivery of the exhibition stands on the show floor.",
         "Provide you with sufficient storage facility for your products.",
     ];
+
+    // Fallback to default content if no dynamic content is available
+    const title = preferredChoiceSection?.title || `WHY WE ARE A PREFERRED CHOICE AS EXHIBITION COMPANY IN ${city.name.toUpperCase()}?`;
+    const content = preferredChoiceSection?.content || `Chronicle Exhibits makes every effort to create and design exceptional booths. Our goal as one of the best exhibition stands contractors in ${city.name}, UAE is to create 3D custom stands that meet your business needs.
+
+We provide a complete range of stand building and designing services.`;
 
     return (
         <section className="py-8 md:py-12 lg:py-16 bg-white">
@@ -38,28 +48,26 @@ const CityPreferredChoiceSection = ({
                             <div className="space-y-6">
                                 {/* Main Heading */}
                                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 uppercase tracking-wide leading-tight">
-                                    WHY WE ARE A PREFERRED CHOICE AS EXHIBITION
-                                    COMPANY IN ABU DHABI?
+                                    {title}
                                 </h2>
 
                                 {/* Content Paragraphs */}
                                 <div className="space-y-4 text-gray-700">
-                                    <p className="text-base leading-relaxed text-justify">
-                                        Chronicle Exhibits makes every effort to
-                                        create and design exceptional booths.
-                                        Our goal as one of the best{" "}
-                                        <strong>
-                                            exhibition stands contractors in Abu
-                                            Dhabi, UAE
-                                        </strong>{" "}
-                                        is to create 3D custom stands that meet
-                                        your business needs.
-                                    </p>
-
-                                    <p className="text-base leading-relaxed text-justify">
-                                        We provide a complete range of stand
-                                        building and designing services.
-                                    </p>
+                                    {content.split('\n\n').map((paragraph, index) => (
+                                        <p key={index} className="text-base leading-relaxed text-justify">
+                                            {paragraph.includes('exhibition stands contractors') ? (
+                                                <>
+                                                    {paragraph.split('exhibition stands contractors')[0]}
+                                                    <strong>
+                                                        exhibition stands contractors
+                                                    </strong>
+                                                    {paragraph.split('exhibition stands contractors')[1]}
+                                                </>
+                                            ) : (
+                                                paragraph
+                                            )}
+                                        </p>
+                                    ))}
                                 </div>
 
                                 {/* Exhibition Support Button */}
