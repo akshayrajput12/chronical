@@ -6,21 +6,9 @@ import { Button } from "@/components/ui/button";
 
 const ContactMap = () => {
     return (
-        <section className="py-8 md:py-12 lg:py-16 bg-white">
-            <div className="container mx-auto px-4">
-                <div className="max-w-6xl mx-auto">
-                    <motion.div
-                        className="text-center mb-8"
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
-                        viewport={{ once: true }}
-                    >
-                        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">
-                            Our Location
-                        </h2>
-                    </motion.div>
-
+        <section className="py-8 md:py-12 lg:py-16 !pb-0 bg-white">
+            <div className="mx-auto">
+                <div className="mx-auto">
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}

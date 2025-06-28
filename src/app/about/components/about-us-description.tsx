@@ -100,15 +100,17 @@ const AboutUsDescription = () => {
             <div className="container mx-auto px-4">
                 <div className="max-w-6xl mx-auto">
                     {/* Main description text */}
-                    <div className="text-center mb-12">
+                    <div className="text-center mb-6">
                         <p className="text-gray-700 leading-relaxed mb-8 text-center max-w-4xl mx-auto text-sm leading-[24px]">
                             {sectionData.section_description}
                         </p>
 
                         <h2 className="text-3xl md:text-4xl font-rubik font-bold mb-2">
                             {sectionData.section_heading}
-                            <span className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 h-1 bg-[#a5cd39] rounded-full w-1/2" />
                         </h2>
+                        <div className="flex justify-center">
+                            <div className="h-1 bg-[#a5cd39] w-16 mt-2 mb-6"></div>
+                        </div>
                     </div>
 
                     {/* Services grid */}

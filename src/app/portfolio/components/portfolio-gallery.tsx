@@ -126,8 +126,8 @@ const PortfolioGallery = () => {
 
     return (
         <section className="py-8 md:py-12 lg:py-16 bg-white">
-            <div className="container mx-auto px-4">
-                <div className="max-w-6xl mx-auto">
+            <div className="mx-auto">
+                <div className="mx-auto px-4">
                     {/* Gallery Grid - Masonry Style with Dynamic Sizes */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 lg:gap-4 auto-rows-[150px] sm:auto-rows-[180px] lg:auto-rows-[200px]">
                         {portfolioItems.map(item => {
@@ -151,20 +151,7 @@ const PortfolioGallery = () => {
                                     )}
 
                                     {/* VIEW CASE Full Overlay on Hover - Shows on ALL images */}
-                                    <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                        <span className="text-white text-sm sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-rubik font-bold tracking-wider">
-                                            VIEW CASE
-                                        </span>
-                                    </div>
-
-                                    {/* Optional title overlay */}
-                                    {item.title && (
-                                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
-                                            <h3 className="text-white text-sm font-medium">
-                                                {item.title}
-                                            </h3>
-                                        </div>
-                                    )}
+                                    <div className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-100 group-hover:opacity-0 transition-opacity duration-300"></div>
                                 </div>
                             );
                         })}

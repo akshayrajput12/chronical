@@ -204,7 +204,7 @@ const DedicationSection = () => {
             <div className="container mx-auto px-4 relative z-10">
                 <div className="max-w-6xl mx-auto">
                     {/* Section Title */}
-                    <div className="text-center mb-12">
+                    <div className="text-center mb-4">
                         <h2 className="text-3xl md:text-4xl font-rubik font-bold mb-2">
                             {sectionData.section_heading}
                         </h2>
@@ -214,7 +214,9 @@ const DedicationSection = () => {
                             </p>
                         )}
                     </div>
-
+                    <div className="flex justify-center">
+                        <div className="h-1 bg-[#a5cd39] w-16 mt-2 mb-4"></div>
+                    </div>
                     {/* Dynamic Layout Based on Item Count */}
                     {items.length <= 3 ? (
                         // Single row for 3 or fewer items

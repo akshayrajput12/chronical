@@ -5,13 +5,13 @@ import React from "react";
 const BoothRequirements = () => {
     return (
         <section className="py-8 md:py-12 lg:py-16 bg-white">
-            <div className="container mx-auto px-4">
+            <div className="mx-auto px-4">
                 <div className="max-w-6xl mx-auto">
                     {/* Main Card */}
-                    <div className="border-2 border-[#a5cd39] rounded-lg p-8 md:p-12 bg-white shadow-sm hover:shadow-md transition-shadow duration-300 max-w-4xl mx-auto">
+                    <div className="border-2 border-[#a5cd39] rounded-lg p-8 md:p-12 bg-white shadow-sm hover:shadow-md transition-shadow duration-300  mx-auto">
                         {/* Heading */}
-                        <h2 className="text-2xl md:text-3xl lg:text-4xl font-rubik font-bold text-center text-gray-900 mb-6">
-                            DESCRIBE YOUR EXHIBITION BOOTH REQUIREMENTS
+                        <h2 className="text-2xl md:text-3xl lg:text-4xl font-rubik font-bold text-center capitalize text-gray-900 mb-6">
+                            Describe Your Exhibition Booth Requirements
                         </h2>
 
                         {/* Contact Information */}

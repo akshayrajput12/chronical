@@ -5,6 +5,7 @@ import BlogHero from "@/components/blog/blog-hero";
 import BlogPostsSection from "@/components/blog/blog-posts-section";
 import BlogSubscription from "@/components/blog/blog-subscription";
 import { BlogPostSummary } from "@/types/blog";
+import BoothRequirements from "../portfolio/components/booth-requirements";
 
 const BlogPage = () => {
     const [blogPosts, setBlogPosts] = useState<BlogPostSummary[]>([]);
@@ -113,7 +114,7 @@ const BlogPage = () => {
         <div className="min-h-screen bg-white">
             <BlogHero />
             <BlogPostsSection blogPosts={blogPosts} />
-            <BlogSubscription />
+            <BoothRequirements />
         </div>
     );
 };

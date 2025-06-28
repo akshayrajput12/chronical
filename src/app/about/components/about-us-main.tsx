@@ -216,17 +216,12 @@ const AboutUsMain = () => {
                             {/* Right side - Text content */}
                             <div className="w-full ml-0 sm:ml-[40px] md:ml-[60px] lg:ml-[80px] md:w-[500px] lg:w-[550px] pt-8 md:pt-0">
                                 <div>
-                                    <div
-                                        className=" tracking-wider mb-3 font-medium font-markazi"
-                                        style={{
-                                            color: sectionData.primary_color,
-                                        }}
-                                    >
-                                        {sectionData.section_label}
-                                    </div>
-                                    <h2 className="text-3xl md:text-4xl font-rubik font-bold mb-2">
+                                    <h2 className="text-3xl text-center md:text-4xl font-rubik font-bold mb-2">
                                         {sectionData.main_heading}
                                     </h2>
+                                    <div className="flex justify-center">
+                                        <div className="h-1 bg-[#a5cd39] w-16 mt-2 mb-6"></div>
+                                    </div>
                                 </div>
 
                                 <p className="text-gray-600 mb-6 leading-relaxed text-base font-nunito">

@@ -25,11 +25,13 @@ const CityContentSection = ({ city }: CityContentSectionProps) => {
                         >
                             <div className="space-y-6">
                                 {/* Main Heading */}
-                                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 uppercase tracking-wide leading-tight">
+                                <h2 className="text-3xl text-center md:text-4xl font-rubik font-bold mb-2">
                                     PREMIER EXHIBITION STANDS DESIGN, AND BOOTH
                                     BUILD PARTNER IN {city.name.toUpperCase()}
                                 </h2>
-
+                                <div className="flex justify-center">
+                                    <div className="h-1 bg-[#a5cd39] w-16 mt-2 mb-0"></div>
+                                </div>
                                 {/* Content Paragraphs */}
                                 <div className="space-y-4 text-gray-700">
                                     <p className="text-base leading-relaxed text-justify">
@@ -77,7 +79,7 @@ const CityContentSection = ({ city }: CityContentSectionProps) => {
                                     src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
                                     alt={`Exhibition Stand in ${city.name}`}
                                     fill
-                                    className="object-cover"
+                                    className="object-cover rounded-lg"
                                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
                                 />
                             </div>

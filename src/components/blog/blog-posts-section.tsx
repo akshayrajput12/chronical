@@ -16,13 +16,13 @@ const BlogPostsSection = ({ blogPosts }: BlogPostsSectionProps) => {
                 <div className="max-w-6xl mx-auto">
                     {/* Section Header */}
                     <motion.div
-                        className="text-center mb-16"
+                        className="text-center mb-8"
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
                         viewport={{ once: true }}
                     >
-                        <h2 className="text-3xl md:text-4xl font-bold text-[#2C2C2C] mb-4">
+                        <h2 className="text-3xl md:text-4xl font-rubik font-bold mb-4">
                             Latest Updates
                         </h2>
                         <div className="w-24 h-1 bg-[#a5cd39] mx-auto"></div>

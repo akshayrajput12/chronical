@@ -210,7 +210,7 @@ const NewCompany = () => {
                                     </span>
                                 </h2>
                                 <motion.div
-                                    className="h-1 bg-[#a5cd39] mt-2"
+                                    className="h-1 mx-auto bg-[#a5cd39] mt-2"
                                     variants={lineVariants}
                                 ></motion.div>
                             </motion.div>
@@ -281,7 +281,10 @@ const NewCompany = () => {
                         animate={controls}
                         variants={containerVariants}
                     >
-                        <motion.div variants={titleVariants} className="mb-4">
+                        <motion.div
+                            variants={titleVariants}
+                            className="mb-4 w-full"
+                        >
                             <h2 className="text-3xl md:text-4xl font-rubik font-bold inline-block">
                                 {sectionData.title}{" "}
                                 <span className="font-markazi font-normal text-gray-700">

@@ -209,7 +209,7 @@ const BlogDetailPage = () => {
                     viewCount={blogPost.view_count}
                     author={blogPost.author_id ? "Admin" : undefined}
                 />
-                <div className="flex gap-4 lg:flex-row flex-col xl:mx-20 lg:mx-8 md:mx-6 mx-4">
+                <div className="flex gap-4 relative lg:flex-row flex-col xl:mx-20 lg:mx-8 md:mx-6 mx-4">
                     <BlogDetailContent
                         content={blogPost.content || ""}
                         excerpt={blogPost.excerpt}

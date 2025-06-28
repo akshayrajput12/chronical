@@ -15,6 +15,7 @@ import CityServicesSection from "@/components/cities/city-services-section";
 import { useCity } from "@/hooks/use-cities";
 import { useComponentLoading } from "@/hooks/use-minimal-loading";
 import { ServicesGrid } from "./services-grid";
+import BoothRequirementsForm from "@/app/home/components/booth-requirements-form";
 
 interface CityDetailPageProps {
     params: Promise<{
@@ -94,6 +95,7 @@ const CityDetailPage = ({ params }: CityDetailPageProps) => {
             <CityComponentsSection city={city} />
             <CityPortfolioSection city={city} />
             <CityWhyBestSection city={city} />
+            <BoothRequirementsForm />
         </div>
     );
 };

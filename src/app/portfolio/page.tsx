@@ -2,6 +2,8 @@ import React from "react";
 import { Metadata } from "next";
 import PortfolioGallery from "./components/portfolio-gallery";
 import BoothRequirements from "./components/booth-requirements";
+import AboutHero from "../about/components/about-hero";
+import PortfolioHero from "./components/portfolio-hero";
 
 export const metadata: Metadata = {
     title: "Portfolio | Chronicle Exhibits - Exhibition Stand Design Gallery",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
 function PortfolioPage() {
     return (
         <div className="flex flex-col relative mt-16 md:mt-20 lg:mt-24">
+            <PortfolioHero />
             <PortfolioGallery />
             <BoothRequirements />
         </div>
