@@ -7,6 +7,7 @@ import BlogDetailHero from "@/components/blog/blog-detail-hero";
 import BlogDetailContent from "@/components/blog/blog-detail-content";
 import BlogRelatedPosts from "@/components/blog/blog-related-posts";
 import { BlogPostWithDetails } from "@/types/blog";
+import { EventsForm } from "@/app/whats-on/components/events-form";
 
 interface BlogDetailPageProps {
     params: { slug: string };
@@ -208,14 +209,17 @@ const BlogDetailPage = () => {
                     viewCount={blogPost.view_count}
                     author={blogPost.author_id ? "Admin" : undefined}
                 />
-                <BlogDetailContent
-                    content={blogPost.content || ""}
-                    excerpt={blogPost.excerpt}
-                />
-                <BlogRelatedPosts
-                    currentPostId={blogPost.id}
-                    currentPostSlug={blogPost.slug}
-                />
+                <div className="flex gap-4 lg:flex-row flex-col xl:mx-20 lg:mx-8 md:mx-6 mx-4">
+                    <BlogDetailContent
+                        content={blogPost.content || ""}
+                        excerpt={blogPost.excerpt}
+                    />
+                    <BlogRelatedPosts
+                        currentPostId={blogPost.id}
+                        currentPostSlug={blogPost.slug}
+                    />
+                </div>
+                <EventsForm />
             </div>
         </>
     );

@@ -3,7 +3,10 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { getCustomExhibitionHero, type CustomExhibitionHero } from "@/services/custom-exhibition-stands.service";
+import {
+    getCustomExhibitionHero,
+    type CustomExhibitionHero,
+} from "@/services/custom-exhibition-stands.service";
 
 const CustomExhibitionHero = () => {
     const [heroData, setHeroData] = useState<CustomExhibitionHero | null>(null);
@@ -18,7 +21,7 @@ const CustomExhibitionHero = () => {
             const data = await getCustomExhibitionHero();
             setHeroData(data);
         } catch (error) {
-            console.error('Error loading hero data:', error);
+            console.error("Error loading hero data:", error);
         } finally {
             setIsLoading(false);
         }
@@ -50,8 +53,11 @@ const CustomExhibitionHero = () => {
             {/* Background Image */}
             <div className="absolute inset-0">
                 <Image
-                    src={heroData?.background_image_url || ''}
-                    alt={heroData?.background_image_alt || 'Custom Exhibition Stands'}
+                    src={heroData?.background_image_url || ""}
+                    alt={
+                        heroData?.background_image_alt ||
+                        "Custom Exhibition Stands"
+                    }
                     fill
                     className="object-cover"
                     priority
@@ -62,7 +68,7 @@ const CustomExhibitionHero = () => {
             </div>
 
             {/* Content */}
-            <div className="relative z-10 md:mt-20  mt-0 h-full flex items-center">
+            <div className="relative z-10 md:mt-12 mt-0 h-full flex items-center">
                 <div className="container mx-auto px-4">
                     <div className="max-w-6xl mx-auto text-center text-white">
                         <motion.div
