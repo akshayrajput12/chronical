@@ -20,8 +20,9 @@ interface CityFormData {
     // Basic city info
     name: string;
     slug: string;
-    country: string;
+    subtitle?: string;
     country_code: string;
+    timezone?: string;
     description: string;
     hero_image_url: string;
     meta_title: string;
@@ -31,6 +32,16 @@ interface CityFormData {
     clients_satisfied: number;
     team_size: number;
     is_active: boolean;
+    // Contact Information
+    contact_phone?: string;
+    contact_email?: string;
+    contact_address?: string;
+    contact_working_hours?: string;
+    contact_emergency?: string;
+    // Coordinates
+    latitude?: number;
+    longitude?: number;
+    meta_keywords?: string;
 }
 
 interface ContentSection {
@@ -80,17 +91,26 @@ const CreateCityPage = () => {
     const [cityData, setCityData] = useState<CityFormData>({
         name: "",
         slug: "",
-        country: "",
+        subtitle: "",
         country_code: "",
+        timezone: "",
         description: "",
         hero_image_url: "",
         meta_title: "",
         meta_description: "",
+        meta_keywords: "",
         projects_completed: 0,
         years_of_operation: 0,
         clients_satisfied: 0,
         team_size: 0,
         is_active: true,
+        contact_phone: "",
+        contact_email: "",
+        contact_address: "",
+        contact_working_hours: "",
+        contact_emergency: "",
+        latitude: undefined,
+        longitude: undefined,
     });
 
     const [contentSections, setContentSections] = useState<ContentSection[]>([
@@ -422,15 +442,20 @@ const CreateCityPage = () => {
         try {
             setLoading(true);
 
-            if (!cityData.name || !cityData.slug || !cityData.country) {
-                alert("Please fill in required fields (Name, Slug, Country)");
+            if (!cityData.name || !cityData.slug) {
+                alert("Please fill in required fields (Name, Slug)");
                 return;
             }
+
+            // Clean up city data - remove undefined values
+            const cleanCityData = Object.fromEntries(
+                Object.entries(cityData).filter(([_, value]) => value !== undefined && value !== "")
+            );
 
             // Create city
             const { data: city, error: cityError } = await supabase
                 .from("cities")
-                .insert([cityData])
+                .insert([cleanCityData])
                 .select()
                 .single();
 
@@ -507,7 +532,8 @@ const CreateCityPage = () => {
 
         } catch (error) {
             console.error("Error creating city:", error);
-            alert("Failed to create city");
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+            alert(`Failed to create city: ${errorMessage}`);
         } finally {
             setLoading(false);
         }
@@ -665,26 +691,14 @@ const BasicInfoTab = ({ cityData, setCityData, handleNameChange, handleHeroImage
             </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-                <Label htmlFor="country">Country *</Label>
-                <Input
-                    id="country"
-                    value={cityData.country}
-                    onChange={(e) => setCityData(prev => ({ ...prev, country: e.target.value }))}
-                    placeholder="United Arab Emirates"
-                    required
-                />
-            </div>
-            <div>
-                <Label htmlFor="country_code">Country Code</Label>
-                <Input
-                    id="country_code"
-                    value={cityData.country_code}
-                    onChange={(e) => setCityData(prev => ({ ...prev, country_code: e.target.value }))}
-                    placeholder="AE"
-                />
-            </div>
+        <div>
+            <Label htmlFor="subtitle">Subtitle</Label>
+            <Input
+                id="subtitle"
+                value={cityData.subtitle || ""}
+                onChange={(e) => setCityData(prev => ({ ...prev, subtitle: e.target.value }))}
+                placeholder="Premium exhibition experiences in the UAE capital"
+            />
         </div>
 
         <div>
@@ -695,6 +709,60 @@ const BasicInfoTab = ({ cityData, setCityData, handleNameChange, handleHeroImage
                 onChange={(e) => setCityData(prev => ({ ...prev, description: e.target.value }))}
                 placeholder="Brief description of the city"
                 rows={3}
+            />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <Label htmlFor="timezone">Timezone</Label>
+                <Input
+                    id="timezone"
+                    value={cityData.timezone || ""}
+                    onChange={(e) => setCityData(prev => ({ ...prev, timezone: e.target.value }))}
+                    placeholder="Asia/Dubai"
+                />
+            </div>
+            <div>
+                <Label htmlFor="contact_phone">Contact Phone</Label>
+                <Input
+                    id="contact_phone"
+                    value={cityData.contact_phone || ""}
+                    onChange={(e) => setCityData(prev => ({ ...prev, contact_phone: e.target.value }))}
+                    placeholder="+971 4 567 8901"
+                />
+            </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <Label htmlFor="contact_email">Contact Email</Label>
+                <Input
+                    id="contact_email"
+                    type="email"
+                    value={cityData.contact_email || ""}
+                    onChange={(e) => setCityData(prev => ({ ...prev, contact_email: e.target.value }))}
+                    placeholder="city@chronicles-dubai.com"
+                />
+            </div>
+            <div>
+                <Label htmlFor="contact_working_hours">Working Hours</Label>
+                <Input
+                    id="contact_working_hours"
+                    value={cityData.contact_working_hours || ""}
+                    onChange={(e) => setCityData(prev => ({ ...prev, contact_working_hours: e.target.value }))}
+                    placeholder="9 AM - 6 PM"
+                />
+            </div>
+        </div>
+
+        <div>
+            <Label htmlFor="contact_address">Contact Address</Label>
+            <Textarea
+                id="contact_address"
+                value={cityData.contact_address || ""}
+                onChange={(e) => setCityData(prev => ({ ...prev, contact_address: e.target.value }))}
+                placeholder="Full address of the office"
+                rows={2}
             />
         </div>
 
@@ -761,6 +829,16 @@ const BasicInfoTab = ({ cityData, setCityData, handleNameChange, handleHeroImage
                     placeholder="SEO description"
                 />
             </div>
+        </div>
+
+        <div>
+            <Label htmlFor="meta_keywords">Meta Keywords</Label>
+            <Input
+                id="meta_keywords"
+                value={cityData.meta_keywords || ""}
+                onChange={(e) => setCityData(prev => ({ ...prev, meta_keywords: e.target.value }))}
+                placeholder="exhibition, stands, dubai, trade show"
+            />
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
