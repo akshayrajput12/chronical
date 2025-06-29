@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { AnimationGeneratorType } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
-import { City } from "@/types/cities";
+import { LegacyCity } from "@/types/cities";
 
 interface CityPortfolioSectionProps {
     city: LegacyCity;
@@ -49,6 +49,26 @@ const CityPortfolioSection = ({ city }: CityPortfolioSectionProps) => {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
+    // Pause auto-play on hover
+    const handleMouseEnter = () => setIsAutoPlaying(false);
+    const handleMouseLeave = () => setIsAutoPlaying(true);
+
+    // Get portfolio items from admin - no static fallbacks
+    const portfolioItems = city.portfolioItems?.filter(item =>
+        item.image_url?.trim() &&
+        item.title?.trim()
+    ).sort((a, b) => a.sort_order - b.sort_order).map(item => ({
+        id: item.id,
+        src: item.image_url,
+        alt: item.alt_text || item.title,
+        title: item.title,
+        category: item.category || 'General',
+        description: item.description,
+        project_year: item.project_year,
+        client_name: item.client_name,
+        is_featured: item.is_featured
+    })) || [];
+
     // Auto-slide functionality
     useEffect(() => {
         if (!isAutoPlaying) return;
@@ -67,99 +87,7 @@ const CityPortfolioSection = ({ city }: CityPortfolioSectionProps) => {
         }, 3000); // Change slide every 3 seconds
 
         return () => clearInterval(interval);
-    }, [isAutoPlaying, cardsToShow]);
-
-    // Pause auto-play on hover
-    const handleMouseEnter = () => setIsAutoPlaying(false);
-    const handleMouseLeave = () => setIsAutoPlaying(true);
-
-    // Portfolio items data
-    const portfolioItems = [
-        {
-            id: 1,
-            src: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=600&fit=crop",
-            alt: "Modern tech exhibition booth with purple lighting and interactive displays",
-            title: "Tech Innovation Pavilion",
-            category: "Technology",
-        },
-        {
-            id: 2,
-            src: "https://images.unsplash.com/photo-1559223607-b4d0555ae227?w=400&h=300&fit=crop",
-            alt: "Colorful triangular booth design with red and blue elements",
-            title: "Creative Design Studio",
-            category: "Design",
-        },
-        {
-            id: 3,
-            src: "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=400&h=500&fit=crop",
-            alt: "Professional booth with circular ceiling design and attendees",
-            title: "Corporate Excellence",
-            category: "Corporate",
-        },
-        {
-            id: 4,
-            src: "https://images.unsplash.com/photo-1511578314322-379afb476865?w=400&h=500&fit=crop",
-            alt: "Wooden and modern booth design with clean lines",
-            title: "Sustainable Solutions",
-            category: "Sustainability",
-        },
-        {
-            id: 5,
-            src: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=400&h=400&fit=crop",
-            alt: "Red and white booth with multiple display screens",
-            title: "Digital Experience",
-            category: "Digital",
-        },
-        {
-            id: 6,
-            src: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop",
-            alt: "White minimalist booth with green accents",
-            title: "Minimalist Approach",
-            category: "Minimalist",
-        },
-        {
-            id: 7,
-            src: "https://images.unsplash.com/photo-1464207687429-7505649dae38?w=400&h=300&fit=crop",
-            alt: "Exhibition hall with golden lighting",
-            title: "Luxury Pavilion",
-            category: "Luxury",
-        },
-        {
-            id: 8,
-            src: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&h=300&fit=crop",
-            alt: "Modern exhibition space with attendees",
-            title: "Modern Architecture",
-            category: "Architecture",
-        },
-        {
-            id: 9,
-            src: "https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=400&h=400&fit=crop",
-            alt: "Trade show booth with interactive displays",
-            title: "Interactive Experience",
-            category: "Interactive",
-        },
-        {
-            id: 10,
-            src: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=400&h=300&fit=crop",
-            alt: "Corporate exhibition stand",
-            title: "Business Solutions",
-            category: "Business",
-        },
-        {
-            id: 11,
-            src: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=400&h=500&fit=crop",
-            alt: "Large scale exhibition with multiple booths",
-            title: "Large Scale Projects",
-            category: "Large Scale",
-        },
-        {
-            id: 12,
-            src: "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=400&h=300&fit=crop",
-            alt: "Professional conference and exhibition setup",
-            title: "Conference Setup",
-            category: "Conference",
-        },
-    ];
+    }, [isAutoPlaying, cardsToShow, portfolioItems.length]);
 
     // Calculate max index
     const maxIndex = Math.max(0, portfolioItems.length - cardsToShow);
@@ -182,10 +110,15 @@ const CityPortfolioSection = ({ city }: CityPortfolioSectionProps) => {
         }
     };
 
-    const handlePortfolioClick = (itemId: number) => {
+    const handlePortfolioClick = (itemId: string) => {
         // Handle portfolio item click - you can add navigation logic here
         console.log(`Portfolio item ${itemId} clicked`);
     };
+
+    // Only render if we have portfolio items from admin
+    if (!portfolioItems || portfolioItems.length === 0) {
+        return null;
+    }
 
     return (
         <section className="py-12 sm:py-16 lg:py-20 bg-white">

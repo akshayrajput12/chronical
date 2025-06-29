@@ -117,7 +117,7 @@ const AboutUsDescription = () => {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         {services.map((service, index) => (
                             <div
-                                key={index}
+                                key={`service-${index}-${service.title.slice(0, 10)}`}
                                 className="bg-white p-8 text-center rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 hover:border-[#a5cd39]/30 group"
                             >
                                 <div className="flex justify-center mb-6">

@@ -5,13 +5,9 @@ import { notFound } from "next/navigation";
 import CityDetailHero from "@/components/cities/city-detail-hero";
 import CityContentSection from "@/components/cities/city-content-section";
 import CityRoleSection from "@/components/cities/city-role-section";
-import CityBoothDesignSection from "@/components/cities/city-booth-design-section";
 import CityComponentsSection from "@/components/cities/city-components-section";
 import CityPortfolioSection from "@/components/cities/city-portfolio-section";
 import CityWhyBestSection from "@/components/cities/city-why-best-section";
-import CityPreferredChoiceSection from "@/components/cities/city-preferred-choice-section";
-import CityLookingForContractorsSection from "@/components/cities/city-looking-for-contractors-section";
-import CityServicesSection from "@/components/cities/city-services-section";
 import { useCity } from "@/hooks/use-cities";
 import { useComponentLoading } from "@/hooks/use-minimal-loading";
 import { ServicesGrid } from "./services-grid";
@@ -89,8 +85,9 @@ const CityDetailPage = ({ params }: CityDetailPageProps) => {
 
     return (
         <div className="min-h-screen bg-white mt-16 md:mt-20 lg:mt-24">
-            <CityDetailHero cityName={city.name} heroImage={city.heroImage} />
-            <ServicesGrid />
+            <CityDetailHero city={city} />
+            <ServicesGrid city={city} />
+            <CityRoleSection city={city} />
             <CityContentSection city={city} />
             <CityComponentsSection city={city} />
             <CityPortfolioSection city={city} />

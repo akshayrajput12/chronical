@@ -155,7 +155,7 @@ const PortfolioGrid = () => {
                 >
                     {portfolioImages.map((image, index) => (
                         <motion.div
-                            key={index}
+                            key={`portfolio-${index}-${image.src.split('/').pop()}`}
                             className="group"
                             variants={itemVariants}
                         >

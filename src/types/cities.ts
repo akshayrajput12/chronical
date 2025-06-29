@@ -254,8 +254,6 @@ export interface CityQueryParams {
 }
 
 // Admin-specific types
-export interface CreateCityRequest extends CityInput {}
-
 export interface UpdateCityRequest extends Partial<CityInput> {
     id: string;
 }

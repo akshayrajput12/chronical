@@ -22,17 +22,22 @@ export default function ClientLayout({
     const isHomePage = pathname === "/" || pathname === "/home";
 
     // Add/remove home-page class to body for typography targeting
+    // Use requestAnimationFrame to avoid hydration mismatch
     useEffect(() => {
         const body = document.body;
 
-        if (isHomePage) {
-            body.classList.add("home-page");
-        } else {
-            body.classList.remove("home-page");
-        }
+        // Defer class modification to avoid hydration mismatch
+        const timeoutId = setTimeout(() => {
+            if (isHomePage) {
+                body.classList.add("home-page");
+            } else {
+                body.classList.remove("home-page");
+            }
+        }, 0);
 
         // Cleanup function to remove class when component unmounts
         return () => {
+            clearTimeout(timeoutId);
             body.classList.remove("home-page");
         };
     }, [isHomePage]);

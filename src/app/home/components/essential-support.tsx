@@ -179,7 +179,7 @@ const EssentialSupport = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:px-0 px-4 gap-4 md:gap-8 lg:gap-20 mb-8">
                     {categories.slice(0, 3).map((category, index) => (
                         <div
-                            key={index}
+                            key={`category-${index}-${category.title}`}
                             className="flex flex-col bg-white p-6 shadow-md justify-between hover:shadow-lg transition-shadow duration-300"
                         >
                             <div>

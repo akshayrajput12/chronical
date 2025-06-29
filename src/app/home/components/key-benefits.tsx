@@ -270,7 +270,7 @@ const KeyBenefits = () => {
                 >
                     {benefits.map((benefit, index) => (
                         <motion.div
-                            key={index}
+                            key={`benefit-${index}-${benefit.title.slice(0, 10)}`}
                             className="flex flex-col items-center text-center"
                             variants={itemVariants}
                         >

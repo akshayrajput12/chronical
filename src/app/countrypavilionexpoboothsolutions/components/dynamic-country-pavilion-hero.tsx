@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
@@ -20,11 +20,7 @@ const DynamicCountryPavilionHero = () => {
 
     const supabase = createClient();
 
-    useEffect(() => {
-        loadHeroData();
-    }, []);
-
-    const loadHeroData = async () => {
+    const loadHeroData = useCallback(async () => {
         try {
             const { data, error } = await supabase
                 .from("expo_pavilion_hero")
@@ -45,7 +41,11 @@ const DynamicCountryPavilionHero = () => {
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [supabase]);
+
+    useEffect(() => {
+        loadHeroData();
+    }, [loadHeroData]);
 
     // Return null if no data is loaded
     if (!heroData) {

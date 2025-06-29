@@ -10,26 +10,25 @@ interface CityContentSectionProps {
 }
 
 const CityContentSection = ({ city }: CityContentSectionProps) => {
-    // Get content section data
+    // Get content section data from admin - no static fallbacks
     const contentSection = city.contentSections?.find(
-        section => section.section_type === "content",
+        section => section.section_type === "content" && section.is_active
     );
 
-    // Fallback to default content if no dynamic content is available
-    const title =
-        contentSection?.title ||
-        `PREMIER EXHIBITION STANDS DESIGN, AND BOOTH BUILD PARTNER IN ${city.name.toUpperCase()}`;
-    const content =
-        contentSection?.content ||
-        `${city.name} offers you a wide range of exhibiting opportunities, as it hosts countless trade shows and exhibitions each year. Chronicle Exhibition Organizing LLC can help you make the most out of these events with an exhibition stand.
+    // Only render if we have content section data from admin
+    if (!contentSection || !contentSection.title?.trim() || !contentSection.content?.trim()) {
+        return null;
+    }
 
-We are one the most reputable exhibition stand builders and contractors in ${city.name}. Chronicle Exhibits Company offer end-to-end services for domestic and international clients.
+    const title = contentSection.title.trim();
+    const subtitle = contentSection.subtitle?.trim();
+    const content = contentSection.content.trim();
+    const imageUrl = contentSection.image_url?.trim();
 
-Our manufacturing unit in ${city.name} is known for providing every type of exhibition stand including Custom trade show stands, modular exhibition stands and double-decker stands.`;
-
-    const imageUrl =
-        contentSection?.image_url ||
-        "https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80";
+    // Don't render if no image is provided
+    if (!imageUrl) {
+        return null;
+    }
 
     return (
         <section className="py-8 md:py-12 lg:py-16 bg-white">
@@ -45,41 +44,43 @@ Our manufacturing unit in ${city.name} is known for providing every type of exhi
                             viewport={{ once: true }}
                         >
                             <div className="space-y-6">
-                                {/* Main Heading */}
+                                {/* Dynamic Heading from Admin */}
                                 <h2 className="text-3xl text-center md:text-4xl font-rubik font-bold mb-2">
-                                    PREMIER EXHIBITION STANDS DESIGN, AND BOOTH
-                                    BUILD PARTNER IN {city.name.toUpperCase()}
+                                    {title}
                                 </h2>
                                 <div className="flex justify-center">
                                     <div className="h-1 bg-[#a5cd39] w-16 mt-2 mb-0"></div>
                                 </div>
-                                {/* Content Paragraphs */}
+
+                                {/* Dynamic Subtitle if available */}
+                                {subtitle && (
+                                    <h3 className="text-xl text-center md:text-2xl font-rubik font-medium text-gray-600 mb-4">
+                                        {subtitle}
+                                    </h3>
+                                )}
+                                {/* Dynamic Content Paragraphs from Admin */}
                                 <div className="space-y-4 text-gray-700">
                                     {content
                                         .split("\n\n")
+                                        .filter(paragraph => paragraph.trim())
                                         .map((paragraph, index) => (
                                             <p
-                                                key={index}
+                                                key={`content-paragraph-${index}-${paragraph.slice(0, 20)}`}
                                                 className="text-base leading-relaxed text-justify"
                                             >
-                                                {paragraph.includes(
-                                                    "Chronicle Exhibition Organizing LLC",
-                                                ) ? (
+                                                {/* Highlight company name if present */}
+                                                {paragraph.includes("Chronicle Exhibition") ||
+                                                 paragraph.includes("Chronicle Exhibits") ? (
                                                     <>
-                                                        {
-                                                            paragraph.split(
-                                                                "Chronicle Exhibition Organizing LLC",
-                                                            )[0]
-                                                        }
-                                                        <span className="text-[#a5cd39] font-medium">
-                                                            Chronicle Exhibition
-                                                            Organizing LLC
-                                                        </span>
-                                                        {
-                                                            paragraph.split(
-                                                                "Chronicle Exhibition Organizing LLC",
-                                                            )[1]
-                                                        }
+                                                        {paragraph.split(/(Chronicle Exhibition[^.]*|Chronicle Exhibits[^.]*)/g).map((part, partIndex) => (
+                                                            part.includes("Chronicle") ? (
+                                                                <span key={partIndex} className="text-[#a5cd39] font-medium">
+                                                                    {part}
+                                                                </span>
+                                                            ) : (
+                                                                part
+                                                            )
+                                                        ))}
                                                     </>
                                                 ) : (
                                                     paragraph
@@ -98,11 +99,11 @@ Our manufacturing unit in ${city.name} is known for providing every type of exhi
                             transition={{ duration: 0.8 }}
                             viewport={{ once: true }}
                         >
-                            {/* Image Container */}
+                            {/* Dynamic Image Container from Admin */}
                             <div className="relative h-64 sm:h-80 md:h-96 lg:h-[400px] overflow-hidden z-10">
                                 <Image
                                     src={imageUrl}
-                                    alt={`Exhibition Stand in ${city.name}`}
+                                    alt={subtitle || title || `Exhibition Stand in ${city.name}`}
                                     fill
                                     className="object-cover rounded-lg"
                                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"

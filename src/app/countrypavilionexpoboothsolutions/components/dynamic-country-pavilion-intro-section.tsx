@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { createClient } from "@/lib/supabase/client";
 
@@ -18,11 +18,7 @@ const DynamicCountryPavilionIntroSection = () => {
 
     const supabase = createClient();
 
-    useEffect(() => {
-        loadIntroData();
-    }, []);
-
-    const loadIntroData = async () => {
+    const loadIntroData = useCallback(async () => {
         try {
             const { data, error } = await supabase
                 .from("expo_pavilion_intro")
@@ -43,7 +39,11 @@ const DynamicCountryPavilionIntroSection = () => {
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [supabase]);
+
+    useEffect(() => {
+        loadIntroData();
+    }, [loadIntroData]);
 
     // Return null if no data is loaded
     if (!introData) {

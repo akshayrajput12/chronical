@@ -182,7 +182,7 @@ const PortfolioSection = () => {
                 >
                     {portfolioImages.map((image, index) => (
                         <motion.div
-                            key={index}
+                            key={`custom-portfolio-${index}-${image.split('/').pop()}`}
                             className="group"
                             variants={itemVariants}
                         >

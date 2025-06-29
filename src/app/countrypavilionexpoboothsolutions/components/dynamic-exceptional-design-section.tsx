@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Easing, motion } from "framer-motion";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
@@ -31,10 +31,6 @@ const DynamicExceptionalDesignSection = () => {
 
     const supabase = createClient();
 
-    useEffect(() => {
-        loadData();
-    }, []);
-
     const buttonVariants = {
         hidden: {
             opacity: 0,
@@ -61,7 +57,7 @@ const DynamicExceptionalDesignSection = () => {
         },
     };
 
-    const loadData = async () => {
+    const loadData = useCallback(async () => {
         try {
             // Load design section data
             const { data: designSection, error: designError } = await supabase
@@ -101,7 +97,11 @@ const DynamicExceptionalDesignSection = () => {
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [supabase]);
+
+    useEffect(() => {
+        loadData();
+    }, [loadData]);
 
     // Return null if no data is loaded
     if (!designData) {

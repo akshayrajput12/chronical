@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Easing, motion } from "framer-motion";
 import { createClient } from "@/lib/supabase/client";
 
@@ -34,11 +34,7 @@ const DynamicPortfolioGrid = () => {
 
     const supabase = createClient();
 
-    useEffect(() => {
-        loadData();
-    }, []);
-
-    const loadData = async () => {
+    const loadData = useCallback(async () => {
         try {
             // Load portfolio section data
             const { data: sectionData, error: sectionError } = await supabase
@@ -71,7 +67,11 @@ const DynamicPortfolioGrid = () => {
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [supabase]);
+
+    useEffect(() => {
+        loadData();
+    }, [loadData]);
 
     // Return null if no data is loaded
     if (!sectionData) {
@@ -180,7 +180,7 @@ const DynamicPortfolioGrid = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {[...Array(6)].map((_, index) => (
                             <div
-                                key={index}
+                                key={`portfolio-skeleton-${index}`}
                                 className="h-52 bg-gray-300 rounded-lg animate-pulse"
                             ></div>
                         ))}

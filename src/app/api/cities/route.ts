@@ -17,10 +17,10 @@ export async function GET(request: NextRequest) {
         const includeRelations = searchParams.get("include_relations") === "true";
 
         // Build base query
-        let query = supabase.from("cities");
-        
+        let query;
+
         if (includeRelations) {
-            query = query.select(`
+            query = supabase.from("cities").select(`
                 *,
                 services:city_services(*),
                 content_sections:city_content_sections(*),
@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
                 contact_details:city_contact_details(*)
             `);
         } else {
-            query = query.select("*");
+            query = supabase.from("cities").select("*");
         }
 
         // Apply filters

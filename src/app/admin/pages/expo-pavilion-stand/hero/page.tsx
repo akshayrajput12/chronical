@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, Save, Eye, Upload, X } from "lucide-react";
 import Link from "next/link";
@@ -31,11 +31,7 @@ const ExpoPavilionHeroEditor = () => {
 
     const supabase = createClient();
 
-    useEffect(() => {
-        loadHeroData();
-    }, []);
-
-    const loadHeroData = async () => {
+    const loadHeroData = useCallback(async () => {
         try {
             const { data, error } = await supabase
                 .from("expo_pavilion_hero")
@@ -72,7 +68,11 @@ const ExpoPavilionHeroEditor = () => {
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [supabase]);
+
+    useEffect(() => {
+        loadHeroData();
+    }, [loadHeroData]);
 
     const handleSave = async () => {
         setIsSaving(true);

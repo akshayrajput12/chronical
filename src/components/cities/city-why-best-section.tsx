@@ -9,26 +9,22 @@ interface CityWhyBestSectionProps {
 }
 
 const CityWhyBestSection = ({ city }: CityWhyBestSectionProps) => {
-    // Get why best section data
+    // Get why best section data from admin
     const whyBestSection = city.contentSections?.find(
         section => section.section_type === "why_best",
     );
 
-    // Fallback to default content if no dynamic content is available
-    const title = whyBestSection?.title || "WHY WE ARE THE BEST OF THE BESTS?";
-    const content =
-        whyBestSection?.content ||
-        `You are in the right place if you're exhibiting in ${city.name}, and looking for a reliable company to design your exhibition stand and build your trade show booth. Chronicle Exhibition Organizing LLC offers turnkey solutions for the design and construction of exhibition stands to major brands and companies in ${city.name} and abroad.
+    // Only render if we have dynamic content from admin
+    if (!whyBestSection || !whyBestSection.title?.trim() || !whyBestSection.content?.trim()) {
+        return null;
+    }
 
-We provide world-class service that is known to increase brand awareness. We are the most suitable choice for the construction of your exhibition booth in ${city.name}, as we are the top exhibition booth contractors and builders across the UAE.
+    // Use only dynamic content from admin - no static fallbacks
+    const title = whyBestSection.title.trim();
+    const content = whyBestSection.content.trim();
 
-Chronicle Exhibits Company are experts in exhibition management, thanks to our extensive experience and team of Graphic Designers and Visualizers. Our goal as one of ${city.name}'s most experienced exhibition stand builders is to provide our clients with a stress-free experience.
-
-Our exhibition stand designs in ${city.name} help them to achieve their exhibiting goals and provide a high ROI. We follow a standard procedure to deliver quality work at an affordable cost within the specified timeframe. This includes gathering inputs from clients on booth design specifications.
-
-The process begins with a rough design to help clients envision the booth they will have at the tradeshow. Once the design is approved by the client, it's time to transform the design into an exhibition booth that meets your needs, goals and vision.
-
-We will help you with the installation and shipping of the booth. We will also assist with the removal and storage of your exhibition stand in ${city.name}.`;
+    // Split content into paragraphs for better rendering
+    const contentParagraphs = content.split('\n\n').filter(paragraph => paragraph.trim().length > 0);
 
     return (
         <section className="py-8 md:py-12 lg:py-16 bg-gray-100">
@@ -43,8 +39,7 @@ We will help you with the installation and shipping of the booth. We will also a
                         viewport={{ once: true }}
                     >
                         <h2 className="text-3xl capitalize md:text-4xl font-rubik font-bold mb-2">
-                            Why we are the best exhibition stand builders in{" "}
-                            {city.name}
+                            {title}
                         </h2>
                         <div className="flex justify-center">
                             <div className="h-1 bg-[#a5cd39] w-16 mt-4 mb-4"></div>
@@ -59,62 +54,14 @@ We will help you with the installation and shipping of the booth. We will also a
                         transition={{ duration: 0.8, delay: 0.2 }}
                         viewport={{ once: true }}
                     >
-                        {/* Paragraph 1 */}
-                        <p className="text-base md:text-lg leading-relaxed text-center max-w-5xl mx-auto">
-                            You are in the right place if you're exhibiting in
-                            Abu Dhabi, and looking for a reliable company to
-                            design your exhibition stand and build your trade
-                            show booth. Chronicle Exhibition Organizing LLC
-                            offers turnkey solutions for the design and
-                            construction of exhibition stands to major brands
-                            and companies in Abu Dhabi and abroad.
-                        </p>
-
-                        {/* Paragraph 2 */}
-                        <p className="text-base md:text-lg leading-relaxed text-center max-w-5xl mx-auto">
-                            We provide world-class service that is known to
-                            increase brand awareness. We are the most suitable
-                            choice for the construction of your exhibition booth
-                            in Abu Dhabi, as we are the top exhibition booth
-                            contractors and builders across the UAE.
-                        </p>
-
-                        {/* Paragraph 3 */}
-                        <p className="text-base md:text-lg leading-relaxed text-center max-w-5xl mx-auto">
-                            Chronicle Exhibits Company are experts in exhibition
-                            management, thanks to our extensive experience and
-                            team of Graphic Designers and Visualizers. Our goal
-                            as one of Abu Dhabi's most experienced exhibition
-                            stand builders is to provide our clients with a
-                            stress-free experience.
-                        </p>
-
-                        {/* Paragraph 4 */}
-                        <p className="text-base md:text-lg leading-relaxed text-center max-w-5xl mx-auto">
-                            Our exhibition stand designs in Abu Dhabi help them
-                            to achieve their exhibiting goals and provide a high
-                            ROI. We follow a standard procedure to deliver
-                            quality work at an affordable cost within the
-                            specified timeframe. This includes gathering inputs
-                            from clients on booth design specifications.
-                        </p>
-
-                        {/* Paragraph 5 */}
-                        <p className="text-base md:text-lg leading-relaxed text-center max-w-5xl mx-auto">
-                            The process begins with a rough design to help
-                            clients envision the booth they will have at the
-                            tradeshow. Once the design is approved by the
-                            client, it's time to transform the design into an
-                            exhibition booth that meets your needs, goals and
-                            vision.
-                        </p>
-
-                        {/* Paragraph 6 */}
-                        <p className="text-base md:text-lg leading-relaxed text-center max-w-5xl mx-auto">
-                            We will help you with the installation and shipping
-                            of the booth. We will also assist with the removal
-                            and storage of your exhibition stand in Abu Dhabi.
-                        </p>
+                        {contentParagraphs.map((paragraph, index) => (
+                            <p
+                                key={index}
+                                className="text-base md:text-lg leading-relaxed text-center max-w-5xl mx-auto"
+                            >
+                                {paragraph}
+                            </p>
+                        ))}
                     </motion.div>
                 </div>
             </div>

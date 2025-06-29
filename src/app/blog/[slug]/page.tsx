@@ -209,15 +209,19 @@ const BlogDetailPage = () => {
                     viewCount={blogPost.view_count}
                     author={blogPost.author_id ? "Admin" : undefined}
                 />
-                <div className="flex gap-4 relative lg:flex-row flex-col xl:mx-20 lg:mx-8 md:mx-6 mx-4">
-                    <BlogDetailContent
-                        content={blogPost.content || ""}
-                        excerpt={blogPost.excerpt}
-                    />
-                    <BlogRelatedPosts
-                        currentPostId={blogPost.id}
-                        currentPostSlug={blogPost.slug}
-                    />
+                <div className="flex gap-6 relative lg:flex-row flex-col xl:mx-20 lg:mx-8 md:mx-6 mx-4 min-h-screen">
+                    <div className="lg:w-[70%] w-full">
+                        <BlogDetailContent
+                            content={blogPost.content || ""}
+                            excerpt={blogPost.excerpt}
+                        />
+                    </div>
+                    <div className="lg:w-[30%] w-full">
+                        <BlogRelatedPosts
+                            currentPostId={blogPost.id}
+                            currentPostSlug={blogPost.slug}
+                        />
+                    </div>
                 </div>
                 <EventsForm />
             </div>

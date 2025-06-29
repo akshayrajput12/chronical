@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, Save, Eye, Plus, Trash2, Upload, Edit } from "lucide-react";
 import Link from "next/link";
@@ -46,11 +46,7 @@ const ExpoPavilionPortfolioEditor = () => {
 
     const supabase = createClient();
 
-    useEffect(() => {
-        loadData();
-    }, []);
-
-    const loadData = async () => {
+    const loadData = useCallback(async () => {
         try {
             // Load portfolio section data
             const { data: sectionData, error: sectionError } = await supabase
@@ -100,7 +96,11 @@ const ExpoPavilionPortfolioEditor = () => {
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [supabase]);
+
+    useEffect(() => {
+        loadData();
+    }, [loadData]);
 
     const handleSaveSection = async () => {
         setIsSaving(true);

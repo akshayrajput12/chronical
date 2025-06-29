@@ -45,7 +45,6 @@ interface Service {
     id?: string;
     name: string;
     description: string;
-    image_url?: string;
     href_link?: string;
     sort_order: number;
 }
@@ -71,6 +70,19 @@ interface ContactDetail {
     contact_value: string;
     display_text?: string;
     is_primary: boolean;
+    sort_order: number;
+}
+
+interface PortfolioItem {
+    id?: string;
+    title: string;
+    description: string;
+    image_url: string;
+    alt_text: string;
+    category: string;
+    project_year?: number;
+    client_name?: string;
+    is_featured: boolean;
     sort_order: number;
 }
 
@@ -103,6 +115,7 @@ const EditCityPage = () => {
     const [contentSections, setContentSections] = useState<ContentSection[]>([]);
     const [services, setServices] = useState<Service[]>([]);
     const [components, setComponents] = useState<Component[]>([]);
+    const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>([]);
     const [preferredServices, setPreferredServices] = useState<PreferredService[]>([]);
     const [contactDetails, setContactDetails] = useState<ContactDetail[]>([]);
     const [showImageSelector, setShowImageSelector] = useState(false);
@@ -151,7 +164,7 @@ const EditCityPage = () => {
                 if (sectionsError) throw sectionsError;
 
                 // Ensure all section types exist
-                const sectionTypes = ["content", "role", "booth_design", "why_best", "preferred_choice", "contractors"];
+                const sectionTypes = ["role", "content", "booth_design", "why_best"];
                 const existingSections = sections || [];
                 const allSections = sectionTypes.map(type => {
                     const existing = existingSections.find(s => s.section_type === type);
@@ -172,7 +185,7 @@ const EditCityPage = () => {
                     .order("sort_order");
 
                 if (servicesError) throw servicesError;
-                setServices(servicesData || [{ name: "", description: "", image_url: "", href_link: "", sort_order: 1 }]);
+                setServices(servicesData || [{ name: "", description: "", href_link: "", sort_order: 1 }]);
 
                 // Load components
                 const { data: componentsData, error: componentsError } = await supabase
@@ -196,6 +209,16 @@ const EditCityPage = () => {
                     };
                 });
                 setComponents(allComponents);
+
+                // Load portfolio items
+                const { data: portfolioData, error: portfolioError } = await supabase
+                    .from("city_portfolio_items")
+                    .select("*")
+                    .eq("city_id", cityId)
+                    .order("sort_order");
+
+                if (portfolioError) throw portfolioError;
+                setPortfolioItems(portfolioData || [{ title: "", description: "", image_url: "", alt_text: "", category: "", project_year: new Date().getFullYear(), client_name: "", is_featured: false, sort_order: 1 }]);
 
                 // Load preferred services
                 const { data: preferredData, error: preferredError } = await supabase
@@ -247,26 +270,122 @@ const EditCityPage = () => {
         }));
     };
 
+    // Ensure portfolio bucket exists
+    const ensurePortfolioBucket = async () => {
+        try {
+            const { data: buckets } = await supabase.storage.listBuckets();
+            const portfolioBucketExists = buckets?.some(bucket => bucket.id === 'city-portfolio');
+
+            if (!portfolioBucketExists) {
+                console.log('Creating city-portfolio bucket...');
+                const { error } = await supabase.storage.createBucket('city-portfolio', {
+                    public: true,
+                    fileSizeLimit: 52428800, // 50MB
+                    allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+                });
+
+                if (error) {
+                    console.warn('Failed to create portfolio bucket:', error);
+                    return false;
+                }
+                console.log('Portfolio bucket created successfully');
+            }
+            return true;
+        } catch (error) {
+            console.warn('Error checking/creating portfolio bucket:', error);
+            return false;
+        }
+    };
+
     // Image upload function
     const uploadImage = async (file: File, folder: string = "cities") => {
         try {
             const fileExt = file.name.split('.').pop();
-            const fileName = `${folder}/${Date.now()}.${fileExt}`;
-            
-            const { data, error } = await supabase.storage
-                .from('city-images')
+
+            // Generate unique filename for portfolio items
+            let fileName;
+            if (folder === 'city-portfolio') {
+                // Use the generate_portfolio_filename function format for consistency
+                const timestamp = Date.now();
+                fileName = `${cityId}_${timestamp}_${Math.floor(Math.random() * 1000)}.${fileExt}`;
+            } else {
+                fileName = `${folder}/${Date.now()}.${fileExt}`;
+            }
+
+            // Determine bucket based on folder
+            let bucketName = folder === 'city-portfolio' ? 'city-portfolio' : 'city-images';
+
+            // Ensure portfolio bucket exists if needed
+            if (bucketName === 'city-portfolio') {
+                const bucketExists = await ensurePortfolioBucket();
+                if (!bucketExists) {
+                    console.log('Portfolio bucket not available, using fallback');
+                    bucketName = 'city-images';
+                    const timestamp = Date.now();
+                    const fallbackFileName = `portfolio/${cityId}_${timestamp}_${Math.floor(Math.random() * 1000)}.${fileExt}`;
+
+                    const { error } = await supabase.storage
+                        .from(bucketName)
+                        .upload(fallbackFileName, file);
+
+                    if (error) throw error;
+
+                    const { data: { publicUrl } } = supabase.storage
+                        .from(bucketName)
+                        .getPublicUrl(fallbackFileName);
+
+                    return publicUrl;
+                }
+            }
+
+            console.log(`Attempting to upload to bucket: ${bucketName}, file: ${fileName}`);
+
+            let { error } = await supabase.storage
+                .from(bucketName)
                 .upload(fileName, file);
 
-            if (error) throw error;
+            // If portfolio bucket fails, fallback to city-images bucket
+            if (error && bucketName === 'city-portfolio') {
+                console.warn('Portfolio bucket failed, falling back to city-images bucket:', error);
+                bucketName = 'city-images';
+                const timestamp = Date.now();
+                const fallbackFileName = `portfolio/${cityId}_${timestamp}_${Math.floor(Math.random() * 1000)}.${fileExt}`;
+
+                const fallbackResult = await supabase.storage
+                    .from(bucketName)
+                    .upload(fallbackFileName, file);
+
+                error = fallbackResult.error;
+
+                if (!error) {
+                    console.log('Successfully uploaded to fallback bucket');
+                    const { data: { publicUrl } } = supabase.storage
+                        .from(bucketName)
+                        .getPublicUrl(fallbackFileName);
+                    return publicUrl;
+                }
+            }
+
+            if (error) {
+                console.error('Upload error details:', {
+                    message: error.message,
+                    error: error,
+                    bucket: bucketName,
+                    fileName: fileName
+                });
+                throw error;
+            }
 
             const { data: { publicUrl } } = supabase.storage
-                .from('city-images')
+                .from(bucketName)
                 .getPublicUrl(fileName);
 
+            console.log('Upload successful:', publicUrl);
             return publicUrl;
         } catch (error) {
             console.error('Error uploading image:', error);
-            alert('Failed to upload image');
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            alert(`Failed to upload image: ${errorMessage}`);
             return null;
         }
     };
@@ -281,15 +400,7 @@ const EditCityPage = () => {
         }
     };
 
-    // Handle image upload for services
-    const handleServiceImageUpload = async (index: number, file: File) => {
-        const imageUrl = await uploadImage(file, 'services');
-        if (imageUrl) {
-            const updatedServices = [...services];
-            updatedServices[index].image_url = imageUrl;
-            setServices(updatedServices);
-        }
-    };
+
 
     // Handle hero image upload
     const handleHeroImageUpload = async (file: File) => {
@@ -299,11 +410,21 @@ const EditCityPage = () => {
         }
     };
 
+    // Handle image upload for portfolio items
+    const handlePortfolioImageUpload = async (index: number, file: File) => {
+        const imageUrl = await uploadImage(file, 'city-portfolio');
+        if (imageUrl) {
+            const updatedItems = [...portfolioItems];
+            updatedItems[index].image_url = imageUrl;
+            setPortfolioItems(updatedItems);
+        }
+    };
+
     // Fetch existing images from bucket
-    const fetchExistingImages = async (folder: string = '') => {
+    const fetchExistingImages = async (folder: string = '', bucketName: string = 'city-images') => {
         try {
             const { data, error } = await supabase.storage
-                .from('city-images')
+                .from(bucketName)
                 .list(folder, {
                     limit: 100,
                     offset: 0,
@@ -313,12 +434,13 @@ const EditCityPage = () => {
 
             return data?.map(file => {
                 const { data: { publicUrl } } = supabase.storage
-                    .from('city-images')
+                    .from(bucketName)
                     .getPublicUrl(folder ? `${folder}/${file.name}` : file.name);
                 return {
                     name: file.name,
                     url: publicUrl,
-                    folder: folder
+                    folder: folder,
+                    bucket: bucketName
                 };
             }) || [];
         } catch (error) {
@@ -333,14 +455,15 @@ const EditCityPage = () => {
         setImageSelectionCallback(() => callback);
 
         try {
-            // Fetch images from all folders
-            const [citiesImages, servicesImages, contentImages] = await Promise.all([
-                fetchExistingImages('cities'),
-                fetchExistingImages('services'),
-                fetchExistingImages('content-sections')
+            // Fetch images from all folders and buckets
+            const [citiesImages, servicesImages, contentImages, portfolioImages] = await Promise.all([
+                fetchExistingImages('cities', 'city-images'),
+                fetchExistingImages('services', 'city-images'),
+                fetchExistingImages('content-sections', 'city-images'),
+                fetchExistingImages('city-portfolio', 'city-portfolio')
             ]);
 
-            const allImages = [...citiesImages, ...servicesImages, ...contentImages];
+            const allImages = [...citiesImages, ...servicesImages, ...contentImages, ...portfolioImages];
             setExistingImages(allImages);
             setShowImageSelector(true);
         } catch (error) {
@@ -366,7 +489,6 @@ const EditCityPage = () => {
             setServices([...services, {
                 name: "",
                 description: "",
-                image_url: "",
                 href_link: "",
                 sort_order: services.length + 1
             }]);
@@ -377,6 +499,24 @@ const EditCityPage = () => {
 
     const removeService = (index: number) => {
         setServices(services.filter((_, i) => i !== index));
+    };
+
+    const addPortfolioItem = () => {
+        setPortfolioItems([...portfolioItems, {
+            title: "",
+            description: "",
+            image_url: "",
+            alt_text: "",
+            category: "",
+            project_year: new Date().getFullYear(),
+            client_name: "",
+            is_featured: false,
+            sort_order: portfolioItems.length + 1
+        }]);
+    };
+
+    const removePortfolioItem = (index: number) => {
+        setPortfolioItems(portfolioItems.filter((_, i) => i !== index));
     };
 
     const addPreferredService = () => {
@@ -490,7 +630,6 @@ const EditCityPage = () => {
                     city_id: cityId,
                     name: service.name.trim(),
                     description: service.description?.trim() || "",
-                    image_url: service.image_url?.trim() || null,
                     href_link: service.href_link?.trim() || null,
                     sort_order: service.sort_order || index + 1,
                     is_active: true,
@@ -526,6 +665,32 @@ const EditCityPage = () => {
                 if (componentsError) {
                     console.error("Components error:", componentsError);
                     throw componentsError;
+                }
+            }
+
+            // Insert updated portfolio items
+            const portfolioData = portfolioItems
+                .filter(item => item.title?.trim() && item.image_url?.trim())
+                .map((item, index) => ({
+                    city_id: cityId,
+                    title: item.title.trim(),
+                    description: item.description?.trim() || "",
+                    image_url: item.image_url.trim(),
+                    alt_text: item.alt_text?.trim() || "",
+                    category: item.category?.trim() || "",
+                    project_year: item.project_year || new Date().getFullYear(),
+                    client_name: item.client_name?.trim() || null,
+                    is_featured: item.is_featured || false,
+                    sort_order: item.sort_order || index + 1,
+                }));
+
+            if (portfolioData.length > 0) {
+                const { error: portfolioError } = await supabase
+                    .from("city_portfolio_items")
+                    .insert(portfolioData);
+                if (portfolioError) {
+                    console.error("Portfolio error:", portfolioError);
+                    throw portfolioError;
                 }
             }
 
@@ -610,8 +775,7 @@ const EditCityPage = () => {
         { id: "content", label: "Content Sections" },
         { id: "services", label: "Services" },
         { id: "components", label: "Components" },
-        { id: "preferred", label: "Preferred Services" },
-        { id: "contacts", label: "Contact Details" },
+        { id: "portfolio", label: "Portfolio" },
     ];
 
     return (
@@ -689,35 +853,28 @@ const EditCityPage = () => {
                         setServices={setServices}
                         addService={addService}
                         removeService={removeService}
-                        handleImageUpload={handleServiceImageUpload}
-                        openImageSelector={openImageSelector}
                     />
                 )}
                 
                 {activeTab === "components" && (
-                    <ComponentsTab 
+                    <ComponentsTab
                         components={components}
                         setComponents={setComponents}
                     />
                 )}
-                
-                {activeTab === "preferred" && (
-                    <PreferredServicesTab 
-                        preferredServices={preferredServices}
-                        setPreferredServices={setPreferredServices}
-                        addPreferredService={addPreferredService}
-                        removePreferredService={removePreferredService}
+
+                {activeTab === "portfolio" && (
+                    <PortfolioTab
+                        portfolioItems={portfolioItems}
+                        setPortfolioItems={setPortfolioItems}
+                        addPortfolioItem={addPortfolioItem}
+                        removePortfolioItem={removePortfolioItem}
+                        handleImageUpload={handlePortfolioImageUpload}
+                        openImageSelector={openImageSelector}
                     />
                 )}
                 
-                {activeTab === "contacts" && (
-                    <ContactDetailsTab 
-                        contactDetails={contactDetails}
-                        setContactDetails={setContactDetails}
-                        addContactDetail={addContactDetail}
-                        removeContactDetail={removeContactDetail}
-                    />
-                )}
+
             </div>
 
             {/* Image Selector Modal */}
@@ -924,12 +1081,11 @@ const ContentSectionsTab = ({ contentSections, setContentSections, handleImageUp
     openImageSelector: (callback: (url: string) => void) => void;
 }) => {
     const sectionLabels = {
+        hero: "Hero Section",
         content: "Main Content Section",
         role: "Role Section",
-        booth_design: "Booth Design Section",
+        booth_design: "Component Section",
         why_best: "Why Best Section",
-        preferred_choice: "Preferred Choice Section",
-        contractors: "Contractors Section",
     };
 
     const updateSection = (index: number, field: keyof ContentSection, value: string) => {
@@ -957,7 +1113,7 @@ const ContentSectionsTab = ({ contentSections, setContentSections, handleImageUp
                             />
                         </div>
 
-                        {section.section_type === 'content' && (
+                        {(section.section_type === 'content' || section.section_type === 'hero') && (
                             <div>
                                 <Label htmlFor={`subtitle-${index}`}>Subtitle</Label>
                                 <Input
@@ -980,7 +1136,7 @@ const ContentSectionsTab = ({ contentSections, setContentSections, handleImageUp
                             />
                         </div>
 
-                        {(section.section_type === 'content' || section.section_type === 'booth_design') && (
+                        {(section.section_type === 'content' || section.section_type === 'hero') && (
                             <div>
                                 <Label htmlFor={`image-${index}`}>Image</Label>
                                 <div className="flex items-center space-x-4">
@@ -1033,13 +1189,11 @@ const ContentSectionsTab = ({ contentSections, setContentSections, handleImageUp
 };
 
 // Services Tab Component
-const ServicesTab = ({ services, setServices, addService, removeService, handleImageUpload, openImageSelector }: {
+const ServicesTab = ({ services, setServices, addService, removeService }: {
     services: Service[];
     setServices: React.Dispatch<React.SetStateAction<Service[]>>;
     addService: () => void;
     removeService: (index: number) => void;
-    handleImageUpload: (index: number, file: File) => void;
-    openImageSelector: (callback: (url: string) => void) => void;
 }) => {
     const updateService = (index: number, field: keyof Service, value: string | number) => {
         const updated = [...services];
@@ -1085,7 +1239,7 @@ const ServicesTab = ({ services, setServices, addService, removeService, handleI
                             <Label htmlFor={`service-name-${index}`}>Service Name</Label>
                             <Input
                                 id={`service-name-${index}`}
-                                value={service.name}
+                                value={service.name || ""}
                                 onChange={(e) => updateService(index, 'name', e.target.value)}
                                 placeholder="Service name"
                             />
@@ -1094,7 +1248,7 @@ const ServicesTab = ({ services, setServices, addService, removeService, handleI
                             <Label htmlFor={`service-link-${index}`}>Link</Label>
                             <Input
                                 id={`service-link-${index}`}
-                                value={service.href_link}
+                                value={service.href_link || ""}
                                 onChange={(e) => updateService(index, 'href_link', e.target.value)}
                                 placeholder="/customexhibitionstands"
                             />
@@ -1105,55 +1259,11 @@ const ServicesTab = ({ services, setServices, addService, removeService, handleI
                         <Label htmlFor={`service-description-${index}`}>Description</Label>
                         <Textarea
                             id={`service-description-${index}`}
-                            value={service.description}
+                            value={service.description || ""}
                             onChange={(e) => updateService(index, 'description', e.target.value)}
                             placeholder="Service description"
                             rows={3}
                         />
-                    </div>
-
-                    <div className="mt-4">
-                        <Label htmlFor={`service-image-${index}`}>Image</Label>
-                        <div className="flex items-center space-x-4">
-                            <Input
-                                id={`service-image-${index}`}
-                                value={service.image_url}
-                                onChange={(e) => updateService(index, 'image_url', e.target.value)}
-                                placeholder="Image URL"
-                            />
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => {
-                                    const file = e.target.files?.[0];
-                                    if (file) handleImageUpload(index, file);
-                                }}
-                                className="hidden"
-                                id={`service-file-${index}`}
-                            />
-                            <Button
-                                type="button"
-                                variant="outline"
-                                onClick={() => document.getElementById(`service-file-${index}`)?.click()}
-                            >
-                                <Upload className="w-4 h-4 mr-2" />
-                                Upload
-                            </Button>
-                            <Button
-                                type="button"
-                                variant="outline"
-                                onClick={() => openImageSelector((url) => updateService(index, 'image_url', url))}
-                            >
-                                Select from Bucket
-                            </Button>
-                        </div>
-                        {service.image_url && (
-                            <img
-                                src={service.image_url}
-                                alt="Service preview"
-                                className="mt-2 w-32 h-20 object-cover rounded"
-                            />
-                        )}
                     </div>
                 </div>
             ))}
@@ -1457,5 +1567,187 @@ const ImageSelectorModal = ({ images, onSelect, onClose, loading }: {
         </div>
     </div>
 );
+
+// Portfolio Tab Component
+const PortfolioTab = ({ portfolioItems, setPortfolioItems, addPortfolioItem, removePortfolioItem, handleImageUpload, openImageSelector }: {
+    portfolioItems: PortfolioItem[];
+    setPortfolioItems: React.Dispatch<React.SetStateAction<PortfolioItem[]>>;
+    addPortfolioItem: () => void;
+    removePortfolioItem: (index: number) => void;
+    handleImageUpload: (index: number, file: File) => void;
+    openImageSelector: (callback: (url: string) => void) => void;
+}) => {
+    const updatePortfolioItem = (index: number, field: keyof PortfolioItem, value: string | number | boolean) => {
+        const updated = [...portfolioItems];
+        updated[index] = { ...updated[index], [field]: value };
+        setPortfolioItems(updated);
+    };
+
+    return (
+        <div className="space-y-6">
+            <div className="flex justify-between items-center">
+                <div>
+                    <h3 className="text-lg font-semibold">Portfolio Items</h3>
+                    <p className="text-sm text-gray-600">Showcase your best work and projects. Images will be uploaded to the city-portfolio bucket.</p>
+                </div>
+                <Button
+                    onClick={addPortfolioItem}
+                    variant="outline"
+                >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Portfolio Item
+                </Button>
+            </div>
+
+            {portfolioItems.length === 0 && (
+                <div className="text-center py-8 border-2 border-dashed border-gray-300 rounded-lg">
+                    <p className="text-gray-500">No portfolio items yet. Add your first portfolio item to get started.</p>
+                </div>
+            )}
+
+            {portfolioItems.map((item, index) => (
+                <div key={index} className="border rounded-lg p-6">
+                    <div className="flex justify-between items-center mb-4">
+                        <h4 className="font-medium">Portfolio Item {index + 1}</h4>
+                        {portfolioItems.length > 1 && (
+                            <Button
+                                onClick={() => removePortfolioItem(index)}
+                                variant="ghost"
+                                size="sm"
+                                className="text-red-600"
+                            >
+                                <Trash2 className="w-4 h-4" />
+                            </Button>
+                        )}
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <Label htmlFor={`portfolio-title-${index}`}>Title</Label>
+                            <Input
+                                id={`portfolio-title-${index}`}
+                                value={item.title || ""}
+                                onChange={(e) => updatePortfolioItem(index, 'title', e.target.value)}
+                                placeholder="Project title"
+                            />
+                        </div>
+                        <div>
+                            <Label htmlFor={`portfolio-category-${index}`}>Category</Label>
+                            <Input
+                                id={`portfolio-category-${index}`}
+                                value={item.category || ""}
+                                onChange={(e) => updatePortfolioItem(index, 'category', e.target.value)}
+                                placeholder="e.g., Technology, Design, Corporate"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="mt-4">
+                        <Label htmlFor={`portfolio-description-${index}`}>Description</Label>
+                        <Textarea
+                            id={`portfolio-description-${index}`}
+                            value={item.description || ""}
+                            onChange={(e) => updatePortfolioItem(index, 'description', e.target.value)}
+                            placeholder="Project description"
+                            rows={3}
+                        />
+                    </div>
+
+                    <div className="mt-4">
+                        <Label htmlFor={`portfolio-image-${index}`}>Image</Label>
+                        <div className="flex items-center space-x-4">
+                            <Input
+                                id={`portfolio-image-${index}`}
+                                value={item.image_url || ""}
+                                onChange={(e) => updatePortfolioItem(index, 'image_url', e.target.value)}
+                                placeholder="Image URL"
+                            />
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => {
+                                    const file = e.target.files?.[0];
+                                    if (file) handleImageUpload(index, file);
+                                }}
+                                className="hidden"
+                                id={`portfolio-file-${index}`}
+                            />
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => document.getElementById(`portfolio-file-${index}`)?.click()}
+                            >
+                                <Upload className="w-4 h-4 mr-2" />
+                                Upload
+                            </Button>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => openImageSelector((url) => updatePortfolioItem(index, 'image_url', url))}
+                            >
+                                Select from Bucket
+                            </Button>
+                        </div>
+                        {item.image_url && (
+                            <div className="mt-2">
+                                <img
+                                    src={item.image_url}
+                                    alt="Portfolio preview"
+                                    className="w-48 h-32 object-cover rounded-lg border border-gray-200 shadow-sm"
+                                />
+                                <p className="text-xs text-gray-500 mt-1">Preview</p>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="mt-4">
+                        <Label htmlFor={`portfolio-alt-${index}`}>Alt Text</Label>
+                        <Input
+                            id={`portfolio-alt-${index}`}
+                            value={item.alt_text || ""}
+                            onChange={(e) => updatePortfolioItem(index, 'alt_text', e.target.value)}
+                            placeholder="Descriptive alt text for the image"
+                        />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div>
+                            <Label htmlFor={`portfolio-client-${index}`}>Client Name</Label>
+                            <Input
+                                id={`portfolio-client-${index}`}
+                                value={item.client_name || ""}
+                                onChange={(e) => updatePortfolioItem(index, 'client_name', e.target.value)}
+                                placeholder="Client or company name"
+                            />
+                        </div>
+                        <div>
+                            <Label htmlFor={`portfolio-year-${index}`}>Project Year</Label>
+                            <Input
+                                id={`portfolio-year-${index}`}
+                                type="number"
+                                value={item.project_year || ""}
+                                onChange={(e) => updatePortfolioItem(index, 'project_year', parseInt(e.target.value) || new Date().getFullYear())}
+                                placeholder="2024"
+                                min="2000"
+                                max="2030"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="mt-4 flex items-center space-x-2">
+                        <input
+                            type="checkbox"
+                            id={`portfolio-featured-${index}`}
+                            checked={item.is_featured}
+                            onChange={(e) => updatePortfolioItem(index, 'is_featured', e.target.checked)}
+                            className="rounded"
+                        />
+                        <Label htmlFor={`portfolio-featured-${index}`}>Featured Project</Label>
+                    </div>
+                </div>
+            ))}
+        </div>
+    );
+};
 
 export default EditCityPage;

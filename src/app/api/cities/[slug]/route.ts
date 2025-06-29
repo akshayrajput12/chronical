@@ -17,10 +17,10 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         const includeRelations = searchParams.get("include_relations") === "true";
 
         // Build query
-        let query = supabase.from("cities");
-        
+        let query;
+
         if (includeRelations) {
-            query = query.select(`
+            query = supabase.from("cities").select(`
                 *,
                 services:city_services(
                     id,
@@ -80,7 +80,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
                 )
             `);
         } else {
-            query = query.select("*");
+            query = supabase.from("cities").select("*");
         }
 
         const { data: city, error } = await query

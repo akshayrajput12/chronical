@@ -102,6 +102,7 @@ export interface BlogPostSummary {
     title: string;
     slug: string;
     excerpt?: string;
+    content?: string; // Optional content for reading time calculation
     featured_image_url?: string;
     featured_image_alt?: string;
     published_at?: string;

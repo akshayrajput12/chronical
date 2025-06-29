@@ -6,13 +6,36 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { LegacyCity } from "@/types/cities";
 
 interface CityDetailHeroProps {
-    cityName: string;
-    heroImage: string;
+    city: LegacyCity;
 }
 
-const CityDetailHero = ({ cityName, heroImage }: CityDetailHeroProps) => {
+const CityDetailHero = ({ city }: CityDetailHeroProps) => {
+    // Get hero section data from admin - check for hero content section first
+    const heroSection = city.contentSections?.find(
+        section => section.section_type === "hero" && section.is_active
+    );
+
+    // Extract dynamic data with fallbacks to basic city info
+    const heroTitle = heroSection?.title?.trim() ||
+        `EXHIBITION STAND DESIGN BUILDER IN ${city.name.toUpperCase()}, UAE.`;
+
+    const heroSubtitle = heroSection?.subtitle?.trim() || city.subtitle?.trim();
+
+    const heroDescription = heroSection?.content?.trim() ||
+        city.description?.trim() ||
+        `Chronicle Exhibition Organizing LLC is one of the most reputable exhibition stand design manufacturers, and contractors located in ${city.name} offering an exhaustive array of stand-up services for exhibitions. We provide complete display stand solutions, including designing, planning, fabricating and erecting and putting up.`;
+
+    const heroImage = heroSection?.image_url?.trim() ||
+        city.heroImage ||
+        "https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80";
+
+    // Don't render if no image is available
+    if (!heroImage) {
+        return null;
+    }
     return (
         <section className="w-full bg-white">
             {/* Full width hero container with background image */}
@@ -21,7 +44,7 @@ const CityDetailHero = ({ cityName, heroImage }: CityDetailHeroProps) => {
                 <div className="absolute inset-0 z-0">
                     <Image
                         src={heroImage}
-                        alt={`Exhibition services in ${cityName}`}
+                        alt={heroSubtitle || heroTitle || `Exhibition services in ${city.name}`}
                         fill
                         className="object-cover"
                         priority
@@ -34,32 +57,55 @@ const CityDetailHero = ({ cityName, heroImage }: CityDetailHeroProps) => {
                 <div className="relative z-10 md:mt-6  mt-0 px-4 sm:px-6 md:px-8 lg:px-12 text-center text-white w-full">
                     <div className="max-w-7xl mx-auto">
                         <div className="max-w-5xl mx-auto">
-                            {/* Main Heading - exactly matching the reference image */}
+                            {/* Dynamic Main Heading from Admin */}
                             <motion.h1
                                 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-6 leading-tight uppercase tracking-wide"
                                 initial={{ opacity: 0, y: 30 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8 }}
                             >
-                                EXHIBITION STAND DESIGN BUILDER <br />
-                                IN {cityName.toUpperCase()}, UAE.
+                                {heroTitle}
                             </motion.h1>
 
-                            {/* Description Text - matching the reference image */}
+                            {/* Dynamic Subtitle if available */}
+                            {heroSubtitle && (
+                                <motion.h2
+                                    className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-white/95 mb-4 max-w-4xl mx-auto leading-relaxed font-markazi-text font-medium"
+                                    initial={{ opacity: 0, y: 30 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.8, delay: 0.1 }}
+                                >
+                                    {heroSubtitle}
+                                </motion.h2>
+                            )}
+
+                            {/* Dynamic Description Text from Admin */}
                             <motion.h3
                                 className="text-sm sm:text-base md:text-lg lg:text-xl text-white/90 mb-4 max-w-4xl mx-auto leading-relaxed font-markazi-text"
                                 initial={{ opacity: 0, y: 30 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8, delay: 0.2 }}
                             >
-                                Chronicle Exhibition Organizing LLC is one of
-                                the most reputable exhibition stand design
-                                manufacturers, and contractors located in{" "}
-                                {cityName} offering an exhaustive array of
-                                stand-up services for exhibitions. We provide
-                                complete display stand solutions, including
-                                designing, planning, fabricating and erecting
-                                and putting up.
+                                {heroDescription.split('\n\n').map((paragraph, index) => (
+                                    <span key={`hero-desc-${index}`}>
+                                        {paragraph.includes('Chronicle Exhibition') || paragraph.includes('Chronicle Exhibits') ? (
+                                            <>
+                                                {paragraph.split(/(Chronicle Exhibition[^.]*|Chronicle Exhibits[^.]*)/g).map((part, partIndex) => (
+                                                    part.includes('Chronicle') ? (
+                                                        <span key={partIndex} className="text-[#a5cd39] font-medium">
+                                                            {part}
+                                                        </span>
+                                                    ) : (
+                                                        part
+                                                    )
+                                                ))}
+                                            </>
+                                        ) : (
+                                            paragraph
+                                        )}
+                                        {index < heroDescription.split('\n\n').length - 1 && <br />}
+                                    </span>
+                                ))}
                             </motion.h3>
 
                             {/* Call-to-Action Button - matching the reference image */}

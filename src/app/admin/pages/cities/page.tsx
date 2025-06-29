@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,7 +29,7 @@ const CitiesAdminPage = () => {
     const [selectedCities, setSelectedCities] = useState<string[]>([]);
 
     // Fetch cities
-    const fetchCities = async () => {
+    const fetchCities = useCallback(async () => {
         try {
             setLoading(true);
             let query = supabase
@@ -60,7 +60,7 @@ const CitiesAdminPage = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [statusFilter, searchTerm, supabase]);
 
     // Delete city and associated images
     const handleDelete = async (cityId: string) => {
@@ -267,7 +267,7 @@ const CitiesAdminPage = () => {
 
     useEffect(() => {
         fetchCities();
-    }, [statusFilter, searchTerm]);
+    }, [fetchCities]);
 
     return (
         <div className="p-6 max-w-7xl mx-auto">

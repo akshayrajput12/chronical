@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, Save, Eye, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
@@ -40,11 +40,7 @@ const ExpoPavilionExceptionalDesignEditor = () => {
 
     const supabase = createClient();
 
-    useEffect(() => {
-        loadData();
-    }, []);
-
-    const loadData = async () => {
+    const loadData = useCallback(async () => {
         try {
             // Load design section data
             const { data: designSection, error: designError } = await supabase
@@ -128,7 +124,11 @@ const ExpoPavilionExceptionalDesignEditor = () => {
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [supabase]);
+
+    useEffect(() => {
+        loadData();
+    }, [loadData]);
 
     const handleSave = async () => {
         setIsSaving(true);

@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { BlogPostSummary } from "@/types/blog";
+import { getReadingTime } from "@/utils/reading-time";
 
 interface BlogRelatedPostsProps {
     currentPostId: string;
@@ -88,38 +89,64 @@ const BlogRelatedPosts = ({
     currentPostId,
     currentPostSlug,
 }: BlogRelatedPostsProps) => {
-    const [relatedPosts, setRelatedPosts] =
-        useState<BlogPostSummary[]>(staticBlogPosts);
-    const [loading, setLoading] = useState(false);
+    const [relatedPosts, setRelatedPosts] = useState<BlogPostSummary[]>([]);
+    const [loading, setLoading] = useState(true);
 
-    // Filter out current post and get first 4 posts
+    // Fetch related posts from API
+    useEffect(() => {
+        const fetchRelatedPosts = async () => {
+            try {
+                setLoading(true);
+                const response = await fetch(`/api/blog/posts?relatedTo=${currentPostId}&pageSize=4`);
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch related posts');
+                }
+
+                const data = await response.json();
+                setRelatedPosts(data.posts || []);
+            } catch (error) {
+                console.error('Error fetching related posts:', error);
+                // Fallback to static posts if API fails
+                setRelatedPosts(staticBlogPosts.filter(
+                    post => post.id !== currentPostId && post.slug !== currentPostSlug
+                ).slice(0, 4));
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (currentPostId) {
+            fetchRelatedPosts();
+        }
+    }, [currentPostId, currentPostSlug]);
+
+    // Filter out current post (extra safety check)
     const filteredPosts = relatedPosts
         .filter(
             post => post.id !== currentPostId && post.slug !== currentPostSlug,
         )
         .slice(0, 4);
 
-    const featuredPost = filteredPosts[0];
-    const recentPosts = filteredPosts.slice(1, 4);
-
     if (loading) {
         return (
-            <aside className="lg:w-[30%] w-full">
-                <div className="sticky top-24 bg-white">
+            <aside className="w-full">
+                <div className="sticky top-20 bg-white max-h-screen overflow-y-auto">
                     <div className="px-4">
                         <div className="w-full mx-auto">
-                            <div className="grid grid-cols-1 gap-6">
+                            <div className="border border-gray-200 rounded-lg p-6 max-h-[calc(100vh-6rem)]">
                                 <div className="animate-pulse">
-                                    <div className="h-6 bg-gray-200 rounded mb-4"></div>
+                                    <div className="h-6 bg-gray-200 rounded mb-6"></div>
                                     {[1, 2, 3].map(i => (
                                         <div
                                             key={i}
                                             className="flex gap-3 mb-4 animate-pulse"
                                         >
-                                            <div className="w-16 h-16 bg-gray-200 rounded"></div>
+                                            <div className="w-16 h-16 bg-gray-200 rounded-lg"></div>
                                             <div className="flex-1">
                                                 <div className="h-4 bg-gray-200 rounded mb-2"></div>
-                                                <div className="h-3 bg-gray-200 rounded w-2/3"></div>
+                                                <div className="h-3 bg-gray-200 rounded w-2/3 mb-1"></div>
+                                                <div className="h-3 bg-gray-200 rounded w-1/2"></div>
                                             </div>
                                         </div>
                                     ))}
@@ -145,82 +172,78 @@ const BlogRelatedPosts = ({
     };
 
     return (
-        <aside className="lg:w-[30%] w-full">
-            <div className="sticky top-24 bg-white">
+        <aside className="w-full">
+            <div className="sticky top-20 bg-white max-h-screen overflow-y-auto">
                 <div className="px-4">
                     <div className="w-full mx-auto">
-                        <div className="grid grid-cols-1 gap-6">
-                            {/* Recent Articles - Right Side */}
-                            <motion.div
-                                className="bg-gray-50 p-6 rounded-lg h-fit"
-                                initial={{ opacity: 0, x: 30 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ duration: 0.6, delay: 0.2 }}
-                            >
-                                <h3 className="text-lg font-semibold text-gray-900 mb-6 border-b border-gray-200 pb-2">
-                                    Recent Articles
-                                </h3>
+                        {/* Related Blogs Section */}
+                        <motion.div
+                            className="border border-gray-200 rounded-lg p-6 h-fit max-h-[calc(100vh-6rem)]"
+                            initial={{ opacity: 0, x: 30 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.6, delay: 0.2 }}
+                        >
+                            <h3 className="text-xl font-semibold text-gray-900 mb-6">
+                                Related Blogs
+                            </h3>
 
-                                <div className="space-y-4">
-                                    {recentPosts.map((post, index) => (
-                                        <motion.div
-                                            key={post.id}
-                                            initial={{ opacity: 0, y: 20 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            transition={{
-                                                duration: 0.6,
-                                                delay: 0.3 + index * 0.1,
-                                            }}
-                                        >
-                                            <Link href={`/blog/${post.slug}`}>
-                                                <div className="flex gap-3 group cursor-pointer hover:bg-white p-2 rounded-lg transition-colors duration-200">
-                                                    {/* Thumbnail */}
-                                                    <div className="relative w-16 h-16 flex-shrink-0 overflow-hidden rounded-lg">
-                                                        {post.featured_image_url ? (
-                                                            <Image
-                                                                src={
-                                                                    post.featured_image_url
-                                                                }
-                                                                alt={
-                                                                    post.featured_image_alt ||
-                                                                    post.title
-                                                                }
-                                                                fill
-                                                                className="object-cover transition-transform duration-300 group-hover:scale-110"
-                                                                sizes="64px"
-                                                            />
-                                                        ) : (
-                                                            <div className="w-full h-full bg-gray-300 flex items-center justify-center">
-                                                                <span className="text-gray-500 text-xs">
-                                                                    No img
+                            <div className="space-y-4">
+                                {filteredPosts.map((post, index) => (
+                                    <motion.div
+                                        key={post.id}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{
+                                            duration: 0.6,
+                                            delay: 0.3 + index * 0.1,
+                                        }}
+                                    >
+                                        <Link href={`/blog/${post.slug}`}>
+                                            <div className="flex gap-3 group cursor-pointer hover:bg-gray-50 p-3 rounded-lg transition-colors duration-200">
+                                                {/* Thumbnail */}
+                                                <div className="relative w-16 h-16 flex-shrink-0 overflow-hidden rounded-lg">
+                                                    {post.featured_image_url ? (
+                                                        <Image
+                                                            src={post.featured_image_url}
+                                                            alt={post.featured_image_alt || post.title}
+                                                            fill
+                                                            className="object-cover transition-transform duration-300 group-hover:scale-110"
+                                                            sizes="64px"
+                                                        />
+                                                    ) : (
+                                                        <div className="w-full h-full bg-gray-300 flex items-center justify-center rounded-lg">
+                                                            <span className="text-gray-500 text-xs">
+                                                                No img
+                                                            </span>
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                                {/* Content */}
+                                                <div className="flex-1 min-w-0">
+                                                    <h4 className="font-medium text-gray-900 text-sm line-clamp-2 group-hover:text-gray-700 transition-colors mb-2">
+                                                        {post.title}
+                                                    </h4>
+                                                    <div className="flex items-center gap-2 text-xs text-gray-500">
+                                                        {post.category_name && (
+                                                            <>
+                                                                <span className="text-gray-600">
+                                                                    {post.category_name}
                                                                 </span>
-                                                            </div>
+                                                                <span>•</span>
+                                                            </>
                                                         )}
-                                                    </div>
-
-                                                    {/* Content */}
-                                                    <div className="flex-1 min-w-0">
-                                                        <h4 className="font-medium text-gray-900 text-sm line-clamp-2 group-hover:text-gray-700 transition-colors mb-1">
-                                                            {post.title}
-                                                        </h4>
+                                                        <span>
+                                                            {getReadingTime(post.content || post.excerpt || '')}
+                                                        </span>
                                                     </div>
                                                 </div>
-                                            </Link>
-                                        </motion.div>
-                                    ))}
-                                </div>
-
-                                {/* View All Link */}
-                                <div className="mt-6 pt-4 border-t border-gray-200">
-                                    <Link
-                                        href="/blog"
-                                        className="text-[#a5cd39] hover:text-[#8fb82e] font-medium text-sm transition-colors duration-300 flex items-center justify-center"
-                                    >
-                                        View All Articles →
-                                    </Link>
-                                </div>
-                            </motion.div>
-                        </div>
+                                            </div>
+                                        </Link>
+                                    </motion.div>
+                                ))}
+                            </div>
+                        </motion.div>
                     </div>
                 </div>
             </div>

@@ -2,6 +2,7 @@
 
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
+import Heading from '@tiptap/extension-heading'
 import Image from '@tiptap/extension-image'
 import Link from '@tiptap/extension-link'
 import Table from '@tiptap/extension-table'
@@ -76,8 +77,17 @@ export default function TiptapEditor({
         bulletList: false,
         orderedList: false,
         listItem: false,
+        // Disable built-in heading to use our custom one
+        heading: false,
         // Configure hard break to preserve line breaks
         hardBreak: false, // We'll use our custom HardBreak extension
+      }),
+      // Add custom Heading extension with specific classes
+      Heading.configure({
+        levels: [1, 2, 3, 4, 5, 6],
+        HTMLAttributes: {
+          class: 'tiptap-heading',
+        },
       }),
       // Add HardBreak extension for proper line breaks
       HardBreak.configure({
@@ -251,9 +261,9 @@ export default function TiptapEditor({
   }
 
   return (
-    <div className={`border rounded-lg bg-white ${className}`}>
-      {/* Custom styles for lists */}
-      <style jsx>{`
+    <div className={`tiptap-editor border rounded-lg bg-white ${className}`}>
+      {/* Custom styles for lists and headings */}
+      <style jsx global>{`
         .ProseMirror ul {
           list-style-type: disc;
           padding-left: 1.5rem;
@@ -270,6 +280,100 @@ export default function TiptapEditor({
         }
         .ProseMirror li p {
           margin: 0;
+        }
+
+        /* Custom heading font styles */
+        .ProseMirror h1 {
+          font-family: var(--font-rubik), 'Rubik', sans-serif !important;
+          font-weight: 700 !important;
+          font-size: 2.25rem !important;
+          line-height: 1.2 !important;
+          margin-top: 2rem !important;
+          margin-bottom: 1rem !important;
+          color: #111827 !important;
+        }
+
+        .ProseMirror h2 {
+          font-family: var(--font-rubik), 'Rubik', sans-serif !important;
+          font-weight: 700 !important;
+          font-size: 1.875rem !important;
+          line-height: 1.2 !important;
+          margin-top: 1.5rem !important;
+          margin-bottom: 0.75rem !important;
+          color: #111827 !important;
+        }
+
+        .ProseMirror h3 {
+          font-family: var(--font-markazi-text), 'Markazi Text', serif !important;
+          font-weight: 600 !important;
+          font-size: 1.5rem !important;
+          line-height: 1.3 !important;
+          margin-top: 1.25rem !important;
+          margin-bottom: 0.5rem !important;
+          color: #111827 !important;
+        }
+
+        /* Additional specificity for h3 in editor */
+        .ProseMirror[contenteditable="true"] h3,
+        .ProseMirror h3[data-type="heading"],
+        div[contenteditable="true"] h3 {
+          font-family: var(--font-markazi-text), 'Markazi Text', serif !important;
+          font-weight: 600 !important;
+        }
+
+        /* Ensure font variables are available */
+        .ProseMirror {
+          font-family: inherit;
+        }
+
+        /* Force Markazi font for h3 with maximum specificity */
+        .tiptap-editor .ProseMirror h3,
+        .ProseMirror h3.tiptap-heading,
+        .ProseMirror .tiptap-heading[data-level="3"],
+        [data-type="heading"][data-level="3"] {
+          font-family: var(--font-markazi-text), 'Markazi Text', serif !important;
+          font-weight: 600 !important;
+        }
+
+        /* Also target h4, h5, h6 for Markazi font */
+        .tiptap-editor .ProseMirror h4,
+        .tiptap-editor .ProseMirror h5,
+        .tiptap-editor .ProseMirror h6,
+        .ProseMirror h4.tiptap-heading,
+        .ProseMirror h5.tiptap-heading,
+        .ProseMirror h6.tiptap-heading {
+          font-family: var(--font-markazi-text), 'Markazi Text', serif !important;
+          font-weight: 600 !important;
+        }
+
+        .ProseMirror h4 {
+          font-family: var(--font-markazi-text), 'Markazi Text', serif !important;
+          font-weight: 600 !important;
+          font-size: 1.25rem !important;
+          line-height: 1.3 !important;
+          margin-top: 1rem !important;
+          margin-bottom: 0.5rem !important;
+          color: #111827 !important;
+        }
+
+        .ProseMirror h5 {
+          font-family: var(--font-markazi-text), 'Markazi Text', serif !important;
+          font-weight: 600 !important;
+          font-size: 1.125rem !important;
+          line-height: 1.3 !important;
+          margin-top: 1rem !important;
+          margin-bottom: 0.5rem !important;
+          color: #111827 !important;
+        }
+
+        .ProseMirror h6 {
+          font-family: var(--font-markazi-text), 'Markazi Text', serif !important;
+          font-weight: 600 !important;
+          font-size: 1rem !important;
+          line-height: 1.3 !important;
+          margin-top: 1rem !important;
+          margin-bottom: 0.5rem !important;
+          color: #111827 !important;
         }
       `}</style>
       {/* Mode Switcher */}

@@ -31,7 +31,8 @@ const Logo = ({
                 alt="Chronicle Exhibits Logo"
                 width={120}
                 height={70}
-                className="h-auto min-h-[70px] w-auto"
+                className="h-auto w-auto"
+                style={{ minHeight: '70px' }}
                 priority
             />
         </Link>
