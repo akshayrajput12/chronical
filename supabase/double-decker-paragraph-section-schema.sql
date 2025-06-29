@@ -91,7 +91,8 @@ DECLARE
 BEGIN
     -- Deactivate all existing sections
     UPDATE double_decker_paragraph_section 
-    SET is_active = false, updated_at = NOW();
+    SET is_active = false, updated_at = NOW()
+    WHERE is_active = true;
     
     -- Insert new active section
     INSERT INTO double_decker_paragraph_section (

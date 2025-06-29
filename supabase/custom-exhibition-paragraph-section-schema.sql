@@ -92,7 +92,7 @@ BEGIN
     -- Deactivate all existing sections
     UPDATE custom_exhibition_paragraph_section 
     SET is_active = false, updated_at = NOW();
-    
+    WHERE is_active = true;
     -- Insert new active section
     INSERT INTO custom_exhibition_paragraph_section (
         paragraph_content,

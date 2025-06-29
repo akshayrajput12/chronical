@@ -14,33 +14,11 @@ interface BlogDetailContentProps {
 const BlogDetailContent = ({
     content,
     images = [],
-    excerpt,
 }: BlogDetailContentProps) => {
     return (
         <>
-            {/* Excerpt Section - positioned right after back link */}
-            {/* COMMENTED OUT: Excerpt section removed from blog detail page
-            {excerpt && (
-                <section className="bg-white pb-4 md:pb-12">
-                    <div className="container mx-auto px-4">
-                        <div className="max-w-6xl mx-auto">
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.6, delay: 0.2 }}
-                            >
-                                <h3 className=" text-center text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight mb-4 md:mb-6">
-                                    {excerpt}
-                                </h3>
-                            </motion.div>
-                        </div>
-                    </div>
-                </section>
-            )}
-            */}
-
             {/* Main Content Section */}
-            <section className="w-full bg-white">
+            <section className="w-[70%] bg-white">
                 <div className="container mx-auto px-4">
                     <div className="max-w-6xl mx-auto">
                         <div className="w-full">
@@ -118,6 +96,7 @@ const BlogDetailContent = ({
                         font-size: 2.25rem;
                     }
                     .blog-content h2 {
+                        font-family: var(--font-rubik), "Rubik", sans-serif !important;
                         font-size: 1.875rem;
                     }
                     .blog-content h3 {

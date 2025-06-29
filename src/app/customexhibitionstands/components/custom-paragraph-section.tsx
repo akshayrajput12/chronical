@@ -5,6 +5,7 @@ import {
     getCustomExhibitionParagraphSection,
     CustomExhibitionParagraphSection,
 } from "@/services/custom-exhibition-stands.service";
+import BlogContent from "@/components/blog/blog-content";
 
 const CustomParagraphSection = () => {
     const [data, setData] = useState<CustomExhibitionParagraphSection | null>(
@@ -61,14 +62,15 @@ const CustomParagraphSection = () => {
     }
 
     return (
-        <section className="pb-16 bg-white mx-auto">
+        <section className="pb-16 bg-white">
             <div className="container px-4 mx-auto">
                 <div className="max-w-full">
-                    <div className="text-center">
+                    <div className="text-left">
                         <div className="max-w-6xl space-y-6">
-                            <p className="text-lg text-gray-700 leading-relaxed">
-                                {data?.paragraph_content}
-                            </p>
+                            <BlogContent
+                                content={data?.paragraph_content ?? ""}
+                            />
+                            ;
                         </div>
                     </div>
                 </div>

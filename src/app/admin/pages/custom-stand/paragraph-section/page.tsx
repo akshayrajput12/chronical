@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import {
@@ -16,6 +15,7 @@ import {
 import { toast } from "sonner";
 import { ArrowLeft, Save, Eye, FileText } from "lucide-react";
 import Link from "next/link";
+import TiptapEditor from "@/components/admin/tiptap-editor";
 import {
     getCustomExhibitionParagraphSection,
     saveCustomExhibitionParagraphSection,
@@ -24,7 +24,7 @@ import {
 
 const CustomStandParagraphSectionEditor = () => {
     const [data, setData] = useState<CustomExhibitionParagraphSection>({
-        paragraph_content: '',
+        paragraph_content: "",
         is_active: true,
     });
     const [isLoading, setIsLoading] = useState(true);
@@ -41,14 +41,17 @@ const CustomStandParagraphSectionEditor = () => {
                 setData(result);
             }
         } catch (error) {
-            console.error('Error loading paragraph section data:', error);
-            toast.error('Failed to load paragraph section data');
+            console.error("Error loading paragraph section data:", error);
+            toast.error("Failed to load paragraph section data");
         } finally {
             setIsLoading(false);
         }
     };
 
-    const handleInputChange = (field: keyof CustomExhibitionParagraphSection, value: any) => {
+    const handleInputChange = (
+        field: keyof CustomExhibitionParagraphSection,
+        value: any,
+    ) => {
         setData(prev => ({
             ...prev,
             [field]: value,
@@ -57,22 +60,24 @@ const CustomStandParagraphSectionEditor = () => {
 
     const handleSave = async () => {
         if (!data.paragraph_content.trim()) {
-            toast.error('Paragraph content is required');
+            toast.error("Paragraph content is required");
             return;
         }
 
         setIsSaving(true);
         try {
-            const success = await saveCustomExhibitionParagraphSection(data.paragraph_content);
+            const success = await saveCustomExhibitionParagraphSection(
+                data.paragraph_content,
+            );
             if (success) {
-                toast.success('Paragraph section saved successfully!');
+                toast.success("Paragraph section saved successfully!");
                 await loadData(); // Reload to get updated data
             } else {
-                toast.error('Failed to save paragraph section');
+                toast.error("Failed to save paragraph section");
             }
         } catch (error) {
-            console.error('Error saving paragraph section:', error);
-            toast.error('Failed to save paragraph section');
+            console.error("Error saving paragraph section:", error);
+            toast.error("Failed to save paragraph section");
         } finally {
             setIsSaving(false);
         }
@@ -109,8 +114,12 @@ const CustomStandParagraphSectionEditor = () => {
                                 <ArrowLeft className="w-5 h-5" />
                             </Link>
                             <div>
-                                <h1 className="text-3xl font-bold text-gray-900">Paragraph Section</h1>
-                                <p className="text-gray-600">Manage the paragraph section content</p>
+                                <h1 className="text-3xl font-bold text-gray-900">
+                                    Paragraph Section
+                                </h1>
+                                <p className="text-gray-600">
+                                    Manage the paragraph section content
+                                </p>
                             </div>
                         </div>
                         <div className="flex items-center space-x-4">
@@ -141,23 +150,31 @@ const CustomStandParagraphSectionEditor = () => {
                                 Paragraph Content
                             </CardTitle>
                             <CardDescription>
-                                Edit the paragraph content that appears in the section
+                                Edit the paragraph content that appears in the
+                                section
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-6">
                             {/* Paragraph Content */}
                             <div>
-                                <Label htmlFor="paragraph_content">Paragraph Content</Label>
-                                <Textarea
-                                    id="paragraph_content"
-                                    value={data.paragraph_content}
-                                    onChange={(e) => handleInputChange('paragraph_content', e.target.value)}
-                                    rows={8}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                    placeholder="Enter paragraph content"
+                                <Label htmlFor="paragraph_content">
+                                    Paragraph Content
+                                </Label>
+                                <TiptapEditor
+                                    content={data.paragraph_content}
+                                    onChange={content =>
+                                        handleInputChange(
+                                            "paragraph_content",
+                                            content,
+                                        )
+                                    }
+                                    placeholder="Enter paragraph content with rich formatting..."
+                                    className="mt-2"
                                 />
-                                <p className="text-sm text-gray-500 mt-1">
-                                    This content will be displayed in the paragraph section.
+                                <p className="text-sm text-gray-500 mt-2">
+                                    Use the rich text editor to format your
+                                    content with headings, lists, links, and
+                                    more.
                                 </p>
                             </div>
 
@@ -166,7 +183,9 @@ const CustomStandParagraphSectionEditor = () => {
                                 <Switch
                                     id="is_active"
                                     checked={data.is_active}
-                                    onCheckedChange={(checked) => handleInputChange('is_active', checked)}
+                                    onCheckedChange={checked =>
+                                        handleInputChange("is_active", checked)
+                                    }
                                 />
                                 <Label htmlFor="is_active">Active</Label>
                             </div>
@@ -178,7 +197,7 @@ const CustomStandParagraphSectionEditor = () => {
                                 className="w-full bg-[#a5cd39] hover:bg-[#8fb32a] text-black"
                             >
                                 <Save className="w-4 h-4 mr-2" />
-                                {isSaving ? 'Saving...' : 'Save Changes'}
+                                {isSaving ? "Saving..." : "Save Changes"}
                             </Button>
                         </CardContent>
                     </Card>
@@ -199,9 +218,14 @@ const CustomStandParagraphSectionEditor = () => {
                                 transition={{ duration: 0.5 }}
                             >
                                 <div className="bg-white p-6 rounded-lg border">
-                                    <p className="text-lg text-gray-700 leading-relaxed">
-                                        {data.paragraph_content || 'Enter paragraph content to see preview...'}
-                                    </p>
+                                    <div
+                                        className="text-lg text-gray-700 leading-relaxed prose prose-sm sm:prose lg:prose-lg xl:prose-xl max-w-none"
+                                        dangerouslySetInnerHTML={{
+                                            __html:
+                                                data.paragraph_content ||
+                                                "Enter paragraph content to see preview...",
+                                        }}
+                                    />
                                 </div>
                             </motion.div>
                         </CardContent>

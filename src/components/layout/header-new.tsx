@@ -252,13 +252,13 @@ const Header = () => {
                                             }
                                         />
                                         <NavItem
-                                            href="/support"
-                                            label="SUPPORT"
+                                            href="/portfolio"
+                                            label="PORTFOLIO"
                                             isActive={
                                                 activeNavigation.type ===
                                                     "right" &&
                                                 activeNavigation.key ===
-                                                    "support"
+                                                    "portfolio"
                                             }
                                         />
                                         <NavItem
@@ -503,29 +503,6 @@ const Header = () => {
                                                                 isActive={
                                                                     pathname ===
                                                                     "/cities"
-                                                                }
-                                                            />
-                                                        </div>
-                                                        <div
-                                                            className={cn(
-                                                                "h-12 w-[1.5px] mx-4",
-                                                                (
-                                                                    isHomePage
-                                                                        ? isScrolled
-                                                                        : true
-                                                                )
-                                                                    ? "bg-white"
-                                                                    : "bg-white",
-                                                            )}
-                                                        ></div>
-                                                        <div className="relative group">
-                                                            <SubNavItem
-                                                                href="/portfolio"
-                                                                label="PORTFOLIO"
-                                                                subLabel="Showcasing our finest stand creations"
-                                                                isActive={
-                                                                    pathname ===
-                                                                    "/portfolio"
                                                                 }
                                                             />
                                                         </div>

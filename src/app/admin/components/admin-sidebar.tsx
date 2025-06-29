@@ -112,8 +112,12 @@ const AdminSidebar = ({
         blog: pathname.includes("/admin/pages/blog"),
         cities: pathname.includes("/admin/pages/cities"),
         customStand: pathname.includes("/admin/pages/custom-stand"),
-        doubleDeckerStand: pathname.includes("/admin/pages/double-decker-stand"),
-        expoPavilionStand: pathname.includes("/admin/pages/expo-pavilion-stand"),
+        doubleDeckerStand: pathname.includes(
+            "/admin/pages/double-decker-stand",
+        ),
+        expoPavilionStand: pathname.includes(
+            "/admin/pages/expo-pavilion-stand",
+        ),
     });
 
     const toggleSection = (section: string) => {
@@ -585,7 +589,9 @@ const AdminSidebar = ({
                         href="/admin/pages/custom-stand"
                         label="Custom Stand"
                         icon={<Building2 size={18} />}
-                        isActive={pathname.includes("/admin/pages/custom-stand")}
+                        isActive={pathname.includes(
+                            "/admin/pages/custom-stand",
+                        )}
                         hasChildren={true}
                         isOpen={openSections.customStand}
                         onClick={() => toggleSection("customStand")}
@@ -665,6 +671,14 @@ const AdminSidebar = ({
                                             "/admin/pages/custom-stand/portfolio"
                                         }
                                     />
+                                    <SubNavItem
+                                        href="/admin/pages/custom-stand/paragraph-section"
+                                        label="Portfolio Content Section"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/custom-stand/paragraph-section"
+                                        }
+                                    />
                                 </div>
                             </motion.div>
                         )}
@@ -677,7 +691,9 @@ const AdminSidebar = ({
                         href="/admin/pages/double-decker-stand"
                         label="Double Decker Stand"
                         icon={<Building2 size={18} />}
-                        isActive={pathname.includes("/admin/pages/double-decker-stand")}
+                        isActive={pathname.includes(
+                            "/admin/pages/double-decker-stand",
+                        )}
                         hasChildren={true}
                         isOpen={openSections.doubleDeckerStand}
                         onClick={() => toggleSection("doubleDeckerStand")}
@@ -725,6 +741,14 @@ const AdminSidebar = ({
                                             "/admin/pages/double-decker-stand/portfolio"
                                         }
                                     />
+                                    <SubNavItem
+                                        href="/admin/pages/double-decker-stand/paragraph-section"
+                                        label="Portfolio Paragraph Section"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/double-decker-stand/paragraph-section"
+                                        }
+                                    />
                                 </div>
                             </motion.div>
                         )}
@@ -737,7 +761,9 @@ const AdminSidebar = ({
                         href="/admin/pages/expo-pavilion-stand"
                         label="Expo Pavilion Stand"
                         icon={<Building2 size={18} />}
-                        isActive={pathname.includes("/admin/pages/expo-pavilion-stand")}
+                        isActive={pathname.includes(
+                            "/admin/pages/expo-pavilion-stand",
+                        )}
                         hasChildren={true}
                         isOpen={openSections.expoPavilionStand}
                         onClick={() => toggleSection("expoPavilionStand")}
@@ -783,6 +809,14 @@ const AdminSidebar = ({
                                         isActive={
                                             pathname ===
                                             "/admin/pages/expo-pavilion-stand/portfolio"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/expo-pavilion-stand/paragraph-section"
+                                        label="Portfolio Paragraph Section"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/expo-pavilion-stand/paragraph-section"
                                         }
                                     />
                                 </div>

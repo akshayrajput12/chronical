@@ -196,7 +196,7 @@ const BlogDetailPage = () => {
                 />
             </Head>
 
-            <div className="min-h-screen bg-white mt-16 md:mt-20 lg:mt-24">
+            <div className="bg-white mt-16 md:mt-20 lg:mt-24">
                 <BlogDetailHero
                     title={blogPost.title}
                     subtitle={blogPost.excerpt || ""}
@@ -209,22 +209,18 @@ const BlogDetailPage = () => {
                     viewCount={blogPost.view_count}
                     author={blogPost.author_id ? "Admin" : undefined}
                 />
-                <div className="flex gap-6 relative lg:flex-row flex-col xl:mx-20 lg:mx-8 md:mx-6 mx-4 min-h-screen">
-                    <div className="lg:w-[70%] w-full">
-                        <BlogDetailContent
-                            content={blogPost.content || ""}
-                            excerpt={blogPost.excerpt}
-                        />
-                    </div>
-                    <div className="lg:w-[30%] w-full">
-                        <BlogRelatedPosts
-                            currentPostId={blogPost.id}
-                            currentPostSlug={blogPost.slug}
-                        />
-                    </div>
+                <div className="relative lg:mx-20 md:mx-12 sm:mx-8 mx-4 flex row-col justify-between xl:gap-8 lg:gap-4 gap-6">
+                    <BlogDetailContent
+                        content={blogPost.content || ""}
+                        excerpt={blogPost.excerpt}
+                    />
+                    <BlogRelatedPosts
+                        currentPostId={blogPost.id}
+                        currentPostSlug={blogPost.slug}
+                    />
                 </div>
-                <EventsForm />
             </div>
+            <EventsForm />
         </>
     );
 };
