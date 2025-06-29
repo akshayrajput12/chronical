@@ -3,13 +3,21 @@
 import React from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { City } from "@/types/cities";
+import { LegacyCity } from "@/types/cities";
 
 interface CityBoothDesignSectionProps {
-    city: City;
+    city: LegacyCity;
 }
 
 const CityBoothDesignSection = ({ city }: CityBoothDesignSectionProps) => {
+    // Get booth design section data
+    const boothDesignSection = city.contentSections?.find(section => section.section_type === 'booth_design');
+
+    // Fallback to default content if no dynamic content is available
+    const title = boothDesignSection?.title || "WHAT IS AN EXHIBITION BOOTH DESIGN?";
+    const content = boothDesignSection?.content || "An exhibition stand design puts forward the central idea of your brand & expresses the motto of your company in an influential way. A well-designed exhibition stand or booth helps you reach your business goals & brings the maximum public to your booth.";
+    const imageUrl = boothDesignSection?.image_url || "https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80";
+
     return (
         <section className="py-8 md:py-12 lg:py-16 bg-white">
             <div className="container mx-auto px-4">
@@ -26,19 +34,13 @@ const CityBoothDesignSection = ({ city }: CityBoothDesignSectionProps) => {
                             <div className="space-y-6">
                                 {/* Main Heading */}
                                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 uppercase tracking-wide leading-tight">
-                                    WHAT IS AN EXHIBITION BOOTH DESIGN?
+                                    {title}
                                 </h2>
 
                                 {/* Content Paragraph */}
                                 <div className="text-gray-700">
                                     <p className="text-base md:text-lg leading-relaxed text-justify">
-                                        An exhibition stand design puts forward
-                                        the central idea of your brand &
-                                        expresses the motto of your company in
-                                        an influential way. A well-designed
-                                        exhibition stand or booth helps you
-                                        reach your business goals & brings the
-                                        maximum public to your booth.
+                                        {content}
                                     </p>
                                 </div>
                             </div>
@@ -55,7 +57,7 @@ const CityBoothDesignSection = ({ city }: CityBoothDesignSectionProps) => {
                             {/* Image Container */}
                             <div className="relative h-64 sm:h-80 md:h-96 lg:h-[400px] overflow-hidden z-10">
                                 <Image
-                                    src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                                    src={imageUrl}
                                     alt="Exhibition Booth Design Example"
                                     fill
                                     className="object-cover"

@@ -8,7 +8,7 @@ import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { City } from "@/types/cities";
 
 interface CityPortfolioSectionProps {
-    city: City;
+    city: LegacyCity;
 }
 
 const CityPortfolioSection = ({ city }: CityPortfolioSectionProps) => {

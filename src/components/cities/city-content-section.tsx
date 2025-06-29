@@ -3,13 +3,34 @@
 import React from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { City } from "@/types/cities";
+import { LegacyCity } from "@/types/cities";
 
 interface CityContentSectionProps {
-    city: City;
+    city: LegacyCity;
 }
 
 const CityContentSection = ({ city }: CityContentSectionProps) => {
+    // Get content section data
+    const contentSection = city.contentSections?.find(
+        section => section.section_type === "content",
+    );
+
+    // Fallback to default content if no dynamic content is available
+    const title =
+        contentSection?.title ||
+        `PREMIER EXHIBITION STANDS DESIGN, AND BOOTH BUILD PARTNER IN ${city.name.toUpperCase()}`;
+    const content =
+        contentSection?.content ||
+        `${city.name} offers you a wide range of exhibiting opportunities, as it hosts countless trade shows and exhibitions each year. Chronicle Exhibition Organizing LLC can help you make the most out of these events with an exhibition stand.
+
+We are one the most reputable exhibition stand builders and contractors in ${city.name}. Chronicle Exhibits Company offer end-to-end services for domestic and international clients.
+
+Our manufacturing unit in ${city.name} is known for providing every type of exhibition stand including Custom trade show stands, modular exhibition stands and double-decker stands.`;
+
+    const imageUrl =
+        contentSection?.image_url ||
+        "https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80";
+
     return (
         <section className="py-8 md:py-12 lg:py-16 bg-white">
             <div className="container mx-auto px-4">
@@ -34,33 +55,37 @@ const CityContentSection = ({ city }: CityContentSectionProps) => {
                                 </div>
                                 {/* Content Paragraphs */}
                                 <div className="space-y-4 text-gray-700">
-                                    <p className="text-base leading-relaxed text-justify">
-                                        {city.name} offers you a wide range of
-                                        exhibiting opportunities, as it hosts
-                                        countless trade shows and exhibitions
-                                        each year.{" "}
-                                        <span className="text-[#a5cd39] font-medium">
-                                            Chronicle Exhibition Organizing LLC
-                                        </span>{" "}
-                                        can help you make the most out of these
-                                        events with an exhibition stand.
-                                    </p>
-
-                                    <p className="text-base leading-relaxed text-justify">
-                                        We are one the most reputable exhibition
-                                        stand builders and contractors in{" "}
-                                        {city.name}. Chronicle Exhibits Company
-                                        offer end-to-end services for domestic
-                                        and international clients.
-                                    </p>
-
-                                    <p className="text-base leading-relaxed text-justify">
-                                        Our manufacturing unit in {city.name} is
-                                        known for providing every type of
-                                        exhibition stand including Custom trade
-                                        show stands, modular exhibition stands
-                                        and double-decker stands.
-                                    </p>
+                                    {content
+                                        .split("\n\n")
+                                        .map((paragraph, index) => (
+                                            <p
+                                                key={index}
+                                                className="text-base leading-relaxed text-justify"
+                                            >
+                                                {paragraph.includes(
+                                                    "Chronicle Exhibition Organizing LLC",
+                                                ) ? (
+                                                    <>
+                                                        {
+                                                            paragraph.split(
+                                                                "Chronicle Exhibition Organizing LLC",
+                                                            )[0]
+                                                        }
+                                                        <span className="text-[#a5cd39] font-medium">
+                                                            Chronicle Exhibition
+                                                            Organizing LLC
+                                                        </span>
+                                                        {
+                                                            paragraph.split(
+                                                                "Chronicle Exhibition Organizing LLC",
+                                                            )[1]
+                                                        }
+                                                    </>
+                                                ) : (
+                                                    paragraph
+                                                )}
+                                            </p>
+                                        ))}
                                 </div>
                             </div>
                         </motion.div>
@@ -76,7 +101,7 @@ const CityContentSection = ({ city }: CityContentSectionProps) => {
                             {/* Image Container */}
                             <div className="relative h-64 sm:h-80 md:h-96 lg:h-[400px] overflow-hidden z-10">
                                 <Image
-                                    src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                                    src={imageUrl}
                                     alt={`Exhibition Stand in ${city.name}`}
                                     fill
                                     className="object-cover rounded-lg"
