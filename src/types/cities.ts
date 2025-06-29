@@ -221,7 +221,7 @@ export interface CityContactDetailInput {
 
 // API Response types
 export interface CitiesResponse {
-    cities: City[];
+    cities: LegacyCity[];
     total: number;
     page?: number;
     limit?: number;

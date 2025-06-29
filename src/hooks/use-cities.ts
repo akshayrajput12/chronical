@@ -100,7 +100,7 @@ export const useCity = (slug: string) => {
  */
 export const useCitiesSearch = () => {
     const [searchQuery, setSearchQuery] = useState("");
-    const [searchResults, setSearchResults] = useState<City[]>([]);
+    const [searchResults, setSearchResults] = useState<LegacyCity[]>([]);
     const [isSearching, setIsSearching] = useState(false);
     const [searchError, setSearchError] = useState<CityError | null>(null);
 
