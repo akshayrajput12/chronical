@@ -324,29 +324,66 @@ export async function DELETE(request: NextRequest) {
 
         const bucketName = bucket || 'event-images';
 
+        // Process file paths to extract relative paths from full URLs
+        const processedFilePaths = filePaths.map(filePath => {
+            try {
+                // If it's a full URL, extract the path after the bucket name
+                if (filePath.includes('supabase.co') || filePath.includes('storage/v1/object/public/')) {
+                    const url = new URL(filePath);
+                    const pathParts = url.pathname.split('/');
+                    const bucketIndex = pathParts.findIndex(part => part === bucketName);
+                    if (bucketIndex !== -1 && bucketIndex < pathParts.length - 1) {
+                        return pathParts.slice(bucketIndex + 1).join('/');
+                    }
+                }
+                // If it's already a relative path, use as is
+                return filePath;
+            } catch (error) {
+                console.error('Error processing file path:', filePath, error);
+                // Fallback: try to extract filename from path
+                return filePath.split('/').pop() || filePath;
+            }
+        });
+
+        console.log('Original file paths:', filePaths);
+        console.log('Processed file paths for deletion:', processedFilePaths);
+
         // Delete files from storage
         const { error } = await supabase.storage
             .from(bucketName)
-            .remove(filePaths);
+            .remove(processedFilePaths);
 
         if (error) {
             console.error('Error deleting files from storage:', error);
+            console.error('Bucket:', bucketName);
+            console.error('Processed file paths:', processedFilePaths);
             return NextResponse.json(
-                { error: 'Failed to delete files' },
+                {
+                    error: 'Failed to delete files from storage',
+                    details: error.message,
+                    bucket: bucketName,
+                    paths: processedFilePaths
+                },
                 { status: 500 }
             );
         }
 
+        console.log('Successfully deleted files from storage:', processedFilePaths);
+
         // If we have image IDs and this is event-images bucket, also delete from database
         if (imageIds && Array.isArray(imageIds) && bucketName === 'event-images') {
-            const { error: dbError } = await supabase
+            console.log('Deleting images from database with IDs:', imageIds);
+            const { data: deletedRows, error: dbError } = await supabase
                 .from('event_images')
                 .delete()
-                .in('id', imageIds);
+                .in('id', imageIds)
+                .select('id, filename');
 
             if (dbError) {
                 console.error('Error deleting images from database:', dbError);
                 // Continue - storage deletion was successful
+            } else {
+                console.log('Successfully deleted from database:', deletedRows);
             }
         }
 

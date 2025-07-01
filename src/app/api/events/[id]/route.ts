@@ -55,7 +55,7 @@ export async function GET(
             );
         }
 
-        // Get related events (same category, excluding current event) - simplified query
+        // Get other events (all events excluding current event) - simplified query
         const { data: relatedEvents } = await supabase
             .from('events')
             .select(`
@@ -66,13 +66,14 @@ export async function GET(
                 featured_image_url,
                 start_date,
                 end_date,
-                venue
+                venue,
+                category:categories(name)
             `)
-            .eq('category_id', event.category_id)
             .neq('id', event.id)
             .eq('is_active', true)
             .not('published_at', 'is', null)
-            .limit(3);
+            .order('start_date', { ascending: true })
+            .limit(6);
 
         // Transform data
         const transformedEvent: Event = {
@@ -83,9 +84,21 @@ export async function GET(
             gallery_images: [], // Empty for now since we removed the images join
         };
 
+        // Transform related events to include category name
+        const transformedRelatedEvents = relatedEvents?.map(relatedEvent => ({
+            ...relatedEvent,
+            category_name: (relatedEvent.category as any)?.name || 'Event',
+            // Format date range if dates exist
+            date_range: relatedEvent.start_date && relatedEvent.end_date
+                ? `${new Date(relatedEvent.start_date).toLocaleDateString()} - ${new Date(relatedEvent.end_date).toLocaleDateString()}`
+                : relatedEvent.start_date
+                    ? new Date(relatedEvent.start_date).toLocaleDateString()
+                    : 'Date TBD'
+        })) || [];
+
         return NextResponse.json({
             event: transformedEvent,
-            related_events: relatedEvents || [],
+            related_events: transformedRelatedEvents,
         });
 
     } catch (error) {

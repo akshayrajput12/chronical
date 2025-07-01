@@ -175,6 +175,13 @@ const CreateEventPage = () => {
         }));
     };
 
+    // Handle gallery image deletion
+    const handleDeleteGalleryImage = (index: number) => {
+        if (confirm('Are you sure you want to remove this image from the gallery?')) {
+            setGalleryImages(prev => prev.filter((_, i) => i !== index));
+        }
+    };
+
     const handleImageUpload = async (field: string, file: File) => {
         setUploadingImage(field);
         try {
@@ -580,27 +587,7 @@ const CreateEventPage = () => {
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="start_date">Start Date</Label>
-                                        <Input
-                                            id="start_date"
-                                            type="datetime-local"
-                                            value={formData.start_date}
-                                            onChange={(e) => handleInputChange("start_date", e.target.value)}
-                                        />
-                                    </div>
-                                    
-                                    <div className="space-y-2">
-                                        <Label htmlFor="end_date">End Date</Label>
-                                        <Input
-                                            id="end_date"
-                                            type="datetime-local"
-                                            value={formData.end_date}
-                                            onChange={(e) => handleInputChange("end_date", e.target.value)}
-                                        />
-                                    </div>
-                                    
+                                <div className="grid grid-cols-1 gap-6">
                                     <div className="space-y-2">
                                         <Label htmlFor="date_range">Display Date Range</Label>
                                         <Input
@@ -720,9 +707,9 @@ const CreateEventPage = () => {
                                     {galleryImages.length === 0 ? (
                                         <div className="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center">
                                             <ImageIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                                            <h4 className="text-lg font-medium text-gray-900 mb-2">No gallery images yet</h4>
+                                            <h4 className="text-lg font-medium text-gray-900 mb-2">No gallery images added yet</h4>
                                             <p className="text-gray-500 mb-4">
-                                                Add images to create an engaging gallery for your event
+                                                Click "Add Images" to get started
                                             </p>
                                             <Button
                                                 type="button"
@@ -733,7 +720,7 @@ const CreateEventPage = () => {
                                                 }}
                                             >
                                                 <Upload className="w-4 h-4 mr-2" />
-                                                Add Your First Image
+                                                Add Images
                                             </Button>
                                         </div>
                                     ) : (
@@ -753,9 +740,7 @@ const CreateEventPage = () => {
                                                                 variant="destructive"
                                                                 size="sm"
                                                                 className="opacity-0 group-hover:opacity-100 transition-opacity"
-                                                                onClick={() => {
-                                                                    setGalleryImages(prev => prev.filter((_, i) => i !== index));
-                                                                }}
+                                                                onClick={() => handleDeleteGalleryImage(index)}
                                                             >
                                                                 <X className="w-4 h-4" />
                                                             </Button>

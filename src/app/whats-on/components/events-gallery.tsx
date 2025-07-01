@@ -3,12 +3,12 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
-import { AnimationGeneratorType, Variants } from "framer-motion";
+import { AnimationGeneratorType } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { Event, EventCategory } from "@/types/events";
+import { Event } from "@/types/events";
 
 const EventsGallery = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -16,40 +16,32 @@ const EventsGallery = () => {
     const [cardsToShow, setCardsToShow] = useState(3);
     const [cardWidth, setCardWidth] = useState(320);
     const [events, setEvents] = useState<Event[]>([]);
-    const [categories, setCategories] = useState<EventCategory[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
-    // Fetch events and categories on component mount
+    // Fetch events on component mount
     useEffect(() => {
-        fetchEventsAndCategories();
+        fetchEvents();
     }, []);
 
-    const fetchEventsAndCategories = async () => {
+    const fetchEvents = async () => {
         setLoading(true);
         setError(null);
 
         try {
-            const [eventsResponse, categoriesResponse] = await Promise.all([
-                fetch('/api/events?limit=50&is_active=true'),
-                fetch('/api/events/categories?is_active=true&include_counts=true')
-            ]);
+            const eventsResponse = await fetch('/api/events?limit=50&is_active=true');
 
-            if (!eventsResponse.ok || !categoriesResponse.ok) {
-                throw new Error('Failed to fetch data');
+            if (!eventsResponse.ok) {
+                throw new Error('Failed to fetch events');
             }
 
             const eventsData = await eventsResponse.json();
-            const categoriesData = await categoriesResponse.json();
-
             setEvents(eventsData.events || []);
-            setCategories(categoriesData.categories || []);
         } catch (error) {
-            console.error('Error fetching events and categories:', error);
+            console.error('Error fetching events:', error);
             setError('Failed to load events. Please try again later.');
             setEvents([]);
-            setCategories([]);
         } finally {
             setLoading(false);
         }
@@ -89,20 +81,37 @@ const EventsGallery = () => {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
-    // Generate filter options from categories
+    // Generate predefined filter options from May 2025 to February 2026
     const filterOptions = [
         "All",
-        ...categories.map(category => category.name)
+        "May 2025",
+        "June 2025",
+        "July 2025",
+        "August 2025",
+        "September 2025",
+        "October 2025",
+        "November 2025",
+        "December 2025",
+        "January 2026",
+        "February 2026"
     ];
 
-    // Filter events based on selected category
+    // Filter events based on selected date-month
     const getFilteredEvents = () => {
         if (selectedFilter === "All") {
             return events;
         }
 
         return events.filter(event => {
-            return event.category_name === selectedFilter;
+            if (!event.start_date) return false;
+
+            const eventDate = new Date(event.start_date);
+            const eventMonthYear = eventDate.toLocaleDateString('en-US', {
+                month: 'long',
+                year: 'numeric'
+            });
+
+            return eventMonthYear === selectedFilter;
         });
     };
 
@@ -179,7 +188,7 @@ const EventsGallery = () => {
                         </h2>
                         <p className="text-gray-600 mb-6">{error}</p>
                         <Button
-                            onClick={fetchEventsAndCategories}
+                            onClick={fetchEvents}
                             className="bg-[#a5cd39] hover:bg-[#8fb82e] text-white"
                         >
                             Try Again

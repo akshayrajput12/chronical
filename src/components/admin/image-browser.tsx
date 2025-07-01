@@ -30,6 +30,7 @@ import {
     List,
     Filter,
     RefreshCw,
+    Trash2,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -189,13 +190,16 @@ const ImageBrowser: React.FC<ImageBrowserProps> = ({
             if (response.ok) {
                 // Add new image to the beginning of the list
                 setImages(prev => [data.image, ...prev]);
-                
-                // Auto-select the uploaded image
+
+                // Auto-select the uploaded image only for single selection mode
                 if (!multiple) {
                     onSelect(data.image);
                     onClose();
                 } else {
+                    // For multiple selection (gallery), just add to selected images but don't close modal
+                    // This allows users to upload multiple images and then select them manually
                     setSelectedImages(prev => new Set([...prev, data.image.id]));
+                    console.log('Image uploaded and added to selection for gallery');
                 }
             } else {
                 console.error("Upload error:", data.error);
@@ -217,6 +221,51 @@ const ImageBrowser: React.FC<ImageBrowserProps> = ({
         const sizes = ["Bytes", "KB", "MB", "GB"];
         const i = Math.floor(Math.log(bytes) / Math.log(k));
         return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+    };
+
+    // Handle image deletion
+    const handleDeleteImage = async (image: ImageData) => {
+        if (!confirm(`Are you sure you want to delete "${image.filename}"? This action cannot be undone.`)) {
+            return;
+        }
+
+        try {
+            const deletePayload = {
+                filePaths: [image.file_path],
+                imageIds: [image.id],
+                bucket: category === 'heroes' ? 'hero-images' :
+                       category === 'galleries' ? 'event-images' :
+                       'event-images' // default bucket
+            };
+
+            console.log('Deleting image with payload:', deletePayload);
+            console.log('Image data:', image);
+
+            // Delete from storage and database
+            const response = await fetch('/api/images', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(deletePayload),
+            });
+
+            const responseData = await response.json();
+            console.log('Delete response:', responseData);
+
+            if (response.ok) {
+                // Remove from local state
+                setImages(prev => prev.filter(img => img.id !== image.id));
+                console.log('Image deleted successfully:', responseData);
+                alert('Image deleted successfully!');
+            } else {
+                console.error('Failed to delete image:', responseData);
+                alert('Failed to delete image: ' + (responseData.error || 'Unknown error'));
+            }
+        } catch (error) {
+            console.error('Error deleting image:', error);
+            alert('Failed to delete image. Please try again.');
+        }
     };
 
     return (
@@ -329,6 +378,21 @@ const ImageBrowser: React.FC<ImageBrowserProps> = ({
                                                 </div>
                                             </div>
                                         )}
+                                        {/* Delete button */}
+                                        <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <Button
+                                                type="button"
+                                                variant="destructive"
+                                                size="sm"
+                                                className="h-8 w-8 p-0"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleDeleteImage(image);
+                                                }}
+                                            >
+                                                <Trash2 className="w-4 h-4" />
+                                            </Button>
+                                        </div>
                                     </div>
                                     <div className="p-2">
                                         <p className="text-xs font-medium truncate">
@@ -380,9 +444,23 @@ const ImageBrowser: React.FC<ImageBrowserProps> = ({
                                             )}
                                         </div>
                                     </div>
-                                    {selectedImages.has(image.id) && (
-                                        <Check className="w-5 h-5 text-[#a5cd39]" />
-                                    )}
+                                    <div className="flex items-center gap-2">
+                                        {selectedImages.has(image.id) && (
+                                            <Check className="w-5 h-5 text-[#a5cd39]" />
+                                        )}
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            size="sm"
+                                            className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleDeleteImage(image);
+                                            }}
+                                        >
+                                            <Trash2 className="w-4 h-4" />
+                                        </Button>
+                                    </div>
                                 </div>
                             ))}
                         </div>

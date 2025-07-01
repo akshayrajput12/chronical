@@ -114,7 +114,7 @@ const EditEventPage = () => {
     const [uploadingImage, setUploadingImage] = useState<string | null>(null);
     const [imageBrowserOpen, setImageBrowserOpen] = useState(false);
     const [imageBrowserType, setImageBrowserType] = useState<'featured' | 'hero' | 'logo' | 'gallery'>('featured');
-    const [galleryImages, setGalleryImages] = useState<Array<{id?: string; file_path: string; database_id?: string}>>([]);
+    const [galleryImages, setGalleryImages] = useState<Array<{id?: string; file_path: string; database_id?: string; filename?: string; alt_text?: string; alreadyInDatabase?: boolean}>>([]);
 
     // Deferred image uploads (like blog admin)
     const [featuredImage, setFeaturedImage] = useState<DeferredImageData>(createEmptyDeferredImage());
@@ -126,23 +126,82 @@ const EditEventPage = () => {
         if (!eventId) return;
 
         try {
+            console.log('Loading gallery images for event:', eventId);
             const response = await fetch(`/api/events/${eventId}/images?type=gallery`);
             if (response.ok) {
                 const data = await response.json();
-                if (data.success && data.images) {
-                    const imageObjects = data.images.map((img: any) => ({
+                console.log('API response data:', data);
+
+                // Check if we have gallery images in the response
+                const galleryImagesData = data.images?.gallery || [];
+
+                if (galleryImagesData.length > 0) {
+                    const imageObjects = galleryImagesData.map((img: any) => ({
                         id: img.id,
                         file_path: img.file_path,
-                        database_id: img.id
+                        database_id: img.id,
+                        filename: img.filename || img.file_path.split('/').pop() || 'Gallery image',
+                        alt_text: img.alt_text || `Gallery image`,
+                        alreadyInDatabase: true // Mark existing images as already in database
                     }));
                     setGalleryImages(imageObjects);
                     console.log('Loaded gallery images:', imageObjects);
+                } else {
+                    console.log('No gallery images found for event');
+                    setGalleryImages([]);
                 }
+            } else {
+                console.error('Failed to load gallery images:', response.status);
+                setGalleryImages([]);
             }
         } catch (error) {
             console.error('Error loading gallery images:', error);
+            setGalleryImages([]);
         }
     }, [eventId]);
+
+    // Handle individual gallery image deletion
+    const handleDeleteGalleryImage = async (imageObj: any) => {
+        if (!confirm('Are you sure you want to delete this image? This action cannot be undone.')) {
+            return;
+        }
+
+        try {
+            if (imageObj.database_id) {
+                // Delete from database and storage via API
+                const response = await fetch(`/api/events/${eventId}/images`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        image_ids: [imageObj.database_id]
+                    }),
+                });
+
+                if (response.ok) {
+                    // Remove from local state
+                    setGalleryImages(prev =>
+                        prev.filter(img => img.database_id !== imageObj.database_id)
+                    );
+                    console.log('Gallery image deleted successfully');
+                } else {
+                    const errorData = await response.json();
+                    console.error('Failed to delete image from database:', errorData);
+                    alert('Failed to delete image: ' + (errorData.error || 'Unknown error'));
+                }
+            } else {
+                // Just remove from local state if not in database yet
+                setGalleryImages(prev =>
+                    prev.filter(img => img.file_path !== imageObj.file_path)
+                );
+                console.log('Image removed from gallery (not saved to database yet)');
+            }
+        } catch (error) {
+            console.error('Error deleting gallery image:', error);
+            alert('Failed to delete image. Please try again.');
+        }
+    };
 
     // Load event data and categories
     useEffect(() => {
@@ -245,6 +304,13 @@ const EditEventPage = () => {
             router.push('/admin/pages/events');
         }
     }, [eventId, router]);
+
+    // Reload gallery images when gallery tab is activated
+    useEffect(() => {
+        if (activeTab === 'gallery' && eventId) {
+            loadGalleryImages();
+        }
+    }, [activeTab, eventId, loadGalleryImages]);
 
     // Generate slug from title
     const generateSlug = (title: string) => {
@@ -385,10 +451,14 @@ const EditEventPage = () => {
     const handleImageSelect = (image: { id: string; filename: string; file_path: string; alt_text: string; category: string; }) => {
         if (imageBrowserType === 'gallery') {
             // Handle gallery images separately
+            // Mark as already saved to database since it's coming from ImageBrowser
             setGalleryImages(prev => [...prev, {
                 id: image.id,
                 file_path: image.file_path,
-                database_id: image.id
+                database_id: image.id,
+                filename: image.filename,
+                alt_text: image.alt_text,
+                alreadyInDatabase: true // Flag to indicate this image is already in the database
             }]);
         } else {
             // Update deferred image state and form data
@@ -557,30 +627,23 @@ const EditEventPage = () => {
     // Save gallery images to database
     const saveGalleryImages = async () => {
         try {
-            // First, get existing gallery images to clear them
-            const existingResponse = await fetch(`/api/events/${eventId}/images?type=gallery`);
-            if (existingResponse.ok) {
-                const existingData = await existingResponse.json();
-                if (existingData.success && existingData.images && existingData.images.length > 0) {
-                    // Delete existing gallery images
-                    const imageIds = existingData.images.map((img: any) => img.id);
-                    const deleteResponse = await fetch(`/api/events/${eventId}/images`, {
-                        method: 'DELETE',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ image_ids: imageIds }),
-                    });
+            console.log('Processing gallery images:', galleryImages);
 
-                    if (!deleteResponse.ok) {
-                        console.warn('Failed to clear existing gallery images, continuing...');
-                    }
-                }
+            // Filter out images that are already in the database
+            const imagesToSave = galleryImages.filter(img => !img.alreadyInDatabase);
+            const imagesAlreadyInDb = galleryImages.filter(img => img.alreadyInDatabase);
+
+            console.log('Images already in database (skipping):', imagesAlreadyInDb);
+            console.log('Images to save to database:', imagesToSave);
+
+            if (imagesToSave.length === 0) {
+                console.log('No new images to save to database');
+                return;
             }
 
-            // Save each gallery image to the database
-            for (let i = 0; i < galleryImages.length; i++) {
-                const imageObj = galleryImages[i];
+            // Save each new gallery image to the database
+            for (let i = 0; i < imagesToSave.length; i++) {
+                const imageObj = imagesToSave[i];
                 const filename = imageObj.file_path.split('/').pop() || `gallery-image-${i + 1}`;
 
                 const imageData = {
@@ -589,12 +652,12 @@ const EditEventPage = () => {
                     file_path: imageObj.file_path,
                     image_type: 'gallery',
                     display_order: i,
-                    alt_text: `Gallery image ${i + 1}`,
+                    alt_text: imageObj.alt_text || `Gallery image ${i + 1}`,
                     mime_type: 'image/jpeg', // Default, could be improved to detect actual type
                     file_size: 0 // Default value since we don't have the actual file size
                 };
 
-                console.log(`Saving gallery image ${i + 1}:`, imageData);
+                console.log(`Saving new gallery image ${i + 1}:`, imageData);
                 const response = await fetch(`/api/events/${eventId}/images`, {
                     method: 'POST',
                     headers: {
@@ -615,7 +678,7 @@ const EditEventPage = () => {
                 }
             }
 
-            console.log('Gallery images saved successfully');
+            console.log('Gallery images processing completed');
         } catch (error) {
             console.error('Error saving gallery images:', error);
             // Don't throw error to prevent blocking the main save operation
@@ -864,27 +927,7 @@ const EditEventPage = () => {
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="start_date">Start Date</Label>
-                                        <Input
-                                            id="start_date"
-                                            type="datetime-local"
-                                            value={formData.start_date}
-                                            onChange={(e) => handleInputChange("start_date", e.target.value)}
-                                        />
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <Label htmlFor="end_date">End Date</Label>
-                                        <Input
-                                            id="end_date"
-                                            type="datetime-local"
-                                            value={formData.end_date}
-                                            onChange={(e) => handleInputChange("end_date", e.target.value)}
-                                        />
-                                    </div>
-
+                                <div className="grid grid-cols-1 gap-6">
                                     <div className="space-y-2">
                                         <Label htmlFor="date_range">Display Date Range</Label>
                                         <Input
@@ -1088,71 +1131,64 @@ const EditEventPage = () => {
                                         </div>
                                     </div>
 
-                                    {galleryImages.length > 0 && (
+                                    {galleryImages.length === 0 ? (
+                                        <div className="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center">
+                                            <ImageIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                                            <h4 className="text-lg font-medium text-gray-900 mb-2">No gallery images added yet</h4>
+                                            <p className="text-gray-500 mb-4">
+                                                Click "Add Images" to get started
+                                            </p>
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                onClick={() => {
+                                                    setImageBrowserType('gallery');
+                                                    setImageBrowserOpen(true);
+                                                }}
+                                            >
+                                                <Upload className="w-4 h-4 mr-2" />
+                                                Add Images
+                                            </Button>
+                                        </div>
+                                    ) : (
                                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                                             {galleryImages
                                                 .filter(imageObj => imageObj.file_path && imageObj.file_path.trim() !== '')
                                                 .map((imageObj, index) => (
                                                 <div key={imageObj.database_id || index} className="relative group">
-                                                    <div className="aspect-square rounded-lg overflow-hidden border">
+                                                    <div className="aspect-square relative rounded-lg overflow-hidden border">
                                                         <Image
                                                             src={imageObj.file_path}
                                                             alt={`Gallery image ${index + 1}`}
                                                             fill
                                                             className="object-cover"
                                                         />
+                                                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all duration-200 flex items-center justify-center">
+                                                            <Button
+                                                                type="button"
+                                                                variant="destructive"
+                                                                size="sm"
+                                                                className="opacity-0 group-hover:opacity-100 transition-opacity"
+                                                                onClick={() => handleDeleteGalleryImage(imageObj)}
+                                                            >
+                                                                <X className="w-4 h-4" />
+                                                            </Button>
+                                                        </div>
                                                     </div>
-                                                    <button
-                                                        onClick={async () => {
-                                                            if (imageObj.database_id) {
-                                                                // Delete from database
-                                                                try {
-                                                                    const response = await fetch(`/api/events/${eventId}/images`, {
-                                                                        method: 'DELETE',
-                                                                        headers: {
-                                                                            'Content-Type': 'application/json',
-                                                                        },
-                                                                        body: JSON.stringify({
-                                                                            image_ids: [imageObj.database_id]
-                                                                        }),
-                                                                    });
-
-                                                                    if (response.ok) {
-                                                                        // Remove from local state
-                                                                        setGalleryImages(prev =>
-                                                                            prev.filter((_, i) => i !== index)
-                                                                        );
-                                                                    } else {
-                                                                        console.error('Failed to delete image from database');
-                                                                        alert('Failed to delete image');
-                                                                    }
-                                                                } catch (error) {
-                                                                    console.error('Error deleting image:', error);
-                                                                    alert('Failed to delete image');
-                                                                }
-                                                            } else {
-                                                                // Just remove from local state (not yet saved to database)
-                                                                setGalleryImages(prev =>
-                                                                    prev.filter((_, i) => i !== index)
-                                                                );
-                                                            }
-                                                        }}
-                                                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                                                    >
-                                                        <X className="w-3 h-3" />
-                                                    </button>
+                                                    <div className="mt-2">
+                                                        <p className="text-sm font-medium truncate">
+                                                            {imageObj.filename || `Gallery image ${index + 1}`}
+                                                        </p>
+                                                        <p className="text-xs text-gray-500 truncate">
+                                                            {imageObj.alt_text || `Gallery image ${index + 1}`}
+                                                        </p>
+                                                    </div>
                                                 </div>
                                             ))}
                                         </div>
                                     )}
 
-                                    {galleryImages.length === 0 && (
-                                        <div className="text-center py-12 border-2 border-dashed border-gray-300 rounded-lg">
-                                            <ImageIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                                            <p className="text-gray-500">No gallery images added yet</p>
-                                            <p className="text-sm text-gray-400">Click "Add Images" to get started</p>
-                                        </div>
-                                    )}
+
                                 </div>
                             </TabsContent>
 
