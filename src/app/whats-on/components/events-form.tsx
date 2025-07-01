@@ -10,7 +10,7 @@ interface EventsFormProps {
 export const EventsForm: React.FC<EventsFormProps> = ({
     eventId,
     onSubmit,
-    className = ""
+    className = "",
 }) => {
     const [formData, setFormData] = useState({
         name: "",
@@ -25,12 +25,16 @@ export const EventsForm: React.FC<EventsFormProps> = ({
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitStatus, setSubmitStatus] = useState<{
-        type: 'success' | 'error' | null;
+        type: "success" | "error" | null;
         message: string;
-    }>({ type: null, message: '' });
+    }>({ type: null, message: "" });
 
     // Handler for input changes
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const handleInputChange = (
+        e: React.ChangeEvent<
+            HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+        >,
+    ) => {
         const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
@@ -51,11 +55,11 @@ export const EventsForm: React.FC<EventsFormProps> = ({
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
-        setSubmitStatus({ type: null, message: '' });
+        setSubmitStatus({ type: null, message: "" });
 
         try {
-            const attachmentUrl = '';
-            let attachmentFilename = '';
+            const attachmentUrl = "";
+            let attachmentFilename = "";
             let attachmentSize = 0;
 
             // Upload file if present
@@ -82,10 +86,10 @@ export const EventsForm: React.FC<EventsFormProps> = ({
             };
 
             // Submit to API
-            const response = await fetch('/api/events/submissions', {
-                method: 'POST',
+            const response = await fetch("/api/events/submissions", {
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json',
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify(submissionData),
             });
@@ -94,8 +98,10 @@ export const EventsForm: React.FC<EventsFormProps> = ({
 
             if (response.ok) {
                 setSubmitStatus({
-                    type: 'success',
-                    message: result.message || 'Form submitted successfully! We will get back to you soon.',
+                    type: "success",
+                    message:
+                        result.message ||
+                        "Form submitted successfully! We will get back to you soon.",
                 });
 
                 // Reset form
@@ -111,9 +117,11 @@ export const EventsForm: React.FC<EventsFormProps> = ({
                 });
 
                 // Clear file input
-                const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+                const fileInput = document.querySelector(
+                    'input[type="file"]',
+                ) as HTMLInputElement;
                 if (fileInput) {
-                    fileInput.value = '';
+                    fileInput.value = "";
                 }
 
                 // Call onSubmit callback if provided
@@ -122,15 +130,18 @@ export const EventsForm: React.FC<EventsFormProps> = ({
                 }
             } else {
                 setSubmitStatus({
-                    type: 'error',
-                    message: result.error || 'Failed to submit form. Please try again.',
+                    type: "error",
+                    message:
+                        result.error ||
+                        "Failed to submit form. Please try again.",
                 });
             }
         } catch (error) {
-            console.error('Error submitting form:', error);
+            console.error("Error submitting form:", error);
             setSubmitStatus({
-                type: 'error',
-                message: 'An error occurred while submitting the form. Please try again.',
+                type: "error",
+                message:
+                    "An error occurred while submitting the form. Please try again.",
             });
         } finally {
             setIsSubmitting(false);
@@ -144,17 +155,20 @@ export const EventsForm: React.FC<EventsFormProps> = ({
                     <div className="w-16 h-1 my-2 bg-[#a5cd39] mx-auto"></div>
                 </h2>
                 <p className="text-center text-white/80 mb-8 max-w-2xl mx-auto">
-                    Interested in this event? Fill out the form below and we'll get back to you with more information.
+                    Interested in this event? Fill out the form below and we'll
+                    get back to you with more information.
                 </p>
 
                 <div className="max-w-6xl mx-auto bg-white rounded-lg shadow p-6">
                     {/* Status Messages */}
                     {submitStatus.type && (
-                        <div className={`mb-6 p-4 rounded-md ${
-                            submitStatus.type === 'success'
-                                ? 'bg-green-50 text-green-800 border border-green-200'
-                                : 'bg-red-50 text-red-800 border border-red-200'
-                        }`}>
+                        <div
+                            className={`mb-6 p-4 rounded-md ${
+                                submitStatus.type === "success"
+                                    ? "bg-green-50 text-green-800 border border-green-200"
+                                    : "bg-red-50 text-red-800 border border-red-200"
+                            }`}
+                        >
                             {submitStatus.message}
                         </div>
                     )}
@@ -264,22 +278,38 @@ export const EventsForm: React.FC<EventsFormProps> = ({
                             <button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className={`px-6 py-2 rounded-md font-medium transition-colors duration-300 uppercase text-sm ${
+                                className={`px-6 py-2 rounded-md font-medium transition-colors duration-300 text-sm ${
                                     isSubmitting
-                                        ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
-                                        : 'bg-[#a5cd39] text-white hover:bg-[#94b933]'
+                                        ? "bg-gray-400 text-gray-200 cursor-not-allowed"
+                                        : "bg-[#a5cd39] text-white hover:bg-[#94b933]"
                                 }`}
                             >
                                 {isSubmitting ? (
                                     <span className="flex items-center">
-                                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        <svg
+                                            className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <circle
+                                                className="opacity-25"
+                                                cx="12"
+                                                cy="12"
+                                                r="10"
+                                                stroke="currentColor"
+                                                strokeWidth="4"
+                                            ></circle>
+                                            <path
+                                                className="opacity-75"
+                                                fill="currentColor"
+                                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                            ></path>
                                         </svg>
                                         Submitting...
                                     </span>
                                 ) : (
-                                    'Submit'
+                                    "Submit"
                                 )}
                             </button>
                         </div>

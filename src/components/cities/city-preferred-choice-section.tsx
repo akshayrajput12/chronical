@@ -47,7 +47,7 @@ We provide a complete range of stand building and designing services.`;
                         >
                             <div className="space-y-6">
                                 {/* Main Heading */}
-                                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 uppercase tracking-wide leading-tight">
+                                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 tracking-wide leading-tight">
                                     {title}
                                 </h2>
 

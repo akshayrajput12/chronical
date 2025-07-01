@@ -8,16 +8,26 @@ interface CityLookingForContractorsSectionProps {
     city: LegacyCity;
 }
 
-const CityLookingForContractorsSection = ({ city }: CityLookingForContractorsSectionProps) => {
+const CityLookingForContractorsSection = ({
+    city,
+}: CityLookingForContractorsSectionProps) => {
     // Get contractors section data
-    const contractorsSection = city.contentSections?.find(section => section.section_type === 'contractors');
+    const contractorsSection = city.contentSections?.find(
+        section => section.section_type === "contractors",
+    );
 
     // Get primary phone contact
-    const primaryPhone = city.contactDetails?.find(contact => contact.contact_type === 'phone' && contact.is_primary);
+    const primaryPhone = city.contactDetails?.find(
+        contact => contact.contact_type === "phone" && contact.is_primary,
+    );
 
     // Fallback to default content if no dynamic content is available
-    const title = contractorsSection?.title || `LOOKING FOR EXHIBITION STAND CONTRACTORS IN ${city.name.toUpperCase()}`;
-    const content = contractorsSection?.content || "Call our team or submit enquiry form below";
+    const title =
+        contractorsSection?.title ||
+        `LOOKING FOR EXHIBITION STAND CONTRACTORS IN ${city.name.toUpperCase()}`;
+    const content =
+        contractorsSection?.content ||
+        "Call our team or submit enquiry form below";
     const phoneNumber = primaryPhone?.contact_value || "+971 (543) 47-4645";
     const phoneDisplay = primaryPhone?.display_text || phoneNumber;
 
@@ -33,24 +43,31 @@ const CityLookingForContractorsSection = ({ city }: CityLookingForContractorsSec
                         viewport={{ once: true }}
                     >
                         {/* Main Heading */}
-                        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 uppercase tracking-wide leading-tight mb-6 md:mb-8">
+                        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 tracking-wide leading-tight mb-6 md:mb-8">
                             {title}
                         </h2>
 
                         {/* Call to Action Text */}
                         <div className="text-base md:text-lg text-gray-700 leading-relaxed">
                             <p>
-                                {content.includes('Call') ? (
+                                {content.includes("Call") ? (
                                     <>
                                         Call{" "}
                                         <a
-                                            href={`tel:${phoneNumber.replace(/[^+\d]/g, '')}`}
+                                            href={`tel:${phoneNumber.replace(
+                                                /[^+\d]/g,
+                                                "",
+                                            )}`}
                                             className="font-bold hover:underline transition-colors duration-300"
                                             style={{ color: "#a5cd39" }}
                                         >
                                             {phoneDisplay}
                                         </a>{" "}
-                                        {content.split('Call')[1]?.replace(phoneDisplay, '').trim() || "or submit enquiry form below"}
+                                        {content
+                                            .split("Call")[1]
+                                            ?.replace(phoneDisplay, "")
+                                            .trim() ||
+                                            "or submit enquiry form below"}
                                     </>
                                 ) : (
                                     content

@@ -235,7 +235,7 @@ const KioskContent = () => {
                             <p className="text-gray-700">
                                 {contentData.second_section_paragraph_2}
                             </p>
-                            <button className="bg-[#a5cd39] mt-6 text-white px-6 py-2 rounded-md font-medium hover:bg-[#94b933] transition-colors duration-300 uppercase w-max font-noto-kufi-arabic text-sm">
+                            <button className="bg-[#a5cd39] mt-6 text-white px-6 py-2 rounded-md font-medium hover:bg-[#94b933] transition-colors duration-300 w-max font-noto-kufi-arabic text-sm">
                                 Request Quotation
                             </button>
                         </motion.div>

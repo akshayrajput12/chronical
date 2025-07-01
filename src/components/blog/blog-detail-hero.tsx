@@ -121,7 +121,7 @@ const BlogDetailHero = ({
                     >
                         <Link
                             href="/blog"
-                            className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 text-sm font-medium uppercase tracking-wide transition-colors duration-300"
+                            className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 text-sm font-medium tracking-wide transition-colors duration-300"
                         >
                             <ArrowLeft className="w-4 h-4" />
                             BACK TO OUR NEWS
