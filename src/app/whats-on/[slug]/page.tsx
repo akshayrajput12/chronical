@@ -445,6 +445,14 @@ export default function EventDetailPage() {
                                                 >
                                                     {/* Perfect Square Image - No Rounded Borders */}
                                                     <div className="relative w-48 h-48 mb-3 overflow-hidden">
+                                                        {/* Category color accent bar */}
+                                                        <div
+                                                            className="absolute top-0 left-0 w-8 h-1 z-10"
+                                                            style={{
+                                                                backgroundColor:
+                                                                    relatedEvent.category_color || "#22c55e",
+                                                            }}
+                                                        ></div>
                                                         <Image
                                                             src={
                                                                 relatedEvent.featured_image_url ||

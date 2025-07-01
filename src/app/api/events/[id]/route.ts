@@ -56,7 +56,8 @@ export async function GET(
         }
 
         // Get other events (all events excluding current event) - simplified query
-        const { data: relatedEvents } = await supabase
+        // First, let's try a simple query without joins to see if we get any results
+        const { data: relatedEvents, error: relatedError } = await supabase
             .from('events')
             .select(`
                 id,
@@ -66,14 +67,20 @@ export async function GET(
                 featured_image_url,
                 start_date,
                 end_date,
+                date_range,
                 venue,
-                category:categories(name)
+                category_id
             `)
             .neq('id', event.id)
             .eq('is_active', true)
             .not('published_at', 'is', null)
-            .order('start_date', { ascending: true })
+            .order('created_at', { ascending: false })
             .limit(6);
+
+        // Log any errors with related events query
+        if (relatedError) {
+            console.error('Error fetching related events:', relatedError);
+        }
 
         // Transform data
         const transformedEvent: Event = {
@@ -84,17 +91,71 @@ export async function GET(
             gallery_images: [], // Empty for now since we removed the images join
         };
 
-        // Transform related events to include category name
-        const transformedRelatedEvents = relatedEvents?.map(relatedEvent => ({
-            ...relatedEvent,
-            category_name: (relatedEvent.category as any)?.name || 'Event',
-            // Format date range if dates exist
-            date_range: relatedEvent.start_date && relatedEvent.end_date
-                ? `${new Date(relatedEvent.start_date).toLocaleDateString()} - ${new Date(relatedEvent.end_date).toLocaleDateString()}`
-                : relatedEvent.start_date
-                    ? new Date(relatedEvent.start_date).toLocaleDateString()
-                    : 'Date TBD'
-        })) || [];
+        // If no published events found, try to get any active events (fallback)
+        let finalRelatedEvents = relatedEvents;
+        if (!relatedEvents || relatedEvents.length === 0) {
+            const { data: anyActiveEvents } = await supabase
+                .from('events')
+                .select(`
+                    id,
+                    title,
+                    slug,
+                    short_description,
+                    featured_image_url,
+                    start_date,
+                    end_date,
+                    date_range,
+                    venue,
+                    category_id
+                `)
+                .neq('id', event.id)
+                .eq('is_active', true)
+                .order('created_at', { ascending: false })
+                .limit(6);
+
+            finalRelatedEvents = anyActiveEvents;
+        }
+
+        // If we have events, fetch their categories separately
+        let categoriesMap: { [key: string]: any } = {};
+        if (finalRelatedEvents && finalRelatedEvents.length > 0) {
+            const categoryIds = finalRelatedEvents
+                .map(e => e.category_id)
+                .filter(id => id);
+
+            if (categoryIds.length > 0) {
+                const { data: categories } = await supabase
+                    .from('event_categories')
+                    .select('id, name, color')
+                    .in('id', categoryIds);
+
+                if (categories) {
+                    categoriesMap = categories.reduce((acc: { [key: string]: any }, cat) => {
+                        acc[cat.id] = cat;
+                        return acc;
+                    }, {});
+                }
+            }
+        }
+
+        // Transform related events to include category name and color
+        const transformedRelatedEvents = finalRelatedEvents?.map(relatedEvent => {
+            const category = categoriesMap[relatedEvent.category_id];
+            return {
+                ...relatedEvent,
+                category_name: category?.name || 'Event',
+                category_color: category?.color || '#22c55e',
+                // Use existing date_range if available, otherwise format from dates
+                date_range: relatedEvent.date_range ||
+                    (relatedEvent.start_date && relatedEvent.end_date
+                        ? `${new Date(relatedEvent.start_date).toLocaleDateString()} - ${new Date(relatedEvent.end_date).toLocaleDateString()}`
+                        : relatedEvent.start_date
+                            ? new Date(relatedEvent.start_date).toLocaleDateString()
+                            : 'Date TBD')
+            };
+        }) || [];
+
+
 
         return NextResponse.json({
             event: transformedEvent,
