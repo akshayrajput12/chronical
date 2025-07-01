@@ -88,7 +88,6 @@ const CityDetailPage = ({ params }: CityDetailPageProps) => {
         <div className="min-h-screen bg-white mt-16 md:mt-20 lg:mt-24">
             <CityDetailHero city={city} />
             <ServicesGrid city={city} />
-            <CityRoleSection city={city} />
             <CityContentSection city={city} />
             <CityComponentsSection city={city} />
             <CityStatisticsSection city={city} />

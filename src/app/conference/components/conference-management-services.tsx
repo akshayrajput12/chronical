@@ -159,7 +159,7 @@ const ConferenceManagementServices = () => {
                                 }}
                                 viewport={{ once: true }}
                             >
-                                <h3 className="text-xl !font-bold mb-6 uppercase tracking-wide text-[#a5cd39]">
+                                <h3 className="text-xl !font-bold mb-6 tracking-wide text-[#a5cd39]">
                                     {service.title}
                                 </h3>
                                 <p className="text-gray-700 text-base leading-relaxed">

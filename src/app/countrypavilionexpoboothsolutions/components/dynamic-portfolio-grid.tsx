@@ -266,7 +266,7 @@ const DynamicPortfolioGrid = () => {
                 <div className="text-center mt-12">
                     <motion.a
                         href={sectionData.cta_button_url}
-                        className="bg-[#a5cd39] text-white px-6 py-1 rounded-md font-medium hover:bg-[#94b933] transition-colors duration-300 uppercase font-noto-kufi-arabic text-sm"
+                        className="bg-[#a5cd39] text-white px-6 py-1 rounded-md font-medium hover:bg-[#94b933] transition-colors duration-300 font-noto-kufi-arabic text-sm"
                         variants={buttonVariants}
                         initial="hidden"
                         animate="visible"

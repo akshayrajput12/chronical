@@ -133,8 +133,8 @@ const KioskConsultancyEditor = () => {
                 // Fallback to default data if no data found
                 setSectionData({
                     section_heading: "FREE KIOSK DESIGN CONSULTANCY NOW",
-                    phone_number: "+971 (543) 47-6649",
-                    phone_display_text: "Call +971 (543) 47-6649",
+                    phone_number: "+971 54 347 4645",
+                    phone_display_text: "Call +971 54 347 4645",
                     phone_href: "tel:+971554974645",
                     additional_text: "or submit inquiry form below",
                     button_bg_color: "black",
@@ -497,7 +497,7 @@ const KioskConsultancyEditor = () => {
                                                         e.target.value,
                                                 }))
                                             }
-                                            placeholder="+971 (543) 47-6649"
+                                            placeholder="+971 54 347 4645"
                                         />
                                     </div>
 
@@ -517,7 +517,7 @@ const KioskConsultancyEditor = () => {
                                                         e.target.value,
                                                 }))
                                             }
-                                            placeholder="Call +971 (543) 47-6649"
+                                            placeholder="Call +971 54 347 4645"
                                         />
                                     </div>
                                 </div>

@@ -20,7 +20,7 @@ const ExceptionalDesignSection = () => {
                                 viewport={{ once: true }}
                             >
                                 <div className="space-y-6">
-                                    <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 uppercase tracking-wide text-center">
+                                    <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 tracking-wide text-center">
                                         EXCEPTIONAL DESIGN SERVICES
                                         <br />
                                         FOR PAVILION BOOTHS

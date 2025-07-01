@@ -1,111 +1,91 @@
-"use client";
-
+import { Mail, PhoneCall } from "lucide-react";
+import Link from "next/link";
 import React from "react";
-import { motion } from "framer-motion";
-import { User, Headphones } from "lucide-react";
 
-const ContactInfo = () => {
-    return (
-        <section className="py-8 md:py-12 lg:py-16 bg-gray-50">
-            <div className="container mx-auto px-4">
-                <div className="max-w-6xl mx-auto">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-                        {/* Sales Contact */}
-                        <motion.div
-                            className="bg-white rounded-xl p-10 shadow-lg hover:shadow-2xl transition-all duration-500 hover:border-[#a5cd39] border-2 border-transparent group hover:scale-105 transform"
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8 }}
-                            viewport={{ once: true }}
-                            whileHover={{ y: -5 }}
-                        >
-                            <div className="flex items-center space-x-6">
-                                <motion.div
-                                    className="flex-shrink-0 flex items-center justify-center w-16 h-16 bg-[#a5cd39]/10 rounded-full group-hover:bg-[#a5cd39]/20 transition-all duration-500"
-                                    whileHover={{ scale: 1.1, rotate: 5 }}
-                                >
-                                    <User className="w-8 h-8 text-[#a5cd39] group-hover:scale-110 transition-transform duration-300" />
-                                </motion.div>
+const companies = [
+    {
+        region: "Europe",
+        address: (
+            <>
+                Zum see 7,
+                <br />
+                14542 Werder (Havel), Germany
+            </>
+        ),
+        phone: "+49 (0) 33 2774 99-100",
+        email: "enquiry@triumfo.de",
+    },
+    {
+        region: "United States",
+        address: (
+            <>
+                2782 Abels Ln,
+                <br />
+                Las Vegas, NV 89115, USA
+            </>
+        ),
+        phone: "+1 702 992 0440",
+        email: "enquiry@triumfo.us",
+    },
+    {
+        region: "India",
+        address: (
+            <>
+                A-65 Sector-83, Phase II,
+                <br />
+                Noida – 201305, India
+            </>
+        ),
+        phone: "+91-0120-4690699",
+        email: "enquiry@triumfo.in",
+    },
+];
 
-                                <div className="flex-1">
-                                    <h3 className="text-sm font-markazi font-bold text-[#a5cd39] uppercase tracking-wider mb-3 group-hover:tracking-widest transition-all duration-300">
-                                        SALES DEPARTMENT
-                                    </h3>
+function formatPhoneHref(phone: string) {
+    // Remove spaces, parentheses, and dashes for tel: links
+    return phone.replace(/[\s()-]/g, "");
+}
 
-                                    <div className="space-y-2">
-                                        <motion.p
-                                            className="text-2xl font-rubik font-bold text-gray-900 group-hover:text-[#a5cd39] transition-colors duration-300"
-                                            whileHover={{ scale: 1.02 }}
-                                        >
-                                            +971 554 974 645
-                                        </motion.p>
-                                        <motion.a
-                                            href="mailto:sales@chronicleexhibits.com"
-                                            className="text-base font-nunito text-gray-600 hover:text-[#a5cd39] transition-colors duration-300 block font-medium"
-                                            whileHover={{ scale: 1.01 }}
-                                        >
-                                            sales@chronicleexhibits.com
-                                        </motion.a>
-                                        <p className="text-sm font-nunito text-gray-500 leading-relaxed pt-2">
-                                            Get in touch for project inquiries,
-                                            quotes, and exhibition stand design
-                                            consultations.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </motion.div>
-
-                        {/* Customer Care Contact */}
-                        <motion.div
-                            className="bg-white rounded-xl p-10 shadow-lg hover:shadow-2xl transition-all duration-500 hover:border-[#a5cd39] border-2 border-transparent group hover:scale-105 transform"
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, delay: 0.2 }}
-                            viewport={{ once: true }}
-                            whileHover={{ y: -5 }}
-                        >
-                            <div className="flex items-center space-x-6">
-                                <motion.div
-                                    className="flex-shrink-0 flex items-center justify-center w-16 h-16 bg-[#a5cd39]/10 rounded-full group-hover:bg-[#a5cd39]/20 transition-all duration-500"
-                                    whileHover={{ scale: 1.1, rotate: -5 }}
-                                >
-                                    <Headphones className="w-8 h-8 text-[#a5cd39] group-hover:scale-110 transition-transform duration-300" />
-                                </motion.div>
-
-                                <div className="flex-1">
-                                    <h3 className="text-sm font-markazi font-bold text-[#a5cd39] uppercase tracking-wider mb-3 group-hover:tracking-widest transition-all duration-300">
-                                        CUSTOMER CARE
-                                    </h3>
-
-                                    <div className="space-y-2">
-                                        <motion.p
-                                            className="text-2xl font-rubik font-bold text-gray-900 group-hover:text-[#a5cd39] transition-colors duration-300"
-                                            whileHover={{ scale: 1.02 }}
-                                        >
-                                            +971 (0)4 389 3999
-                                        </motion.p>
-                                        <motion.a
-                                            href="mailto:care@chronicleexhibits.com"
-                                            className="text-base font-noto-kufi-arabic text-gray-600 hover:text-[#a5cd39] transition-colors duration-300 block font-medium"
-                                            whileHover={{ scale: 1.01 }}
-                                        >
-                                            care@chronicleexhibits.com
-                                        </motion.a>
-                                        <p className="text-sm font-noto-kufi-arabic text-gray-500 leading-relaxed pt-2">
-                                            Reach out for support, service
-                                            requests, and post-project
-                                            assistance.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </motion.div>
-                    </div>
-                </div>
+const GroupCompanies = () => (
+    <section className="bg-[#101e36] py-12">
+        <div className="container mx-auto px-4">
+            <h2 className="text-3xl md:text-4xl text-center text-white font-rubik font-bold mb-1">
+                GROUP COMPANIES
+            </h2>
+            <div className="flex !mb-2 justify-center">
+                <div className="h-1 bg-[#a5cd39] w-16 mt-1 mb-6"></div>
             </div>
-        </section>
-    );
-};
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {companies.map(c => (
+                    <div
+                        key={c.region}
+                        className="bg-white shadow-lg p-8 border-t-4 border-[#a5cd39] flex flex-col h-full hover:-translate-y-1 hover:shadow-xl transition-all duration-300"
+                    >
+                        <h3 className="mb-2">{c.region}</h3>
+                        <div className="text-gray-500 mb-4">{c.address}</div>
+                        <div className="mb-2 flex items-center gap-2 text-gray-900">
+                            <PhoneCall className="w-4 h-4" />
+                            <Link
+                                href={`tel:${formatPhoneHref(c.phone)}`}
+                                className="font-semibold hover:text-[#a5cd39] transition-colors"
+                            >
+                                {c.phone}
+                            </Link>
+                        </div>
+                        <div className="flex items-center gap-2 text-gray-900">
+                            <Mail className="w-4 h-4" />
+                            <Link
+                                href={`mailto:${c.email}`}
+                                className="font-semibold hover:text-[#a5cd39] transition-colors"
+                            >
+                                {c.email}
+                            </Link>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </section>
+);
 
-export default ContactInfo;
+export default GroupCompanies;

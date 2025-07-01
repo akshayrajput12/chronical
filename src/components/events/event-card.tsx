@@ -58,7 +58,7 @@ const EventCard = ({
                 >
                     {/* Date */}
                     <div
-                        className="text-xs sm:text-xs md:text-xs text-gray-700 uppercase mb-3 sm:mb-4 md:mb-5 mt-2 sm:mt-3 md:mt-4 font-medium transition-colors duration-300 group-hover:text-[#22c55e]"
+                        className="text-xs sm:text-xs md:text-xs text-gray-700 mb-3 sm:mb-4 md:mb-5 mt-2 sm:mt-3 md:mt-4 font-medium transition-colors duration-300 group-hover:text-[#22c55e]"
                         style={{ letterSpacing: "1px" }}
                     >
                         {event.date_range}
@@ -74,7 +74,7 @@ const EventCard = ({
 
                     {/* Category */}
                     <p
-                        className="text-xs sm:text-xs md:text-xs text-gray-700 uppercase font-medium transition-colors duration-300 group-hover:text-[#22c55e]"
+                        className="text-xs sm:text-xs md:text-xs text-gray-700 font-medium transition-colors duration-300 group-hover:text-[#22c55e]"
                         style={{ letterSpacing: "1px" }}
                     >
                         {event.category?.name || event.category_name}

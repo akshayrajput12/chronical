@@ -109,7 +109,7 @@ const ConferenceSolutionSection = () => {
                         transition={{ duration: 0.8 }}
                         viewport={{ once: true }}
                     >
-                        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black mb-6 uppercase tracking-wide">
+                        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black mb-6 tracking-wide">
                             {sectionData.main_heading}
                         </h2>
                         <div className="flex flex-wrap items-center justify-center gap-3">

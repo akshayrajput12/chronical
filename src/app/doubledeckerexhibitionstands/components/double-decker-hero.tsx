@@ -20,10 +20,12 @@ const DoubleDeckerHero = () => {
     useEffect(() => {
         const loadHeroData = async () => {
             try {
-                const { data, error } = await supabase.rpc('get_double_decker_hero_section');
+                const { data, error } = await supabase.rpc(
+                    "get_double_decker_hero_section",
+                );
 
                 if (error) {
-                    console.error('Error loading hero data:', error);
+                    console.error("Error loading hero data:", error);
                     return;
                 }
 
@@ -31,7 +33,7 @@ const DoubleDeckerHero = () => {
                     setHeroData(data);
                 }
             } catch (error) {
-                console.error('Error loading hero data:', error);
+                console.error("Error loading hero data:", error);
             } finally {
                 setLoading(false);
             }
@@ -60,8 +62,14 @@ const DoubleDeckerHero = () => {
             {/* Background Image */}
             <div className="absolute inset-0">
                 <Image
-                    src={heroData.background_image_url || "https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"}
-                    alt={heroData.background_image_alt || "Double Decker Exhibition Stands"}
+                    src={
+                        heroData.background_image_url ||
+                        "https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                    }
+                    alt={
+                        heroData.background_image_alt ||
+                        "Double Decker Exhibition Stands"
+                    }
                     fill
                     className="object-cover"
                     priority
@@ -80,14 +88,14 @@ const DoubleDeckerHero = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8 }}
                         >
-                            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 uppercase tracking-wide leading-tight">
+                            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 tracking-wide leading-tight">
                                 {heroData.main_heading}
                             </h1>
                             <h3 className="text-sm sm:text-base lg:text-lg max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-3xl mx-auto leading-relaxed font-markazi-text tracking-wide">
-                                {heroData.description} Make the most
-                                of your space, and do not compromise in design.
-                                Impress your guests during trade shows and
-                                special events by incorporating these.
+                                {heroData.description} Make the most of your
+                                space, and do not compromise in design. Impress
+                                your guests during trade shows and special
+                                events by incorporating these.
                             </h3>
                         </motion.div>
                     </div>

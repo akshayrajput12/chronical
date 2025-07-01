@@ -110,7 +110,7 @@ const AboutMainEditor = () => {
     useEffect(() => {
         loadMainData();
         loadMainImages();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const loadMainData = async () => {
@@ -961,7 +961,7 @@ const AboutMainEditor = () => {
                                             {/* Right side - Text content preview */}
                                             <div className="w-full md:w-1/2 space-y-4">
                                                 <div
-                                                    className="text-sm font-medium uppercase tracking-wider"
+                                                    className="text-sm font-medium  tracking-wider"
                                                     style={{
                                                         color: sectionData.primary_color,
                                                     }}

@@ -231,7 +231,7 @@ const AboutUsMain = () => {
                                 <div className="mt-8">
                                     <a
                                         href={sectionData.cta_url}
-                                        className="bg-[#a5cd39] text-white px-6 py-1 rounded-md font-medium hover:bg-[#94b933] transition-colors duration-300 uppercase font-noto-kufi-arabic text-sm"
+                                        className="bg-[#a5cd39] text-white px-6 py-1 rounded-md font-medium hover:bg-[#94b933] transition-colors duration-300 font-noto-kufi-arabic text-sm"
                                         style={{
                                             backgroundColor:
                                                 sectionData.primary_color,

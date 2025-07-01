@@ -230,7 +230,7 @@ export const EventsForm: React.FC<EventsFormProps> = ({
                                     accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                                     title="Upload File (PDF, DOC, JPG, PNG)"
                                 />
-                                <div className="flex items-center justify-between w-full h-12 px-4 py-2 text-sm bg-white border border-gray-300 hover:border-[#a5cd39] focus-within:border-[#a5cd39] rounded-md cursor-pointer transition-all duration-200">
+                                <div className="flex items-center justify-between w-full h-10 px-1 pl-2 py-2 text-sm bg-white border border-gray-300 hover:border-[#a5cd39] focus-within:border-[#a5cd39] rounded-md cursor-pointer transition-all duration-200">
                                     <span
                                         className={`${
                                             formData.file
