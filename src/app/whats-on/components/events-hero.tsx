@@ -1,44 +1,135 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
+import { EventsHero as EventsHeroType } from "@/types/events";
 
 const EventsHero = () => {
+    const [heroData, setHeroData] = useState<EventsHeroType | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        fetchHeroData();
+    }, []);
+
+    const fetchHeroData = async () => {
+        try {
+            const response = await fetch('/api/events/hero');
+            const data = await response.json();
+
+            if (data.hero) {
+                setHeroData(data.hero);
+            }
+        } catch (error) {
+            console.error('Error fetching hero data:', error);
+            // Use default data on error
+            setHeroData({
+                id: 'default',
+                main_heading: 'Welcome to Dubai World Trade Centre',
+                sub_heading: 'Dubai\'s epicentre for events and business in the heart of the city',
+                background_image_url: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+                background_overlay_opacity: 0.30,
+                background_overlay_color: '#000000',
+                text_color: '#ffffff',
+                heading_font_size: 'responsive',
+                is_active: true,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+            });
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
+
+    if (loading) {
+        return (
+            <section className="relative h-[75vh] 2xl:h-[60vh] flex flex-col items-center justify-center overflow-hidden bg-gray-900">
+                <div className="animate-pulse">
+                    <div className="h-8 bg-gray-700 rounded w-96 mb-4"></div>
+                    <div className="h-4 bg-gray-700 rounded w-64 mx-auto"></div>
+                </div>
+            </section>
+        );
+    }
+
+    if (!heroData) {
+        return null;
+    }
+
+    const backgroundStyle = heroData.background_image_url
+        ? { backgroundImage: `url('${heroData.background_image_url}')` }
+        : { backgroundColor: '#1f2937' }; // Default gray background
+
+    const overlayStyle = {
+        backgroundColor: "#000000", // Fixed black overlay
+        opacity: 0.3, // Fixed 30% opacity
+    };
+
     return (
         <section className="relative h-[75vh] 2xl:h-[60vh] flex flex-col items-center justify-center overflow-hidden">
-            {/* Background Image - Dubai World Trade Centre themed */}
+            {/* Background Image */}
             <div
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                style={{
-                    backgroundImage:
-                        "url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')",
-                }}
+                style={backgroundStyle}
             />
 
-            {/* Subtle Overlay */}
-            <div className="absolute inset-0 bg-black/30" />
+            {/* Overlay */}
+            <div
+                className="absolute inset-0"
+                style={overlayStyle}
+            />
 
             {/* Content */}
-            <div className="relative z-10 flex flex-col justify-center text-center text-white w-full px-4 sm:px-6 md:px-8 lg:px-12">
+            <div
+                className="relative z-10 flex flex-col justify-center w-full px-4 sm:px-6 md:px-8 lg:px-12 text-center"
+                style={{ color: "#ffffff" }}
+            >
                 <motion.h1
-                    className="text-3xl md:mt-20  mt-0 sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-rubik font-bold leading-tight"
+                    className="text-4xl md:text-5xl lg:text-6xl font-rubik font-bold leading-tight"
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.2 }}
                 >
-                    Welcome to Dubai World Trade Centre
+                    {heroData.main_heading}
                 </motion.h1>
 
-                <motion.h3
-                    className="text-sm sm:text-base md:text-lg lg:text-xl font-markazi-text text-white/90 max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-3xl mx-auto leading-relaxed font-light tracking-wide"
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.4 }}
-                >
-                    Dubai&apos;s epicentre for events and business in the heart
-                    of the city
-                </motion.h3>
+                {heroData.sub_heading && (
+                    <motion.h3
+                        className="text-base md:text-lg font-markazi-text opacity-90 max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-3xl mx-auto leading-relaxed font-light tracking-wide mt-4"
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.4 }}
+                        style={{ color: "#ffffff" }}
+                    >
+                        {heroData.sub_heading}
+                    </motion.h3>
+                )}
+
+                {/* Call to Action Button */}
+                {heroData.button_text && heroData.button_url && (
+                    <motion.div
+                        className="mt-8 flex justify-center"
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.6 }}
+                    >
+                        <a
+                            href={heroData.button_url}
+                            className={`inline-flex items-center px-6 py-3 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 ${
+                                heroData.button_style === 'primary'
+                                    ? 'bg-[#a5cd39] text-white hover:bg-[#8fb82e] shadow-lg hover:shadow-xl'
+                                    : heroData.button_style === 'secondary'
+                                    ? 'bg-white text-gray-900 hover:bg-gray-100 shadow-lg hover:shadow-xl'
+                                    : 'border-2 border-current text-current hover:bg-current hover:text-white'
+                            }`}
+                        >
+                            {heroData.button_text}
+                        </a>
+                    </motion.div>
+                )}
             </div>
 
             {/* Scroll Down Indicator */}
@@ -49,7 +140,9 @@ const EventsHero = () => {
                 transition={{ duration: 0.8, delay: 0.6 }}
                 whileHover={{ y: 5 }}
             >
-                <ChevronDown className="w-8 h-8 text-white animate-bounce" />
+                <ChevronDown
+                    className="w-8 h-8 animate-bounce text-white"
+                />
             </motion.div>
         </section>
     );

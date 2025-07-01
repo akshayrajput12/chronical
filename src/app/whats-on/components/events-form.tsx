@@ -1,16 +1,42 @@
 import React, { useState } from "react";
+import { EventFormSubmissionInput } from "@/types/events";
 
-export const EventsForm = () => {
+interface EventsFormProps {
+    eventId?: string;
+    onSubmit?: (data: EventFormSubmissionInput) => void;
+    className?: string;
+}
+
+export const EventsForm: React.FC<EventsFormProps> = ({
+    eventId,
+    onSubmit,
+    className = ""
+}) => {
     const [formData, setFormData] = useState({
         name: "",
-        exhibitionName: "",
-        companyName: "",
+        exhibition_name: "",
+        company_name: "",
         email: "",
         phone: "",
         budget: "",
         message: "",
         file: null as File | null,
     });
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitStatus, setSubmitStatus] = useState<{
+        type: 'success' | 'error' | null;
+        message: string;
+    }>({ type: null, message: '' });
+
+    // Handler for input changes
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
 
     // Handler for file input change
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,52 +46,177 @@ export const EventsForm = () => {
             file,
         }));
     };
+
+    // Handler for form submission
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        setSubmitStatus({ type: null, message: '' });
+
+        try {
+            const attachmentUrl = '';
+            let attachmentFilename = '';
+            let attachmentSize = 0;
+
+            // Upload file if present
+            if (formData.file) {
+                // TODO: Implement file upload to Supabase storage
+                // For now, we'll just store the file info
+                attachmentFilename = formData.file.name;
+                attachmentSize = formData.file.size;
+            }
+
+            // Prepare submission data
+            const submissionData: EventFormSubmissionInput = {
+                event_id: eventId,
+                name: formData.name,
+                exhibition_name: formData.exhibition_name || undefined,
+                company_name: formData.company_name || undefined,
+                email: formData.email,
+                phone: formData.phone || undefined,
+                budget: formData.budget || undefined,
+                message: formData.message || undefined,
+                attachment_url: attachmentUrl || undefined,
+                attachment_filename: attachmentFilename || undefined,
+                attachment_size: attachmentSize || undefined,
+            };
+
+            // Submit to API
+            const response = await fetch('/api/events/submissions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(submissionData),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                setSubmitStatus({
+                    type: 'success',
+                    message: result.message || 'Form submitted successfully! We will get back to you soon.',
+                });
+
+                // Reset form
+                setFormData({
+                    name: "",
+                    exhibition_name: "",
+                    company_name: "",
+                    email: "",
+                    phone: "",
+                    budget: "",
+                    message: "",
+                    file: null,
+                });
+
+                // Clear file input
+                const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+                if (fileInput) {
+                    fileInput.value = '';
+                }
+
+                // Call onSubmit callback if provided
+                if (onSubmit) {
+                    onSubmit(submissionData);
+                }
+            } else {
+                setSubmitStatus({
+                    type: 'error',
+                    message: result.error || 'Failed to submit form. Please try again.',
+                });
+            }
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            setSubmitStatus({
+                type: 'error',
+                message: 'An error occurred while submitting the form. Please try again.',
+            });
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
     return (
-        <section className="py-16 bg-black/60">
+        <section className={`py-16 bg-black/60 ${className}`}>
             <div className="container mx-auto px-4">
                 <h2 className="text-3xl sm:text-4xl font-rubik font-bold text-center text-white mb-4">
-                    Event Gallery
+                    Get in Touch
                     <div className="w-16 h-1 my-2 bg-[#a5cd39] mx-auto"></div>
                 </h2>
+                <p className="text-center text-white/80 mb-8 max-w-2xl mx-auto">
+                    Interested in this event? Fill out the form below and we'll get back to you with more information.
+                </p>
 
                 <div className="max-w-6xl mx-auto bg-white rounded-lg shadow p-6">
-                    <form className="space-y-4">
+                    {/* Status Messages */}
+                    {submitStatus.type && (
+                        <div className={`mb-6 p-4 rounded-md ${
+                            submitStatus.type === 'success'
+                                ? 'bg-green-50 text-green-800 border border-green-200'
+                                : 'bg-red-50 text-red-800 border border-red-200'
+                        }`}>
+                            {submitStatus.message}
+                        </div>
+                    )}
+
+                    <form onSubmit={handleSubmit} className="space-y-4">
                         {/* Simple responsive grid for all main fields */}
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             <input
                                 type="text"
-                                placeholder="Name"
+                                name="name"
+                                placeholder="Name *"
+                                value={formData.name}
+                                onChange={handleInputChange}
                                 className="h-8 px-2 py-1 text-xs border border-gray-300 rounded-md w-full focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] placeholder:text-gray-500 transition-all duration-200"
                                 required
+                                disabled={isSubmitting}
                             />
                             <input
                                 type="text"
+                                name="exhibition_name"
                                 placeholder="Exhibition Name"
+                                value={formData.exhibition_name}
+                                onChange={handleInputChange}
                                 className="h-8 px-2 py-1 text-xs border border-gray-300 rounded-md w-full focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] placeholder:text-gray-500 transition-all duration-200"
-                                required
+                                disabled={isSubmitting}
                             />
                             <input
                                 type="text"
+                                name="company_name"
                                 placeholder="Company Name"
+                                value={formData.company_name}
+                                onChange={handleInputChange}
                                 className="h-8 px-2 py-1 text-xs border border-gray-300 rounded-md w-full focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] placeholder:text-gray-500 transition-all duration-200"
-                                required
+                                disabled={isSubmitting}
                             />
                             <input
                                 type="email"
-                                placeholder="Email"
+                                name="email"
+                                placeholder="Email *"
+                                value={formData.email}
+                                onChange={handleInputChange}
                                 className="h-8 px-2 py-1 text-xs border border-gray-300 rounded-md w-full focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] placeholder:text-gray-500 transition-all duration-200"
                                 required
+                                disabled={isSubmitting}
                             />
                             <input
                                 type="tel"
+                                name="phone"
                                 placeholder="Phone (with country code)"
+                                value={formData.phone}
+                                onChange={handleInputChange}
                                 className="h-8 px-2 py-1 text-xs border border-gray-300 rounded-md w-full focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] placeholder:text-gray-500 transition-all duration-200"
-                                required
+                                disabled={isSubmitting}
                             />
                             <input
                                 type="text"
+                                name="budget"
                                 placeholder="Budget"
+                                value={formData.budget}
+                                onChange={handleInputChange}
                                 className="h-8 px-2 py-1 text-xs border border-gray-300 rounded-md w-full focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] placeholder:text-gray-500 transition-all duration-200"
+                                disabled={isSubmitting}
                             />
                         </div>
                         {/* File upload full width */}
@@ -100,18 +251,36 @@ export const EventsForm = () => {
                         {/* Textarea full width */}
                         <div>
                             <textarea
-                                placeholder="Describe your booth requirements, design preferences, special features, or any specific customizations you need..."
+                                name="message"
+                                placeholder="Tell us about your event requirements, booth specifications, or any questions you have..."
+                                value={formData.message}
+                                onChange={handleInputChange}
                                 className="min-h-[40px] h-16 px-2 py-1 text-xs border border-gray-300 rounded-md w-full focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] placeholder:text-gray-500 transition-all duration-200 resize-none"
-                                required
+                                disabled={isSubmitting}
                             />
                         </div>
                         {/* Submit button centered */}
                         <div className="flex justify-center pt-2">
                             <button
                                 type="submit"
-                                className="bg-[#a5cd39] text-white px-6 py-2 rounded-md font-medium hover:bg-[#94b933] transition-colors duration-300 uppercase font-noto-kufi-arabic text-sm"
+                                disabled={isSubmitting}
+                                className={`px-6 py-2 rounded-md font-medium transition-colors duration-300 uppercase text-sm ${
+                                    isSubmitting
+                                        ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
+                                        : 'bg-[#a5cd39] text-white hover:bg-[#94b933]'
+                                }`}
                             >
-                                Submit
+                                {isSubmitting ? (
+                                    <span className="flex items-center">
+                                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                        Submitting...
+                                    </span>
+                                ) : (
+                                    'Submit'
+                                )}
                             </button>
                         </div>
                     </form>

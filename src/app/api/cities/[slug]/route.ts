@@ -77,6 +77,15 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
                     is_primary,
                     is_active,
                     sort_order
+                ),
+                statistics:city_statistics(
+                    id,
+                    statistic_type,
+                    title,
+                    value,
+                    icon_name,
+                    is_active,
+                    sort_order
                 )
             `);
         } else {

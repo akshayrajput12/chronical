@@ -5,12 +5,12 @@ import { motion } from "framer-motion";
 import { AnimationGeneratorType, Variants } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Event } from "@/app/whats-on/data/events";
+import { Event } from "@/types/events";
 import EventCard from "./event-card";
 
 interface EventCarouselProps {
     events: Event[];
-    onEventClick: (eventId: string) => void;
+    onEventClick: (eventSlug: string) => void;
 }
 
 const EventCarousel = ({ events, onEventClick }: EventCarouselProps) => {

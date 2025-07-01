@@ -22,7 +22,6 @@ interface CityFormData {
     country: string;
     country_code: string;
     description: string;
-    hero_image_url: string;
     meta_title: string;
     meta_description: string;
     projects_completed: number;
@@ -86,6 +85,15 @@ interface PortfolioItem {
     sort_order: number;
 }
 
+interface Statistic {
+    id?: string;
+    statistic_type: string;
+    title: string;
+    value: string;
+    icon_name: string;
+    sort_order: number;
+}
+
 const EditCityPage = () => {
     const router = useRouter();
     const params = useParams();
@@ -102,7 +110,6 @@ const EditCityPage = () => {
         country: "",
         country_code: "",
         description: "",
-        hero_image_url: "",
         meta_title: "",
         meta_description: "",
         projects_completed: 0,
@@ -118,6 +125,7 @@ const EditCityPage = () => {
     const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>([]);
     const [preferredServices, setPreferredServices] = useState<PreferredService[]>([]);
     const [contactDetails, setContactDetails] = useState<ContactDetail[]>([]);
+    const [statistics, setStatistics] = useState<Statistic[]>([]);
     const [showImageSelector, setShowImageSelector] = useState(false);
     const [imageSelectionCallback, setImageSelectionCallback] = useState<((url: string) => void) | null>(null);
     const [existingImages, setExistingImages] = useState<{name: string, url: string, folder: string}[]>([]);
@@ -144,7 +152,6 @@ const EditCityPage = () => {
                     country: city.country || "",
                     country_code: city.country_code || "",
                     description: city.description || "",
-                    hero_image_url: city.hero_image_url || "",
                     meta_title: city.meta_title || "",
                     meta_description: city.meta_description || "",
                     projects_completed: city.projects_completed || 0,
@@ -164,11 +171,24 @@ const EditCityPage = () => {
                 if (sectionsError) throw sectionsError;
 
                 // Ensure all section types exist
-                const sectionTypes = ["role", "content", "booth_design", "why_best"];
+                const sectionTypes = ["hero", "role", "content", "booth_design", "why_best"];
                 const existingSections = sections || [];
                 const allSections = sectionTypes.map(type => {
                     const existing = existingSections.find(s => s.section_type === type);
-                    return existing || {
+                    if (existing) {
+                        return existing;
+                    }
+                    // Default content for hero section
+                    if (type === "hero") {
+                        return {
+                            section_type: type,
+                            title: "EXHIBITION STAND DESIGN BUILDER IN [CITY], UAE.",
+                            subtitle: "World-class exhibition solutions in the global business hub",
+                            content: "Chronicle Exhibition Organizing LLC is one of the most reputable exhibition stand design manufacturers, and contractors located in [CITY] offering an exhaustive array of stand-up services for exhibitions. We provide complete display stand solutions, including designing, planning, fabricating and erecting and putting up.",
+                            image_url: "",
+                        };
+                    }
+                    return {
                         section_type: type,
                         title: "",
                         content: "",
@@ -239,6 +259,21 @@ const EditCityPage = () => {
 
                 if (contactsError) throw contactsError;
                 setContactDetails(contactsData || [{ contact_type: "phone", contact_value: "", display_text: "", is_primary: true, sort_order: 1 }]);
+
+                // Load statistics
+                const { data: statisticsData, error: statisticsError } = await supabase
+                    .from("city_statistics")
+                    .select("*")
+                    .eq("city_id", cityId)
+                    .order("sort_order");
+
+                if (statisticsError) throw statisticsError;
+                setStatistics(statisticsData || [
+                    { statistic_type: "happy_clients", title: "Happy Clients", value: "4650+", icon_name: "users", color: "#4F46E5", sort_order: 1 },
+                    { statistic_type: "completed_projects", title: "Completed Projects", value: "20800+", icon_name: "briefcase", color: "#4F46E5", sort_order: 2 },
+                    { statistic_type: "customer_support", title: "Customer Support", value: "24X7", icon_name: "headphones", color: "#4F46E5", sort_order: 3 },
+                    { statistic_type: "exhibitions", title: "Exhibitions", value: "2050+", icon_name: "trophy", color: "#4F46E5", sort_order: 4 },
+                ]);
 
             } catch (error) {
                 console.error("Error loading city data:", error);
@@ -402,13 +437,7 @@ const EditCityPage = () => {
 
 
 
-    // Handle hero image upload
-    const handleHeroImageUpload = async (file: File) => {
-        const imageUrl = await uploadImage(file, 'cities');
-        if (imageUrl) {
-            setCityData(prev => ({ ...prev, hero_image_url: imageUrl }));
-        }
-    };
+
 
     // Handle image upload for portfolio items
     const handlePortfolioImageUpload = async (index: number, file: File) => {
@@ -566,7 +595,6 @@ const EditCityPage = () => {
             if (cityData.country.trim()) updateData.country = cityData.country.trim();
             if (cityData.country_code.trim()) updateData.country_code = cityData.country_code.trim();
             if (cityData.description.trim()) updateData.description = cityData.description.trim();
-            if (cityData.hero_image_url.trim()) updateData.hero_image_url = cityData.hero_image_url.trim();
             if (cityData.meta_title.trim()) updateData.meta_title = cityData.meta_title.trim();
             if (cityData.meta_description.trim()) updateData.meta_description = cityData.meta_description.trim();
             if (cityData.projects_completed > 0) updateData.projects_completed = cityData.projects_completed;
@@ -591,6 +619,7 @@ const EditCityPage = () => {
                     supabase.from("city_content_sections").delete().eq("city_id", cityId),
                     supabase.from("city_services").delete().eq("city_id", cityId),
                     supabase.from("city_components").delete().eq("city_id", cityId),
+                    supabase.from("city_statistics").delete().eq("city_id", cityId),
                     supabase.from("city_preferred_services").delete().eq("city_id", cityId),
                     supabase.from("city_contact_details").delete().eq("city_id", cityId),
                 ]);
@@ -737,6 +766,29 @@ const EditCityPage = () => {
                 }
             }
 
+            // Insert updated statistics
+            const statisticsData = statistics
+                .filter(stat => stat.title?.trim() && stat.value?.trim() && stat.statistic_type?.trim())
+                .map((stat, index) => ({
+                    city_id: cityId,
+                    statistic_type: stat.statistic_type.trim(),
+                    title: stat.title.trim(),
+                    value: stat.value.trim(),
+                    icon_name: stat.icon_name || "users",
+                    sort_order: stat.sort_order || index + 1,
+                    is_active: true,
+                }));
+
+            if (statisticsData.length > 0) {
+                const { error: statisticsError } = await supabase
+                    .from("city_statistics")
+                    .insert(statisticsData);
+                if (statisticsError) {
+                    console.error("Statistics error:", statisticsError);
+                    throw statisticsError;
+                }
+            }
+
             alert("City updated successfully!");
             router.push("/admin/pages/cities");
 
@@ -775,6 +827,7 @@ const EditCityPage = () => {
         { id: "content", label: "Content Sections" },
         { id: "services", label: "Services" },
         { id: "components", label: "Components" },
+        { id: "statistics", label: "Statistics" },
         { id: "portfolio", label: "Portfolio" },
     ];
 
@@ -833,8 +886,6 @@ const EditCityPage = () => {
                         cityData={cityData}
                         setCityData={setCityData}
                         handleNameChange={handleNameChange}
-                        handleHeroImageUpload={handleHeroImageUpload}
-                        openImageSelector={openImageSelector}
                     />
                 )}
                 
@@ -860,6 +911,13 @@ const EditCityPage = () => {
                     <ComponentsTab
                         components={components}
                         setComponents={setComponents}
+                    />
+                )}
+
+                {activeTab === "statistics" && (
+                    <StatisticsTab
+                        statistics={statistics}
+                        setStatistics={setStatistics}
                     />
                 )}
 
@@ -891,12 +949,10 @@ const EditCityPage = () => {
 };
 
 // Basic Info Tab Component
-const BasicInfoTab = ({ cityData, setCityData, handleNameChange, handleHeroImageUpload, openImageSelector }: {
+const BasicInfoTab = ({ cityData, setCityData, handleNameChange }: {
     cityData: CityFormData;
     setCityData: React.Dispatch<React.SetStateAction<CityFormData>>;
     handleNameChange: (name: string) => void;
-    handleHeroImageUpload: (file: File) => void;
-    openImageSelector: (callback: (url: string) => void) => void;
 }) => (
     <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -952,49 +1008,7 @@ const BasicInfoTab = ({ cityData, setCityData, handleNameChange, handleHeroImage
             />
         </div>
 
-        <div>
-            <Label htmlFor="hero_image">Hero Image</Label>
-            <div className="flex items-center space-x-4">
-                <Input
-                    id="hero_image"
-                    value={cityData.hero_image_url}
-                    onChange={(e) => setCityData(prev => ({ ...prev, hero_image_url: e.target.value }))}
-                    placeholder="Hero image URL"
-                />
-                <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) handleHeroImageUpload(file);
-                    }}
-                    className="hidden"
-                    id="hero-file"
-                />
-                <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => document.getElementById('hero-file')?.click()}
-                >
-                    <Upload className="w-4 h-4 mr-2" />
-                    Upload
-                </Button>
-                <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => openImageSelector((url) => setCityData(prev => ({ ...prev, hero_image_url: url })))}
-                >
-                    Select from Bucket
-                </Button>
-            </div>
-            {cityData.hero_image_url && (
-                <img
-                    src={cityData.hero_image_url}
-                    alt="Hero preview"
-                    className="mt-2 w-48 h-32 object-cover rounded"
-                />
-            )}
-        </div>
+
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
@@ -1348,6 +1362,128 @@ const ComponentsTab = ({ components, setComponents }: {
                                         />
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
+// Statistics Tab Component
+const StatisticsTab = ({ statistics, setStatistics }: {
+    statistics: Statistic[];
+    setStatistics: React.Dispatch<React.SetStateAction<Statistic[]>>;
+}) => {
+    const updateStatistic = (index: number, field: keyof Statistic, value: string | number) => {
+        const updated = [...statistics];
+        updated[index] = { ...updated[index], [field]: value };
+        setStatistics(updated);
+    };
+
+    const addStatistic = () => {
+        setStatistics([...statistics, {
+            statistic_type: "",
+            title: "",
+            value: "",
+            icon_name: "users",
+            sort_order: statistics.length + 1
+        }]);
+    };
+
+    const removeStatistic = (index: number) => {
+        setStatistics(statistics.filter((_, i) => i !== index));
+    };
+
+    const iconOptions = [
+        { value: "users", label: "Users" },
+        { value: "briefcase", label: "Briefcase" },
+        { value: "headphones", label: "Headphones" },
+        { value: "trophy", label: "Trophy" },
+    ];
+
+    return (
+        <div className="space-y-6">
+            <div className="flex justify-between items-center">
+                <h3 className="text-lg font-semibold">Statistics</h3>
+                <Button onClick={addStatistic} className="bg-[#a5cd39] hover:bg-[#8fb82e]">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Statistic
+                </Button>
+            </div>
+
+            <div className="space-y-4">
+                {statistics.map((statistic, index) => (
+                    <div key={index} className="border rounded-lg p-4">
+                        <div className="flex justify-between items-start mb-4">
+                            <h4 className="font-medium">Statistic {index + 1}</h4>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => removeStatistic(index)}
+                                className="text-red-600 hover:text-red-700"
+                            >
+                                <Trash2 className="w-4 h-4" />
+                            </Button>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <Label htmlFor={`statistic-type-${index}`}>Statistic Type</Label>
+                                <Input
+                                    id={`statistic-type-${index}`}
+                                    value={statistic.statistic_type}
+                                    onChange={(e) => updateStatistic(index, "statistic_type", e.target.value)}
+                                    placeholder="e.g., happy_clients"
+                                />
+                            </div>
+
+                            <div>
+                                <Label htmlFor={`statistic-title-${index}`}>Title</Label>
+                                <Input
+                                    id={`statistic-title-${index}`}
+                                    value={statistic.title}
+                                    onChange={(e) => updateStatistic(index, "title", e.target.value)}
+                                    placeholder="e.g., Happy Clients"
+                                />
+                            </div>
+
+                            <div>
+                                <Label htmlFor={`statistic-value-${index}`}>Value</Label>
+                                <Input
+                                    id={`statistic-value-${index}`}
+                                    value={statistic.value}
+                                    onChange={(e) => updateStatistic(index, "value", e.target.value)}
+                                    placeholder="e.g., 4650+"
+                                />
+                            </div>
+
+                            <div>
+                                <Label htmlFor={`statistic-icon-${index}`}>Icon</Label>
+                                <select
+                                    id={`statistic-icon-${index}`}
+                                    value={statistic.icon_name}
+                                    onChange={(e) => updateStatistic(index, "icon_name", e.target.value)}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#a5cd39]"
+                                >
+                                    {iconOptions.map(option => (
+                                        <option key={option.value} value={option.value}>
+                                            {option.label}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div>
+                                <Label htmlFor={`statistic-sort-${index}`}>Sort Order</Label>
+                                <Input
+                                    id={`statistic-sort-${index}`}
+                                    type="number"
+                                    value={statistic.sort_order}
+                                    onChange={(e) => updateStatistic(index, "sort_order", parseInt(e.target.value) || 0)}
+                                    min="0"
+                                />
                             </div>
                         </div>
                     </div>

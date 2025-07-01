@@ -3,97 +3,137 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { ImageIcon } from "lucide-react";
 import Image from "next/image";
 
 interface EventGalleryProps {
     eventId?: string;
+    images?: any[];
+    title?: string;
+    showNavigation?: boolean;
+    className?: string;
 }
 
-const EventGallery: React.FC<EventGalleryProps> = ({ eventId }) => {
+const EventGallery: React.FC<EventGalleryProps> = ({
+    eventId,
+    images: propImages,
+    title = "Event Gallery",
+    showNavigation = true,
+    className = ""
+}) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isDragging, setIsDragging] = useState(false);
     const [startX, setStartX] = useState(0);
     const [scrollLeft, setScrollLeft] = useState(0);
+    const [galleryImages, setGalleryImages] = useState<any[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
     const sliderRef = useRef<HTMLDivElement>(null);
 
-    // Gallery images data - this would eventually come from database
-    const galleryImages = [
-        {
-            id: 1,
-            src: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-            alt: "Exhibition Hall with Visitors",
-            date: "MARCH 15, 2024",
-            title: "Exhibition Hall with Visitors",
-            category: "EXHIBITION EVENTS",
-        },
-        {
-            id: 2,
-            src: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-            alt: "Auto Show Exhibition",
-            date: "MARCH 20, 2024",
-            title: "Auto Show Exhibition",
-            category: "AUTOMOTIVE SHOWS",
-        },
-        {
-            id: 3,
-            src: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-            alt: "Trade Show Event",
-            date: "MARCH 25, 2024",
-            title: "Trade Show Event",
-            category: "BUSINESS EVENTS",
-        },
-        {
-            id: 4,
-            src: "https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-            alt: "Business Conference",
-            date: "APRIL 01, 2024",
-            title: "Business Conference",
-            category: "CONFERENCES",
-        },
-        {
-            id: 5,
-            src: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-            alt: "Fashion Event",
-            date: "APRIL 05, 2024",
-            title: "Fashion Event",
-            category: "FASHION SHOWS",
-        },
-        {
-            id: 6,
-            src: "https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-            alt: "Technology Exhibition",
-            date: "APRIL 10, 2024",
-            title: "Technology Exhibition",
-            category: "TECH EVENTS",
-        },
-        {
-            id: 7,
-            src: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-            alt: "Corporate Event",
-            date: "APRIL 15, 2024",
-            title: "Corporate Event",
-            category: "CORPORATE EVENTS",
-        },
-        {
-            id: 8,
-            src: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-            alt: "Product Launch",
-            date: "APRIL 20, 2024",
-            title: "Product Launch",
-            category: "PRODUCT LAUNCHES",
-        },
-    ];
+    // Fetch gallery images if eventId is provided and no images prop
+    useEffect(() => {
+        let isCancelled = false;
+
+        if (propImages) {
+            setGalleryImages(propImages);
+            return;
+        }
+
+        if (!eventId) return;
+
+        const fetchEventImages = async () => {
+            setLoading(true);
+            setError(null);
+
+            try {
+                const response = await fetch(`/api/events/${eventId}/images?type=gallery`);
+                if (isCancelled) return;
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    if (!isCancelled) setGalleryImages(data.images.gallery || []);
+                } else {
+                    if (!isCancelled) setError(data.error || 'Failed to load gallery images');
+                }
+            } catch (error) {
+                if (isCancelled) return;
+                console.error('Error fetching gallery images:', error);
+                setError('Failed to load gallery images');
+            } finally {
+                if (!isCancelled) setLoading(false);
+            }
+        };
+
+        fetchEventImages();
+
+        return () => {
+            isCancelled = true;
+        };
+    }, [eventId, propImages]);
+
+    // Retry function for error handling
+    const retryFetch = () => {
+        if (eventId && !propImages) {
+            setError(null);
+            setLoading(true);
+
+            const fetchEventImages = async () => {
+                try {
+                    const response = await fetch(`/api/events/${eventId}/images?type=gallery`);
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        setGalleryImages(data.images.gallery || []);
+                    } else {
+                        setError(data.error || 'Failed to load gallery images');
+                    }
+                } catch (error) {
+                    console.error('Error fetching gallery images:', error);
+                    setError('Failed to load gallery images');
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            fetchEventImages();
+        }
+    };
+
+    // Use prop images or fetched images
+    const rawImages = propImages || galleryImages;
+
+    // Transform images to consistent format and filter out invalid images
+    const formattedImages = rawImages
+        .filter((image: any) => {
+            // Ensure image has a valid src
+            const src = image.large_url || image.medium_url || image.file_path;
+            return src && src.trim() !== '';
+        })
+        .map((image: any) => ({
+            id: image.id || image.relation_id,
+            src: image.large_url || image.medium_url || image.file_path,
+            thumbnail: image.thumbnail_url || image.file_path,
+            alt: image.alt_text || image.title || 'Event gallery image',
+            title: image.title || image.filename,
+            caption: image.caption,
+            width: image.width,
+            height: image.height,
+        }));
+
+    // Use formatted images or fallback to empty array
+    const displayImages = formattedImages.length > 0 ? formattedImages : [];
 
     // Auto-slide functionality
     useEffect(() => {
-        if (!isDragging) {
+        if (!isDragging && displayImages.length > 0) {
             const interval = setInterval(() => {
-                setCurrentIndex(prev => (prev + 1) % galleryImages.length);
+                setCurrentIndex(prev => (prev + 1) % displayImages.length);
             }, 4000); // Change slide every 4 seconds
 
             return () => clearInterval(interval);
         }
-    }, [galleryImages.length, isDragging]);
+    }, [displayImages.length, isDragging]);
 
     // Mouse drag handlers
     const handleMouseDown = (e: React.MouseEvent) => {
@@ -137,7 +177,7 @@ const EventGallery: React.FC<EventGalleryProps> = ({ eventId }) => {
         setCurrentIndex(index);
         if (sliderRef.current) {
             const slideWidth =
-                sliderRef.current.scrollWidth / galleryImages.length;
+                sliderRef.current.scrollWidth / displayImages.length;
             sliderRef.current.scrollTo({
                 left: slideWidth * index,
                 behavior: "smooth",
@@ -145,8 +185,81 @@ const EventGallery: React.FC<EventGalleryProps> = ({ eventId }) => {
         }
     };
 
+    // Loading state
+    if (loading) {
+        return (
+            <div className={`py-16 ${className}`}>
+                <motion.div
+                    className="text-center mb-8 md:mb-12"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                    viewport={{ once: true }}
+                >
+                    <h2 className="text-3xl sm:text-4xl font-rubik font-bold text-center mb-4">
+                        {title}
+                    </h2>
+                    <div className="w-16 h-1 bg-[#a5cd39] mx-auto"></div>
+                </motion.div>
+                <div className="flex justify-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#a5cd39]"></div>
+                </div>
+            </div>
+        );
+    }
+
+    // Error state
+    if (error) {
+        return (
+            <div className={`py-16 ${className}`}>
+                <motion.div
+                    className="text-center mb-8 md:mb-12"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                    viewport={{ once: true }}
+                >
+                    <h2 className="text-3xl sm:text-4xl font-rubik font-bold text-center mb-4">
+                        {title}
+                    </h2>
+                    <div className="w-16 h-1 bg-[#a5cd39] mx-auto"></div>
+                </motion.div>
+                <div className="text-center">
+                    <p className="text-gray-600 mb-4">{error}</p>
+                    <Button onClick={retryFetch} variant="outline">
+                        Try Again
+                    </Button>
+                </div>
+            </div>
+        );
+    }
+
+    // No images state
+    if (displayImages.length === 0) {
+        return (
+            <div className={`py-16 ${className}`}>
+                <motion.div
+                    className="text-center mb-8 md:mb-12"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                    viewport={{ once: true }}
+                >
+                    <h2 className="text-3xl sm:text-4xl font-rubik font-bold text-center mb-4">
+                        {title}
+                    </h2>
+                    <div className="w-16 h-1 bg-[#a5cd39] mx-auto"></div>
+                </motion.div>
+                <div className="text-center">
+                    <ImageIcon className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                    <p className="text-gray-600">No gallery images available for this event.</p>
+                </div>
+            </div>
+        );
+    }
+
     return (
-        <>
+        <div className={`py-16 ${className}`}>
             {/* Section Title */}
             <motion.div
                 className="text-center mb-8 md:mb-12"
@@ -156,7 +269,7 @@ const EventGallery: React.FC<EventGalleryProps> = ({ eventId }) => {
                 viewport={{ once: true }}
             >
                 <h2 className="text-3xl sm:text-4xl font-rubik font-bold text-center mb-4">
-                    Event Gallery
+                    {title}
                 </h2>
                 <div className="w-16 h-1 bg-[#a5cd39] mx-auto"></div>
             </motion.div>
@@ -185,7 +298,7 @@ const EventGallery: React.FC<EventGalleryProps> = ({ eventId }) => {
                     onTouchMove={handleTouchMove}
                     onTouchEnd={handleTouchEnd}
                 >
-                    {galleryImages.map((image, index) => (
+                    {displayImages.map((image, index) => (
                         <motion.div
                             key={image.id}
                             className="flex-none relative overflow-hidden group cursor-pointer select-none shadow-md hover:shadow-xl w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-[306px] lg:h-[306px]"
@@ -213,7 +326,7 @@ const EventGallery: React.FC<EventGalleryProps> = ({ eventId }) => {
 
                 {/* Scroll Indicator Dots */}
                 <div className="flex justify-center mt-6 gap-1">
-                    {galleryImages.map((_, index) => (
+                    {displayImages.map((_, index) => (
                         <button
                             key={index}
                             className={`w-2 h-2 rounded-full transition-all duration-300 hover:scale-125 ${
@@ -232,7 +345,7 @@ const EventGallery: React.FC<EventGalleryProps> = ({ eventId }) => {
                         className="bg-[#a5cd39] h-1 rounded-full transition-all duration-300"
                         style={{
                             width: `${
-                                ((currentIndex + 1) / galleryImages.length) *
+                                ((currentIndex + 1) / displayImages.length) *
                                 100
                             }%`,
                         }}
@@ -255,7 +368,7 @@ const EventGallery: React.FC<EventGalleryProps> = ({ eventId }) => {
                     </Button>
                 </motion.div>
             </motion.div>
-        </>
+        </div>
     );
 };
 

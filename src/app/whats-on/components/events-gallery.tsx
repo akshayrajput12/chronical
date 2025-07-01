@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 import { AnimationGeneratorType, Variants } from "framer-motion";
@@ -8,17 +8,52 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { getAllEvents, Event } from "../data/events";
+import { Event, EventCategory } from "@/types/events";
 
 const EventsGallery = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [selectedFilter, setSelectedFilter] = useState("All");
     const [cardsToShow, setCardsToShow] = useState(3);
     const [cardWidth, setCardWidth] = useState(320);
+    const [events, setEvents] = useState<Event[]>([]);
+    const [categories, setCategories] = useState<EventCategory[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
-    // Get all events from centralized data
-    const allEvents: Event[] = getAllEvents();
+    // Fetch events and categories on component mount
+    useEffect(() => {
+        fetchEventsAndCategories();
+    }, []);
+
+    const fetchEventsAndCategories = async () => {
+        setLoading(true);
+        setError(null);
+
+        try {
+            const [eventsResponse, categoriesResponse] = await Promise.all([
+                fetch('/api/events?limit=50&is_active=true'),
+                fetch('/api/events/categories?is_active=true&include_counts=true')
+            ]);
+
+            if (!eventsResponse.ok || !categoriesResponse.ok) {
+                throw new Error('Failed to fetch data');
+            }
+
+            const eventsData = await eventsResponse.json();
+            const categoriesData = await categoriesResponse.json();
+
+            setEvents(eventsData.events || []);
+            setCategories(categoriesData.categories || []);
+        } catch (error) {
+            console.error('Error fetching events and categories:', error);
+            setError('Failed to load events. Please try again later.');
+            setEvents([]);
+            setCategories([]);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     // Handle responsive cards display and card width - Always show 3 cards
     React.useEffect(() => {
@@ -54,67 +89,32 @@ const EventsGallery = () => {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
-    // Filter options based on event dates
+    // Generate filter options from categories
     const filterOptions = [
         "All",
-        "May 2025",
-        "June 2025",
-        "July 2025",
-        "August 2025",
-        "September 2025",
-        "October 2025",
-        "November 2025",
-        "December 2025",
-        "January 2026",
-        "February 2026",
+        ...categories.map(category => category.name)
     ];
 
-    // Filter events based on selected month
+    // Filter events based on selected category
     const getFilteredEvents = () => {
         if (selectedFilter === "All") {
-            return allEvents;
+            return events;
         }
 
-        return allEvents.filter(event => {
-            const eventDate = event.dateRange.toLowerCase();
-            const filterMonth = selectedFilter.toLowerCase();
-
-            if (filterMonth.includes("may")) return eventDate.includes("may");
-            if (filterMonth.includes("june") || filterMonth.includes("jun"))
-                return eventDate.includes("jun");
-            if (filterMonth.includes("july") || filterMonth.includes("jul"))
-                return eventDate.includes("jul");
-            if (filterMonth.includes("august") || filterMonth.includes("aug"))
-                return eventDate.includes("aug");
-            if (
-                filterMonth.includes("september") ||
-                filterMonth.includes("sep")
-            )
-                return eventDate.includes("sep");
-            if (filterMonth.includes("october") || filterMonth.includes("oct"))
-                return eventDate.includes("oct");
-            if (filterMonth.includes("november") || filterMonth.includes("nov"))
-                return eventDate.includes("nov");
-            if (filterMonth.includes("december") || filterMonth.includes("dec"))
-                return eventDate.includes("dec");
-            if (filterMonth.includes("january") || filterMonth.includes("jan"))
-                return eventDate.includes("jan");
-            if (filterMonth.includes("february") || filterMonth.includes("feb"))
-                return eventDate.includes("feb");
-
-            return false;
+        return events.filter(event => {
+            return event.category_name === selectedFilter;
         });
     };
 
-    const events = getFilteredEvents();
+    const filteredEvents = getFilteredEvents();
 
     // Reset carousel index when filter changes
-    React.useEffect(() => {
+    useEffect(() => {
         setCurrentIndex(0);
     }, [selectedFilter]);
 
-    // Calculate max index (similar to your script)
-    const maxIndex = Math.max(0, events.length - cardsToShow);
+    // Calculate max index
+    const maxIndex = Math.max(0, filteredEvents.length - cardsToShow);
 
     const nextSlide = () => {
         if (currentIndex < maxIndex) {
@@ -134,9 +134,61 @@ const EventsGallery = () => {
         }
     };
 
-    const handleEventClick = (eventId: string) => {
-        router.push(`/whats-on/${eventId}`);
+    const handleEventClick = (eventSlug: string) => {
+        router.push(`/whats-on/${eventSlug}`);
     };
+
+    // Loading state
+    if (loading) {
+        return (
+            <section
+                className="py-12 sm:py-16 lg:py-20"
+                style={{ backgroundColor: "rgb(248, 248, 248)" }}
+            >
+                <div className="w-full px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
+                    <div className="text-center">
+                        <div className="animate-pulse">
+                            <div className="h-8 bg-gray-300 rounded w-64 mx-auto mb-8"></div>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                {[1, 2, 3].map((i) => (
+                                    <div key={i} className="bg-white rounded-lg p-6">
+                                        <div className="h-48 bg-gray-300 rounded mb-4"></div>
+                                        <div className="h-4 bg-gray-300 rounded mb-2"></div>
+                                        <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+    }
+
+    // Error state
+    if (error) {
+        return (
+            <section
+                className="py-12 sm:py-16 lg:py-20"
+                style={{ backgroundColor: "rgb(248, 248, 248)" }}
+            >
+                <div className="w-full px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
+                    <div className="text-center">
+                        <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                            Unable to Load Events
+                        </h2>
+                        <p className="text-gray-600 mb-6">{error}</p>
+                        <Button
+                            onClick={fetchEventsAndCategories}
+                            className="bg-[#a5cd39] hover:bg-[#8fb82e] text-white"
+                        >
+                            Try Again
+                        </Button>
+                    </div>
+                </div>
+            </section>
+        );
+    }
 
     return (
         <section
@@ -185,7 +237,7 @@ const EventsGallery = () => {
                 </motion.div>
 
                 {/* Events Carousel Container */}
-                {events.length > 0 ? (
+                {filteredEvents.length > 0 ? (
                     <div className="relative mx-2 sm:mx-4 md:mx-8 lg:mx-12 xl:mx-16">
                         {/* Visible area for exactly 3 cards */}
                         <div
@@ -196,7 +248,7 @@ const EventsGallery = () => {
                             }}
                         >
                             {/* Navigation Buttons */}
-                            {events.length > cardsToShow && (
+                            {filteredEvents.length > cardsToShow && (
                                 <>
                                     <Button
                                         variant="ghost"
@@ -224,7 +276,7 @@ const EventsGallery = () => {
                                     className="flex gap-4"
                                     style={{
                                         width: `${
-                                            events.length * (cardWidth + 16)
+                                            filteredEvents.length * (cardWidth + 16)
                                         }px`, // cardWidth + gap
                                         transform: `translateX(-${
                                             currentIndex * (cardWidth + 16)
@@ -244,7 +296,7 @@ const EventsGallery = () => {
                                         duration: 0.8,
                                     }}
                                 >
-                                    {events.map((event, index) => (
+                                    {filteredEvents.map((event, index) => (
                                         <motion.div
                                             key={event.id}
                                             className="flex-none"
@@ -260,7 +312,7 @@ const EventsGallery = () => {
                                             <div
                                                 className="bg-white cursor-pointer mb-8 sm:mb-12 md:mb-16 lg:mb-20  transition-all duration-500 hover:shadow-lg rounded-lg"
                                                 onClick={() =>
-                                                    handleEventClick(event.id)
+                                                    handleEventClick(event.slug)
                                                 }
                                                 style={{
                                                     width: "100%",
@@ -278,7 +330,7 @@ const EventsGallery = () => {
                                                     className="absolute top-0 left-0 w-8 sm:w-12 md:w-16 h-1"
                                                     style={{
                                                         backgroundColor:
-                                                            "#22c55e",
+                                                            event.category_color || "#22c55e",
                                                         zIndex: 10,
                                                     }}
                                                 ></div>
@@ -286,7 +338,7 @@ const EventsGallery = () => {
                                                 {/* Image */}
                                                 <div className="relative flex-1 overflow-hidden h-48 sm:h-56 md:h-64 lg:h-72">
                                                     <Image
-                                                        src={event.image}
+                                                        src={event.featured_image_url || '/placeholder-event.jpg'}
                                                         alt={event.title}
                                                         fill
                                                         className="object-cover transition-transform duration-300 hover:scale-105"
@@ -308,7 +360,7 @@ const EventsGallery = () => {
                                                                 "1px",
                                                         }}
                                                     >
-                                                        {event.dateRange}
+                                                        {event.date_range || 'Date TBD'}
                                                     </div>
 
                                                     {/* Title */}
@@ -324,7 +376,7 @@ const EventsGallery = () => {
                                                                 "1px",
                                                         }}
                                                     >
-                                                        {event.category}
+                                                        {event.category_name || 'Uncategorized'}
                                                     </p>
                                                 </div>
                                             </div>

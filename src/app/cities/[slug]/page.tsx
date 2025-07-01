@@ -8,6 +8,7 @@ import CityRoleSection from "@/components/cities/city-role-section";
 import CityComponentsSection from "@/components/cities/city-components-section";
 import CityPortfolioSection from "@/components/cities/city-portfolio-section";
 import CityWhyBestSection from "@/components/cities/city-why-best-section";
+import CityStatisticsSection from "@/components/cities/city-statistics-section";
 import { useCity } from "@/hooks/use-cities";
 import { useComponentLoading } from "@/hooks/use-minimal-loading";
 import { ServicesGrid } from "./services-grid";
@@ -90,6 +91,7 @@ const CityDetailPage = ({ params }: CityDetailPageProps) => {
             <CityRoleSection city={city} />
             <CityContentSection city={city} />
             <CityComponentsSection city={city} />
+            <CityStatisticsSection city={city} />
             <CityPortfolioSection city={city} />
             <CityWhyBestSection city={city} />
             <BoothRequirementsForm />

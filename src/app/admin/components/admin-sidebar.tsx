@@ -111,6 +111,7 @@ const AdminSidebar = ({
         kiosk: pathname.includes("/admin/pages/kiosk"),
         blog: pathname.includes("/admin/pages/blog"),
         cities: pathname.includes("/admin/pages/cities"),
+        events: pathname.includes("/admin/pages/events"),
         customStand: pathname.includes("/admin/pages/custom-stand"),
         doubleDeckerStand: pathname.includes(
             "/admin/pages/double-decker-stand",
@@ -575,6 +576,69 @@ const AdminSidebar = ({
                                         isActive={
                                             pathname ===
                                             "/admin/pages/cities/create"
+                                        }
+                                    />
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
+
+                {/* Events Page */}
+                <div>
+                    <NavItem
+                        href="/admin/pages/events"
+                        label="Events"
+                        icon={<Calendar size={18} />}
+                        isActive={pathname.includes("/admin/pages/events")}
+                        hasChildren={true}
+                        isOpen={openSections.events}
+                        onClick={() => toggleSection("events")}
+                    />
+
+                    <AnimatePresence>
+                        {openSections.events && (
+                            <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: "auto", opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.2 }}
+                                className="overflow-hidden"
+                            >
+                                <div className="py-1 space-y-1">
+                                    <SubNavItem
+                                        href="/admin/pages/events"
+                                        label="All Events"
+                                        isActive={
+                                            pathname === "/admin/pages/events"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/events/create"
+                                        label="Create Event"
+                                        isActive={
+                                            pathname === "/admin/pages/events/create"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/events/categories"
+                                        label="Categories"
+                                        isActive={
+                                            pathname === "/admin/pages/events/categories"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/events/hero"
+                                        label="Hero Section"
+                                        isActive={
+                                            pathname === "/admin/pages/events/hero"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/events/submissions"
+                                        label="Form Submissions"
+                                        isActive={
+                                            pathname === "/admin/pages/events/submissions"
                                         }
                                     />
                                 </div>

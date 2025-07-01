@@ -172,6 +172,24 @@ CREATE TABLE IF NOT EXISTS city_contact_details (
 );
 
 -- =====================================================
+-- CITY STATISTICS TABLE (for statistics section)
+-- =====================================================
+
+CREATE TABLE IF NOT EXISTS city_statistics (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    city_id UUID REFERENCES cities(id) ON DELETE CASCADE,
+    statistic_type VARCHAR(50) NOT NULL, -- 'happy_clients', 'completed_projects', 'customer_support', 'exhibitions'
+    title VARCHAR(255) NOT NULL, -- Display title like 'Happy Clients', 'Completed Projects'
+    value VARCHAR(20) NOT NULL, -- The number/value like '4650+', '20800+'
+    icon_name VARCHAR(100), -- Icon reference for the statistic
+    color VARCHAR(7) DEFAULT '#4F46E5', -- Hex color code for the icon background
+    is_active BOOLEAN DEFAULT true,
+    sort_order INTEGER DEFAULT 0,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- =====================================================
 -- INDEXES FOR PERFORMANCE
 -- =====================================================
 
@@ -187,6 +205,8 @@ CREATE INDEX IF NOT EXISTS idx_city_components_city_id ON city_components(city_i
 CREATE INDEX IF NOT EXISTS idx_city_preferred_services_city_id ON city_preferred_services(city_id);
 CREATE INDEX IF NOT EXISTS idx_city_contact_details_city_id ON city_contact_details(city_id);
 CREATE INDEX IF NOT EXISTS idx_city_contact_details_type ON city_contact_details(contact_type);
+CREATE INDEX IF NOT EXISTS idx_city_statistics_city_id ON city_statistics(city_id);
+CREATE INDEX IF NOT EXISTS idx_city_statistics_type ON city_statistics(statistic_type);
 
 -- =====================================================
 -- TRIGGERS FOR UPDATED_AT
@@ -209,6 +229,7 @@ CREATE TRIGGER update_city_portfolio_items_updated_at BEFORE UPDATE ON city_port
 CREATE TRIGGER update_city_components_updated_at BEFORE UPDATE ON city_components FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_city_preferred_services_updated_at BEFORE UPDATE ON city_preferred_services FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_city_contact_details_updated_at BEFORE UPDATE ON city_contact_details FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+CREATE TRIGGER update_city_statistics_updated_at BEFORE UPDATE ON city_statistics FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 -- =====================================================
 -- UTILITY FUNCTIONS
@@ -256,6 +277,7 @@ ALTER TABLE city_portfolio_items ENABLE ROW LEVEL SECURITY;
 ALTER TABLE city_components ENABLE ROW LEVEL SECURITY;
 ALTER TABLE city_preferred_services ENABLE ROW LEVEL SECURITY;
 ALTER TABLE city_contact_details ENABLE ROW LEVEL SECURITY;
+ALTER TABLE city_statistics ENABLE ROW LEVEL SECURITY;
 
 -- Public read access for active cities
 CREATE POLICY "Public can view active cities" ON cities FOR SELECT USING (is_active = true);
@@ -265,6 +287,7 @@ CREATE POLICY "Public can view city portfolio items" ON city_portfolio_items FOR
 CREATE POLICY "Public can view active city components" ON city_components FOR SELECT USING (is_active = true);
 CREATE POLICY "Public can view active city preferred services" ON city_preferred_services FOR SELECT USING (is_active = true);
 CREATE POLICY "Public can view active city contact details" ON city_contact_details FOR SELECT USING (is_active = true);
+CREATE POLICY "Public can view active city statistics" ON city_statistics FOR SELECT USING (is_active = true);
 
 -- Admin full access (authenticated users with admin role)
 CREATE POLICY "Admins can manage cities" ON cities FOR ALL USING (auth.role() = 'authenticated');
@@ -274,6 +297,7 @@ CREATE POLICY "Admins can manage city portfolio items" ON city_portfolio_items F
 CREATE POLICY "Admins can manage city components" ON city_components FOR ALL USING (auth.role() = 'authenticated');
 CREATE POLICY "Admins can manage city preferred services" ON city_preferred_services FOR ALL USING (auth.role() = 'authenticated');
 CREATE POLICY "Admins can manage city contact details" ON city_contact_details FOR ALL USING (auth.role() = 'authenticated');
+CREATE POLICY "Admins can manage city statistics" ON city_statistics FOR ALL USING (auth.role() = 'authenticated');
 
 -- =====================================================
 -- STORAGE POLICIES
@@ -531,6 +555,25 @@ CROSS JOIN (
         ('email', 'info@chronicles-dubai.com', 'info@chronicles-dubai.com', false, 2),
         ('whatsapp', '+971543474645', 'WhatsApp: +971 (543) 47-4645', false, 3)
 ) AS contacts(contact_type, contact_value, display_text, is_primary, contact_order);
+
+-- Insert sample city statistics for each city
+INSERT INTO city_statistics (city_id, statistic_type, title, value, icon_name, color, sort_order)
+SELECT
+    c.id,
+    stat_type,
+    stat_title,
+    stat_value,
+    stat_icon,
+    stat_color,
+    stat_order
+FROM cities c
+CROSS JOIN (
+    VALUES
+        ('happy_clients', 'Happy Clients', '4650+', 'users', '#4F46E5', 1),
+        ('completed_projects', 'Completed Projects', '20800+', 'briefcase', '#4F46E5', 2),
+        ('customer_support', 'Customer Support', '24X7', 'headphones', '#4F46E5', 3),
+        ('exhibitions', 'Exhibitions', '2050+', 'trophy', '#4F46E5', 4)
+) AS stats(stat_type, stat_title, stat_value, stat_icon, stat_color, stat_order);
 
 -- =====================================================
 -- STORAGE BUCKETS FOR IMAGES

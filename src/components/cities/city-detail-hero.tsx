@@ -18,18 +18,16 @@ const CityDetailHero = ({ city }: CityDetailHeroProps) => {
         section => section.section_type === "hero" && section.is_active
     );
 
-    // Extract dynamic data with fallbacks to basic city info
-    const heroTitle = heroSection?.title?.trim() ||
-        `EXHIBITION STAND DESIGN BUILDER IN ${city.name.toUpperCase()}, UAE.`;
+    // Only render if we have hero section data from admin
+    if (!heroSection || !heroSection.title?.trim()) {
+        return null;
+    }
 
-    const heroSubtitle = heroSection?.subtitle?.trim() || city.subtitle?.trim();
-
-    const heroDescription = heroSection?.content?.trim() ||
-        city.description?.trim() ||
-        `Chronicle Exhibition Organizing LLC is one of the most reputable exhibition stand design manufacturers, and contractors located in ${city.name} offering an exhaustive array of stand-up services for exhibitions. We provide complete display stand solutions, including designing, planning, fabricating and erecting and putting up.`;
-
-    const heroImage = heroSection?.image_url?.trim() ||
-        city.heroImage ||
+    // Extract dynamic data from admin - replace [CITY] placeholder with actual city name
+    const heroTitle = heroSection.title.trim().replace(/\[CITY\]/g, city.name.toUpperCase());
+    const heroSubtitle = heroSection.subtitle?.trim() || "";
+    const heroDescription = heroSection.content?.trim().replace(/\[CITY\]/g, city.name) || "";
+    const heroImage = heroSection.image_url?.trim() ||
         "https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80";
 
     // Don't render if no image is available

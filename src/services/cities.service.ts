@@ -56,6 +56,7 @@ export class CitiesService {
             components: city.components,
             preferredServices: city.preferred_services,
             contactDetails: city.contact_details,
+            statistics: city.statistics,
         };
     }
 

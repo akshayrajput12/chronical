@@ -38,8 +38,8 @@
 - **Components**: Events Gallery, Event listings
 
 ### 8. **Event Detail Pages**
-- **Route**: `/whats-on/[id]`
-- **File**: `src/app/whats-on/[id]/page.tsx`
+- **Route**: `/whats-on/[slug]`
+- **File**: `src/app/whats-on/[slug]/page.tsx`
 - **Components**: Individual event details
 
 ## Exhibition Stand Pages

@@ -3,12 +3,12 @@
 import React from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { Event } from "@/app/whats-on/data/events";
+import { Event } from "@/types/events";
 
 interface EventCardProps {
     event: Event;
     index: number;
-    onClick: (eventId: string) => void;
+    onClick: (eventSlug: string) => void;
     className?: string;
     style?: React.CSSProperties;
 }
@@ -31,7 +31,7 @@ const EventCard = ({
         >
             <div
                 className="bg-white cursor-pointer mb-8 sm:mb-12 md:mb-16 lg:mb-20 pt-6 sm:pt-8 md:pt-10 lg:pt-12 transition-all duration-500 hover:shadow-lg group rounded-lg flex flex-col"
-                onClick={() => onClick(event.id)}
+                onClick={() => onClick(event.slug)}
                 style={{
                     width: "100%",
                     // Responsive height maintaining 380:520 aspect ratio
@@ -61,7 +61,7 @@ const EventCard = ({
                         className="text-xs sm:text-xs md:text-xs text-gray-700 uppercase mb-3 sm:mb-4 md:mb-5 mt-2 sm:mt-3 md:mt-4 font-medium transition-colors duration-300 group-hover:text-[#22c55e]"
                         style={{ letterSpacing: "1px" }}
                     >
-                        {event.dateRange}
+                        {event.date_range}
                     </div>
 
                     {/* Title */}
@@ -77,14 +77,14 @@ const EventCard = ({
                         className="text-xs sm:text-xs md:text-xs text-gray-700 uppercase font-medium transition-colors duration-300 group-hover:text-[#22c55e]"
                         style={{ letterSpacing: "1px" }}
                     >
-                        {event.category}
+                        {event.category?.name || event.category_name}
                     </p>
                 </div>
 
                 {/* Image */}
                 <div className="relative flex-1 overflow-hidden">
                     <Image
-                        src={event.image}
+                        src={event.featured_image_url || '/placeholder-image.jpg'}
                         alt={event.title}
                         fill
                         className="object-cover transition-transform duration-300 group-hover:scale-105"

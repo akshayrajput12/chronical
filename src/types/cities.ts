@@ -47,6 +47,7 @@ export interface City {
     components?: CityComponent[];
     preferred_services?: CityPreferredService[];
     contact_details?: CityContactDetail[];
+    statistics?: CityStatistic[];
 }
 
 export interface CityService {
@@ -123,6 +124,19 @@ export interface CityContactDetail {
     contact_value: string;
     display_text?: string;
     is_primary: boolean;
+    is_active: boolean;
+    sort_order: number;
+    created_at?: string;
+    updated_at?: string;
+}
+
+export interface CityStatistic {
+    id: string; // UUID
+    city_id: string;
+    statistic_type: string; // 'happy_clients', 'completed_projects', 'customer_support', 'exhibitions'
+    title: string; // Display title like 'Happy Clients', 'Completed Projects'
+    value: string; // The number/value like '4650+', '20800+'
+    icon_name?: string; // Icon reference for the statistic
     is_active: boolean;
     sort_order: number;
     created_at?: string;
@@ -219,6 +233,15 @@ export interface CityContactDetailInput {
     sort_order?: number;
 }
 
+export interface CityStatisticInput {
+    statistic_type: string;
+    title: string;
+    value: string;
+    icon_name?: string;
+    is_active?: boolean;
+    sort_order?: number;
+}
+
 // API Response types
 export interface CitiesResponse {
     cities: LegacyCity[];
@@ -307,4 +330,5 @@ export interface LegacyCity {
     components?: CityComponent[];
     preferredServices?: CityPreferredService[];
     contactDetails?: CityContactDetail[];
+    statistics?: CityStatistic[];
 }

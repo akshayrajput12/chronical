@@ -27,7 +27,8 @@ export async function GET(request: NextRequest) {
                 portfolio_items:city_portfolio_items(*),
                 components:city_components(*),
                 preferred_services:city_preferred_services(*),
-                contact_details:city_contact_details(*)
+                contact_details:city_contact_details(*),
+                statistics:city_statistics(*)
             `);
         } else {
             query = supabase.from("cities").select("*");
