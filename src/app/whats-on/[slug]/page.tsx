@@ -54,9 +54,9 @@ export default function EventDetailPage() {
 
                 if (!eventResponse.ok) {
                     if (eventResponse.status === 404) {
-                        setError('Event not found');
+                        setError("Event not found");
                     } else {
-                        setError('Failed to load event');
+                        setError("Failed to load event");
                     }
                     return;
                 }
@@ -73,11 +73,10 @@ export default function EventDetailPage() {
 
                 const blogData = await blogResponse.json();
                 setBlogPosts(blogData.posts || []);
-
             } catch (error) {
                 if (isCancelled) return;
-                console.error('Error fetching data:', error);
-                setError('Failed to load event. Please try again later.');
+                console.error("Error fetching data:", error);
+                setError("Failed to load event. Please try again later.");
             } finally {
                 if (!isCancelled) {
                     setLoading(false);
@@ -115,16 +114,14 @@ export default function EventDetailPage() {
             <div className="min-h-screen bg-gray-100 flex items-center justify-center">
                 <div className="text-center">
                     <h1 className="text-2xl font-bold text-gray-900 mb-4">
-                        {error || 'Event not found'}
+                        {error || "Event not found"}
                     </h1>
                     <p className="text-gray-600 mb-6">
-                        The event you're looking for doesn't exist or has been removed.
+                        The event you're looking for doesn't exist or has been
+                        removed.
                     </p>
                     <div className="space-x-4">
-                        <Button
-                            onClick={() => router.back()}
-                            variant="outline"
-                        >
+                        <Button onClick={() => router.back()} variant="outline">
                             <ArrowLeft className="w-4 h-4 mr-2" />
                             Go Back
                         </Button>
@@ -145,7 +142,11 @@ export default function EventDetailPage() {
             <section className="relative h-[75vh] 2xl:h-[60vh] flex flex-col items-center justify-center w-full overflow-hidden">
                 {/* Background Image - Hero Image */}
                 <Image
-                    src={event.hero_image_url || event.featured_image_url || '/placeholder-event.jpg'}
+                    src={
+                        event.hero_image_url ||
+                        event.featured_image_url ||
+                        "/placeholder-event.jpg"
+                    }
                     alt={event.title}
                     fill
                     className="object-cover"
@@ -182,7 +183,7 @@ export default function EventDetailPage() {
                             className="inline-flex items-center text-gray-600 hover:text-[#a5cd39] transition-colors duration-300"
                         >
                             <ArrowLeft className="w-4 h-4 mr-2" />
-                            <span className="text-sm font-medium uppercase tracking-wide">
+                            <span className="text-sm font-medium tracking-wide">
                                 BACK TO EVENT LIST
                             </span>
                         </Link>
@@ -207,12 +208,12 @@ export default function EventDetailPage() {
                                     <div className="text-2xl md:text-3xl lg:text-4xl text-[#a5cd39] mb-2 md:mb-3 lg:mb-4">
                                         <Calendar className="w-6 h-6 md:w-8 h-8 lg:w-10 h-10 mx-auto" />
                                     </div>
-                                    <div className="text-[#a5cd39] font-bold text-xs md:text-xs lg:text-sm uppercase tracking-wider">
+                                    <div className="text-[#a5cd39] font-bold text-xs md:text-xs lg:text-sm tracking-wider">
                                         TIME & DATE
                                     </div>
                                     <div className="h-0.5 md:h-1 w-8 md:w-10 lg:w-12 mx-auto bg-gray-200 my-1 md:my-2 lg:my-3"></div>
                                     <div className="text-black text-xs md:text-xs lg:text-sm font-medium">
-                                        {event.date_range || 'Date TBD'}
+                                        {event.date_range || "Date TBD"}
                                     </div>
                                 </div>
                                 <div className="border-l h-16 md:h-20 lg:h-24 border-gray-300"></div>
@@ -230,7 +231,7 @@ export default function EventDetailPage() {
                                     <div className="text-2xl md:text-3xl lg:text-4xl text-[#a5cd39] mb-2 md:mb-3 lg:mb-4">
                                         <MapPin className="w-6 h-6 md:w-8 h-8 lg:w-10 h-10 mx-auto" />
                                     </div>
-                                    <div className="text-[#a5cd39] font-bold text-xs md:text-xs lg:text-sm uppercase tracking-wider">
+                                    <div className="text-[#a5cd39] font-bold text-xs md:text-xs lg:text-sm tracking-wider">
                                         LOCATION
                                     </div>
                                     <div className="h-0.5 md:h-1 w-8 md:w-10 lg:w-12 mx-auto bg-gray-200 my-1 md:my-2 lg:my-3"></div>
@@ -253,7 +254,7 @@ export default function EventDetailPage() {
                                     <div className="text-2xl md:text-3xl lg:text-4xl text-[#a5cd39] mb-2 md:mb-3 lg:mb-4">
                                         <Building2 className="w-6 h-6 md:w-8 h-8 lg:w-10 h-10 mx-auto" />
                                     </div>
-                                    <div className="text-[#a5cd39] font-bold text-xs md:text-xs lg:text-sm uppercase tracking-wider">
+                                    <div className="text-[#a5cd39] font-bold text-xs md:text-xs lg:text-sm tracking-wider">
                                         INDUSTRY
                                     </div>
                                     <div className="h-0.5 md:h-1 w-8 md:w-10 lg:w-12 mx-auto bg-gray-200 my-1 md:my-2 lg:my-3"></div>
@@ -283,26 +284,38 @@ export default function EventDetailPage() {
                             >
                                 <div className="text-center">
                                     {/* Event Logo */}
-                                    {event.logo_image_url && event.logo_image_url.trim() !== '' && (
-                                        <div className="mb-6">
-                                            <div className="relative">
-                                                <Image
-                                                    src={event.logo_image_url}
-                                                    alt={event.logo_text || event.title}
-                                                    width={200}
-                                                    height={100}
-                                                    className="mx-auto object-contain"
-                                                    unoptimized={event.logo_image_url.startsWith('/')}
-                                                    onError={() => {
-                                                        console.error('Logo image failed to load:', event.logo_image_url);
-                                                    }}
-                                                />
+                                    {event.logo_image_url &&
+                                        event.logo_image_url.trim() !== "" && (
+                                            <div className="mb-6">
+                                                <div className="relative">
+                                                    <Image
+                                                        src={
+                                                            event.logo_image_url
+                                                        }
+                                                        alt={
+                                                            event.logo_text ||
+                                                            event.title
+                                                        }
+                                                        width={200}
+                                                        height={100}
+                                                        className="mx-auto object-contain"
+                                                        unoptimized={event.logo_image_url.startsWith(
+                                                            "/",
+                                                        )}
+                                                        onError={() => {
+                                                            console.error(
+                                                                "Logo image failed to load:",
+                                                                event.logo_image_url,
+                                                            );
+                                                        }}
+                                                    />
+                                                </div>
                                             </div>
-                                        </div>
-                                    )}
+                                        )}
 
                                     {/* Logo Text */}
-                                    {(event.logo_text || event.logo_subtext) && (
+                                    {(event.logo_text ||
+                                        event.logo_subtext) && (
                                         <div className="mb-6 text-center">
                                             {event.logo_text && (
                                                 <h3 className="text-2xl font-bold text-gray-900 mb-2">
@@ -319,11 +332,12 @@ export default function EventDetailPage() {
 
                                     {/* Organizer Info */}
                                     <div className="border-t border-gray-300 pt-6">
-                                        <p className="text-xs text-gray-500 mb-2 uppercase tracking-wider">
+                                        <p className="text-xs text-gray-500 mb-2 tracking-wider">
                                             Organised By
                                         </p>
                                         <p className="font-semibold text-base">
-                                            {event.organizer || "Event Organizer"}
+                                            {event.organizer ||
+                                                "Event Organizer"}
                                         </p>
                                         {event.organized_by && (
                                             <p className="text-sm text-gray-600">
@@ -349,7 +363,10 @@ export default function EventDetailPage() {
                                         </p>
                                     )}
                                     <EventContent
-                                        content={event.description || "Event description will be available soon."}
+                                        content={
+                                            event.description ||
+                                            "Event description will be available soon."
+                                        }
                                     />
                                 </div>
                             </motion.div>
@@ -402,54 +419,75 @@ export default function EventDetailPage() {
                             <div className="overflow-hidden mx-12">
                                 {relatedEvents.length > 0 ? (
                                     <div className="flex gap-6">
-                                        {relatedEvents.map((relatedEvent, index) => (
-                                            <motion.div
-                                                key={relatedEvent.id}
-                                                className="flex-none w-48 cursor-pointer group"
-                                                initial={{ opacity: 0, y: 20 }}
-                                                whileInView={{ opacity: 1, y: 0 }}
-                                                transition={{
-                                                    duration: 0.6,
-                                                    delay: index * 0.1,
-                                                }}
-                                                viewport={{ once: true }}
-                                                onClick={() =>
-                                                    handleOtherEventClick(
-                                                        relatedEvent.slug,
-                                                    )
-                                                }
-                                            >
-                                                {/* Perfect Square Image - No Rounded Borders */}
-                                                <div className="relative w-48 h-48 mb-3 overflow-hidden">
-                                                    <Image
-                                                        src={relatedEvent.featured_image_url || '/placeholder-event.jpg'}
-                                                        alt={relatedEvent.title}
-                                                        fill
-                                                        className="object-cover transition-transform duration-300 group-hover:scale-105"
-                                                    />
-                                                </div>
+                                        {relatedEvents.map(
+                                            (relatedEvent, index) => (
+                                                <motion.div
+                                                    key={relatedEvent.id}
+                                                    className="flex-none w-48 cursor-pointer group"
+                                                    initial={{
+                                                        opacity: 0,
+                                                        y: 20,
+                                                    }}
+                                                    whileInView={{
+                                                        opacity: 1,
+                                                        y: 0,
+                                                    }}
+                                                    transition={{
+                                                        duration: 0.6,
+                                                        delay: index * 0.1,
+                                                    }}
+                                                    viewport={{ once: true }}
+                                                    onClick={() =>
+                                                        handleOtherEventClick(
+                                                            relatedEvent.slug,
+                                                        )
+                                                    }
+                                                >
+                                                    {/* Perfect Square Image - No Rounded Borders */}
+                                                    <div className="relative w-48 h-48 mb-3 overflow-hidden">
+                                                        <Image
+                                                            src={
+                                                                relatedEvent.featured_image_url ||
+                                                                "/placeholder-event.jpg"
+                                                            }
+                                                            alt={
+                                                                relatedEvent.title
+                                                            }
+                                                            fill
+                                                            className="object-cover transition-transform duration-300 group-hover:scale-105"
+                                                        />
+                                                    </div>
 
-                                                {/* Content */}
-                                                <div className="text-center">
-                                                    <h3 className="font-medium text-sm mb-1 text-gray-800 leading-tight">
-                                                        {relatedEvent.title}
-                                                    </h3>
-                                                    <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
-                                                        {relatedEvent.category_name || 'Event'}
-                                                    </p>
-                                                    {relatedEvent.date_range && (
-                                                        <p className="text-xs text-gray-400 mt-1">
-                                                            {relatedEvent.date_range}
+                                                    {/* Content */}
+                                                    <div className="text-center">
+                                                        <h3 className="font-medium text-sm mb-1 text-gray-800 leading-tight">
+                                                            {relatedEvent.title}
+                                                        </h3>
+                                                        <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
+                                                            {relatedEvent.category_name ||
+                                                                "Event"}
                                                         </p>
-                                                    )}
-                                                </div>
-                                            </motion.div>
-                                        ))}
+                                                        {relatedEvent.date_range && (
+                                                            <p className="text-xs text-gray-400 mt-1">
+                                                                {
+                                                                    relatedEvent.date_range
+                                                                }
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                </motion.div>
+                                            ),
+                                        )}
                                     </div>
                                 ) : (
                                     <div className="text-center py-12">
-                                        <p className="text-gray-500">No related events found.</p>
-                                        <Link href="/whats-on" className="text-[#a5cd39] hover:underline mt-2 inline-block">
+                                        <p className="text-gray-500">
+                                            No related events found.
+                                        </p>
+                                        <Link
+                                            href="/whats-on"
+                                            className="text-[#a5cd39] hover:underline mt-2 inline-block"
+                                        >
                                             View all events
                                         </Link>
                                     </div>

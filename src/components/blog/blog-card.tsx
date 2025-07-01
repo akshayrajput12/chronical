@@ -99,7 +99,7 @@ const BlogCard = ({
                 <div className="p-4 flex flex-col" style={{ height: "240px" }}>
                     {/* Article Label and Date */}
                     <div className="mb-3 flex justify-between items-center">
-                        <span className="text-xs font-medium text-gray-600 uppercase tracking-wider">
+                        <span className="text-xs font-medium text-gray-600 tracking-wider">
                             ARTICLE
                         </span>
                         {post.published_at && (
@@ -124,7 +124,7 @@ const BlogCard = ({
 
                 {/* Full-Width Blue Button - Fixed height */}
                 <div className="relative" style={{ height: "40px" }}>
-                    <div className="bg-[#a5cd39] text-white h-full flex items-center justify-center text-xs font-medium uppercase tracking-wider hover:bg-[#357ABD] transition-colors duration-300 cursor-pointer">
+                    <div className="bg-[#a5cd39] text-white h-full flex items-center justify-center text-xs font-medium tracking-wider hover:bg-[#357ABD] transition-colors duration-300 cursor-pointer">
                         FIND OUT MORE
                     </div>
                 </div>

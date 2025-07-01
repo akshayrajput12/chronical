@@ -205,7 +205,7 @@ const KioskBenefits = () => {
                                     delay: index * 0.1,
                                 }}
                             >
-                                <h3 className="text-xl  mb-4 font-bold text-[#333333] text-center uppercase">
+                                <h3 className="text-xl  mb-4 font-bold text-[#333333] text-center">
                                     {benefit.title}
                                 </h3>
                                 <p className="text-gray-700">

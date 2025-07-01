@@ -363,7 +363,7 @@ const EventsGallery = () => {
                                                 >
                                                     {/* Date */}
                                                     <div
-                                                        className="text-xs sm:text-xs md:text-xs text-gray-700 uppercase mb-3 sm:mb-4 md:mb-5 mt-2 sm:mt-3 md:mt-4 font-medium"
+                                                        className="text-xs sm:text-xs md:text-xs text-gray-700 mb-3 sm:mb-4 md:mb-5 mt-2 sm:mt-3 md:mt-4 font-medium"
                                                         style={{
                                                             letterSpacing:
                                                                 "1px",
@@ -379,7 +379,7 @@ const EventsGallery = () => {
 
                                                     {/* Category */}
                                                     <p
-                                                        className="text-xs sm:text-xs md:text-xs text-gray-700 uppercase font-medium"
+                                                        className="text-xs sm:text-xs md:text-xs text-gray-700 font-medium"
                                                         style={{
                                                             letterSpacing:
                                                                 "1px",

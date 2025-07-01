@@ -15,24 +15,26 @@ const EventsHero = () => {
 
     const fetchHeroData = async () => {
         try {
-            const response = await fetch('/api/events/hero');
+            const response = await fetch("/api/events/hero");
             const data = await response.json();
 
             if (data.hero) {
                 setHeroData(data.hero);
             }
         } catch (error) {
-            console.error('Error fetching hero data:', error);
+            console.error("Error fetching hero data:", error);
             // Use default data on error
             setHeroData({
-                id: 'default',
-                main_heading: 'Welcome to Dubai World Trade Centre',
-                sub_heading: 'Dubai\'s epicentre for events and business in the heart of the city',
-                background_image_url: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-                background_overlay_opacity: 0.30,
-                background_overlay_color: '#000000',
-                text_color: '#ffffff',
-                heading_font_size: 'responsive',
+                id: "default",
+                main_heading: "Welcome to Dubai World Trade Centre",
+                sub_heading:
+                    "Dubai's epicentre for events and business in the heart of the city",
+                background_image_url:
+                    "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+                background_overlay_opacity: 0.3,
+                background_overlay_color: "#000000",
+                text_color: "#ffffff",
+                heading_font_size: "responsive",
                 is_active: true,
                 created_at: new Date().toISOString(),
                 updated_at: new Date().toISOString(),
@@ -41,8 +43,6 @@ const EventsHero = () => {
             setLoading(false);
         }
     };
-
-
 
     if (loading) {
         return (
@@ -61,7 +61,7 @@ const EventsHero = () => {
 
     const backgroundStyle = heroData.background_image_url
         ? { backgroundImage: `url('${heroData.background_image_url}')` }
-        : { backgroundColor: '#1f2937' }; // Default gray background
+        : { backgroundColor: "#1f2937" }; // Default gray background
 
     const overlayStyle = {
         backgroundColor: "#000000", // Fixed black overlay
@@ -77,14 +77,11 @@ const EventsHero = () => {
             />
 
             {/* Overlay */}
-            <div
-                className="absolute inset-0"
-                style={overlayStyle}
-            />
+            <div className="absolute inset-0" style={overlayStyle} />
 
             {/* Content */}
             <div
-                className="relative z-10 flex flex-col justify-center w-full px-4 sm:px-6 md:px-8 lg:px-12 text-center"
+                className="relative z-10 mt-12 flex flex-col justify-center w-full px-4 sm:px-6 md:px-8 lg:px-12 text-center"
                 style={{ color: "#ffffff" }}
             >
                 <motion.h1
@@ -107,29 +104,6 @@ const EventsHero = () => {
                         {heroData.sub_heading}
                     </motion.h3>
                 )}
-
-                {/* Call to Action Button */}
-                {heroData.button_text && heroData.button_url && (
-                    <motion.div
-                        className="mt-8 flex justify-center"
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 0.6 }}
-                    >
-                        <a
-                            href={heroData.button_url}
-                            className={`inline-flex items-center px-6 py-3 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 ${
-                                heroData.button_style === 'primary'
-                                    ? 'bg-[#a5cd39] text-white hover:bg-[#8fb82e] shadow-lg hover:shadow-xl'
-                                    : heroData.button_style === 'secondary'
-                                    ? 'bg-white text-gray-900 hover:bg-gray-100 shadow-lg hover:shadow-xl'
-                                    : 'border-2 border-current text-current hover:bg-current hover:text-white'
-                            }`}
-                        >
-                            {heroData.button_text}
-                        </a>
-                    </motion.div>
-                )}
             </div>
 
             {/* Scroll Down Indicator */}
@@ -140,9 +114,7 @@ const EventsHero = () => {
                 transition={{ duration: 0.8, delay: 0.6 }}
                 whileHover={{ y: 5 }}
             >
-                <ChevronDown
-                    className="w-8 h-8 animate-bounce text-white"
-                />
+                <ChevronDown className="w-8 h-8 animate-bounce text-white" />
             </motion.div>
         </section>
     );

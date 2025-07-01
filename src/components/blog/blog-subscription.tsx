@@ -43,8 +43,9 @@ const BlogSubscription = () => {
                                 </h2>
 
                                 {/* Sans-serif Subtext */}
-                                <p className="font-sans text-xs md:text-sm uppercase tracking-wide text-gray-200 font-medium leading-relaxed">
-                                    SIGN UP AND RECEIVE ARTICLES, FEATURES, INFOGRAPHICS AND VIDEOS
+                                <p className="font-sans text-xs md:text-sm tracking-wide text-gray-200 font-medium leading-relaxed">
+                                    SIGN UP AND RECEIVE ARTICLES, FEATURES,
+                                    INFOGRAPHICS AND VIDEOS
                                     <br />
                                     STRAIGHT TO YOUR INBOX
                                 </p>
@@ -59,7 +60,7 @@ const BlogSubscription = () => {
                                 viewport={{ once: true }}
                             >
                                 <Button
-                                    className="bg-[#a5cd39] hover:bg-[#8fb82e] text-white px-6 py-3 text-sm font-bold uppercase tracking-wide rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg whitespace-nowrap border-0"
+                                    className="bg-[#a5cd39] hover:bg-[#8fb82e] text-white px-6 py-3 text-sm font-bold tracking-wide rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg whitespace-nowrap border-0"
                                     onClick={() => {
                                         // Handle subscription logic here
                                         console.log("Subscribe button clicked");

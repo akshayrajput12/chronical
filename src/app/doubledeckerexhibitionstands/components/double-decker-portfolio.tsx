@@ -245,7 +245,7 @@ const DoubleDeckersPortfolio = () => {
                 {/* Animated Call to Action */}
                 <div className="text-center mt-12">
                     <motion.button
-                        className="bg-[#a5cd39] text-white px-6 py-1 rounded-md font-medium hover:bg-[#94b933] transition-colors duration-300 uppercase font-noto-kufi-arabic text-sm"
+                        className="bg-[#a5cd39] text-white px-6 py-1 rounded-md font-medium hover:bg-[#94b933] transition-colors duration-300 font-noto-kufi-arabic text-sm"
                         variants={buttonVariants}
                         initial="hidden"
                         animate="visible"

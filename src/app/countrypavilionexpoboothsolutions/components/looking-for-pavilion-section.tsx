@@ -19,7 +19,7 @@ const LookingForPavilionSection = () => {
                         transition={{ duration: 0.8 }}
                         viewport={{ once: true }}
                     >
-                        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black uppercase tracking-wide">
+                        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black tracking-wide">
                             LOOKING FOR COUNTRY PAVILION EXPO BOOTH SOLUTIONS IN
                             DUBAI
                         </h2>

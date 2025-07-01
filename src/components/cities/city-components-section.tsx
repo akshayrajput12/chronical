@@ -15,14 +15,23 @@ const CityComponentsSection = ({ city }: CityComponentsSectionProps) => {
     );
 
     // Get components from admin - no static fallbacks
-    const components = city.components?.filter(component =>
-        component.is_active &&
-        component.title?.trim() &&
-        component.description?.trim()
-    ).sort((a, b) => a.sort_order - b.sort_order) || [];
+    const components =
+        city.components
+            ?.filter(
+                component =>
+                    component.is_active &&
+                    component.title?.trim() &&
+                    component.description?.trim(),
+            )
+            .sort((a, b) => a.sort_order - b.sort_order) || [];
 
     // Only render if we have both component section content and components from admin
-    if (!componentSection || !componentSection.title?.trim() || !componentSection.content?.trim() || components.length === 0) {
+    if (
+        !componentSection ||
+        !componentSection.title?.trim() ||
+        !componentSection.content?.trim() ||
+        components.length === 0
+    ) {
         return null;
     }
 
@@ -58,18 +67,28 @@ const CityComponentsSection = ({ city }: CityComponentsSectionProps) => {
                         transition={{ duration: 0.8, delay: 0.2 }}
                         viewport={{ once: true }}
                     >
-                        {headerContent.split('\n\n').map((paragraph, index) => (
+                        {headerContent.split("\n\n").map((paragraph, index) => (
                             <p
                                 key={index}
                                 className="text-base md:text-lg text-gray-700 leading-relaxed max-w-5xl mx-auto mb-4 last:mb-0"
                             >
-                                {paragraph.includes('Exhibition booth design') ? (
+                                {paragraph.includes(
+                                    "Exhibition booth design",
+                                ) ? (
                                     <>
-                                        {paragraph.split('Exhibition booth design')[0]}
+                                        {
+                                            paragraph.split(
+                                                "Exhibition booth design",
+                                            )[0]
+                                        }
                                         <span className="font-semibold">
                                             Exhibition booth design
                                         </span>
-                                        {paragraph.split('Exhibition booth design')[1]}
+                                        {
+                                            paragraph.split(
+                                                "Exhibition booth design",
+                                            )[1]
+                                        }
                                     </>
                                 ) : (
                                     paragraph
@@ -86,12 +105,17 @@ const CityComponentsSection = ({ city }: CityComponentsSectionProps) => {
                                 className="text-center"
                                 initial={{ opacity: 0, y: 30 }}
                                 whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.8, delay: 0.1 * (index + 1) }}
+                                transition={{
+                                    duration: 0.8,
+                                    delay: 0.1 * (index + 1),
+                                }}
                                 viewport={{ once: true }}
                             >
                                 <h3
-                                    className="text-xl md:text-2xl font-bold mb-4 uppercase tracking-wide"
-                                    style={{ color: component.color || "#a5cd39" }}
+                                    className="text-xl md:text-2xl font-bold mb-4 tracking-wide"
+                                    style={{
+                                        color: component.color || "#a5cd39",
+                                    }}
                                 >
                                     {component.title}
                                 </h3>

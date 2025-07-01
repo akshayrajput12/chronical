@@ -279,7 +279,7 @@ const BoothRequirementsForm = () => {
                                 <Button
                                     type="submit"
                                     disabled={isSubmitting}
-                                    className="bg-[#a5cd39] hover:bg-[#8fb32a] text-black px-12 py-4 text-sm font-semibold transition-all duration-200 rounded-md font-noto-kufi-arabic uppercase tracking-wider min-w-[200px] shadow-sm hover:shadow-md"
+                                    className="bg-[#a5cd39] hover:bg-[#8fb32a] text-black px-12 py-4 text-sm font-semibold transition-all duration-200 rounded-md font-noto-kufi-arabic tracking-wider min-w-[200px] shadow-sm hover:shadow-md"
                                 >
                                     {isSubmitting ? (
                                         <>
