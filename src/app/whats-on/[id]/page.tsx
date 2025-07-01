@@ -192,25 +192,6 @@ export default function EventDetailPage() {
                                 </div>
                                 <div className="border-l h-16 md:h-20 lg:h-24 border-gray-300"></div>
                             </motion.div>
-
-                            {/* Share Icon */}
-                            <motion.div
-                                className="text-center px-1 md:px-2 lg:px-3"
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.6, delay: 0.5 }}
-                                viewport={{ once: true }}
-                            >
-                                <div className="text-xl md:text-2xl lg:text-3xl border border-[#a5cd39] md:border-2 rounded-full p-2 md:p-3 lg:p-4 w-10 h-10 md:w-12 h-12 lg:w-16 h-16 flex items-center justify-center cursor-pointer hover:bg-[#a5cd39] hover:text-white transition-colors duration-300 text-[#a5cd39]">
-                                    <svg
-                                        className="w-4 h-4 md:w-5 h-5 lg:w-6 h-6"
-                                        fill="currentColor"
-                                        viewBox="0 0 20 20"
-                                    >
-                                        <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
-                                    </svg>
-                                </div>
-                            </motion.div>
                         </div>
                     </div>
                 </div>

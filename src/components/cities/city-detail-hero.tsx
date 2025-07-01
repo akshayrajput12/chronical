@@ -15,20 +15,23 @@ interface CityDetailHeroProps {
 const CityDetailHero = ({ city }: CityDetailHeroProps) => {
     // Get hero section data from admin - check for hero content section first
     const heroSection = city.contentSections?.find(
-        section => section.section_type === "hero" && section.is_active
+        section => section.section_type === "hero" && section.is_active,
     );
 
     // Extract dynamic data with fallbacks to basic city info
-    const heroTitle = heroSection?.title?.trim() ||
+    const heroTitle =
+        heroSection?.title?.trim() ||
         `EXHIBITION STAND DESIGN BUILDER IN ${city.name.toUpperCase()}, UAE.`;
 
     const heroSubtitle = heroSection?.subtitle?.trim() || city.subtitle?.trim();
 
-    const heroDescription = heroSection?.content?.trim() ||
+    const heroDescription =
+        heroSection?.content?.trim() ||
         city.description?.trim() ||
         `Chronicle Exhibition Organizing LLC is one of the most reputable exhibition stand design manufacturers, and contractors located in ${city.name} offering an exhaustive array of stand-up services for exhibitions. We provide complete display stand solutions, including designing, planning, fabricating and erecting and putting up.`;
 
-    const heroImage = heroSection?.image_url?.trim() ||
+    const heroImage =
+        heroSection?.image_url?.trim() ||
         city.heroImage ||
         "https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80";
 
@@ -44,7 +47,11 @@ const CityDetailHero = ({ city }: CityDetailHeroProps) => {
                 <div className="absolute inset-0 z-0">
                     <Image
                         src={heroImage}
-                        alt={heroSubtitle || heroTitle || `Exhibition services in ${city.name}`}
+                        alt={
+                            heroSubtitle ||
+                            heroTitle ||
+                            `Exhibition services in ${city.name}`
+                        }
                         fill
                         className="object-cover"
                         priority
@@ -59,7 +66,7 @@ const CityDetailHero = ({ city }: CityDetailHeroProps) => {
                         <div className="max-w-5xl mx-auto">
                             {/* Dynamic Main Heading from Admin */}
                             <motion.h1
-                                className="text-xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-6 leading-tight uppercase tracking-wide"
+                                className="text-xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-6 leading-tight tracking-wide"
                                 initial={{ opacity: 0, y: 30 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8 }}
@@ -86,26 +93,48 @@ const CityDetailHero = ({ city }: CityDetailHeroProps) => {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8, delay: 0.2 }}
                             >
-                                {heroDescription.split('\n\n').map((paragraph, index) => (
-                                    <span key={`hero-desc-${index}`}>
-                                        {paragraph.includes('Chronicle Exhibition') || paragraph.includes('Chronicle Exhibits') ? (
-                                            <>
-                                                {paragraph.split(/(Chronicle Exhibition[^.]*|Chronicle Exhibits[^.]*)/g).map((part, partIndex) => (
-                                                    part.includes('Chronicle') ? (
-                                                        <span key={partIndex} className="text-[#a5cd39] font-medium">
-                                                            {part}
-                                                        </span>
-                                                    ) : (
-                                                        part
-                                                    )
-                                                ))}
-                                            </>
-                                        ) : (
-                                            paragraph
-                                        )}
-                                        {index < heroDescription.split('\n\n').length - 1 && <br />}
-                                    </span>
-                                ))}
+                                {heroDescription
+                                    .split("\n\n")
+                                    .map((paragraph, index) => (
+                                        <span key={`hero-desc-${index}`}>
+                                            {paragraph.includes(
+                                                "Chronicle Exhibition",
+                                            ) ||
+                                            paragraph.includes(
+                                                "Chronicle Exhibits",
+                                            ) ? (
+                                                <>
+                                                    {paragraph
+                                                        .split(
+                                                            /(Chronicle Exhibition[^.]*|Chronicle Exhibits[^.]*)/g,
+                                                        )
+                                                        .map(
+                                                            (part, partIndex) =>
+                                                                part.includes(
+                                                                    "Chronicle",
+                                                                ) ? (
+                                                                    <span
+                                                                        key={
+                                                                            partIndex
+                                                                        }
+                                                                        className="text-[#a5cd39] font-medium"
+                                                                    >
+                                                                        {part}
+                                                                    </span>
+                                                                ) : (
+                                                                    part
+                                                                ),
+                                                        )}
+                                                </>
+                                            ) : (
+                                                paragraph
+                                            )}
+                                            {index <
+                                                heroDescription.split("\n\n")
+                                                    .length -
+                                                    1 && <br />}
+                                        </span>
+                                    ))}
                             </motion.h3>
 
                             {/* Call-to-Action Button - matching the reference image */}

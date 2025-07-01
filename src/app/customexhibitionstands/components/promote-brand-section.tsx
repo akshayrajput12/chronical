@@ -13,6 +13,7 @@ import {
     getCustomExhibitionPromoteBrand,
     CustomExhibitionPromoteBrand,
 } from "@/services/custom-exhibition-stands.service";
+import { RequestQuotationDialog } from "@/components/ui/request-quotation-dialog";
 
 const PromoteBrandSection = () => {
     const [data, setData] = useState<CustomExhibitionPromoteBrand | null>(null);
@@ -119,13 +120,19 @@ const PromoteBrandSection = () => {
                                         {data?.paragraph_3}
                                     </p>
                                     <Link href={data?.cta_url || "#"}>
-                                        <motion.button
-                                            className="bg-[#a5cd39] text-white px-6 py-2 rounded-md font-medium hover:bg-[#94b933] transition-colors duration-300 uppercase font-noto-kufi-arabic text-sm"
-                                            variants={buttonVariants}
-                                            whileHover="hover"
-                                        >
-                                            {data?.cta_text}
-                                        </motion.button>
+                                        <RequestQuotationDialog
+                                            trigger={
+                                                <motion.button
+                                                    className="bg-[#a5cd39] text-white px-6 py-2 rounded-md font-medium hover:bg-[#94b933] transition-colors duration-300 uppercase font-noto-kufi-arabic text-sm"
+                                                    variants={buttonVariants}
+                                                    whileHover="hover"
+                                                    type="button"
+                                                >
+                                                    {data?.cta_text ||
+                                                        "Request Quotation"}
+                                                </motion.button>
+                                            }
+                                        />
                                     </Link>
                                 </div>
                             </div>
