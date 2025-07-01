@@ -16,7 +16,7 @@ const CountryPavilionIntroSection = () => {
                         transition={{ duration: 0.8 }}
                         viewport={{ once: true }}
                     >
-                        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 uppercase tracking-wide mb-8 text-center">
+                        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 tracking-wide mb-8 text-center">
                             COUNTRY PAVILION EXPO BOOTH
                         </h2>
                     </motion.div>

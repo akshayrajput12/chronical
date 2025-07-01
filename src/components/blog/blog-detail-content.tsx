@@ -23,7 +23,9 @@ const BlogDetailContent = ({
                     <div className="max-w-6xl mx-auto">
                         <div className="w-full">
                             {/* Main Content */}
-                            <BlogContent content={content} />
+                            <div className="lg:px-10 2xl:px-16">
+                                <BlogContent content={content} />
+                            </div>
                             {/* Blog Images Gallery */}
                             {images && images.length > 0 && (
                                 <motion.div

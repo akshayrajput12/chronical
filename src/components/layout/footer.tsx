@@ -51,12 +51,14 @@ const Footer = () => {
                                 {isLoading ? (
                                     // Loading state
                                     <>
-                                        <li className="text-gray-400 text-sm">Loading locations...</li>
+                                        <li className="text-gray-400 text-sm">
+                                            Loading locations...
+                                        </li>
                                     </>
                                 ) : cities.length > 0 ? (
                                     // Dynamic cities from database
                                     <>
-                                        {cities.slice(0, 6).map((city) => (
+                                        {cities.slice(0, 6).map(city => (
                                             <FooterLink
                                                 key={city.id}
                                                 href={`/cities/${city.slug}`}
@@ -72,7 +74,9 @@ const Footer = () => {
                                     </>
                                 ) : (
                                     // Fallback if no cities
-                                    <li className="text-gray-400 text-sm">No locations available</li>
+                                    <li className="text-gray-400 text-sm">
+                                        No locations available
+                                    </li>
                                 )}
                             </ul>
                         </div>
@@ -84,7 +88,6 @@ const Footer = () => {
                             </h3>
                             <ul className="space-y-1.5 text-sm">
                                 <FooterLink href="/about-us" label="About Us" />
-                                <FooterLink href="/support" label="Support" />
                                 <FooterLink href="/blog" label="Blog" />
                                 <FooterLink
                                     href="/contact-us"
@@ -100,10 +103,10 @@ const Footer = () => {
                                     CALL US
                                 </h3>
                                 <a
-                                    href="tel:+971554974645"
+                                    href="tel:+971543474645"
                                     className="text-[#a5cd39] text-base font-medium hover:underline"
                                 >
-                                    +971 554 974 645
+                                    +971 54 347 4645
                                 </a>
                             </div>
 

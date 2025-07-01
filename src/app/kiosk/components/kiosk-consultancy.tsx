@@ -11,8 +11,8 @@ const KioskConsultancy = () => {
         useState<KioskConsultancySectionData>({
             id: "",
             section_heading: "FREE KIOSK DESIGN CONSULTANCY NOW",
-            phone_number: "+971 (543) 47-6649",
-            phone_display_text: "Call +971 (543) 47-6649",
+            phone_number: "+971 54 347 4645",
+            phone_display_text: "Call +971 54 347 4645",
             phone_href: "tel:+971554974645",
             additional_text: "or submit inquiry form below",
             button_bg_color: "black",
@@ -55,8 +55,8 @@ const KioskConsultancy = () => {
                 setConsultancyData({
                     id: "",
                     section_heading: "FREE KIOSK DESIGN CONSULTANCY NOW",
-                    phone_number: "+971 (543) 47-6649",
-                    phone_display_text: "Call +971 (543) 47-6649",
+                    phone_number: "+971 54 347 4645",
+                    phone_display_text: "Call +971 54 347 4645",
                     phone_href: "tel:+971554974645",
                     additional_text: "or submit inquiry form below",
                     button_bg_color: "black",
@@ -75,8 +75,8 @@ const KioskConsultancy = () => {
             setConsultancyData({
                 id: "",
                 section_heading: "FREE KIOSK DESIGN CONSULTANCY NOW",
-                phone_number: "+971 (543) 47-6649",
-                phone_display_text: "Call +971 (543) 47-6649",
+                phone_number: "+971 54 347 4645",
+                phone_display_text: "Call +971 54 347 4645",
                 phone_href: "tel:+971554974645",
                 additional_text: "or submit inquiry form below",
                 button_bg_color: "black",

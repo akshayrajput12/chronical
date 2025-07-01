@@ -125,8 +125,8 @@ Visit `/kiosk` to see the updated consultancy section
 ## 📊 **Consultancy Elements Made Dynamic**
 
 - ✅ **Section Heading**: "FREE KIOSK DESIGN CONSULTANCY NOW"
-- ✅ **Phone Number**: "+971 (543) 47-6649"
-- ✅ **Phone Display Text**: "Call +971 (543) 47-6649"
+- ✅ **Phone Number**: "+971 54 347 4645"
+- ✅ **Phone Display Text**: "Call +971 54 347 4645"
 - ✅ **Phone Href**: "tel:+971554974645"
 - ✅ **Additional Text**: "or submit inquiry form below"
 - ✅ **Section Background Color**: "#a5cd39"

@@ -21,7 +21,7 @@ const BoothRequirements = () => {
                                 href="tel:+971543474645"
                                 className="text-[#a5cd39] hover:text-[#94b933] font-semibold transition-colors duration-200"
                             >
-                                +971 (543) 47-6445
+                                +971 54 347 4645
                             </a>
                             <span> or submit enquiry form below</span>
                         </div>

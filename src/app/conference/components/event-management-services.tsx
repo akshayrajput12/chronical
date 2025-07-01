@@ -185,7 +185,7 @@ const EventManagementServices = () => {
                                     {sectionData.second_paragraph}
                                 </p>
                             </div>
-                            <button className="bg-[#a5cd39] mt-4 text-white px-6 py-2 rounded-md font-medium hover:bg-[#94b933] transition-colors duration-300 uppercase w-max font-noto-kufi-arabic text-sm">
+                            <button className="bg-[#a5cd39] mt-4 text-white px-6 py-2 rounded-md font-medium hover:bg-[#94b933] transition-colors duration-300 w-max font-noto-kufi-arabic text-sm">
                                 Request Quotation
                             </button>
                         </div>

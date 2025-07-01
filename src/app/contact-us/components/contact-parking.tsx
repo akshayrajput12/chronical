@@ -66,7 +66,7 @@ const ContactParking = () => {
                                         <br />
                                         Trade Centre
                                     </h2>
-                                    <p className="text-xs md:text-sm text-gray-300 uppercase tracking-wider font-light">
+                                    <p className="text-xs md:text-sm text-gray-300  tracking-wider font-light">
                                         PLAN YOUR ARRIVAL BY EXPLORING OUR
                                         USEFUL PARKING AND
                                         <br />
@@ -76,7 +76,7 @@ const ContactParking = () => {
 
                                 <div className="hidden md:block flex-shrink-0 ml-8">
                                     <Button
-                                        className="bg-transparent border border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-white px-6 py-2 text-xs font-normal transition-all duration-300 rounded-full uppercase tracking-wider"
+                                        className="bg-transparent border border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-white px-6 py-2 text-xs font-normal transition-all duration-300 rounded-full  tracking-wider"
                                         onClick={() =>
                                             window.open("#", "_blank")
                                         }
@@ -90,7 +90,7 @@ const ContactParking = () => {
                         {/* Mobile button */}
                         <div className="md:hidden absolute bottom-3 left-1/2 transform -translate-x-1/2 z-10">
                             <Button
-                                className="bg-transparent border border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-white px-4 py-1 text-xs font-normal transition-all duration-300 rounded-full uppercase tracking-wider"
+                                className="bg-transparent border border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-white px-4 py-1 text-xs font-normal transition-all duration-300 rounded-full  tracking-wider"
                                 onClick={() => window.open("#", "_blank")}
                             >
                                 DOWNLOAD THE MAPS

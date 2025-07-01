@@ -22,8 +22,8 @@ CREATE TABLE IF NOT EXISTS kiosk_consultancy_sections (
   
   -- Section Content
   section_heading TEXT NOT NULL DEFAULT 'FREE KIOSK DESIGN CONSULTANCY NOW',
-  phone_number TEXT NOT NULL DEFAULT '+971 (543) 47-6649',
-  phone_display_text TEXT NOT NULL DEFAULT 'Call +971 (543) 47-6649',
+  phone_number TEXT NOT NULL DEFAULT '+971 54 347 4645',
+  phone_display_text TEXT NOT NULL DEFAULT 'Call +971 54 347 4645',
   phone_href TEXT NOT NULL DEFAULT 'tel:+971554974645',
   additional_text TEXT NOT NULL DEFAULT 'or submit inquiry form below',
   
@@ -106,8 +106,8 @@ INSERT INTO kiosk_consultancy_sections (
   section_text_color
 ) VALUES (
   'FREE KIOSK DESIGN CONSULTANCY NOW',
-  '+971 (543) 47-6649',
-  'Call +971 (543) 47-6649',
+  '+971 54 347 4645',
+  'Call +971 54 347 4645',
   'tel:+971554974645',
   'or submit inquiry form below',
   'black',
@@ -225,6 +225,6 @@ COMMENT ON FUNCTION validate_color(TEXT) IS 'Validates color format (hex or name
 -- SELECT * FROM get_kiosk_consultancy_section();
 
 -- Test validation functions
--- SELECT validate_phone_number('+971 (543) 47-6649');
+-- SELECT validate_phone_number('+971 54 347 4645');
 -- SELECT validate_phone_href('tel:+971554974645');
 -- SELECT validate_color('#a5cd39');

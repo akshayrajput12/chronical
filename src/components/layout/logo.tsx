@@ -29,10 +29,9 @@ const Logo = ({
             <Image
                 src={shouldUseDarkLogo ? "/logo-dark.png" : "/logo.png"}
                 alt="Chronicle Exhibits Logo"
-                width={120}
-                height={70}
-                className="h-auto w-auto"
-                style={{ minHeight: '70px' }}
+                width={130}
+                height={80}
+                className="max-h-[70px] w-auto"
                 priority
             />
         </Link>

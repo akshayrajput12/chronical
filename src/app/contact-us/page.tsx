@@ -24,8 +24,8 @@ function ContactUsPage() {
     return (
         <div className="flex flex-col relative">
             <ContactHero />
-            <ContactInfo />
             <ContactForm />
+            <ContactInfo />
             <ContactMap />
         </div>
     );
