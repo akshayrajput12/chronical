@@ -124,23 +124,22 @@ export interface EventFormSubmission {
     id: string;
     event_id?: string;
     name: string;
-    exhibition_name?: string;
-    company_name?: string;
     email: string;
     phone?: string;
-    budget?: string;
+    company?: string; // Changed from company_name to match DB schema
     message?: string;
     attachment_url?: string;
-    attachment_filename?: string;
-    attachment_size?: number;
     status: 'new' | 'read' | 'replied' | 'archived';
     is_spam: boolean;
+    spam_score?: number;
+    admin_notes?: string;
+    handled_by?: string;
     created_at: string;
     updated_at: string;
     ip_address?: string;
     user_agent?: string;
     referrer?: string;
-    
+
     // Related Data
     event?: Event;
 }
@@ -223,15 +222,15 @@ export interface EventsHeroInput {
 export interface EventFormSubmissionInput {
     event_id?: string;
     name: string;
-    exhibition_name?: string;
-    company_name?: string;
+    exhibition_name?: string; // Keep for form compatibility
+    company_name?: string; // Keep for form compatibility
     email: string;
     phone?: string;
-    budget?: string;
+    budget?: string; // Keep for form compatibility
     message?: string;
     attachment_url?: string;
-    attachment_filename?: string;
-    attachment_size?: number;
+    attachment_filename?: string; // Keep for form compatibility
+    attachment_size?: number; // Keep for form compatibility
     ip_address?: string;
     user_agent?: string;
     referrer?: string;

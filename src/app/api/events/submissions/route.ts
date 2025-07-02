@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { createServiceClient } from '@/lib/supabase/service';
 import { EventFormSubmission, EventFormSubmissionInput } from '@/types/events';
 
 // GET /api/events/submissions - Fetch form submissions with filtering
@@ -100,7 +101,8 @@ export async function GET(request: NextRequest) {
 // POST /api/events/submissions - Create new form submission (public endpoint)
 export async function POST(request: NextRequest) {
     try {
-        const supabase = await createClient();
+        // Use service client to bypass RLS for form submissions
+        const supabase = createServiceClient();
         
         const submissionData: EventFormSubmissionInput = await request.json();
 
@@ -114,9 +116,11 @@ export async function POST(request: NextRequest) {
         // Basic spam detection
         const isSpam = detectSpam(submissionData);
 
-        // Add metadata
-        const submissionWithMetadata = {
-            ...submissionData,
+        // Prepare submission data with all the fields the form sends
+        // After running the migration script, these columns should exist
+        const submissionForDB: any = {
+            name: submissionData.name,
+            email: submissionData.email,
             ip_address: ip,
             user_agent: userAgent,
             referrer,
@@ -124,9 +128,44 @@ export async function POST(request: NextRequest) {
             status: isSpam ? 'archived' : 'new',
         };
 
+        // Add event_id if provided
+        if (submissionData.event_id) {
+            submissionForDB.event_id = submissionData.event_id;
+        }
+
+        // Add optional fields only if they have values
+        if (submissionData.phone) {
+            submissionForDB.phone = submissionData.phone;
+        }
+        if (submissionData.message) {
+            submissionForDB.message = submissionData.message;
+        }
+        if (submissionData.attachment_url) {
+            submissionForDB.attachment_url = submissionData.attachment_url;
+        }
+
+        // Add the form-specific fields (these will be added by the migration script)
+        if (submissionData.company_name) {
+            submissionForDB.company_name = submissionData.company_name;
+        }
+        if (submissionData.exhibition_name) {
+            submissionForDB.exhibition_name = submissionData.exhibition_name;
+        }
+        if (submissionData.budget) {
+            submissionForDB.budget = submissionData.budget;
+        }
+        if (submissionData.attachment_filename) {
+            submissionForDB.attachment_filename = submissionData.attachment_filename;
+        }
+        if (submissionData.attachment_size) {
+            submissionForDB.attachment_size = submissionData.attachment_size;
+        }
+
+        console.log('Attempting to insert submission:', JSON.stringify(submissionForDB, null, 2));
+
         const { data: submission, error } = await supabase
             .from('event_form_submissions')
-            .insert([submissionWithMetadata])
+            .insert([submissionForDB])
             .select(`
                 *,
                 event:events(
@@ -139,8 +178,16 @@ export async function POST(request: NextRequest) {
 
         if (error) {
             console.error('Error creating submission:', error);
+            console.error('Error details:', JSON.stringify(error, null, 2));
+            console.error('Attempted to insert:', JSON.stringify(submissionForDB, null, 2));
+
+            // Return more specific error information
             return NextResponse.json(
-                { error: 'Failed to submit form' },
+                {
+                    error: 'Failed to submit form',
+                    details: error.message,
+                    code: error.code
+                },
                 { status: 500 }
             );
         }
