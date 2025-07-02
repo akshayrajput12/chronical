@@ -1,25 +1,74 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
+import { ContactHeroSection } from "@/types/contact";
+import { contactPageService } from "@/lib/services/contact";
 
 const ContactHero = () => {
+    const [heroData, setHeroData] = useState<ContactHeroSection | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string>("");
+
+    useEffect(() => {
+        const fetchHeroData = async () => {
+            try {
+                const data = await contactPageService.getHeroSection();
+                setHeroData(data);
+            } catch (error) {
+                console.error("Error fetching hero data:", error);
+                setError("Failed to load page content. Please refresh the page.");
+                setHeroData(null);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchHeroData();
+    }, []);
+
+    if (loading) {
+        return (
+            <section className="relative 2xl:h-[60vh] h-[75vh] flex items-center justify-center overflow-hidden bg-gray-900">
+                <div className="text-white text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto"></div>
+                    <p className="mt-4">Loading...</p>
+                </div>
+            </section>
+        );
+    }
+
+    if (error || !heroData) {
+        return (
+            <section className="relative 2xl:h-[60vh] h-[75vh] flex items-center justify-center overflow-hidden bg-gray-900">
+                <div className="text-white text-center">
+                    <p className="text-red-400 mb-4">{error || "Failed to load page content"}</p>
+                    <button
+                        onClick={() => window.location.reload()}
+                        className="bg-[#a5cd39] hover:bg-[#8fb32a] text-white px-6 py-2 rounded-md font-medium transition-colors duration-200"
+                    >
+                        Retry
+                    </button>
+                </div>
+            </section>
+        );
+    }
+
     return (
         <section className="relative 2xl:h-[60vh] h-[75vh] flex items-center justify-center overflow-hidden">
-            {/* Background Image - Glass/Metal Structure */}
+            {/* Background Image - Dynamic */}
             <div
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat"
                 style={{
-                    backgroundImage:
-                        "url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')",
+                    backgroundImage: `url('${heroData.background_image_url}')`,
                 }}
             />
 
             {/* Subtle Overlay */}
             <div className="absolute inset-0 bg-black/30" />
 
-            {/* Content */}
+            {/* Content - Dynamic */}
             <div className="relative z-10 md:mt-20 mt-0 text-center text-white w-full px-4 sm:px-6 md:px-8 lg:px-12">
                 <motion.h1
                     className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-rubik font-bold mb-4 sm:mb-6 leading-tight"
@@ -27,7 +76,7 @@ const ContactHero = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.2 }}
                 >
-                    Contact Us
+                    {heroData.title}
                 </motion.h1>
 
                 <motion.h3
@@ -36,8 +85,7 @@ const ContactHero = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.4 }}
                 >
-                    Our team is standing by to answer your questions and direct
-                    you to the expertise you need for your next event
+                    {heroData.subtitle}
                 </motion.h3>
             </div>
 

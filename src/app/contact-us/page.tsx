@@ -4,7 +4,6 @@ import ContactHero from "./components/contact-hero";
 import ContactInfo from "./components/contact-info";
 import ContactForm from "./components/contact-form";
 import ContactMap from "./components/contact-map";
-import ContactParking from "./components/contact-parking";
 
 export const metadata: Metadata = {
     title: "Contact Us | Chronicle Exhibits - Exhibition Stand Design Dubai",

@@ -118,6 +118,10 @@ export async function POST(request: NextRequest) {
 
         const eventData: EventInput = await request.json();
 
+        // Debug: Log the received data to identify the issue
+        console.log('Received event data:', JSON.stringify(eventData, null, 2));
+        console.log('Event data keys:', Object.keys(eventData));
+
         // Generate slug if not provided
         if (!eventData.slug && eventData.title) {
             eventData.slug = eventData.title
@@ -126,7 +130,7 @@ export async function POST(request: NextRequest) {
                 .replace(/(^-|-$)/g, '');
         }
 
-        // Clean up data - convert empty strings to null for foreign keys
+        // Clean up data - convert empty strings to null for foreign keys and remove invalid fields
         const cleanedEventData = {
             ...eventData,
             category_id: eventData.category_id && eventData.category_id.trim() !== '' ? eventData.category_id : null,
@@ -135,9 +139,28 @@ export async function POST(request: NextRequest) {
             published_at: eventData.published_at && eventData.published_at.trim() !== '' ? eventData.published_at : null,
         };
 
+        // Remove any invalid field names that might have been created by bugs
+        const validFields = [
+            'title', 'slug', 'description', 'detailed_description', 'short_description',
+            'category_id', 'organizer', 'organized_by', 'venue', 'event_type', 'industry', 'audience',
+            'start_date', 'end_date', 'date_range',
+            'featured_image_url', 'hero_image_url', 'logo_image_url', 'logo_text', 'logo_subtext',
+            'meta_title', 'meta_description', 'meta_keywords',
+            'is_active', 'is_featured', 'display_order', 'published_at'
+        ];
+
+        const filteredEventData = Object.keys(cleanedEventData)
+            .filter(key => validFields.includes(key))
+            .reduce((obj, key) => {
+                obj[key] = (cleanedEventData as any)[key];
+                return obj;
+            }, {} as any);
+
+        console.log('Filtered event data:', JSON.stringify(filteredEventData, null, 2));
+
         // Add metadata - using null since auth is disabled
         const eventWithMetadata = {
-            ...cleanedEventData,
+            ...filteredEventData,
             created_by: null,
             updated_by: null,
         };

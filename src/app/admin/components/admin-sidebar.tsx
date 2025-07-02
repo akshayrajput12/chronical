@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     Home,
@@ -103,6 +103,7 @@ const AdminSidebar = ({
 }) => {
     const pathname = usePathname();
     const router = useRouter();
+    const searchParams = useSearchParams();
     const supabase = createClient();
     const [openSections, setOpenSections] = useState<Record<string, boolean>>({
         home: pathname.includes("/admin/pages/home"),
@@ -112,6 +113,7 @@ const AdminSidebar = ({
         blog: pathname.includes("/admin/pages/blog"),
         cities: pathname.includes("/admin/pages/cities"),
         events: pathname.includes("/admin/pages/events"),
+        contact: pathname.includes("/admin/contact"),
         customStand: pathname.includes("/admin/pages/custom-stand"),
         doubleDeckerStand: pathname.includes(
             "/admin/pages/double-decker-stand",
@@ -889,13 +891,12 @@ const AdminSidebar = ({
                     </AnimatePresence>
                 </div>
 
-                {/* Other Pages */}
-
+                {/* Contact Page */}
                 <NavItem
-                    href="/admin/pages/contact"
+                    href="/admin/contact"
                     label="Contact"
                     icon={<Phone size={18} />}
-                    isActive={pathname.includes("/admin/pages/contact")}
+                    isActive={pathname.includes("/admin/contact")}
                 />
 
                 <NavItem

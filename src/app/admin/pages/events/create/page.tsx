@@ -889,7 +889,9 @@ const CreateEventPage = () => {
                             ...prev,
                             [imageBrowserType]: image
                         }));
-                        handleInputChange(`${imageBrowserType}_image_url`, image.file_path);
+                        // Fix: Use the correct field name mapping
+                        const fieldName = `${imageBrowserType}_image_url` as keyof EventInput;
+                        handleInputChange(fieldName, image.file_path);
                     }
                 }}
                 multiple={imageBrowserType === 'gallery'}

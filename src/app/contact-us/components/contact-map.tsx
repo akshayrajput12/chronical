@@ -1,10 +1,63 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
+import { ContactMapSettings } from "@/types/contact";
+import { contactPageService } from "@/lib/services/contact";
 
 const ContactMap = () => {
+    const [mapSettings, setMapSettings] = useState<ContactMapSettings | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string>("");
+
+    useEffect(() => {
+        const fetchMapSettings = async () => {
+            try {
+                const settings = await contactPageService.getMapSettings();
+                setMapSettings(settings);
+            } catch (error) {
+                console.error("Error fetching map settings:", error);
+                setError("Failed to load map settings. Please refresh the page.");
+                setMapSettings(null);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchMapSettings();
+    }, []);
+
+    if (loading) {
+        return (
+            <section className="py-8 md:py-12 lg:py-16 !pb-0 bg-white">
+                <div className="mx-auto">
+                    <div className="text-center">
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#a5cd39] mx-auto"></div>
+                        <p className="mt-4 text-gray-600">Loading map...</p>
+                    </div>
+                </div>
+            </section>
+        );
+    }
+
+    if (error || !mapSettings) {
+        return (
+            <section className="py-8 md:py-12 lg:py-16 !pb-0 bg-white">
+                <div className="mx-auto">
+                    <div className="text-center">
+                        <p className="text-red-600 mb-4">{error || "Error loading map settings. Please refresh the page."}</p>
+                        <button
+                            onClick={() => window.location.reload()}
+                            className="bg-[#a5cd39] hover:bg-[#8fb32a] text-white px-6 py-2 rounded-md font-medium transition-colors duration-200"
+                        >
+                            Retry
+                        </button>
+                    </div>
+                </div>
+            </section>
+        );
+    }
+
     return (
         <section className="py-8 md:py-12 lg:py-16 !pb-0 bg-white">
             <div className="mx-auto">
@@ -15,18 +68,30 @@ const ContactMap = () => {
                         transition={{ duration: 0.6, delay: 0.4 }}
                         viewport={{ once: true }}
                     >
-                        <div className="w-full h-[400px]">
+                        <div className="w-full" style={{ height: `${mapSettings.map_height}px` }}>
                             <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3607.5139890547107!2d55.38061577600814!3d25.28692967765328!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f42e5a9ddaf97%3A0x563a582dbda7f14c!2sChronicle%20Exhibition%20Organizing%20L.L.C%20%7C%20Exhibition%20Stand%20Builder%20in%20Dubai%2C%20UAE%20-%20Middle%20East!5e0!3m2!1sen!2sin!4v1750325309116!5m2!1sen!2sin"
+                                src={mapSettings.map_embed_url}
                                 width="100%"
                                 height="100%"
                                 style={{ border: 0 }}
                                 allowFullScreen
                                 loading="lazy"
                                 referrerPolicy="no-referrer-when-downgrade"
-                                title="Dubai World Trade Centre Location"
+                                title={mapSettings.map_title}
                             ></iframe>
                         </div>
+                        {mapSettings.show_directions_button && mapSettings.directions_url && (
+                            <div className="text-center mt-4">
+                                <a
+                                    href={mapSettings.directions_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-block bg-[#a5cd39] hover:bg-[#8fb32a] text-white px-6 py-2 rounded-md font-medium transition-colors duration-200"
+                                >
+                                    Get Directions
+                                </a>
+                            </div>
+                        )}
                     </motion.div>
                 </div>
             </div>
