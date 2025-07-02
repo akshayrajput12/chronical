@@ -126,9 +126,13 @@ export interface EventFormSubmission {
     name: string;
     email: string;
     phone?: string;
-    company?: string; // Changed from company_name to match DB schema
+    company_name?: string; // Form field
+    exhibition_name?: string; // Form field
+    budget?: string; // Form field
     message?: string;
     attachment_url?: string;
+    attachment_filename?: string; // File attachment info
+    attachment_size?: number; // File attachment info
     status: 'new' | 'read' | 'replied' | 'archived';
     is_spam: boolean;
     spam_score?: number;

@@ -90,7 +90,7 @@ export default function ContactImageLibraryTab() {
             setActionLoading(true);
             const deletePromises = selectedImages.map(imageId => {
                 const image = images.find(img => img.id === imageId);
-                if (image) {
+                if (image && image.path) {
                     return contactAdminService.deleteImage(image.bucket, image.path);
                 }
                 return Promise.resolve(false);
@@ -427,7 +427,6 @@ export default function ContactImageLibraryTab() {
                             label="Upload Images"
                             placeholder="Select or drag images to upload"
                             showLibrary={false}
-                            multiple={true}
                         />
                     </div>
                     

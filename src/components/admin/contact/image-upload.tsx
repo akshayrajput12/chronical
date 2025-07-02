@@ -82,12 +82,11 @@ export const ContactImageUpload: React.FC<ContactImageUploadProps> = ({
     const loadImageLibrary = async () => {
         setLoadingLibrary(true);
         try {
-            const result = await contactAdminService.getImageLibrary(bucket, folder);
-            if (result.success && result.data) {
-                setImageLibrary(result.data);
-            }
+            const result = await contactAdminService.getImageLibrary();
+            setImageLibrary(result);
         } catch (error) {
             console.error('Failed to load image library:', error);
+            setError('Failed to load image library');
         } finally {
             setLoadingLibrary(false);
         }

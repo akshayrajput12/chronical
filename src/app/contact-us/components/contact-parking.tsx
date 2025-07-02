@@ -23,12 +23,13 @@ const ContactParking = () => {
                     map_embed_url: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3607.5139890547107!2d55.38061577600814!3d25.28692967765328!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f42e5a9ddaf97%3A0x563a582dbda7f14c!2sChronicle%20Exhibition%20Organizing%20L.L.C%20%7C%20Exhibition%20Stand%20Builder%20in%20Dubai%2C%20UAE%20-%20Middle%20East!5e0!3m2!1sen!2sin!4v1750325309116!5m2!1sen!2sin",
                     map_title: "Dubai World Trade Centre Location",
                     map_height: 400,
-                    show_directions_button: true,
-                    directions_url: "https://maps.google.com",
                     parking_title: "On-site parking at Dubai World Trade Centre",
                     parking_description: "PLAN YOUR ARRIVAL BY EXPLORING OUR USEFUL PARKING AND ACCESSIBILITY MAPS.",
                     parking_background_image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
                     parking_maps_download_url: "#",
+                    google_maps_url: "https://maps.google.com",
+                    show_parking_section: true,
+                    show_map_section: true,
                     is_active: true,
                     created_at: new Date().toISOString(),
                     updated_at: new Date().toISOString()
@@ -71,7 +72,7 @@ const ContactParking = () => {
             <div className="container mx-auto px-4">
                 <div className="max-w-6xl mx-auto">
                     {/* Top Button */}
-                    {mapSettings.show_directions_button && mapSettings.directions_url && (
+                    {mapSettings.google_maps_url && (
                         <motion.div
                             className="text-center mb-8"
                             initial={{ opacity: 0, y: -20 }}
@@ -82,7 +83,7 @@ const ContactParking = () => {
                             <Button
                                 className="bg-white border border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-white px-6 py-2 text-sm font-medium transition-all duration-300 rounded-md shadow-sm"
                                 onClick={() =>
-                                    window.open(mapSettings.directions_url, "_blank")
+                                    window.open(mapSettings.google_maps_url, "_blank")
                                 }
                             >
                                 OPEN IN GOOGLE MAP

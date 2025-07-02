@@ -118,7 +118,7 @@ const ContactForm = () => {
 
         try {
             // Upload file if present
-            let attachmentUrl = null;
+            const attachmentUrl = null;
             let attachmentFilename = null;
             let attachmentSize = null;
             let attachmentType = null;

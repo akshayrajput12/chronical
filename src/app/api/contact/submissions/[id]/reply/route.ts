@@ -4,11 +4,12 @@ import { createClient } from "@/lib/supabase/server";
 // POST /api/contact/submissions/[id]/reply - Send reply to submission
 export async function POST(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const { message } = await request.json();
-        
+        const { id } = await params;
+
         if (!message) {
             return NextResponse.json(
                 { error: "Message is required" },
@@ -26,7 +27,7 @@ export async function POST(
                 admin_notes: message,
                 updated_at: new Date().toISOString()
             })
-            .eq("id", params.id);
+            .eq("id", id);
 
         if (error) {
             console.error("Error sending reply:", error);

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import {
     ArrowLeft,
@@ -52,6 +52,13 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog";
 import Link from "next/link";
 import { EventFormSubmission } from "@/types/events";
 
@@ -89,7 +96,11 @@ const EventSubmissionsPage = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [totalSubmissions, setTotalSubmissions] = useState(0);
 
-    const fetchSubmissions = async () => {
+    // View modal state
+    const [viewModalOpen, setViewModalOpen] = useState(false);
+    const [selectedSubmission, setSelectedSubmission] = useState<EventFormSubmission | null>(null);
+
+    const fetchSubmissions = useCallback(async () => {
         setLoading(true);
         try {
             const params = new URLSearchParams({
@@ -114,12 +125,80 @@ const EventSubmissionsPage = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [currentPage, statusFilter, eventFilter, spamFilter, searchTerm]);
 
     // Fetch submissions data
     useEffect(() => {
         fetchSubmissions();
-    }, [currentPage, statusFilter, eventFilter, spamFilter, searchTerm, fetchSubmissions]);
+    }, [fetchSubmissions]);
+
+    // View submission handler
+    const handleViewSubmission = (submission: EventFormSubmission) => {
+        setSelectedSubmission(submission);
+        setViewModalOpen(true);
+    };
+
+    // Download attachment handler
+    const handleDownloadAttachment = async (submission: EventFormSubmission) => {
+        if (!submission.attachment_url) return;
+
+        try {
+            // Create a temporary link to download the file
+            const link = document.createElement('a');
+            link.href = submission.attachment_url;
+            link.download = submission.attachment_filename || 'attachment';
+            link.target = '_blank';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (error) {
+            console.error('Error downloading attachment:', error);
+        }
+    };
+
+    // Status update handler
+    const handleStatusUpdate = async (submissionId: string, newStatus: string) => {
+        try {
+            const response = await fetch(`/api/events/submissions/${submissionId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ status: newStatus }),
+            });
+
+            if (response.ok) {
+                // Refresh submissions
+                fetchSubmissions();
+            } else {
+                console.error('Failed to update status');
+            }
+        } catch (error) {
+            console.error('Error updating status:', error);
+        }
+    };
+
+    // Delete handler
+    const handleDelete = async (submissionId: string) => {
+        if (!confirm('Are you sure you want to delete this submission? This action cannot be undone.')) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/events/submissions/${submissionId}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                // Refresh submissions
+                fetchSubmissions();
+            } else {
+                console.error('Failed to delete submission');
+            }
+        } catch (error) {
+            console.error('Error deleting submission:', error);
+        }
+    };
 
     const getStatusBadge = (status: string) => {
         const statusConfig = {
@@ -148,40 +227,6 @@ const EventSubmissionsPage = () => {
             hour: '2-digit',
             minute: '2-digit',
         });
-    };
-
-    const handleStatusUpdate = async (submissionId: string, newStatus: string) => {
-        try {
-            const response = await fetch(`/api/events/submissions/${submissionId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ status: newStatus }),
-            });
-
-            if (response.ok) {
-                fetchSubmissions(); // Refresh the list
-            }
-        } catch (error) {
-            console.error('Error updating status:', error);
-        }
-    };
-
-    const handleDelete = async (submissionId: string) => {
-        if (confirm('Are you sure you want to delete this submission?')) {
-            try {
-                const response = await fetch(`/api/events/submissions/${submissionId}`, {
-                    method: 'DELETE',
-                });
-
-                if (response.ok) {
-                    fetchSubmissions(); // Refresh the list
-                }
-            } catch (error) {
-                console.error('Error deleting submission:', error);
-            }
-        }
     };
 
     return (
@@ -354,7 +399,15 @@ const EventSubmissionsPage = () => {
                                                 <TableCell>
                                                     <div className="flex items-center gap-2">
                                                         <Building className="w-4 h-4 text-gray-400" />
-                                                        {submission.company_name || 'Not specified'}
+                                                        <div className="flex flex-col">
+                                                            <span>{submission.company_name || 'Not specified'}</span>
+                                                            {submission.attachment_url && (
+                                                                <span className="text-xs text-blue-600 flex items-center gap-1">
+                                                                    <Download className="w-3 h-3" />
+                                                                    Has attachment
+                                                                </span>
+                                                            )}
+                                                        </div>
                                                     </div>
                                                 </TableCell>
                                                 <TableCell>
@@ -375,9 +428,15 @@ const EventSubmissionsPage = () => {
                                                         </DropdownMenuTrigger>
                                                         <DropdownMenuContent align="end">
                                                             <DropdownMenuItem
-                                                                onClick={() => handleStatusUpdate(submission.id, 'reviewed')}
+                                                                onClick={() => handleViewSubmission(submission)}
                                                             >
                                                                 <Eye className="w-4 h-4 mr-2" />
+                                                                View Details
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuItem
+                                                                onClick={() => handleStatusUpdate(submission.id, 'reviewed')}
+                                                            >
+                                                                <CheckCircle className="w-4 h-4 mr-2" />
                                                                 Mark as Reviewed
                                                             </DropdownMenuItem>
                                                             <DropdownMenuItem
@@ -438,6 +497,191 @@ const EventSubmissionsPage = () => {
                     </CardContent>
                 </Card>
             </motion.div>
+
+            {/* View Submission Modal */}
+            <Dialog open={viewModalOpen} onOpenChange={setViewModalOpen}>
+                <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+                    <DialogHeader>
+                        <DialogTitle className="flex items-center gap-2">
+                            <Eye className="w-5 h-5" />
+                            Submission Details
+                        </DialogTitle>
+                        <DialogDescription>
+                            Complete form submission information
+                        </DialogDescription>
+                    </DialogHeader>
+
+                    {selectedSubmission && (
+                        <div className="space-y-6">
+                            {/* Header Info */}
+                            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                <div>
+                                    <h3 className="font-semibold text-lg">{selectedSubmission.name}</h3>
+                                    <p className="text-gray-600">{selectedSubmission.email}</p>
+                                    {selectedSubmission.phone && (
+                                        <p className="text-gray-600">📞 {selectedSubmission.phone}</p>
+                                    )}
+                                </div>
+                                <div className="text-right">
+                                    {getStatusBadge(selectedSubmission.status)}
+                                    <p className="text-sm text-gray-500 mt-1">
+                                        {formatDate(selectedSubmission.created_at)}
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Form Details Grid */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {/* Left Column */}
+                                <div className="space-y-4">
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                                            Event
+                                        </label>
+                                        <p className="text-gray-900">
+                                            {selectedSubmission.event?.title || 'Not specified'}
+                                        </p>
+                                    </div>
+
+                                    {selectedSubmission.company_name && (
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                                Company Name
+                                            </label>
+                                            <p className="text-gray-900">{selectedSubmission.company_name}</p>
+                                        </div>
+                                    )}
+
+                                    {selectedSubmission.exhibition_name && (
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                                Exhibition Name
+                                            </label>
+                                            <p className="text-gray-900">{selectedSubmission.exhibition_name}</p>
+                                        </div>
+                                    )}
+
+                                    {selectedSubmission.budget && (
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                                Budget
+                                            </label>
+                                            <p className="text-gray-900">{selectedSubmission.budget}</p>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Right Column */}
+                                <div className="space-y-4">
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                                            Contact Information
+                                        </label>
+                                        <div className="space-y-1">
+                                            <p className="text-gray-900">{selectedSubmission.name}</p>
+                                            <p className="text-gray-600">{selectedSubmission.email}</p>
+                                            {selectedSubmission.phone && (
+                                                <p className="text-gray-600">{selectedSubmission.phone}</p>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                                            Submission Info
+                                        </label>
+                                        <div className="space-y-1 text-sm text-gray-600">
+                                            <p>Date: {formatDate(selectedSubmission.created_at)}</p>
+                                            {selectedSubmission.ip_address && (
+                                                <p>IP: {selectedSubmission.ip_address}</p>
+                                            )}
+                                            {selectedSubmission.referrer && selectedSubmission.referrer !== 'direct' && (
+                                                <p>Referrer: {selectedSubmission.referrer}</p>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* Attachment Section */}
+                                    {selectedSubmission.attachment_url && (
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                                                Attachment
+                                            </label>
+                                            <div className="flex items-center gap-2 p-3 bg-blue-50 rounded-lg">
+                                                <div className="flex-1">
+                                                    <p className="font-medium text-blue-900">
+                                                        {selectedSubmission.attachment_filename || 'Attachment'}
+                                                    </p>
+                                                    {selectedSubmission.attachment_size && (
+                                                        <p className="text-sm text-blue-600">
+                                                            {(selectedSubmission.attachment_size / 1024 / 1024).toFixed(2)} MB
+                                                        </p>
+                                                    )}
+                                                </div>
+                                                <Button
+                                                    onClick={() => handleDownloadAttachment(selectedSubmission)}
+                                                    size="sm"
+                                                    className="bg-blue-600 hover:bg-blue-700"
+                                                >
+                                                    <Download className="w-4 h-4 mr-1" />
+                                                    Download
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Message Section */}
+                            {selectedSubmission.message && (
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        Message
+                                    </label>
+                                    <div className="p-4 bg-gray-50 rounded-lg">
+                                        <p className="text-gray-900 whitespace-pre-wrap">
+                                            {selectedSubmission.message}
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Admin Notes Section */}
+                            {selectedSubmission.admin_notes && (
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        Admin Notes
+                                    </label>
+                                    <div className="p-4 bg-yellow-50 rounded-lg">
+                                        <p className="text-gray-900 whitespace-pre-wrap">
+                                            {selectedSubmission.admin_notes}
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Action Buttons */}
+                            <div className="flex justify-end gap-2 pt-4 border-t">
+                                <Button
+                                    variant="outline"
+                                    onClick={() => setViewModalOpen(false)}
+                                >
+                                    Close
+                                </Button>
+                                {selectedSubmission.attachment_url && (
+                                    <Button
+                                        onClick={() => handleDownloadAttachment(selectedSubmission)}
+                                        className="bg-blue-600 hover:bg-blue-700"
+                                    >
+                                        <Download className="w-4 h-4 mr-2" />
+                                        Download Attachment
+                                    </Button>
+                                )}
+                            </div>
+                        </div>
+                    )}
+                </DialogContent>
+            </Dialog>
         </motion.div>
     );
 };

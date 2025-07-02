@@ -92,7 +92,7 @@ export default function ContactInfoTab() {
         setShowDialog(true);
     };
 
-    const handleInputChange = (field: keyof ContactGroupCompanyInput, value: string | number | boolean) => {
+    const handleInputChange = (field: keyof ContactGroupCompanyFormInput, value: string | number | boolean) => {
         setFormData(prev => ({
             ...prev,
             [field]: value

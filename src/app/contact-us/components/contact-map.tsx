@@ -80,10 +80,10 @@ const ContactMap = () => {
                                 title={mapSettings.map_title}
                             ></iframe>
                         </div>
-                        {mapSettings.show_directions_button && mapSettings.directions_url && (
+                        {mapSettings.google_maps_url && (
                             <div className="text-center mt-4">
                                 <a
-                                    href={mapSettings.directions_url}
+                                    href={mapSettings.google_maps_url}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="inline-block bg-[#a5cd39] hover:bg-[#8fb32a] text-white px-6 py-2 rounded-md font-medium transition-colors duration-200"

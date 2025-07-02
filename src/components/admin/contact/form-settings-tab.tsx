@@ -16,17 +16,18 @@ import { Save, Loader2, AlertCircle, CheckCircle, Settings } from 'lucide-react'
 export default function ContactFormSettingsTab() {
     const [formSettings, setFormSettings] = useState<ContactFormSettings | null>(null);
     const [formData, setFormData] = useState<ContactFormSettingsInput>({
-        sidebar_title: '',
-        sidebar_description: '',
+        form_title: '',
+        form_subtitle: '',
         success_message: '',
-        error_message: '',
+        success_description: '',
+        sidebar_phone: '',
+        sidebar_email: '',
+        sidebar_address: '',
         max_file_size_mb: 10,
-        allowed_file_types: '',
+        allowed_file_types: ['.pdf', '.doc', '.docx', '.jpg', '.jpeg', '.png'],
         enable_file_upload: true,
-        require_terms_acceptance: true,
+        require_terms_agreement: true,
         terms_text: '',
-        terms_link: '',
-        enable_spam_protection: true,
         is_active: true
     });
     const [loading, setLoading] = useState(true);
@@ -45,17 +46,18 @@ export default function ContactFormSettingsTab() {
             if (data) {
                 setFormSettings(data);
                 setFormData({
-                    sidebar_title: data.sidebar_title,
-                    sidebar_description: data.sidebar_description,
+                    form_title: data.form_title,
+                    form_subtitle: data.form_subtitle || '',
                     success_message: data.success_message,
-                    error_message: data.error_message,
+                    success_description: data.success_description,
+                    sidebar_phone: data.sidebar_phone,
+                    sidebar_email: data.sidebar_email,
+                    sidebar_address: data.sidebar_address,
                     max_file_size_mb: data.max_file_size_mb,
                     allowed_file_types: data.allowed_file_types,
                     enable_file_upload: data.enable_file_upload,
-                    require_terms_acceptance: data.require_terms_acceptance,
+                    require_terms_agreement: data.require_terms_agreement,
                     terms_text: data.terms_text,
-                    terms_link: data.terms_link || '',
-                    enable_spam_protection: data.enable_spam_protection,
                     is_active: data.is_active
                 });
             }
@@ -67,7 +69,7 @@ export default function ContactFormSettingsTab() {
         }
     };
 
-    const handleInputChange = (field: keyof ContactFormSettingsInput, value: string | number | boolean) => {
+    const handleInputChange = (field: keyof ContactFormSettingsInput, value: string | number | boolean | string[]) => {
         setFormData(prev => ({
             ...prev,
             [field]: value
@@ -84,20 +86,28 @@ export default function ContactFormSettingsTab() {
             setSuccess('');
 
             // Validate required fields
-            if (!formData.sidebar_title.trim()) {
-                setError('Sidebar title is required');
-                return;
-            }
-            if (!formData.sidebar_description.trim()) {
-                setError('Sidebar description is required');
+            if (!formData.form_title.trim()) {
+                setError('Form title is required');
                 return;
             }
             if (!formData.success_message.trim()) {
                 setError('Success message is required');
                 return;
             }
-            if (!formData.error_message.trim()) {
-                setError('Error message is required');
+            if (!formData.success_description.trim()) {
+                setError('Success description is required');
+                return;
+            }
+            if (!formData.sidebar_phone.trim()) {
+                setError('Sidebar phone is required');
+                return;
+            }
+            if (!formData.sidebar_email.trim()) {
+                setError('Sidebar email is required');
+                return;
+            }
+            if (!formData.sidebar_address.trim()) {
+                setError('Sidebar address is required');
                 return;
             }
 
@@ -154,37 +164,84 @@ export default function ContactFormSettingsTab() {
             )}
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Sidebar Content */}
+                {/* Form Title */}
                 <Card>
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
                             <Settings className="h-5 w-5" />
-                            Sidebar Content
+                            Form Title
                         </CardTitle>
                         <CardDescription>
-                            Configure the content displayed in the form sidebar
+                            Configure the main form title and subtitle
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div>
-                            <Label htmlFor="sidebar_title">Sidebar Title *</Label>
+                            <Label htmlFor="form_title">Form Title *</Label>
                             <Input
-                                id="sidebar_title"
-                                value={formData.sidebar_title}
-                                onChange={(e) => handleInputChange('sidebar_title', e.target.value)}
-                                placeholder="Enter sidebar title"
+                                id="form_title"
+                                value={formData.form_title}
+                                onChange={(e) => handleInputChange('form_title', e.target.value)}
+                                placeholder="Enter form title"
                                 className="mt-1"
                             />
                         </div>
 
                         <div>
-                            <Label htmlFor="sidebar_description">Sidebar Description *</Label>
+                            <Label htmlFor="form_subtitle">Form Subtitle</Label>
+                            <Input
+                                id="form_subtitle"
+                                value={formData.form_subtitle || ''}
+                                onChange={(e) => handleInputChange('form_subtitle', e.target.value)}
+                                placeholder="Enter form subtitle (optional)"
+                                className="mt-1"
+                            />
+                        </div>
+                    </CardContent>
+                </Card>
+
+                {/* Sidebar Contact Info */}
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                            <Settings className="h-5 w-5" />
+                            Sidebar Contact Information
+                        </CardTitle>
+                        <CardDescription>
+                            Configure the contact information displayed in the form sidebar
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div>
+                            <Label htmlFor="sidebar_phone">Phone *</Label>
+                            <Input
+                                id="sidebar_phone"
+                                value={formData.sidebar_phone}
+                                onChange={(e) => handleInputChange('sidebar_phone', e.target.value)}
+                                placeholder="Enter phone number"
+                                className="mt-1"
+                            />
+                        </div>
+
+                        <div>
+                            <Label htmlFor="sidebar_email">Email *</Label>
+                            <Input
+                                id="sidebar_email"
+                                value={formData.sidebar_email}
+                                onChange={(e) => handleInputChange('sidebar_email', e.target.value)}
+                                placeholder="Enter email address"
+                                className="mt-1"
+                            />
+                        </div>
+
+                        <div>
+                            <Label htmlFor="sidebar_address">Address *</Label>
                             <Textarea
-                                id="sidebar_description"
-                                value={formData.sidebar_description}
-                                onChange={(e) => handleInputChange('sidebar_description', e.target.value)}
-                                placeholder="Enter sidebar description"
-                                rows={4}
+                                id="sidebar_address"
+                                value={formData.sidebar_address}
+                                onChange={(e) => handleInputChange('sidebar_address', e.target.value)}
+                                placeholder="Enter address"
+                                rows={3}
                                 className="mt-1"
                             />
                         </div>
@@ -196,7 +253,7 @@ export default function ContactFormSettingsTab() {
                     <CardHeader>
                         <CardTitle>Form Messages</CardTitle>
                         <CardDescription>
-                            Configure success and error messages
+                            Configure success messages
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
@@ -213,12 +270,12 @@ export default function ContactFormSettingsTab() {
                         </div>
 
                         <div>
-                            <Label htmlFor="error_message">Error Message *</Label>
+                            <Label htmlFor="success_description">Success Description *</Label>
                             <Textarea
-                                id="error_message"
-                                value={formData.error_message}
-                                onChange={(e) => handleInputChange('error_message', e.target.value)}
-                                placeholder="Message shown when form submission fails"
+                                id="success_description"
+                                value={formData.success_description}
+                                onChange={(e) => handleInputChange('success_description', e.target.value)}
+                                placeholder="Detailed description shown after successful submission"
                                 rows={3}
                                 className="mt-1"
                             />
@@ -264,13 +321,17 @@ export default function ContactFormSettingsTab() {
                                 <Label htmlFor="allowed_file_types">Allowed File Types</Label>
                                 <Input
                                     id="allowed_file_types"
-                                    value={formData.allowed_file_types}
-                                    onChange={(e) => handleInputChange('allowed_file_types', e.target.value)}
-                                    placeholder="e.g., pdf,doc,docx,jpg,png"
+                                    value={Array.isArray(formData.allowed_file_types) ? formData.allowed_file_types.join(',') : ''}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        const arrayValue = value.split(',').map(type => type.trim()).filter(type => type.length > 0);
+                                        handleInputChange('allowed_file_types', arrayValue);
+                                    }}
+                                    placeholder="e.g., .pdf,.doc,.docx,.jpg,.png"
                                     className="mt-1"
                                 />
                                 <p className="text-xs text-gray-500 mt-1">
-                                    Comma-separated list of allowed file extensions
+                                    Comma-separated list of allowed file extensions (include the dot, e.g., .pdf)
                                 </p>
                             </div>
                         </div>
@@ -289,14 +350,14 @@ export default function ContactFormSettingsTab() {
                 <CardContent className="space-y-4">
                     <div className="flex items-center space-x-2">
                         <Switch
-                            id="require_terms_acceptance"
-                            checked={formData.require_terms_acceptance}
-                            onCheckedChange={(checked) => handleInputChange('require_terms_acceptance', checked)}
+                            id="require_terms_agreement"
+                            checked={formData.require_terms_agreement}
+                            onCheckedChange={(checked) => handleInputChange('require_terms_agreement', checked)}
                         />
-                        <Label htmlFor="require_terms_acceptance">Require Terms Acceptance</Label>
+                        <Label htmlFor="require_terms_agreement">Require Terms Agreement</Label>
                     </div>
 
-                    {formData.require_terms_acceptance && (
+                    {formData.require_terms_agreement && (
                         <div className="space-y-4 pl-6">
                             <div>
                                 <Label htmlFor="terms_text">Terms Text</Label>
@@ -308,44 +369,24 @@ export default function ContactFormSettingsTab() {
                                     className="mt-1"
                                 />
                             </div>
-
-                            <div>
-                                <Label htmlFor="terms_link">Terms Link (Optional)</Label>
-                                <Input
-                                    id="terms_link"
-                                    value={formData.terms_link}
-                                    onChange={(e) => handleInputChange('terms_link', e.target.value)}
-                                    placeholder="https://example.com/terms"
-                                    className="mt-1"
-                                />
-                            </div>
                         </div>
                     )}
                 </CardContent>
             </Card>
 
-            {/* Security Settings */}
+            {/* Status Settings */}
             <Card>
                 <CardHeader>
-                    <CardTitle>Security Settings</CardTitle>
+                    <CardTitle>Status Settings</CardTitle>
                     <CardDescription>
-                        Configure spam protection and security features
+                        Configure form status
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div className="flex items-center space-x-2">
                         <Switch
-                            id="enable_spam_protection"
-                            checked={formData.enable_spam_protection}
-                            onCheckedChange={(checked) => handleInputChange('enable_spam_protection', checked)}
-                        />
-                        <Label htmlFor="enable_spam_protection">Enable Spam Protection</Label>
-                    </div>
-
-                    <div className="flex items-center space-x-2">
-                        <Switch
                             id="is_active"
-                            checked={formData.is_active}
+                            checked={formData.is_active || false}
                             onCheckedChange={(checked) => handleInputChange('is_active', checked)}
                         />
                         <Label htmlFor="is_active">Form Active</Label>

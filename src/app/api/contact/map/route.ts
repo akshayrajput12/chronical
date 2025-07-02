@@ -26,9 +26,9 @@ export async function GET() {
                 map_height: 400,
                 parking_title: "On-site parking at Dubai World Trade Centre",
                 parking_description: "PLAN YOUR ARRIVAL BY EXPLORING OUR USEFUL PARKING AND ACCESSIBILITY MAPS.",
-                parking_background_image_url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-                parking_button_text: "Download Parking Map",
-                parking_button_url: "#",
+                parking_background_image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+                parking_maps_download_url: "#",
+                google_maps_url: "https://maps.google.com",
                 show_parking_section: true,
                 show_map_section: true,
                 is_active: true,
@@ -47,7 +47,7 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
     try {
-        const supabase = createClient(true); // Use service role to bypass RLS
+        const supabase = await createClient(true); // Use service role to bypass RLS
         const body = await request.json();
 
         // Validate required fields
@@ -62,9 +62,9 @@ export async function POST(request: NextRequest) {
             map_height: body.map_height || 400,
             parking_title: body.parking_title || '',
             parking_description: body.parking_description || '',
-            parking_background_image_url: body.parking_background_image_url || '',
-            parking_button_text: body.parking_button_text || '',
-            parking_button_url: body.parking_button_url || '',
+            parking_background_image: body.parking_background_image || '',
+            parking_maps_download_url: body.parking_maps_download_url || '',
+            google_maps_url: body.google_maps_url || '',
             show_parking_section: body.show_parking_section || false,
             show_map_section: body.show_map_section !== false, // Default to true
             is_active: body.is_active !== false, // Default to true
@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
     try {
-        const supabase = createClient(true); // Use service role to bypass RLS
+        const supabase = await createClient(true); // Use service role to bypass RLS
         const body = await request.json();
 
         if (!body.id) {
@@ -111,9 +111,9 @@ export async function PUT(request: NextRequest) {
             map_height: body.map_height || 400,
             parking_title: body.parking_title || '',
             parking_description: body.parking_description || '',
-            parking_background_image_url: body.parking_background_image_url || '',
-            parking_button_text: body.parking_button_text || '',
-            parking_button_url: body.parking_button_url || '',
+            parking_background_image: body.parking_background_image || '',
+            parking_maps_download_url: body.parking_maps_download_url || '',
+            google_maps_url: body.google_maps_url || '',
             show_parking_section: body.show_parking_section || false,
             show_map_section: body.show_map_section !== false, // Default to true
             is_active: body.is_active !== false, // Default to true

@@ -52,7 +52,7 @@ export default function ContactMapTab() {
         }
     };
 
-    const handleInputChange = (field: keyof ContactMapSettingsInput, value: string | boolean) => {
+    const handleInputChange = (field: keyof ContactMapSettingsInput, value: string | boolean | number) => {
         setFormData(prev => ({
             ...prev,
             [field]: value

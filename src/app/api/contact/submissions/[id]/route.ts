@@ -5,16 +5,17 @@ import { ContactFormSubmissionResponse, ContactFormSubmissionUpdate } from "@/ty
 // GET /api/contact/submissions/[id] - Get single submission (admin only)
 export async function GET(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         // Use service role for admin operations to bypass RLS
         const supabase = await createClient(true);
+        const { id } = await params;
 
         const { data: submission, error: fetchError } = await supabase
             .from("contact_form_submissions")
             .select("*")
-            .eq("id", params.id)
+            .eq("id", id)
             .single();
 
         if (fetchError) {
@@ -49,11 +50,12 @@ export async function GET(
 // PATCH /api/contact/submissions/[id] - Update submission (admin only)
 export async function PATCH(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         // Use service role for admin operations to bypass RLS
         const supabase = await createClient(true);
+        const { id } = await params;
 
         const updateData: ContactFormSubmissionUpdate = await request.json();
 
@@ -81,7 +83,7 @@ export async function PATCH(
         const { data: updatedSubmission, error: updateError } = await supabase
             .from("contact_form_submissions")
             .update(updateObject)
-            .eq("id", params.id)
+            .eq("id", id)
             .select()
             .single();
 
@@ -117,16 +119,17 @@ export async function PATCH(
 // DELETE /api/contact/submissions/[id] - Delete submission (admin only)
 export async function DELETE(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         // Use service role for admin operations to bypass RLS
         const supabase = await createClient(true);
+        const { id } = await params;
 
         const { error: deleteError } = await supabase
             .from("contact_form_submissions")
             .delete()
-            .eq("id", params.id);
+            .eq("id", id);
 
         if (deleteError) {
             throw deleteError;
