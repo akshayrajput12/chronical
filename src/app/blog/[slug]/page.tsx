@@ -1,55 +1,36 @@
-"use client";
-
-import React, { useState, useEffect } from "react";
-import { useParams, notFound } from "next/navigation";
+import React from "react";
+import { notFound } from "next/navigation";
 import Head from "next/head";
 import BlogDetailHero from "@/components/blog/blog-detail-hero";
 import BlogDetailContent from "@/components/blog/blog-detail-content";
-import BlogRelatedPosts from "@/components/blog/blog-related-posts";
+import BlogRelatedPostsServer from "@/components/blog/blog-related-posts-server";
 import { BlogPostWithDetails } from "@/types/blog";
 import { EventsForm } from "@/app/whats-on/components/events-form";
+import { getBlogDetailPageData, incrementBlogPostViews } from "@/services/blog-page.service";
 
 interface BlogDetailPageProps {
-    params: { slug: string };
+    params: Promise<{ slug: string }>;
 }
 
-const BlogDetailPage = () => {
-    const params = useParams();
-    const slug = params.slug as string;
-    const [blogPost, setBlogPost] = useState<BlogPostWithDetails | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+const BlogDetailPage = async ({ params }: BlogDetailPageProps) => {
+    // Await params for Next.js 15 compatibility
+    const resolvedParams = await params;
+    const { slug } = resolvedParams;
 
-    // Fetch blog post data
-    useEffect(() => {
-        const fetchBlogPost = async () => {
-            try {
-                setLoading(true);
-                const response = await fetch(`/api/blog/posts/${slug}`);
+    // Fetch blog post data server-side
+    const blogDetailData = await getBlogDetailPageData(slug);
 
-                if (response.status === 404) {
-                    notFound();
-                    return;
-                }
+    // If no blog post found, trigger 404
+    if (!blogDetailData || !blogDetailData.post) {
+        notFound();
+    }
 
-                if (!response.ok) {
-                    throw new Error("Failed to fetch blog post");
-                }
+    const { post: blogPost, relatedPosts } = blogDetailData;
 
-                const data = await response.json();
-                setBlogPost(data);
-            } catch (error) {
-                console.error("Error fetching blog post:", error);
-                setError("Failed to load blog post");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        if (slug) {
-            fetchBlogPost();
-        }
-    }, [slug]);
+    // Increment view count server-side (fire and forget)
+    incrementBlogPostViews(blogPost.slug).catch(error => {
+        console.error("Failed to increment view count:", error);
+    });
 
     // Format date for display
     const formatDate = (dateString: string) => {
@@ -59,35 +40,6 @@ const BlogDetailPage = () => {
             day: "numeric",
         });
     };
-
-    if (loading) {
-        return (
-            <div className="min-h-screen bg-white mt-16 md:mt-20 lg:mt-24">
-                <div className="flex items-center justify-center h-64">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#a5cd39]"></div>
-                    <p className="text-gray-600 ml-4">Loading blog post...</p>
-                </div>
-            </div>
-        );
-    }
-
-    if (error || !blogPost) {
-        return (
-            <div className="min-h-screen bg-white mt-16 md:mt-20 lg:mt-24">
-                <div className="flex flex-col items-center justify-center h-64">
-                    <p className="text-red-600 mb-4">
-                        {error || "Blog post not found"}
-                    </p>
-                    <button
-                        onClick={() => window.history.back()}
-                        className="bg-[#a5cd39] hover:bg-[#8fb82e] text-white px-6 py-2 rounded-md"
-                    >
-                        Go Back
-                    </button>
-                </div>
-            </div>
-        );
-    }
 
     return (
         <>
@@ -214,8 +166,8 @@ const BlogDetailPage = () => {
                         content={blogPost.content || ""}
                         excerpt={blogPost.excerpt}
                     />
-                    <BlogRelatedPosts
-                        currentPostId={blogPost.id}
+                    <BlogRelatedPostsServer
+                        relatedPosts={relatedPosts}
                         currentPostSlug={blogPost.slug}
                     />
                 </div>

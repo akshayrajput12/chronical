@@ -9,6 +9,7 @@ import PortfolioGalleryHeading from "./components/portfolio-gallery-heading";
 import PortfolioGallery from "../portfolio/components/portfolio-gallery";
 import ConferenceSolutionSection from "./components/conference-solution-section";
 import BoothRequirementsForm from "../home/components/booth-requirements-form";
+import { getPortfolioPageData } from "@/services/portfolio-page.service";
 
 export const metadata: Metadata = {
     title: "Conference Organizers in Dubai | Chronicle Exhibits - Event Management Services",
@@ -24,7 +25,10 @@ export const metadata: Metadata = {
     },
 };
 
-function ConferencePage() {
+async function ConferencePage() {
+    // Fetch portfolio data server-side
+    const portfolioData = await getPortfolioPageData();
+
     return (
         <div className="flex flex-col relative ">
             <ConferenceHero />
@@ -33,7 +37,7 @@ function ConferencePage() {
             <CommunicateSection />
             <VirtualEventsSection />
             <PortfolioGalleryHeading />
-            <PortfolioGallery />
+            <PortfolioGallery portfolioItems={portfolioData.portfolioItems} />
             <BoothRequirementsForm />
         </div>
     );

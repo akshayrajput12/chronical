@@ -1,69 +1,32 @@
 "use client";
 
 import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
-import {
-    getWhySection,
-    WhySection as WhySectionType,
-} from "@/services/why-section.service";
+import React, { useRef } from "react";
+import { WhySection as WhySectionType } from "@/services/why-section.service";
 
-const WhySection = () => {
+interface WhySectionProps {
+    whyData: WhySectionType | null;
+}
+
+const WhySection: React.FC<WhySectionProps> = ({ whyData: propWhyData }) => {
     const ref = useRef(null);
-    const [whyData, setWhyData] = useState<WhySectionType | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
 
-    // Fetch why section data
-    useEffect(() => {
-        const fetchWhySection = async () => {
-            try {
-                console.log("Fetching why section data for frontend component");
-                const data = await getWhySection();
-                if (data) {
-                    console.log("Why section data received in frontend:", data);
-                    console.log("Media type:", data.media_type);
-                    console.log("Video URL:", data.video_url);
-                    console.log("Image URL:", data.image_url);
-                    setWhyData(data);
-                }
-            } catch (error) {
-                console.error("Error fetching why section data:", error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        fetchWhySection();
-    }, []);
-
-    // Show loading state or fallback if data is not available
-    if (isLoading) {
+    // Handle case where no data is provided
+    if (!propWhyData) {
         return (
-            <section
-                className="relative overflow-hidden w-full py-8 md:py-12 lg:py-20 z-10"
-                id="why-section"
-            >
-                <div className="container mx-auto px-4">
-                    <div className="max-w-6xl mx-auto bg-white shadow-xl rounded-lg p-6 md:p-10 lg:p-16 animate-pulse">
-                        <div className="h-6 md:h-8 bg-gray-200 rounded w-1/2 md:w-1/3 mx-auto mb-6 md:mb-8"></div>
-                        <div className="h-1 md:h-2 bg-gray-200 rounded w-12 md:w-16 mx-auto mb-6 md:mb-8"></div>
-                        <div className="h-3 md:h-4 bg-gray-200 rounded w-3/4 md:w-2/3 mx-auto mb-8 md:mb-12 lg:mb-16"></div>
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-16">
-                            <div className="order-2 lg:order-1">
-                                <div className="h-3 md:h-4 bg-gray-200 rounded w-full mb-3 md:mb-4"></div>
-                                <div className="h-3 md:h-4 bg-gray-200 rounded w-full mb-3 md:mb-4"></div>
-                                <div className="h-3 md:h-4 bg-gray-200 rounded w-full mb-3 md:mb-4"></div>
-                                <div className="h-3 md:h-4 bg-gray-200 rounded w-3/4"></div>
-                            </div>
-                            <div className="order-1 lg:order-2">
-                                <div className="h-3 md:h-4 bg-gray-200 rounded w-full mb-4 md:mb-8"></div>
-                                <div className="h-48 md:h-56 lg:h-64 bg-gray-200 rounded w-full"></div>
-                            </div>
-                        </div>
-                    </div>
+            <div className="py-16 bg-gray-50">
+                <div className="container mx-auto px-4 text-center">
+                    <p className="text-gray-600">Why section data is not available.</p>
                 </div>
-            </section>
+            </div>
         );
     }
+
+    const whyData = propWhyData;
+
+
+
+
 
     return (
         <section

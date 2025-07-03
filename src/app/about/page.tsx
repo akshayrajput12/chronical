@@ -1,16 +1,21 @@
 import React from 'react'
+import { getAboutPageData } from '@/services/about-page.service'
 import AboutHero from './components/about-hero'
-import AboutUsMain from './components/about-us-main'
-import AboutUsDescription from './components/about-us-description'
-import DedicationSection from './components/dedication-section'
+import AboutUsMainServer from './components/about-us-main-server'
+import AboutUsDescriptionServer from './components/about-us-description-server'
+import DedicationSectionServer from './components/dedication-section-server'
 
-function AboutPage() {
+// Server component that fetches data at build/request time for better SEO
+async function AboutPage() {
+  // Fetch all about page data server-side for SEO optimization
+  const aboutPageData = await getAboutPageData()
+
   return (
     <div className="flex flex-col relative">
       <AboutHero />
-      <AboutUsMain />
-      <AboutUsDescription />
-      <DedicationSection />
+      <AboutUsMainServer mainSectionData={aboutPageData.mainSection} />
+      <AboutUsDescriptionServer descriptionSectionData={aboutPageData.descriptionSection} />
+      <DedicationSectionServer dedicationSectionData={aboutPageData.dedicationSection} />
     </div>
   )
 }

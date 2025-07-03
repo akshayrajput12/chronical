@@ -1,53 +1,24 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { Easing, motion, useAnimation, Variants } from "framer-motion";
 import ImageScrollGrid from "./image-scroll-grid";
 import { AnimationGeneratorType } from "framer-motion";
 import Link from "next/link";
-import { NewCompanyService } from "@/services/new-company.service";
 import { NewCompanySection, NewCompanyImage } from "@/types/new-company";
 
-const NewCompany = () => {
+interface NewCompanyProps {
+    newCompanyData: NewCompanySection | null;
+    newCompanyImages: Record<number, NewCompanyImage[]>;
+}
+
+const NewCompany: React.FC<NewCompanyProps> = ({ newCompanyData, newCompanyImages }) => {
     const controls = useAnimation();
     const ref = useRef<HTMLDivElement>(null);
-    const [sectionData, setSectionData] = useState<NewCompanySection | null>(
-        null,
-    );
-    const [images, setImages] = useState<Record<number, NewCompanyImage[]>>({});
-    const [loading, setLoading] = useState(true);
-
-    // Fetch section data
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                console.log("Fetching new company section data...");
-                const data = await NewCompanyService.getNewCompanySection();
-                if (data) {
-                    console.log("New company section data received:", data);
-                    setSectionData(data);
-
-                    console.log("Fetching new company images...");
-                    const imagesData =
-                        await NewCompanyService.getNewCompanyImagesByColumn(
-                            data.id,
-                        );
-                    console.log("New company images received:", imagesData);
-                    setImages(imagesData);
-                } else {
-                    console.error("No new company section data found");
-                }
-            } catch (error) {
-                console.error("Error fetching new company data:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchData();
-    }, []);
 
     useEffect(() => {
+        if (!newCompanyData) return;
+
         const element = ref.current;
 
         const observer = new IntersectionObserver(
@@ -71,7 +42,21 @@ const NewCompany = () => {
                 observer.unobserve(element);
             }
         };
-    }, [controls]);
+    }, [controls, newCompanyData]);
+
+    // Handle case where no data is provided
+    if (!newCompanyData) {
+        return (
+            <div className="py-16 bg-gray-50">
+                <div className="container mx-auto px-4 text-center">
+                    <p className="text-gray-600">New company section data is not available.</p>
+                </div>
+            </div>
+        );
+    }
+
+    const sectionData = newCompanyData;
+    const images = newCompanyImages;
 
     const containerVariants: Variants = {
         hidden: { opacity: 0 },
@@ -144,41 +129,6 @@ const NewCompany = () => {
     };
 
     // We no longer need the imageVariants and images arrays as we're using the ImageScrollGrid component
-
-    // Show loading state or fallback to default content
-    if (loading) {
-        return (
-            <section ref={ref} className="py-20 bg-white -mt-1 overflow-hidden">
-                <div className="container mx-auto px-4">
-                    <div className="flex flex-col lg:flex-row items-center justify-between">
-                        <div className="lg:w-1/2 lg:pr-16 mb-10 lg:mb-0">
-                            <div className="animate-pulse">
-                                <div className="h-8 bg-gray-200 rounded w-3/4 mb-4"></div>
-                                <div className="h-1 bg-gray-200 w-24 mt-2 mb-6"></div>
-                                <div className="h-24 bg-gray-200 rounded mb-6"></div>
-                                <div className="h-24 bg-gray-200 rounded mb-8"></div>
-                                <div className="h-10 bg-gray-200 rounded w-40"></div>
-                            </div>
-                        </div>
-                        <div className="lg:w-1/2">
-                            <div className="animate-pulse grid grid-cols-3 gap-4 h-[550px]">
-                                {[1, 2, 3].map(col => (
-                                    <div key={col} className="space-y-4">
-                                        {[1, 2].map(row => (
-                                            <div
-                                                key={`${col}-${row}`}
-                                                className="h-[400px] bg-gray-200 rounded-md"
-                                            ></div>
-                                        ))}
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        );
-    }
 
     // If no data is found, use default content
     if (!sectionData) {

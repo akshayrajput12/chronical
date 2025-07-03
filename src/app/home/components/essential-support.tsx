@@ -1,15 +1,25 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from "react";
-import { getEssentialSupportSection } from "@/services/essential-support.service";
+import React, { useRef } from "react";
 import { EssentialSupportSection } from "@/types/essential-support";
 
-const EssentialSupport = () => {
+interface EssentialSupportProps {
+    essentialSupportData: EssentialSupportSection | null;
+}
+
+const EssentialSupport: React.FC<EssentialSupportProps> = ({ essentialSupportData }) => {
     const ref = useRef<HTMLDivElement>(null);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
-    const [sectionData, setSectionData] =
-        useState<EssentialSupportSection | null>(null);
+
+    // Handle case where no data is provided
+    if (!essentialSupportData) {
+        return (
+            <div className="py-16 bg-gray-50">
+                <div className="container mx-auto px-4 text-center">
+                    <p className="text-gray-600">Essential support section data is not available.</p>
+                </div>
+            </div>
+        );
+    }
 
     // SVG Arrow component
     const ArrowSvg = () => (
@@ -32,32 +42,7 @@ const EssentialSupport = () => {
         </svg>
     );
 
-    // Fetch section data
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                console.log("Fetching essential support section data...");
-                const data = await getEssentialSupportSection();
-                if (data) {
-                    console.log(
-                        "Essential support section data received:",
-                        data,
-                    );
-                    setSectionData(data);
-                } else {
-                    console.error("No essential support section data found");
-                    setError("Failed to load essential support data");
-                }
-            } catch (error) {
-                console.error("Error fetching essential support data:", error);
-                setError("An error occurred while loading the data");
-            } finally {
-                setLoading(false);
-            }
-        };
 
-        fetchData();
-    }, []);
 
     // Render SVG icon from string
     const renderSvgIcon = (svgString: string) => {
@@ -81,8 +66,8 @@ const EssentialSupport = () => {
 
     // Sort categories by display order
     const getSortedCategories = () => {
-        if (sectionData?.categories) {
-            return [...sectionData.categories].sort(
+        if (essentialSupportData?.categories) {
+            return [...essentialSupportData.categories].sort(
                 (a, b) => a.display_order - b.display_order,
             );
         }
@@ -107,47 +92,7 @@ const EssentialSupport = () => {
 
     const categories = getSortedCategories();
 
-    // Show loading state
-    if (loading) {
-        return (
-            <section
-                className="py-20 bg-gray-100 overflow-hidden relative"
-                ref={ref}
-            >
-                <div className="container mx-auto px-4 text-center">
-                    <div className="flex flex-col items-center justify-center py-12">
-                        <div className="w-12 h-12 border-4 border-[#a5cd39] border-t-transparent rounded-full animate-spin mb-4"></div>
-                        <p className="text-gray-600">
-                            Loading essential support services...
-                        </p>
-                    </div>
-                </div>
-            </section>
-        );
-    }
 
-    // Show error state or no data state
-    if (error || !sectionData || categories.length === 0) {
-        return (
-            <section
-                className="py-20 bg-gray-100 overflow-hidden relative"
-                ref={ref}
-            >
-                <div className="container mx-auto px-4 text-center">
-                    <p className="text-red-500 mb-2">
-                        {error
-                            ? "Error loading content"
-                            : "No content available"}
-                    </p>
-                    <p className="text-gray-600">
-                        Essential support services are currently unavailable.
-                        Please check the admin panel to ensure data has been
-                        added.
-                    </p>
-                </div>
-            </section>
-        );
-    }
 
     return (
         <section
@@ -162,16 +107,16 @@ const EssentialSupport = () => {
             <div className="container mx-auto relative z-20">
                 <div className="text-center mb-12">
                     <h2 className="text-3xl md:text-4xl font-rubik font-bold mb-2">
-                        {sectionData.heading}{" "}
+                        {essentialSupportData.heading}{" "}
                         <span className="font-markazi font-normal">
-                            {sectionData.heading_span}
+                            {essentialSupportData.heading_span}
                         </span>
                     </h2>
                     <div className="flex justify-center">
                         <div className="h-1 bg-[#a5cd39] w-16 mt-2 mb-6"></div>
                     </div>
                     <p className="text-gray-600 font-markazi-text! text-2xl max-w-3xl mx-auto">
-                        {sectionData.description}
+                        {essentialSupportData.description}
                     </p>
                 </div>
 
@@ -223,10 +168,10 @@ const EssentialSupport = () => {
                             </div>
                             <div className="flex mt-8">
                                 <a
-                                    href={sectionData.cta_url}
+                                    href={essentialSupportData.cta_url}
                                     className="bg-[#a5cd39] text-white px-6 py-2 rounded-md font-medium hover:bg-[#94b933] transition-colors duration-300 uppercase font-noto-kufi-arabic text-sm"
                                 >
-                                    {sectionData.cta_text}
+                                    {essentialSupportData.cta_text}
                                 </a>
                             </div>
                         </div>

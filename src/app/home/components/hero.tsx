@@ -2,10 +2,13 @@
 import React, { useState, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
-import { getHeroSection } from "@/services/hero.service";
 import { AnimationGeneratorType, Variants } from "framer-motion";
 import { HeroSection as HeroSectionType } from "@/types/hero";
 import { useComponentLoading } from "@/hooks/use-minimal-loading";
+
+interface HeroSectionProps {
+    heroData: HeroSectionType | null;
+}
 
 // Static video path
 const staticVideoPath = "/videos/hero-background.mp4";
@@ -30,35 +33,12 @@ const defaultData: HeroSectionType = {
     ],
 };
 
-const HeroSection: React.FC = () => {
-    // State for hero data
-    const [heroData, setHeroData] = useState<HeroSectionType>(defaultData);
-    const [loading, setLoading] = useState(true);
+const HeroSection: React.FC<HeroSectionProps> = ({ heroData: propHeroData }) => {
+    // Use provided data or fallback to default
+    const heroData = propHeroData || defaultData;
     const [typingIndex, setTypingIndex] = useState(0);
     const [displayText, setDisplayText] = useState("");
     const [isDeleting, setIsDeleting] = useState(false);
-
-    // Use minimal loader for this component - won't block the entire screen
-    useComponentLoading(loading, "Loading hero section...");
-
-    // Fetch hero data from the database
-    useEffect(() => {
-        const fetchHeroData = async () => {
-            setLoading(true);
-            try {
-                const data = await getHeroSection();
-                if (data) {
-                    setHeroData(data);
-                }
-            } catch (error) {
-                console.error("Error fetching hero data:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchHeroData();
-    }, []);
 
     // Get typing texts from hero data
     const typingTexts = heroData.typing_texts.map(item => item.text);

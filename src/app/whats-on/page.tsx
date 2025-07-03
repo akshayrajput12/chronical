@@ -1,7 +1,8 @@
 import React from 'react'
 import { Metadata } from 'next'
-import EventsHero from './components/events-hero'
-import EventsGallery from './components/events-gallery'
+import EventsHeroServer from './components/events-hero-server'
+import EventsGalleryServer from './components/events-gallery-server'
+import { getEventsPageData } from '@/services/event-page.service'
 
 export const metadata: Metadata = {
   title: "What's On | Chronicle Exhibits - Upcoming Exhibitions & Events",
@@ -14,11 +15,18 @@ export const metadata: Metadata = {
   },
 }
 
-function WhatsOnPage() {
+async function WhatsOnPage() {
+  // Fetch events page data server-side
+  const eventsPageData = await getEventsPageData(50, 0, true);
+
   return (
     <div className="flex flex-col relative">
-      <EventsHero />
-      <EventsGallery />
+      <EventsHeroServer hero={eventsPageData.hero} />
+      <EventsGalleryServer
+        events={eventsPageData.events}
+        totalCount={eventsPageData.totalCount}
+        hasMore={eventsPageData.hasMore}
+      />
     </div>
   )
 }

@@ -2,69 +2,20 @@
 
 import { Mail, PhoneCall } from "lucide-react";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { ContactGroupCompany } from "@/types/contact";
-import { contactPageService } from "@/lib/services/contact";
 
 function formatPhoneHref(phone: string) {
     // Remove spaces, parentheses, and dashes for tel: links
     return phone.replace(/[\s()-]/g, "");
 }
 
-const GroupCompanies = () => {
-    const [companies, setCompanies] = useState<ContactGroupCompany[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string>("");
+interface ContactInfoProps {
+    groupCompanies: ContactGroupCompany[];
+}
 
-    useEffect(() => {
-        const fetchCompanies = async () => {
-            try {
-                const data = await contactPageService.getGroupCompanies();
-                setCompanies(data);
-            } catch (error) {
-                console.error("Error fetching group companies:", error);
-                setError("Failed to load company information. Please refresh the page.");
-                setCompanies([]);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchCompanies();
-    }, []);
-
-    if (loading) {
-        return (
-            <section className="bg-[#101e36] py-12">
-                <div className="container mx-auto px-4">
-                    <div className="text-center text-white">
-                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto"></div>
-                        <p className="mt-4">Loading group companies...</p>
-                    </div>
-                </div>
-            </section>
-        );
-    }
-
-    if (error) {
-        return (
-            <section className="bg-[#101e36] py-12">
-                <div className="container mx-auto px-4">
-                    <div className="text-center text-white">
-                        <p className="text-red-400 mb-4">{error}</p>
-                        <button
-                            onClick={() => window.location.reload()}
-                            className="bg-[#a5cd39] hover:bg-[#8fb32a] text-white px-6 py-2 rounded-md font-medium transition-colors duration-200"
-                        >
-                            Retry
-                        </button>
-                    </div>
-                </div>
-            </section>
-        );
-    }
-
-    if (companies.length === 0) {
+const ContactInfo: React.FC<ContactInfoProps> = ({ groupCompanies }) => {
+    if (groupCompanies.length === 0) {
         return (
             <section className="bg-[#101e36] py-12">
                 <div className="container mx-auto px-4">
@@ -86,7 +37,7 @@ const GroupCompanies = () => {
                     <div className="h-1 bg-[#a5cd39] w-16 mt-1 mb-6"></div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {companies.map(company => (
+                    {groupCompanies.map(company => (
                         <div
                             key={company.id}
                             className="bg-white shadow-lg p-8 border-t-4 border-[#a5cd39] flex flex-col h-full hover:-translate-y-1 hover:shadow-xl transition-all duration-300"
@@ -126,4 +77,4 @@ const GroupCompanies = () => {
     );
 };
 
-export default GroupCompanies;
+export default ContactInfo;

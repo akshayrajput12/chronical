@@ -1,11 +1,27 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: [
-      'images.unsplash.com',
-      'img.clerk.com',
-      'vuceqeajjczcjeqadbqv.supabase.co', // Old Supabase URL
-      'weyctebrsboqjfkntyfd.supabase.co', // New Supabase URL
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'img.clerk.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'vuceqeajjczcjeqadbqv.supabase.co',
+      },
+      {
+        protocol: 'https',
+        hostname: 'weyctebrsboqjfkntyfd.supabase.co',
+      },
+      {
+        protocol: 'https',
+        hostname: 'encrypted-tbn0.gstatic.com',
+      },
     ],
   }
 }

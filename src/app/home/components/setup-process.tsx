@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState, useMemo } from "react";
+import React, { useEffect, useRef, useMemo } from "react";
 import {
     AnimationGeneratorType,
     Easing,
@@ -8,22 +8,20 @@ import {
     useAnimation,
     Variants,
 } from "framer-motion";
-import { getSetupProcessData } from "@/services/setup-process.service";
 import {
     SetupProcessDisplayData,
     SetupProcessStep,
 } from "@/types/setup-process";
 
-const SetupProcess = () => {
+interface SetupProcessProps {
+    setupData: SetupProcessDisplayData | null;
+}
+
+const SetupProcess: React.FC<SetupProcessProps> = ({ setupData: propSetupData }) => {
     const controls = useAnimation();
     const ref = useRef<HTMLDivElement>(null);
 
-    // State for setup process data
-    const [setupData, setSetupData] = useState<SetupProcessDisplayData | null>(
-        null,
-    );
-    const [loading, setLoading] = useState(true);
-
+    // Handle case where no data is provided - use default fallback
     // Default fallback data - memoized to prevent unnecessary re-renders
     const defaultData: SetupProcessDisplayData = useMemo(
         () => ({
@@ -77,32 +75,8 @@ const SetupProcess = () => {
         [],
     );
 
-    // Fetch setup process data from database
-    useEffect(() => {
-        const fetchSetupProcessData = async () => {
-            try {
-                console.log("Fetching setup process data...");
-                const data = await getSetupProcessData();
-                console.log("Setup process data received:", data);
-
-                if (data) {
-                    setSetupData(data);
-                } else {
-                    console.log(
-                        "No setup process data found, using default data",
-                    );
-                    setSetupData(defaultData);
-                }
-            } catch (error) {
-                console.error("Error fetching setup process data:", error);
-                setSetupData(defaultData);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchSetupProcessData();
-    }, [defaultData]);
+    // Use provided data or fallback to default
+    const setupData = propSetupData || defaultData;
 
     useEffect(() => {
         const element = ref.current;
@@ -238,26 +212,7 @@ const SetupProcess = () => {
         },
     };
 
-    // Show loading state
-    if (loading) {
-        return (
-            <section
-                ref={ref}
-                className="relative py-16 md:py-20 text-white bg-cover bg-center bg-no-repeat bg-gray-900"
-            >
-                <div className="container mx-auto px-4">
-                    <div className="flex items-center justify-center min-h-[400px]">
-                        <div className="text-center">
-                            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#a5cd39] mx-auto"></div>
-                            <p className="mt-4 text-gray-300">
-                                Loading setup process...
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        );
-    }
+
 
     // Use setupData or fallback to defaultData
     const data = setupData || defaultData;
@@ -319,7 +274,7 @@ const SetupProcess = () => {
                                         <div className="border-t-2 border-gray-400 absolute w-24 top-1/2 right-32"></div>
                                     </div>
                                     <div className="flex flex-row md:flex-row justify-center space-x-4 md:space-x-6 lg:space-x-10">
-                                        {data.how_to_apply_steps.map(
+                                        {(data?.how_to_apply_steps || []).map(
                                             (step, index) => (
                                                 <motion.div
                                                     key={step.id}
@@ -363,7 +318,7 @@ const SetupProcess = () => {
                                     <div className="border-t-2 border-gray-400 absolute w-24 top-1/2 right-32"></div>
                                 </div>
                                 <div className="flex flex-row md:flex-row justify-center space-x-4 md:space-x-6 lg:space-x-10">
-                                    {data.getting_started_steps.map(
+                                    {(data?.getting_started_steps || []).map(
                                         (step, index) => (
                                             <motion.div
                                                 key={step.id}

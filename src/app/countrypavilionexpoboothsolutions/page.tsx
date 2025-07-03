@@ -1,11 +1,12 @@
 import React from "react";
 import { Metadata } from "next";
-import DynamicCountryPavilionHero from "./components/dynamic-country-pavilion-hero";
-import DynamicCountryPavilionIntroSection from "./components/dynamic-country-pavilion-intro-section";
-import DynamicExceptionalDesignSection from "./components/dynamic-exceptional-design-section";
-import DynamicPortfolioGrid from "./components/dynamic-portfolio-grid";
+import { getCountryPavilionPageData } from "@/services/country-pavilion-page.service";
+import CountryPavilionHeroServer from "./components/country-pavilion-hero-server";
+import CountryPavilionIntroSectionServer from "./components/country-pavilion-intro-section-server";
+import ExceptionalDesignSectionServer from "./components/exceptional-design-section-server";
+import PortfolioGridServer from "./components/portfolio-grid-server";
 import BoothRequirementsForm from "../home/components/booth-requirements-form";
-import ExpoPavilionParagraphSection from "./components/expo-pavilion-paragraph-section";
+import ExpoPavilionParagraphSectionServer from "./components/expo-pavilion-paragraph-section-server";
 
 export const metadata: Metadata = {
     title: "Country Pavilion Expo Booth Design UAE | Chronicle Exhibits",
@@ -19,14 +20,24 @@ export const metadata: Metadata = {
     },
 };
 
-function CountryPavilionExpoBoothSolutionsPage() {
+// Server component that fetches data at build/request time for better SEO
+async function CountryPavilionExpoBoothSolutionsPage() {
+    // Fetch all country pavilion page data server-side for SEO optimization
+    const countryPavilionPageData = await getCountryPavilionPageData();
+
     return (
         <div className="flex flex-col relative">
-            <DynamicCountryPavilionHero />
-            <DynamicCountryPavilionIntroSection />
-            <DynamicExceptionalDesignSection />
-            <DynamicPortfolioGrid />
-            <ExpoPavilionParagraphSection />
+            <CountryPavilionHeroServer heroData={countryPavilionPageData.hero} />
+            <CountryPavilionIntroSectionServer introData={countryPavilionPageData.intro} />
+            <ExceptionalDesignSectionServer
+                exceptionalDesignData={countryPavilionPageData.exceptionalDesign}
+                designBenefitsData={countryPavilionPageData.designBenefits}
+            />
+            <PortfolioGridServer
+                portfolioSectionData={countryPavilionPageData.portfolioSection}
+                portfolioItemsData={countryPavilionPageData.portfolioItems}
+            />
+            <ExpoPavilionParagraphSectionServer paragraphSectionData={countryPavilionPageData.paragraphSection} />
             <BoothRequirementsForm />
         </div>
     );

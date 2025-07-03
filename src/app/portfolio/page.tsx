@@ -2,8 +2,8 @@ import React from "react";
 import { Metadata } from "next";
 import PortfolioGallery from "./components/portfolio-gallery";
 import BoothRequirements from "./components/booth-requirements";
-import AboutHero from "../about/components/about-hero";
 import PortfolioHero from "./components/portfolio-hero";
+import { getPortfolioPageData } from "@/services/portfolio-page.service";
 
 export const metadata: Metadata = {
     title: "Portfolio | Chronicle Exhibits - Exhibition Stand Design Gallery",
@@ -19,11 +19,14 @@ export const metadata: Metadata = {
     },
 };
 
-function PortfolioPage() {
+async function PortfolioPage() {
+    // Fetch all portfolio data server-side for SEO optimization
+    const portfolioData = await getPortfolioPageData();
+
     return (
         <div className="flex flex-col relative mt-16 md:mt-20 lg:mt-24">
-            <PortfolioHero />
-            <PortfolioGallery />
+            <PortfolioHero heroData={portfolioData.hero} />
+            <PortfolioGallery portfolioItems={portfolioData.portfolioItems} />
             <BoothRequirements />
         </div>
     );

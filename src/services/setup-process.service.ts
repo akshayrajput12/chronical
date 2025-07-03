@@ -14,20 +14,15 @@ import {
  */
 export async function getSetupProcessData(): Promise<SetupProcessDisplayData | null> {
     try {
-        console.log("Attempting to fetch setup process data...");
-        
         // Try to use the new function first
         try {
             const { data, error } = await supabase.rpc('get_setup_process_section_with_image');
-            console.log("RPC call result:", { data, error });
 
             if (error) {
-                console.warn("RPC function failed, falling back to direct queries:", error);
                 throw error; // This will trigger the fallback
             }
 
             if (!data || data.length === 0) {
-                console.log("No data returned from RPC function");
                 return null;
             }
 
@@ -48,7 +43,7 @@ export async function getSetupProcessData(): Promise<SetupProcessDisplayData | n
                 getting_started_steps: gettingStartedSteps,
             };
         } catch (rpcError) {
-            console.log("RPC failed, using fallback approach...");
+
             
             // Fallback: Get section data directly
             const { data: sectionData, error: sectionError } = await supabase

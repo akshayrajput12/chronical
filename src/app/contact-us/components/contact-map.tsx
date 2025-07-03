@@ -1,61 +1,36 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { ContactMapSettings } from "@/types/contact";
-import { contactPageService } from "@/lib/services/contact";
 
-const ContactMap = () => {
-    const [mapSettings, setMapSettings] = useState<ContactMapSettings | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string>("");
+interface ContactMapProps {
+    mapSettings: ContactMapSettings | null;
+}
 
-    useEffect(() => {
-        const fetchMapSettings = async () => {
-            try {
-                const settings = await contactPageService.getMapSettings();
-                setMapSettings(settings);
-            } catch (error) {
-                console.error("Error fetching map settings:", error);
-                setError("Failed to load map settings. Please refresh the page.");
-                setMapSettings(null);
-            } finally {
-                setLoading(false);
-            }
-        };
+const ContactMap: React.FC<ContactMapProps> = ({ mapSettings }) => {
+    // Default fallback data
+    const defaultMapSettings: ContactMapSettings = {
+        id: "default",
+        map_embed_url: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3610.1234567890!2d55.2708!3d25.2048!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjXCsDEyJzE3LjMiTiA1NcKwMTYnMTQuOSJF!5e0!3m2!1sen!2sae!4v1234567890123",
+        map_title: "Chronicle Exhibits Location",
+        map_height: 400,
+        parking_title: "Parking Information",
+        parking_description: "Free parking available on-site",
+        parking_background_image: "",
+        parking_maps_download_url: "",
+        google_maps_url: "https://maps.google.com",
+        show_parking_section: false,
+        show_map_section: true,
+        is_active: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+    };
 
-        fetchMapSettings();
-    }, []);
+    const displayData = mapSettings || defaultMapSettings;
 
-    if (loading) {
-        return (
-            <section className="py-8 md:py-12 lg:py-16 !pb-0 bg-white">
-                <div className="mx-auto">
-                    <div className="text-center">
-                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#a5cd39] mx-auto"></div>
-                        <p className="mt-4 text-gray-600">Loading map...</p>
-                    </div>
-                </div>
-            </section>
-        );
-    }
-
-    if (error || !mapSettings) {
-        return (
-            <section className="py-8 md:py-12 lg:py-16 !pb-0 bg-white">
-                <div className="mx-auto">
-                    <div className="text-center">
-                        <p className="text-red-600 mb-4">{error || "Error loading map settings. Please refresh the page."}</p>
-                        <button
-                            onClick={() => window.location.reload()}
-                            className="bg-[#a5cd39] hover:bg-[#8fb32a] text-white px-6 py-2 rounded-md font-medium transition-colors duration-200"
-                        >
-                            Retry
-                        </button>
-                    </div>
-                </div>
-            </section>
-        );
+    if (!displayData.show_map_section) {
+        return null;
     }
 
     return (
@@ -68,22 +43,22 @@ const ContactMap = () => {
                         transition={{ duration: 0.6, delay: 0.4 }}
                         viewport={{ once: true }}
                     >
-                        <div className="w-full" style={{ height: `${mapSettings.map_height}px` }}>
+                        <div className="w-full" style={{ height: `${displayData.map_height}px` }}>
                             <iframe
-                                src={mapSettings.map_embed_url}
+                                src={displayData.map_embed_url}
                                 width="100%"
                                 height="100%"
                                 style={{ border: 0 }}
                                 allowFullScreen
                                 loading="lazy"
                                 referrerPolicy="no-referrer-when-downgrade"
-                                title={mapSettings.map_title}
+                                title={displayData.map_title}
                             ></iframe>
                         </div>
-                        {mapSettings.google_maps_url && (
+                        {displayData.google_maps_url && (
                             <div className="text-center mt-4">
                                 <a
-                                    href={mapSettings.google_maps_url}
+                                    href={displayData.google_maps_url}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="inline-block bg-[#a5cd39] hover:bg-[#8fb32a] text-white px-6 py-2 rounded-md font-medium transition-colors duration-200"

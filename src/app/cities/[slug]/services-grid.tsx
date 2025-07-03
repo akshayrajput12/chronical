@@ -1,3 +1,5 @@
+"use client";
+
 import { LegacyCity } from "@/types/cities";
 import Image from "next/image";
 import React from "react";

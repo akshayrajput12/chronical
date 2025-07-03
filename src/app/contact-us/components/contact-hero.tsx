@@ -1,59 +1,27 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { ContactHeroSection } from "@/types/contact";
-import { contactPageService } from "@/lib/services/contact";
 
-const ContactHero = () => {
-    const [heroData, setHeroData] = useState<ContactHeroSection | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string>("");
+interface ContactHeroProps {
+    heroData: ContactHeroSection | null;
+}
 
-    useEffect(() => {
-        const fetchHeroData = async () => {
-            try {
-                const data = await contactPageService.getHeroSection();
-                setHeroData(data);
-            } catch (error) {
-                console.error("Error fetching hero data:", error);
-                setError("Failed to load page content. Please refresh the page.");
-                setHeroData(null);
-            } finally {
-                setLoading(false);
-            }
-        };
+const ContactHero: React.FC<ContactHeroProps> = ({ heroData }) => {
+    // Default fallback data
+    const defaultHeroData: ContactHeroSection = {
+        id: "default",
+        title: "Contact Us",
+        subtitle: "Get in Touch with Our Team",
+        background_image_url: "",
+        is_active: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+    };
 
-        fetchHeroData();
-    }, []);
-
-    if (loading) {
-        return (
-            <section className="relative 2xl:h-[60vh] h-[75vh] flex items-center justify-center overflow-hidden bg-gray-900">
-                <div className="text-white text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto"></div>
-                    <p className="mt-4">Loading...</p>
-                </div>
-            </section>
-        );
-    }
-
-    if (error || !heroData) {
-        return (
-            <section className="relative 2xl:h-[60vh] h-[75vh] flex items-center justify-center overflow-hidden bg-gray-900">
-                <div className="text-white text-center">
-                    <p className="text-red-400 mb-4">{error || "Failed to load page content"}</p>
-                    <button
-                        onClick={() => window.location.reload()}
-                        className="bg-[#a5cd39] hover:bg-[#8fb32a] text-white px-6 py-2 rounded-md font-medium transition-colors duration-200"
-                    >
-                        Retry
-                    </button>
-                </div>
-            </section>
-        );
-    }
+    const displayData = heroData || defaultHeroData;
 
     return (
         <section className="relative 2xl:h-[60vh] h-[75vh] flex items-center justify-center overflow-hidden">
@@ -61,7 +29,7 @@ const ContactHero = () => {
             <div
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat"
                 style={{
-                    backgroundImage: `url('${heroData.background_image_url}')`,
+                    backgroundImage: displayData.background_image_url ? `url('${displayData.background_image_url}')` : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                 }}
             />
 
@@ -76,7 +44,7 @@ const ContactHero = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.2 }}
                 >
-                    {heroData.title}
+                    {displayData.title}
                 </motion.h1>
 
                 <motion.h3
@@ -85,7 +53,7 @@ const ContactHero = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.4 }}
                 >
-                    {heroData.subtitle}
+                    {displayData.subtitle}
                 </motion.h3>
             </div>
 

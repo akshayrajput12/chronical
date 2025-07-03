@@ -87,36 +87,36 @@ export async function GET(request: NextRequest) {
             groupCompanies: groupCompaniesData || [
                 {
                     id: "default-1",
-                    name: "Triumfo Europe",
+                    region: "Triumfo Europe",
                     description: "European operations and services",
                     address: "Zum see 7, 14542 Werder (Havel), Germany",
                     phone: "+49 (0) 33 2774 99-100",
                     email: "enquiry@triumfo.de",
-                    display_order: 1,
+                    sort_order: 1,
                     is_active: true,
                     created_at: new Date().toISOString(),
                     updated_at: new Date().toISOString()
                 },
                 {
                     id: "default-2",
-                    name: "Triumfo United States",
+                    region: "Triumfo United States",
                     description: "North American operations and services",
                     address: "2782 Abels Ln, Las Vegas, NV 89115, USA",
                     phone: "+1 702 992 0440",
                     email: "enquiry@triumfo.us",
-                    display_order: 2,
+                    sort_order: 2,
                     is_active: true,
                     created_at: new Date().toISOString(),
                     updated_at: new Date().toISOString()
                 },
                 {
                     id: "default-3",
-                    name: "Triumfo India",
+                    region: "Triumfo India",
                     description: "Indian operations and services",
                     address: "A-65 Sector-83, Phase II, Noida – 201305, India",
                     phone: "+91-0120-4690699",
                     email: "enquiry@triumfo.in",
-                    display_order: 3,
+                    sort_order: 3,
                     is_active: true,
                     created_at: new Date().toISOString(),
                     updated_at: new Date().toISOString()

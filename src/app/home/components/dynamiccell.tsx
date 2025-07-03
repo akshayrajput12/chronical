@@ -3,8 +3,9 @@
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import { motion, useInView, useAnimation, Easing } from "framer-motion";
-import { supabase } from "@/lib/supabase";
+
 import { DynamicCellDisplayData } from "@/types/dynamic-cell";
+import { getImageUrlForBucket } from "@/utils/image-url";
 
 const defaultImage = {
     src: "/images/home.jpg", // Fallback image
@@ -138,19 +139,21 @@ interface BusinessSection {
     stats: BusinessStat[];
 }
 
-const DynamicCell = () => {
+interface DynamicCellProps {
+    dynamicCellData: DynamicCellDisplayData | null;
+    businessData: BusinessSection | null;
+}
+
+const DynamicCell: React.FC<DynamicCellProps> = ({ dynamicCellData: propDynamicCellData, businessData: propBusinessData }) => {
     const controls = useAnimation();
     const ref = useRef(null);
     const isInView = useInView(ref, { once: false, amount: 0.3 });
 
-    const [businessData, setBusinessData] = useState<BusinessSection | null>(
-        null,
-    );
-    const [dynamicCellData, setDynamicCellData] =
-        useState<DynamicCellDisplayData | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
     const [imageError, setImageError] = useState(false);
+
+    // Handle case where no data is provided
+    const businessData = propBusinessData || hardcodedBusinessData;
+    const dynamicCellData = propDynamicCellData;
 
     useEffect(() => {
         if (isInView) {
@@ -193,163 +196,8 @@ const DynamicCell = () => {
         },
     };
 
-    useEffect(() => {
-        const fetchAllData = async () => {
-            setLoading(true);
-            setError(null);
 
-            try {
-                console.log(
-                    "Fetching business section and dynamic cell data...",
-                );
 
-                // Fetch dynamic cell data first
-                const { data: dynamicCellSection, error: dynamicCellError } =
-                    await supabase.rpc("get_dynamic_cell_section");
-
-                if (dynamicCellError) {
-                    console.error(
-                        "Error fetching dynamic cell data:",
-                        dynamicCellError,
-                    );
-                    // Set image error flag to use hardcoded fallback
-                    setImageError(true);
-                    console.log(
-                        "Using hardcoded fallback image due to database error",
-                    );
-                } else if (
-                    dynamicCellSection &&
-                    dynamicCellSection.length > 0
-                ) {
-                    const cellData = dynamicCellSection[0];
-
-                    // If background_image_url is a file path (not a full URL), construct the Supabase URL
-                    if (
-                        cellData.background_image_url &&
-                        !cellData.background_image_url.startsWith("http")
-                    ) {
-                        const { data: urlData } = supabase.storage
-                            .from("dynamic-cell-images")
-                            .getPublicUrl(cellData.background_image_url);
-
-                        cellData.background_image_url = urlData.publicUrl;
-                    }
-
-                    setDynamicCellData(cellData);
-                    console.log("Dynamic cell data:", cellData);
-                } else {
-                    // No data returned, use hardcoded fallback
-                    setImageError(true);
-                    console.log(
-                        "No dynamic cell data found, using hardcoded fallback image",
-                    );
-                }
-
-                // Get active business section
-                const { data: sectionData, error: sectionError } =
-                    await supabase
-                        .from("business_sections")
-                        .select("id, heading, subheading")
-                        .eq("is_active", true)
-                        .order("created_at", { ascending: false })
-                        .limit(1)
-                        .single();
-
-                if (sectionError) {
-                    console.error(
-                        "Error fetching business section:",
-                        sectionError,
-                    );
-                    console.log(
-                        "Using hardcoded business data due to database error",
-                    );
-                    setBusinessData(hardcodedBusinessData);
-                    setImageError(true);
-                    setLoading(false);
-                    return;
-                }
-
-                console.log("Business section data:", sectionData);
-
-                if (!sectionData) {
-                    console.log(
-                        "No active business section found, using hardcoded data",
-                    );
-                    setBusinessData(hardcodedBusinessData);
-                    setImageError(true);
-                    setLoading(false);
-                    return;
-                }
-
-                // Get paragraphs for this section
-                const { data: paragraphsData, error: paragraphsError } =
-                    await supabase
-                        .from("business_paragraphs")
-                        .select("id, content, display_order")
-                        .eq("business_section_id", sectionData.id)
-                        .order("display_order", { ascending: true });
-
-                if (paragraphsError) {
-                    console.error(
-                        "Error fetching business paragraphs:",
-                        paragraphsError,
-                    );
-                    console.log(
-                        "Using hardcoded business data due to paragraphs error",
-                    );
-                    setBusinessData(hardcodedBusinessData);
-                    setImageError(true);
-                    setLoading(false);
-                    return;
-                }
-
-                console.log("Business paragraphs data:", paragraphsData);
-
-                // Get stats for this section
-                const { data: statsData, error: statsError } = await supabase
-                    .from("business_stats")
-                    .select("id, value, label, sublabel, display_order")
-                    .eq("business_section_id", sectionData.id)
-                    .order("display_order", { ascending: true });
-
-                if (statsError) {
-                    console.error("Error fetching business stats:", statsError);
-                    console.log(
-                        "Using hardcoded business data due to stats error",
-                    );
-                    setBusinessData(hardcodedBusinessData);
-                    setImageError(true);
-                    setLoading(false);
-                    return;
-                }
-
-                console.log("Business stats data:", statsData);
-
-                // Combine all data
-                const combinedData = {
-                    id: sectionData.id,
-                    heading: sectionData.heading,
-                    subheading: sectionData.subheading,
-                    paragraphs: paragraphsData || [],
-                    stats: statsData || [],
-                };
-
-                console.log("Combined business data:", combinedData);
-                setBusinessData(combinedData);
-            } catch (error) {
-                console.error("Unexpected error in fetchBusinessData:", error);
-                console.log(
-                    "Using hardcoded business data due to unexpected error",
-                );
-                setBusinessData(hardcodedBusinessData);
-                setImageError(true);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchAllData();
-    }, []);
 
     return (
         <section
@@ -368,7 +216,7 @@ const DynamicCell = () => {
                     src={
                         imageError
                             ? hardcodedFallbackImage.src
-                            : dynamicCellData?.background_image_url ||
+                            : getImageUrlForBucket.dynamicCell(dynamicCellData?.background_image_url) ||
                               defaultImage.src
                     }
                     alt={

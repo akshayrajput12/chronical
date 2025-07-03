@@ -1,11 +1,12 @@
 import React from "react";
 import { Metadata } from "next";
-import CustomExhibitionHero from "./components/custom-exhibition-hero";
-import LeadingContractorSection from "./components/leading-contractor-section";
-import PromoteBrandSection from "./components/promote-brand-section";
-import StrikingCustomizedSection from "./components/striking-customized-section";
-import ReasonsToChooseSection from "./components/reasons-to-choose-section";
-import FAQSection from "./components/faq-section";
+import { getCustomExhibitionPageData } from "@/services/custom-exhibition-page.service";
+import CustomExhibitionHeroServer from "./components/custom-exhibition-hero-server";
+import LeadingContractorSectionServer from "./components/leading-contractor-section-server";
+import PromoteBrandSectionServer from "./components/promote-brand-section-server";
+import StrikingCustomizedSectionServer from "./components/striking-customized-section-server";
+import ReasonsToChooseSectionServer from "./components/reasons-to-choose-section-server";
+import FAQSectionServer from "./components/faq-section-server";
 import BoothRequirementsForm from "../home/components/booth-requirements-form";
 import PortfolioSection from "./components/portfolio-section";
 import CustomParagraphSection from "./components/custom-paragraph-section";
@@ -24,14 +25,19 @@ export const metadata: Metadata = {
     },
 };
 
-function CustomExhibitionStandsPage() {
+// Server component that fetches data at build/request time for better SEO
+async function CustomExhibitionStandsPage() {
+    // Fetch all custom exhibition stands page data server-side for SEO optimization
+    const customExhibitionPageData = await getCustomExhibitionPageData();
+
     return (
         <div className="flex flex-col relative">
-            <CustomExhibitionHero />
-            <LeadingContractorSection />
-            <PromoteBrandSection />
-            <ReasonsToChooseSection />
-            <FAQSection />
+            <CustomExhibitionHeroServer heroData={customExhibitionPageData.hero} />
+            <LeadingContractorSectionServer leadingContractorData={customExhibitionPageData.leadingContractor} />
+            <PromoteBrandSectionServer promoteBrandData={customExhibitionPageData.promoteBrand} />
+            <StrikingCustomizedSectionServer strikingCustomizedData={customExhibitionPageData.strikingCustomized} />
+            <ReasonsToChooseSectionServer reasonsToChooseData={customExhibitionPageData.reasonsToChoose} />
+            <FAQSectionServer faqSectionData={customExhibitionPageData.faqSection} faqItemsData={customExhibitionPageData.faqItems} />
             <PortfolioSection />
             <CustomParagraphSection />
             <BoothRequirementsForm />

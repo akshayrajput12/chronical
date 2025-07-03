@@ -1,174 +1,24 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
-import { useComponentLoading } from "@/hooks/use-minimal-loading";
+import React from "react";
+import { BusinessSection } from "@/types/business";
 
-// Define types based on the database schema
-interface BusinessParagraph {
-    id: string;
-    content: string;
-    display_order: number;
+interface BusinessHubSectionProps {
+    businessData: BusinessSection | null;
 }
 
-interface BusinessStat {
-    id: string;
-    value: number;
-    label: string;
-    sublabel: string;
-    display_order: number;
-}
-
-interface BusinessSection {
-    id: string;
-    heading: string;
-    subheading: string;
-    paragraphs: BusinessParagraph[];
-    stats: BusinessStat[];
-}
-
-const BusinessHubSection = () => {
-    // State for business data
-    const [businessData, setBusinessData] = useState<BusinessSection | null>(
-        null,
-    );
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-
-    // Use minimal loader - won't block the screen
-    useComponentLoading(loading, "Loading business data...");
-
-    // Fetch business data from Supabase
-    useEffect(() => {
-        const fetchBusinessData = async () => {
-            setLoading(true);
-            setError(null);
-
-            try {
-                console.log("Fetching business section data...");
-
-                // Get active business section
-                const { data: sectionData, error: sectionError } =
-                    await supabase
-                        .from("business_sections")
-                        .select("id, heading, subheading")
-                        .eq("is_active", true)
-                        .order("created_at", { ascending: false })
-                        .limit(1)
-                        .single();
-
-                if (sectionError) {
-                    console.error(
-                        "Error fetching business section:",
-                        sectionError,
-                    );
-                    setError(
-                        `Failed to fetch business section: ${sectionError.message}`,
-                    );
-                    setLoading(false);
-                    return;
-                }
-
-                console.log("Business section data:", sectionData);
-
-                if (!sectionData) {
-                    setError("No active business section found");
-                    setLoading(false);
-                    return;
-                }
-
-                // Get paragraphs for this section
-                const { data: paragraphsData, error: paragraphsError } =
-                    await supabase
-                        .from("business_paragraphs")
-                        .select("id, content, display_order")
-                        .eq("business_section_id", sectionData.id)
-                        .order("display_order", { ascending: true });
-
-                if (paragraphsError) {
-                    console.error(
-                        "Error fetching business paragraphs:",
-                        paragraphsError,
-                    );
-                    setError(
-                        `Failed to fetch paragraphs: ${paragraphsError.message}`,
-                    );
-                    setLoading(false);
-                    return;
-                }
-
-                console.log("Business paragraphs data:", paragraphsData);
-
-                // Get stats for this section
-                const { data: statsData, error: statsError } = await supabase
-                    .from("business_stats")
-                    .select("id, value, label, sublabel, display_order")
-                    .eq("business_section_id", sectionData.id)
-                    .order("display_order", { ascending: true });
-
-                if (statsError) {
-                    console.error("Error fetching business stats:", statsError);
-                    setError(`Failed to fetch stats: ${statsError.message}`);
-                    setLoading(false);
-                    return;
-                }
-
-                console.log("Business stats data:", statsData);
-
-                // Combine all data
-                const combinedData = {
-                    id: sectionData.id,
-                    heading: sectionData.heading,
-                    subheading: sectionData.subheading,
-                    paragraphs: paragraphsData || [],
-                    stats: statsData || [],
-                };
-
-                console.log("Combined business data:", combinedData);
-                setBusinessData(combinedData);
-            } catch (error) {
-                console.error("Unexpected error in fetchBusinessData:", error);
-                setError("An unexpected error occurred");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchBusinessData();
-    }, []);
-
-    // Don't show loading state - minimal loader handles it
-    // Show default content while loading to prevent blank screens
-
-    // Show error state
-    if (error) {
-        return (
-            <div className="flex items-center justify-center h-[50vh] bg-white">
-                <div className="text-center text-gray-500">
-                    <p className="text-xl">
-                        Error loading business section data
-                    </p>
-                    <p className="mt-2">{error}</p>
-                    <p className="mt-4">
-                        Please check the console for more details.
-                    </p>
-                </div>
-            </div>
-        );
-    }
-
-    // Show error state if no data
+const BusinessHubSection: React.FC<BusinessHubSectionProps> = ({ businessData }) => {
+    // Handle case where no data is provided
     if (!businessData) {
         return (
-            <div className="flex items-center justify-center h-[50vh] bg-white">
-                <div className="text-center text-gray-500">
-                    <p className="text-xl">
-                        Could not load business section data.
-                    </p>
-                    <p>Please check your database connection.</p>
+            <div className="py-16 bg-gray-50">
+                <div className="container mx-auto px-4 text-center">
+                    <p className="text-gray-600">Business section data is not available.</p>
                 </div>
             </div>
         );
     }
+
+
 
     return (
         <section

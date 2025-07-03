@@ -301,6 +301,12 @@ export interface LegacyCity {
     updatedAt?: string;
     countryCode?: string;
     timezone?: string;
+
+    // SEO Fields
+    meta_title?: string;
+    meta_description?: string;
+    meta_keywords?: string;
+
     coordinates?: {
         latitude: number;
         longitude: number;

@@ -3,6 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { NewCompanyImage } from "@/types/new-company";
+import { getImageUrlForBucket } from "@/utils/image-url";
 
 interface ImageScrollGridProps {
     className?: string;
@@ -54,15 +55,15 @@ const ImageScrollGrid: React.FC<ImageScrollGridProps> = ({
 
     // Use database images if available, otherwise use default images
     const column1Images = columnImages[1]?.length
-        ? columnImages[1].map(img => img.image_url)
+        ? columnImages[1].map(img => getImageUrlForBucket.newCompany(img.image_url) || img.image_url)
         : defaultColumn1Images;
 
     const column2Images = columnImages[2]?.length
-        ? columnImages[2].map(img => img.image_url)
+        ? columnImages[2].map(img => getImageUrlForBucket.newCompany(img.image_url) || img.image_url)
         : defaultColumn2Images;
 
     const column3Images = columnImages[3]?.length
-        ? columnImages[3].map(img => img.image_url)
+        ? columnImages[3].map(img => getImageUrlForBucket.newCompany(img.image_url) || img.image_url)
         : defaultColumn3Images;
 
     // Get alt text for images

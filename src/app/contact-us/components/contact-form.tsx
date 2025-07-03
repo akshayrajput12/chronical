@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,9 +11,11 @@ import Link from "next/link";
 import { ContactFormSettings, ContactFormData, ContactFormErrors } from "@/types/contact";
 import { contactPageService } from "@/lib/services/contact";
 
-const ContactForm = () => {
-    const [formSettings, setFormSettings] = useState<ContactFormSettings | null>(null);
-    const [loading, setLoading] = useState(true);
+interface ContactFormProps {
+    formSettings: ContactFormSettings | null;
+}
+
+const ContactForm: React.FC<ContactFormProps> = ({ formSettings }) => {
     const [formData, setFormData] = useState<ContactFormData>({
         name: "",
         exhibitionName: "",
@@ -29,24 +31,28 @@ const ContactForm = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [submitError, setSubmitError] = useState<string | null>(null);
-    const [error, setError] = useState<string>("");
 
-    useEffect(() => {
-        const fetchFormSettings = async () => {
-            try {
-                const settings = await contactPageService.getFormSettings();
-                setFormSettings(settings);
-            } catch (error) {
-                console.error("Error fetching form settings:", error);
-                setError("Failed to load form settings. Please refresh the page.");
-                setFormSettings(null);
-            } finally {
-                setLoading(false);
-            }
-        };
+    // Default fallback data
+    const defaultFormSettings: ContactFormSettings = {
+        id: "default",
+        form_title: "Feel Free To Write",
+        form_subtitle: "",
+        success_message: "Thank You for Your Message!",
+        success_description: "We've received your inquiry and will get back to you within 24 hours.",
+        sidebar_phone: "+971 54 347 4645",
+        sidebar_email: "info@chronicleexhibts.ae",
+        sidebar_address: "Al Qouz Industrial Area 1st. No. 5B, Warehouse 14 P.O. Box 128046, Dubai – UAE",
+        enable_file_upload: true,
+        max_file_size_mb: 10,
+        allowed_file_types: ['.pdf', '.doc', '.docx', '.jpg', '.jpeg', '.png'],
+        require_terms_agreement: true,
+        terms_text: "By clicking submit, you agree to our Terms and Conditions",
+        is_active: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+    };
 
-        fetchFormSettings();
-    }, []);
+    const displaySettings = formSettings || defaultFormSettings;
 
     const validateForm = (): boolean => {
         const newErrors: ContactFormErrors = {};
@@ -65,20 +71,20 @@ const ContactForm = () => {
             newErrors.message = "Message is required";
         }
 
-        if (formSettings?.require_terms_agreement && !formData.agreedToTerms) {
+        if (displaySettings.require_terms_agreement && !formData.agreedToTerms) {
             newErrors.agreedToTerms = "You must agree to the terms and conditions";
         }
 
         // File validation
-        if (formData.file && formSettings) {
-            const maxSize = formSettings.max_file_size_mb * 1024 * 1024; // Convert MB to bytes
+        if (formData.file) {
+            const maxSize = displaySettings.max_file_size_mb * 1024 * 1024; // Convert MB to bytes
             if (formData.file.size > maxSize) {
-                newErrors.file = `File size must be less than ${formSettings.max_file_size_mb}MB`;
+                newErrors.file = `File size must be less than ${displaySettings.max_file_size_mb}MB`;
             }
 
             const fileExtension = '.' + formData.file.name.split('.').pop()?.toLowerCase();
-            if (!formSettings.allowed_file_types.includes(fileExtension)) {
-                newErrors.file = `File type not allowed. Allowed types: ${formSettings.allowed_file_types.join(', ')}`;
+            if (!displaySettings.allowed_file_types.includes(fileExtension)) {
+                newErrors.file = `File type not allowed. Allowed types: ${displaySettings.allowed_file_types.join(', ')}`;
             }
         }
 
@@ -172,20 +178,7 @@ const ContactForm = () => {
         }
     };
 
-    if (loading) {
-        return (
-            <section className="py-8 md:py-12 lg:py-16 bg-white">
-                <div className="container mx-auto px-4">
-                    <div className="max-w-7xl mx-auto text-center">
-                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#a5cd39] mx-auto"></div>
-                        <p className="mt-4 text-gray-600">Loading form...</p>
-                    </div>
-                </div>
-            </section>
-        );
-    }
-
-    if (isSubmitted && formSettings) {
+    if (isSubmitted) {
         return (
             <section className="py-8 md:py-12 lg:py-16 bg-gray-100">
                 <div className="container mx-auto px-4">
@@ -198,30 +191,12 @@ const ContactForm = () => {
                         >
                             <CheckCircle className="w-16 h-16 text-[#a5cd39] mx-auto mb-6" />
                             <h3 className="text-2xl font-rubik font-bold text-gray-900 mb-4">
-                                {formSettings.success_message}
+                                {displaySettings.success_message}
                             </h3>
                             <p className="text-lg font-nunito text-gray-600">
-                                {formSettings.success_description}
+                                {displaySettings.success_description}
                             </p>
                         </motion.div>
-                    </div>
-                </div>
-            </section>
-        );
-    }
-
-    if (error || !formSettings) {
-        return (
-            <section className="py-8 md:py-12 lg:py-16 bg-white">
-                <div className="container mx-auto px-4">
-                    <div className="max-w-7xl mx-auto text-center">
-                        <p className="text-red-600 mb-4">{error || "Error loading form settings. Please refresh the page."}</p>
-                        <button
-                            onClick={() => window.location.reload()}
-                            className="bg-[#a5cd39] hover:bg-[#8fb32a] text-white px-6 py-2 rounded-md font-medium transition-colors duration-200"
-                        >
-                            Retry
-                        </button>
                     </div>
                 </div>
             </section>
@@ -233,10 +208,10 @@ const ContactForm = () => {
             <div className="container mx-auto px-4">
                 <div className="max-w-7xl mx-auto">
                     <h2 className="text-3xl md:text-4xl text-left font-rubik font-bold mb-1">
-                        {formSettings.form_title}
+                        {displaySettings.form_title}
                     </h2>
-                    {formSettings.form_subtitle && (
-                        <p className="text-lg text-gray-600 mb-2">{formSettings.form_subtitle}</p>
+                    {displaySettings.form_subtitle && (
+                        <p className="text-lg text-gray-600 mb-2">{displaySettings.form_subtitle}</p>
                     )}
                     <div className="flex !mb-2">
                         <div className="h-1 bg-[#a5cd39] w-16 mt-1 mb-6"></div>
@@ -381,7 +356,7 @@ const ContactForm = () => {
                                         required
                                     />
                                 </div>
-                                {formSettings.enable_file_upload && (
+                                {displaySettings.enable_file_upload && (
                                     <div className="space-y-3">
                                         <Label
                                             htmlFor="file-upload"
@@ -395,7 +370,7 @@ const ContactForm = () => {
                                                 id="file-upload"
                                                 onChange={handleFileChange}
                                                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                                                accept={formSettings.allowed_file_types.join(',')}
+                                                accept={displaySettings.allowed_file_types.join(',')}
                                             />
                                             <div className={`flex items-center justify-between w-full h-9 px-3 py-2 text-sm bg-gray-100 border hover:border-[#a5cd39] focus-within:border-[#a5cd39] rounded-md cursor-pointer transition-all duration-200 ${
                                                 errors.file ? 'border-red-300' : 'border-gray-300'
@@ -412,8 +387,8 @@ const ContactForm = () => {
                                             <p className="text-red-500 text-xs mt-1">{errors.file}</p>
                                         )}
                                         <p className="text-xs text-gray-500">
-                                            Max file size: {formSettings.max_file_size_mb}MB.
-                                            Allowed types: {formSettings.allowed_file_types.join(', ')}
+                                            Max file size: {displaySettings.max_file_size_mb}MB.
+                                            Allowed types: {displaySettings.allowed_file_types.join(', ')}
                                         </p>
                                     </div>
                                 )}
@@ -448,7 +423,7 @@ const ContactForm = () => {
                                 </div>
                             </div>
 
-                            {formSettings.require_terms_agreement && (
+                            {displaySettings.require_terms_agreement && (
                                 <div className="mb-6">
                                     <div className="flex items-start gap-3">
                                         <input
@@ -465,7 +440,7 @@ const ContactForm = () => {
                                             htmlFor="terms"
                                             className="text-sm text-gray-600 leading-relaxed"
                                         >
-                                            {formSettings.terms_text}
+                                            {displaySettings.terms_text}
                                         </label>
                                     </div>
                                     {errors.agreedToTerms && (
@@ -476,7 +451,7 @@ const ContactForm = () => {
 
                             <Button
                                 type="submit"
-                                disabled={isSubmitting || (formSettings.require_terms_agreement && !formData.agreedToTerms)}
+                                disabled={isSubmitting || (displaySettings.require_terms_agreement && !formData.agreedToTerms)}
                                 className="bg-[#007bff] hover:bg-[#0056b3] text-white px-8 py-3 text-sm font-medium transition-all duration-300 rounded-md tracking-wide shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 {isSubmitting ? (
@@ -501,10 +476,10 @@ const ContactForm = () => {
                                     </h3>
                                     <div className="text-base !font-bold text-gray-900 mb-2">
                                         <Link
-                                            href={`tel:${formSettings.sidebar_phone.replace(/\s+/g, '')}`}
+                                            href={`tel:${displaySettings.sidebar_phone.replace(/\s+/g, '')}`}
                                             className="text-[#a5cd39] !text-base !font-semibold"
                                         >
-                                            {formSettings.sidebar_phone}
+                                            {displaySettings.sidebar_phone}
                                         </Link>
                                     </div>
                                 </div>
@@ -514,10 +489,10 @@ const ContactForm = () => {
                                     </h3>
                                     <div className="text-base font-semibold text-gray-900 mb-2">
                                         <Link
-                                            href={`mailto:${formSettings.sidebar_email}`}
+                                            href={`mailto:${displaySettings.sidebar_email}`}
                                             className="text-[#a5cd39] !text-base !font-semibold"
                                         >
-                                            {formSettings.sidebar_email}
+                                            {displaySettings.sidebar_email}
                                         </Link>
                                     </div>
                                 </div>
@@ -526,10 +501,10 @@ const ContactForm = () => {
                                         Visit Office
                                     </h3>
                                     <div className="text-base text-gray-700">
-                                        {formSettings.sidebar_address.split(',').map((line, index) => (
+                                        {displaySettings.sidebar_address.split(',').map((line, index) => (
                                             <span key={index}>
                                                 {line.trim()}
-                                                {index < formSettings.sidebar_address.split(',').length - 1 && <br />}
+                                                {index < displaySettings.sidebar_address.split(',').length - 1 && <br />}
                                             </span>
                                         ))}
                                     </div>

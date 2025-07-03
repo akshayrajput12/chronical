@@ -1,130 +1,90 @@
-"use client";
-
-import React, { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { motion } from "framer-motion";
+import React from "react";
+import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+import { MotionDiv, MotionH2 } from "./components/motion-wrapper";
 import {
     Calendar,
     MapPin,
     Building2,
     ChevronDown,
     ArrowLeft,
-    ChevronLeft,
-    ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-import { Event } from "@/types/events";
 import EventGallery from "../components/event-gallery";
 import BlogCarousel from "@/components/blog/blog-carousel";
-import BlogPostsSection from "@/components/blog/blog-posts-section";
 import { EventsForm } from "../components/events-form";
 import EventContent from "@/components/events/event-content";
+import { getEventDetailPageData, incrementEventViews } from "@/services/event-page.service";
+import RelatedEventsClient from "../components/related-events-client";
 
-export default function EventDetailPage() {
-    const params = useParams();
-    const router = useRouter();
-    const eventSlug = params.slug as string;
+interface EventDetailPageProps {
+    params: Promise<{
+        slug: string;
+    }>;
+}
 
-    // State for event data
-    const [event, setEvent] = useState<Event | null>(null);
-    const [relatedEvents, setRelatedEvents] = useState<Event[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+// Generate metadata for SEO
+export async function generateMetadata({ params }: EventDetailPageProps): Promise<Metadata> {
+    const resolvedParams = await params;
+    const eventData = await getEventDetailPageData(resolvedParams.slug);
 
-    // Dynamic blog posts state
-    const [blogPosts, setBlogPosts] = useState([]);
-    const [loadingBlogs, setLoadingBlogs] = useState(true);
-
-    // Fetch event data and blog posts
-    useEffect(() => {
-        let isCancelled = false;
-
-        const fetchData = async () => {
-            if (!eventSlug) return;
-
-            setLoading(true);
-            setError(null);
-
-            try {
-                // Fetch event data
-                const eventResponse = await fetch(`/api/events/${eventSlug}`);
-                if (isCancelled) return;
-
-                if (!eventResponse.ok) {
-                    if (eventResponse.status === 404) {
-                        setError("Event not found");
-                    } else {
-                        setError("Failed to load event");
-                    }
-                    return;
-                }
-
-                const eventData = await eventResponse.json();
-                if (isCancelled) return;
-
-                setEvent(eventData.event);
-                setRelatedEvents(eventData.related_events || []);
-
-                // Fetch blog posts
-                const blogResponse = await fetch("/api/blog/posts");
-                if (isCancelled) return;
-
-                const blogData = await blogResponse.json();
-                setBlogPosts(blogData.posts || []);
-            } catch (error) {
-                if (isCancelled) return;
-                console.error("Error fetching data:", error);
-                setError("Failed to load event. Please try again later.");
-            } finally {
-                if (!isCancelled) {
-                    setLoading(false);
-                    setLoadingBlogs(false);
-                }
-            }
+    if (!eventData) {
+        return {
+            title: "Event Not Found",
+            description: "The requested event could not be found.",
         };
-
-        fetchData();
-
-        return () => {
-            isCancelled = true;
-        };
-    }, [eventSlug]);
-
-    const handleOtherEventClick = (otherEventSlug: string) => {
-        router.push(`/whats-on/${otherEventSlug}`);
-    };
-
-    // Loading state
-    if (loading) {
-        return (
-            <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#a5cd39] mx-auto mb-4"></div>
-                    <p className="text-gray-600">Loading event...</p>
-                </div>
-            </div>
-        );
     }
 
-    // Error state
-    if (error || !event) {
+    const { event } = eventData;
+
+    return {
+        title: `${event.title} | Chronicle Exhibits`,
+        description: event.short_description || event.description || `Join us for ${event.title} at Chronicle Exhibits.`,
+        keywords: `${event.title}, ${event.category_name || 'event'}, exhibition, Dubai, Chronicle Exhibits`,
+        openGraph: {
+            title: event.title,
+            description: event.short_description || event.description || `Join us for ${event.title}`,
+            images: event.featured_image_url ? [event.featured_image_url] : [],
+            type: 'article',
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: event.title,
+            description: event.short_description || event.description || `Join us for ${event.title}`,
+            images: event.featured_image_url ? [event.featured_image_url] : [],
+        },
+    };
+}
+
+export default async function EventDetailPage({ params }: EventDetailPageProps) {
+    // Fetch event data server-side
+    const resolvedParams = await params;
+    const eventData = await getEventDetailPageData(resolvedParams.slug);
+
+    if (!eventData) {
+        notFound();
+    }
+
+    const { event, relatedEvents, galleryImages, blogPosts } = eventData;
+
+    // Increment view count (fire and forget)
+    incrementEventViews(event.id);
+
+    // Error state component for not found
+    if (!event) {
         return (
             <div className="min-h-screen bg-gray-100 flex items-center justify-center">
                 <div className="text-center">
                     <h1 className="text-2xl font-bold text-gray-900 mb-4">
-                        {error || "Event not found"}
+                        Event not found
                     </h1>
                     <p className="text-gray-600 mb-6">
                         The event you're looking for doesn't exist or has been
                         removed.
                     </p>
                     <div className="space-x-4">
-                        <Button onClick={() => router.back()} variant="outline">
-                            <ArrowLeft className="w-4 h-4 mr-2" />
-                            Go Back
-                        </Button>
                         <Link href="/whats-on">
                             <Button className="bg-[#a5cd39] hover:bg-[#8fb82e] text-white">
                                 View All Events
@@ -158,7 +118,7 @@ export default function EventDetailPage() {
 
                 {/* Centered Title */}
                 <div className="relative z-20 md:mt-20 mt-0 flex flex-col items-center justify-center h-full text-center text-white px-4 sm:px-6 md:px-8 lg:px-12">
-                    <motion.div
+                    <MotionDiv
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
@@ -170,7 +130,7 @@ export default function EventDetailPage() {
                         <div className="mt-4 absolute bottom-0 left-[50%] sm:mt-8">
                             <ChevronDown className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 mx-auto animate-bounce opacity-70" />
                         </div>
-                    </motion.div>
+                    </MotionDiv>
                 </div>
             </section>
 
@@ -197,7 +157,7 @@ export default function EventDetailPage() {
                     <div className="max-w-6xl mx-auto">
                         <div className="flex items-center justify-center gap-2 md:gap-4 lg:gap-6 xl:gap-8 flex-wrap lg:flex-nowrap">
                             {/* TIME & DATE */}
-                            <motion.div
+                            <MotionDiv
                                 className="flex items-center gap-2 md:gap-4 lg:gap-6"
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
@@ -217,10 +177,10 @@ export default function EventDetailPage() {
                                     </div>
                                 </div>
                                 <div className="border-l h-16 md:h-20 lg:h-24 border-gray-300"></div>
-                            </motion.div>
+                            </MotionDiv>
 
                             {/* LOCATION */}
-                            <motion.div
+                            <MotionDiv
                                 className="flex items-center gap-2 md:gap-4 lg:gap-6"
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
@@ -240,10 +200,10 @@ export default function EventDetailPage() {
                                     </div>
                                 </div>
                                 <div className="border-l h-16 md:h-20 lg:h-24 border-gray-300"></div>
-                            </motion.div>
+                            </MotionDiv>
 
                             {/* INDUSTRY */}
-                            <motion.div
+                            <MotionDiv
                                 className="flex items-center gap-2 md:gap-4 lg:gap-6"
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
@@ -263,7 +223,7 @@ export default function EventDetailPage() {
                                     </div>
                                 </div>
                                 <div className="border-l h-16 md:h-20 lg:h-24 border-gray-300"></div>
-                            </motion.div>
+                            </MotionDiv>
                         </div>
                     </div>
                 </div>
@@ -275,7 +235,7 @@ export default function EventDetailPage() {
                     <div className="max-w-6xl mx-auto">
                         <div className="flex flex-col lg:flex-row gap-12 items-start">
                             {/* Left Column - Event Logo (30%) */}
-                            <motion.div
+                            <MotionDiv
                                 className="w-full lg:w-[30%]"
                                 initial={{ opacity: 0, x: -30 }}
                                 whileInView={{ opacity: 1, x: 0 }}
@@ -346,10 +306,10 @@ export default function EventDetailPage() {
                                         )}
                                     </div>
                                 </div>
-                            </motion.div>
+                            </MotionDiv>
 
                             {/* Right Column - Description (70%) */}
-                            <motion.div
+                            <MotionDiv
                                 className="w-full lg:w-[70%] self-center flex flex-col justify-center"
                                 initial={{ opacity: 0, x: 30 }}
                                 whileInView={{ opacity: 1, x: 0 }}
@@ -369,7 +329,7 @@ export default function EventDetailPage() {
                                         }
                                     />
                                 </div>
-                            </motion.div>
+                            </MotionDiv>
                         </div>
                     </div>
                 </div>
@@ -378,14 +338,14 @@ export default function EventDetailPage() {
 
             {/* Event Gallery Section */}
             <section className="py-8 md:py-12 lg:py-16 bg-white">
-                <EventGallery eventId={event.id} />
+                <EventGallery eventId={event.id} images={galleryImages} />
             </section>
 
             {/* Other Events Section */}
             <section className="py-16 bg-gray-100">
                 <div className="container mx-auto px-4">
                     <div className="max-w-6xl mx-auto">
-                        <motion.h2
+                        <MotionH2
                             className="text-3xl sm:text-4xl font-rubik font-bold text-center mb-12"
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
@@ -394,114 +354,10 @@ export default function EventDetailPage() {
                         >
                             Other events happening in Dubai
                             <div className="w-16 h-1 mt-6 bg-[#a5cd39] mx-auto"></div>
-                        </motion.h2>
+                        </MotionH2>
 
                         {/* Horizontal Carousel */}
-                        <div className="relative">
-                            {/* Navigation Arrows */}
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white shadow-md rounded-full w-10 h-10 text-gray-600 hover:text-gray-900"
-                            >
-                                <ChevronLeft className="w-5 h-5" />
-                            </Button>
-
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white shadow-md rounded-full w-10 h-10 text-gray-600 hover:text-gray-900"
-                            >
-                                <ChevronRight className="w-5 h-5" />
-                            </Button>
-
-                            {/* Events Container */}
-                            <div className="overflow-hidden mx-12">
-                                {relatedEvents.length > 0 ? (
-                                    <div className="flex gap-6">
-                                        {relatedEvents.map(
-                                            (relatedEvent, index) => (
-                                                <motion.div
-                                                    key={relatedEvent.id}
-                                                    className="flex-none w-48 cursor-pointer group"
-                                                    initial={{
-                                                        opacity: 0,
-                                                        y: 20,
-                                                    }}
-                                                    whileInView={{
-                                                        opacity: 1,
-                                                        y: 0,
-                                                    }}
-                                                    transition={{
-                                                        duration: 0.6,
-                                                        delay: index * 0.1,
-                                                    }}
-                                                    viewport={{ once: true }}
-                                                    onClick={() =>
-                                                        handleOtherEventClick(
-                                                            relatedEvent.slug,
-                                                        )
-                                                    }
-                                                >
-                                                    {/* Perfect Square Image - No Rounded Borders */}
-                                                    <div className="relative w-48 h-48 mb-3 overflow-hidden">
-                                                        {/* Category color accent bar */}
-                                                        <div
-                                                            className="absolute top-0 left-0 w-8 h-1 z-10"
-                                                            style={{
-                                                                backgroundColor:
-                                                                    relatedEvent.category_color || "#22c55e",
-                                                            }}
-                                                        ></div>
-                                                        <Image
-                                                            src={
-                                                                relatedEvent.featured_image_url ||
-                                                                "/placeholder-event.jpg"
-                                                            }
-                                                            alt={
-                                                                relatedEvent.title
-                                                            }
-                                                            fill
-                                                            className="object-cover transition-transform duration-300 group-hover:scale-105"
-                                                        />
-                                                    </div>
-
-                                                    {/* Content */}
-                                                    <div className="text-center">
-                                                        <h3 className="font-medium text-sm mb-1 text-gray-800 leading-tight">
-                                                            {relatedEvent.title}
-                                                        </h3>
-                                                        <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
-                                                            {relatedEvent.category_name ||
-                                                                "Event"}
-                                                        </p>
-                                                        {relatedEvent.date_range && (
-                                                            <p className="text-xs text-gray-400 mt-1">
-                                                                {
-                                                                    relatedEvent.date_range
-                                                                }
-                                                            </p>
-                                                        )}
-                                                    </div>
-                                                </motion.div>
-                                            ),
-                                        )}
-                                    </div>
-                                ) : (
-                                    <div className="text-center py-12">
-                                        <p className="text-gray-500">
-                                            No related events found.
-                                        </p>
-                                        <Link
-                                            href="/whats-on"
-                                            className="text-[#a5cd39] hover:underline mt-2 inline-block"
-                                        >
-                                            View all events
-                                        </Link>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
+                        <RelatedEventsClient relatedEvents={relatedEvents} />
                     </div>
                 </div>
             </section>
@@ -512,7 +368,7 @@ export default function EventDetailPage() {
             >
                 <div className="container mx-auto px-4">
                     <div className="max-w-6xl mx-auto">
-                        <motion.h2
+                        <MotionH2
                             className="text-3xl sm:text-4xl font-rubik font-bold text-center mb-12"
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
@@ -521,7 +377,7 @@ export default function EventDetailPage() {
                         >
                             Related Articles
                             <div className="w-16 h-1 mt-6 bg-[#a5cd39] mx-auto"></div>
-                        </motion.h2>
+                        </MotionH2>
 
                         <BlogCarousel posts={blogPosts} />
                     </div>

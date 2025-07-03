@@ -1,46 +1,16 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Image from "next/image";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/client";
 import type { PortfolioItemWithImage } from "@/types/portfolio-gallery";
 
-const PortfolioGallery = () => {
-    const [portfolioItems, setPortfolioItems] = useState<
-        PortfolioItemWithImage[]
-    >([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+interface PortfolioGalleryProps {
+    portfolioItems: PortfolioItemWithImage[];
+}
 
-    // Load portfolio items from database
-    useEffect(() => {
-        loadPortfolioItems();
-    }, []);
-
-    const loadPortfolioItems = async () => {
-        try {
-            setLoading(true);
-            setError(null);
-
-            // Use the database function to get items with images
-            const { data, error } = await supabase.rpc(
-                "get_portfolio_items_with_images",
-            );
-
-            if (error) {
-                throw error;
-            }
-
-            if (data) {
-                setPortfolioItems(data);
-            }
-        } catch (error) {
-            console.error("Error loading portfolio items:", error);
-            setError("Failed to load portfolio items");
-        } finally {
-            setLoading(false);
-        }
-    };
+const PortfolioGallery: React.FC<PortfolioGalleryProps> = ({ portfolioItems }) => {
+    const supabase = createClient();
 
     // Get image URL (either from Supabase storage or external URL)
     const getImageUrl = (item: PortfolioItemWithImage): string => {
@@ -56,55 +26,8 @@ const PortfolioGallery = () => {
         return item.image_url || "";
     };
 
-    // Loading state
-    if (loading) {
-        return (
-            <section className="py-8 md:py-12 lg:py-16 bg-white">
-                <div className="container mx-auto px-4">
-                    <div className="max-w-6xl mx-auto">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 lg:gap-4 auto-rows-[150px] sm:auto-rows-[180px] lg:auto-rows-[200px]">
-                            {/* Loading skeleton */}
-                            {Array.from({ length: 12 }).map((_, index) => (
-                                <div
-                                    key={index}
-                                    className={`relative overflow-hidden bg-gray-200 animate-pulse ${
-                                        index % 3 === 0
-                                            ? "row-span-2"
-                                            : "row-span-1"
-                                    }`}
-                                >
-                                    <div className="w-full h-full bg-gray-300"></div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-            </section>
-        );
-    }
-
-    // Error state
-    if (error) {
-        return (
-            <section className="py-8 md:py-12 lg:py-16 bg-white">
-                <div className="container mx-auto px-4">
-                    <div className="max-w-6xl mx-auto text-center">
-                        <div className="bg-red-50 border border-red-200 rounded-lg p-6">
-                            <h3 className="text-lg font-medium text-red-800 mb-2">
-                                Error Loading Portfolio
-                            </h3>
-                            <p className="text-red-600">
-                                {error}. Please try refreshing the page.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        );
-    }
-
     // Empty state
-    if (portfolioItems.length === 0) {
+    if (!portfolioItems || portfolioItems.length === 0) {
         return (
             <section className="py-8 md:py-12 lg:py-16 bg-white">
                 <div className="container mx-auto px-4">
