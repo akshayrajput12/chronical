@@ -230,18 +230,22 @@ export async function getEventDetailPageData(slug: string): Promise<EventDetailP
 
 /**
  * Increment event view count (fire and forget)
+ * TODO: Add view_count field to events table and create increment_event_views function
  */
 export async function incrementEventViews(eventId: string): Promise<void> {
     try {
-        const supabase = await createClient();
-        
-        const { error } = await supabase.rpc("increment_event_views", {
-            event_id: eventId
-        });
+        // Temporarily disabled until view_count field and increment_event_views function are added
+        // const supabase = await createClient();
+        //
+        // const { error } = await supabase.rpc("increment_event_views", {
+        //     event_id: eventId
+        // });
+        //
+        // if (error) {
+        //     console.error("Error incrementing event views:", error);
+        // }
 
-        if (error) {
-            console.error("Error incrementing event views:", error);
-        }
+        console.log(`Event view count increment requested for event: ${eventId} (currently disabled)`);
     } catch (error) {
         console.error("Error incrementing event views:", error);
     }

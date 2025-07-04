@@ -40,6 +40,7 @@ export default function ContactSubmissionsTab({ onStatsUpdate }: ContactSubmissi
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState<ContactFormSubmissionStatus | 'all'>('all');
+    const [formTypeFilter, setFormTypeFilter] = useState<'all' | 'contact' | 'booth'>('all');
     const [selectedSubmission, setSelectedSubmission] = useState<ContactFormSubmission | null>(null);
     const [showViewDialog, setShowViewDialog] = useState(false);
     const [showReplyDialog, setShowReplyDialog] = useState(false);
@@ -76,7 +77,16 @@ export default function ContactSubmissionsTab({ onStatsUpdate }: ContactSubmissi
 
         const matchesStatus = statusFilter === 'all' || submission.status === statusFilter;
 
-        return matchesSearch && matchesStatus;
+        // Determine form type based on message content or exhibition_name presence
+        const isBoothRequirement = submission.message.toLowerCase().includes('booth') ||
+                                 submission.message.toLowerCase().includes('exhibition') ||
+                                 (submission.exhibition_name && submission.exhibition_name.trim() !== '');
+
+        const matchesFormType = formTypeFilter === 'all' ||
+                               (formTypeFilter === 'booth' && isBoothRequirement) ||
+                               (formTypeFilter === 'contact' && !isBoothRequirement);
+
+        return matchesSearch && matchesStatus && matchesFormType;
     });
 
     // Debug logging
@@ -84,6 +94,16 @@ export default function ContactSubmissionsTab({ onStatsUpdate }: ContactSubmissi
     console.log('Filtered submissions:', filteredSubmissions.length);
     console.log('Search term:', searchTerm);
     console.log('Status filter:', statusFilter);
+    console.log('Form type filter:', formTypeFilter);
+
+    // Count booth requirements vs contact forms
+    const boothRequirements = submissions.filter(s =>
+        s.message.toLowerCase().includes('booth') ||
+        s.message.toLowerCase().includes('exhibition') ||
+        (s.exhibition_name && s.exhibition_name.trim() !== '')
+    ).length;
+    console.log('Booth requirements:', boothRequirements);
+    console.log('Contact forms:', submissions.length - boothRequirements);
 
     const handleViewSubmission = (submission: ContactFormSubmission) => {
         setSelectedSubmission(submission);
@@ -239,10 +259,10 @@ export default function ContactSubmissionsTab({ onStatsUpdate }: ContactSubmissi
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                         <MessageSquare className="h-5 w-5" />
-                        Contact Form Submissions
+                        Form Submissions
                     </CardTitle>
                     <CardDescription>
-                        View and manage all contact form submissions
+                        View and manage all contact form and booth requirement submissions
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -273,6 +293,19 @@ export default function ContactSubmissionsTab({ onStatsUpdate }: ContactSubmissi
                                     <SelectItem value="replied">Replied</SelectItem>
                                     <SelectItem value="archived">Archived</SelectItem>
                                     <SelectItem value="spam">Spam</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="sm:w-48">
+                            <Label htmlFor="form-type-filter">Filter by Form Type</Label>
+                            <Select value={formTypeFilter} onValueChange={(value: any) => setFormTypeFilter(value)}>
+                                <SelectTrigger className="mt-1">
+                                    <SelectValue placeholder="All forms" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="all">All Forms</SelectItem>
+                                    <SelectItem value="contact">Contact Forms</SelectItem>
+                                    <SelectItem value="booth">Booth Requirements</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
@@ -313,6 +346,14 @@ export default function ContactSubmissionsTab({ onStatsUpdate }: ContactSubmissi
                                                 }
                                             </h3>
                                             {getStatusBadge(submission.status)}
+                                            {/* Form type indicator */}
+                                            {(submission.message.toLowerCase().includes('booth') ||
+                                              submission.message.toLowerCase().includes('exhibition') ||
+                                              (submission.exhibition_name && submission.exhibition_name.trim() !== '')) && (
+                                                <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200">
+                                                    Booth Requirements
+                                                </Badge>
+                                            )}
                                             {submission.status === 'new' && <Star className="h-4 w-4 text-blue-500" />}
                                         </div>
                                         <div className="flex flex-wrap gap-4 text-sm text-gray-600 mb-3">

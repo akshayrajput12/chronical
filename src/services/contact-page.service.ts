@@ -1,10 +1,17 @@
 import { createClient } from "@/lib/supabase/client";
-import { 
-    ContactHeroSection, 
-    ContactFormSettings, 
-    ContactGroupCompany, 
-    ContactMapSettings 
+import {
+    ContactHeroSection,
+    ContactFormSettings,
+    ContactGroupCompany,
+    ContactMapSettings
 } from "@/types/contact";
+
+// File upload response interface
+interface FileUploadResponse {
+    success: boolean;
+    url?: string;
+    error?: string;
+}
 
 // Types for the contact page data
 export interface ContactPageData {
@@ -60,6 +67,89 @@ const defaultMapSettings: ContactMapSettings = {
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString()
 };
+
+// ContactPageService class for client-side operations
+export class ContactPageService {
+    private supabase = createClient();
+
+    // Upload file for form attachments
+    async uploadFile(file: File): Promise<FileUploadResponse> {
+        try {
+            // Generate unique filename
+            const timestamp = Date.now();
+            const randomString = Math.random().toString(36).substring(2, 15);
+            const fileExtension = file.name.split('.').pop();
+            const fileName = `${timestamp}_${randomString}.${fileExtension}`;
+            const filePath = `attachments/${fileName}`;
+
+            // Convert file to buffer
+            const arrayBuffer = await file.arrayBuffer();
+            const buffer = new Uint8Array(arrayBuffer);
+
+            // Upload to Supabase storage
+            const { data, error } = await this.supabase.storage
+                .from('contact-attachments')
+                .upload(filePath, buffer, {
+                    contentType: file.type,
+                    upsert: false
+                });
+
+            if (error) {
+                console.error('Storage upload error:', error);
+                return {
+                    success: false,
+                    error: 'Failed to upload file'
+                };
+            }
+
+            // Get public URL
+            const { data: urlData } = this.supabase.storage
+                .from('contact-attachments')
+                .getPublicUrl(data.path);
+
+            return {
+                success: true,
+                url: urlData.publicUrl
+            };
+        } catch (error) {
+            console.error('File upload error:', error);
+            return {
+                success: false,
+                error: 'Failed to upload file'
+            };
+        }
+    }
+
+    // Submit form data
+    async submitForm(formData: any): Promise<{ success: boolean; error?: string }> {
+        try {
+            const { data, error } = await this.supabase
+                .from('contact_form_submissions')
+                .insert([formData])
+                .select()
+                .single();
+
+            if (error) {
+                console.error('Form submission error:', error);
+                return {
+                    success: false,
+                    error: 'Failed to submit form'
+                };
+            }
+
+            return { success: true };
+        } catch (error) {
+            console.error('Form submission error:', error);
+            return {
+                success: false,
+                error: 'Failed to submit form'
+            };
+        }
+    }
+}
+
+// Export instance for use in components
+export const contactPageService = new ContactPageService();
 
 // Server-side data fetching functions
 export async function getContactHeroData(): Promise<ContactHeroSection | null> {

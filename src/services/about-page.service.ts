@@ -70,18 +70,10 @@ export async function getAboutDedicationSectionData(): Promise<any | null> {
     try {
         const supabase = await createClient();
 
-        // Try to load dedication section data and its items
+        // Use the database functions to get section and items data with proper image URLs
         const [sectionResult, itemsResult] = await Promise.all([
-            supabase
-                .from("about_dedication_sections")
-                .select("*")
-                .eq("is_active", true)
-                .single(),
-            supabase
-                .from("about_dedication_items")
-                .select("*")
-                .eq("is_active", true)
-                .order("display_order")
+            supabase.rpc("get_about_dedication_section"),
+            supabase.rpc("get_about_dedication_items")
         ]);
 
         if (sectionResult.error) {
@@ -89,8 +81,23 @@ export async function getAboutDedicationSectionData(): Promise<any | null> {
             return null;
         }
 
+        if (itemsResult.error) {
+            console.error("Error fetching dedication items:", itemsResult.error);
+            return null;
+        }
+
+        // Get the section data (first item from array)
+        const sectionData = sectionResult.data && sectionResult.data.length > 0
+            ? sectionResult.data[0]
+            : null;
+
+        if (!sectionData) {
+            console.log("No active dedication section found");
+            return null;
+        }
+
         return {
-            ...sectionResult.data,
+            ...sectionData,
             items: itemsResult.data || []
         };
     } catch (error) {

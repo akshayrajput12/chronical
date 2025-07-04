@@ -6,6 +6,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { CheckCircle } from "lucide-react";
+import { contactPageService } from "@/services/contact-page.service";
+
+interface BoothFormErrors {
+    name?: string;
+    email?: string;
+    message?: string;
+    file?: string;
+    general?: string;
+}
 
 const BoothRequirementsForm = () => {
     const [formData, setFormData] = useState({
@@ -21,12 +30,20 @@ const BoothRequirementsForm = () => {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [errors, setErrors] = useState<BoothFormErrors>({});
 
     const handleInputChange = (field: string, value: string) => {
         setFormData(prev => ({
             ...prev,
             [field]: value,
         }));
+        // Clear error when user starts typing
+        if (errors[field as keyof BoothFormErrors]) {
+            setErrors(prev => ({
+                ...prev,
+                [field]: undefined,
+            }));
+        }
     };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,32 +52,144 @@ const BoothRequirementsForm = () => {
             ...prev,
             file,
         }));
+        // Clear file error when user selects a file
+        if (errors.file) {
+            setErrors(prev => ({
+                ...prev,
+                file: undefined,
+            }));
+        }
+    };
+
+    const validateForm = (): boolean => {
+        const newErrors: BoothFormErrors = {};
+
+        // Required field validation
+        if (!formData.name.trim()) {
+            newErrors.name = "Name is required";
+        }
+
+        if (!formData.email.trim()) {
+            newErrors.email = "Email is required";
+        } else if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(formData.email)) {
+            newErrors.email = "Invalid email format";
+        }
+
+        if (!formData.message.trim()) {
+            newErrors.message = "Message is required";
+        }
+
+        // File validation
+        if (formData.file) {
+            const maxSize = 10 * 1024 * 1024; // 10MB
+            if (formData.file.size > maxSize) {
+                newErrors.file = "File size must be less than 10MB";
+            }
+
+            const allowedTypes = ['.pdf', '.doc', '.docx', '.jpg', '.jpeg', '.png'];
+            const fileExtension = '.' + formData.file.name.split('.').pop()?.toLowerCase();
+            if (!allowedTypes.includes(fileExtension)) {
+                newErrors.file = `File type not allowed. Allowed types: ${allowedTypes.join(', ')}`;
+            }
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (!validateForm()) {
+            return;
+        }
+
         setIsSubmitting(true);
+        setErrors({});
 
-        // Simulate form submission
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        try {
+            let attachmentUrl = "";
+            let attachmentFilename = "";
+            let attachmentSize = 0;
+            let attachmentType = "";
 
-        setIsSubmitting(false);
-        setIsSubmitted(true);
+            // Upload file if present
+            if (formData.file) {
+                try {
+                    const uploadResult = await contactPageService.uploadFile(formData.file);
+                    if (uploadResult.success && uploadResult.url) {
+                        attachmentUrl = uploadResult.url;
+                        attachmentFilename = formData.file.name;
+                        attachmentSize = formData.file.size;
+                        attachmentType = formData.file.type;
+                    } else {
+                        console.error("File upload failed:", uploadResult.error);
+                        setErrors({ file: uploadResult.error || "Failed to upload file. Please try again." });
+                        setIsSubmitting(false);
+                        return;
+                    }
+                } catch (uploadError) {
+                    console.error("File upload error:", uploadError);
+                    setErrors({ file: "Failed to upload file. Please try again." });
+                    setIsSubmitting(false);
+                    return;
+                }
+            }
 
-        // Reset form after 3 seconds
-        setTimeout(() => {
-            setIsSubmitted(false);
-            setFormData({
-                name: "",
-                exhibitionName: "",
-                companyName: "",
-                email: "",
-                phone: "",
-                budget: "",
-                message: "",
-                file: null,
+            // Submit form data to contact form submissions (booth requirements use same table)
+            const submitResult = await contactPageService.submitForm({
+                name: formData.name,
+                exhibition_name: formData.exhibitionName || undefined,
+                company_name: formData.companyName || undefined,
+                email: formData.email,
+                phone: formData.phone || undefined,
+                message: formData.message,
+                attachment_url: attachmentUrl || undefined,
+                attachment_filename: attachmentFilename || undefined,
+                attachment_size: attachmentSize || undefined,
+                attachment_type: attachmentType || undefined,
+                agreed_to_terms: true, // Booth requirements don't require explicit terms agreement
             });
-        }, 3000);
+
+            if (!submitResult.success) {
+                console.error("Form submission failed:", submitResult.error);
+                setErrors({ general: submitResult.error || "Failed to submit form. Please try again." });
+                setIsSubmitting(false);
+                return;
+            }
+
+            setIsSubmitted(true);
+
+            // Reset form after 5 seconds
+            setTimeout(() => {
+                setIsSubmitted(false);
+                setFormData({
+                    name: "",
+                    exhibitionName: "",
+                    companyName: "",
+                    email: "",
+                    phone: "",
+                    budget: "",
+                    message: "",
+                    file: null,
+                });
+                setErrors({});
+
+                // Clear file input
+                const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+                if (fileInput) {
+                    fileInput.value = "";
+                }
+            }, 5000);
+
+        } catch (error) {
+            console.error("Form submission error:", error);
+            setErrors({
+                general: "Failed to submit form. Please try again."
+            });
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     if (isSubmitted) {
@@ -159,9 +288,17 @@ const BoothRequirementsForm = () => {
                                                 e.target.value,
                                             )
                                         }
-                                        className="w-full h-10 px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md placeholder:text-gray-500 transition-all duration-200"
+                                        className={`w-full h-10 px-4 py-3 text-sm bg-white border ${
+                                            errors.name
+                                                ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+                                                : 'border-gray-300 focus:border-[#a5cd39] focus:ring-[#a5cd39]'
+                                        } focus:ring-1 rounded-md placeholder:text-gray-500 transition-all duration-200`}
                                         required
+                                        disabled={isSubmitting}
                                     />
+                                    {errors.name && (
+                                        <p className="text-red-500 text-xs mt-1">{errors.name}</p>
+                                    )}
                                 </div>
                                 <div className="space-y-2">
                                     <Input
@@ -176,7 +313,7 @@ const BoothRequirementsForm = () => {
                                             )
                                         }
                                         className="w-full h-10 px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md placeholder:text-gray-500 transition-all duration-200"
-                                        required
+                                        disabled={isSubmitting}
                                     />
                                 </div>
                                 <div className="space-y-2">
@@ -191,9 +328,17 @@ const BoothRequirementsForm = () => {
                                                 e.target.value,
                                             )
                                         }
-                                        className="w-full h-10 px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md placeholder:text-gray-500 transition-all duration-200"
+                                        className={`w-full h-10 px-4 py-3 text-sm bg-white border ${
+                                            errors.email
+                                                ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+                                                : 'border-gray-300 focus:border-[#a5cd39] focus:ring-[#a5cd39]'
+                                        } focus:ring-1 rounded-md placeholder:text-gray-500 transition-all duration-200`}
                                         required
+                                        disabled={isSubmitting}
                                     />
+                                    {errors.email && (
+                                        <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+                                    )}
                                 </div>
                                 <div className="space-y-2">
                                     <Input
@@ -208,7 +353,7 @@ const BoothRequirementsForm = () => {
                                             )
                                         }
                                         className="w-full h-10 px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md placeholder:text-gray-500 transition-all duration-200"
-                                        required
+                                        disabled={isSubmitting}
                                     />
                                 </div>
                             </div>
@@ -225,7 +370,7 @@ const BoothRequirementsForm = () => {
                                         )
                                     }
                                     className="w-full h-10 px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md placeholder:text-gray-500 transition-all duration-200"
-                                    required
+                                    disabled={isSubmitting}
                                 />
                             </div>
                             {/* Row 2: File Upload */}
@@ -237,8 +382,13 @@ const BoothRequirementsForm = () => {
                                         onChange={handleFileChange}
                                         className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                                         accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                                        disabled={isSubmitting}
                                     />
-                                    <div className="flex items-center justify-between w-full h-10 px-4 py-2 text-sm bg-white border border-gray-300 hover:border-[#a5cd39] focus-within:border-[#a5cd39] rounded-md cursor-pointer transition-all duration-200">
+                                    <div className={`flex items-center justify-between w-full h-10 px-4 py-2 text-sm bg-white border ${
+                                        errors.file
+                                            ? 'border-red-500 hover:border-red-500 focus-within:border-red-500'
+                                            : 'border-gray-300 hover:border-[#a5cd39] focus-within:border-[#a5cd39]'
+                                    } rounded-md cursor-pointer transition-all duration-200`}>
                                         <span
                                             className={`${
                                                 formData.file
@@ -255,6 +405,9 @@ const BoothRequirementsForm = () => {
                                         </span>
                                     </div>
                                 </div>
+                                {errors.file && (
+                                    <p className="text-red-500 text-xs mt-1">{errors.file}</p>
+                                )}
                             </div>
 
                             {/* Row 4: Message */}
@@ -269,17 +422,32 @@ const BoothRequirementsForm = () => {
                                             e.target.value,
                                         )
                                     }
-                                    className="w-full min-h-[120px] px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md resize-none placeholder:text-gray-500 transition-all duration-200"
+                                    className={`w-full min-h-[120px] px-4 py-3 text-sm bg-white border ${
+                                        errors.message
+                                            ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+                                            : 'border-gray-300 focus:border-[#a5cd39] focus:ring-[#a5cd39]'
+                                    } focus:ring-1 rounded-md resize-none placeholder:text-gray-500 transition-all duration-200`}
                                     required
+                                    disabled={isSubmitting}
                                 />
+                                {errors.message && (
+                                    <p className="text-red-500 text-xs mt-1">{errors.message}</p>
+                                )}
                             </div>
+
+                            {/* Error Display */}
+                            {errors.general && (
+                                <div className="text-center">
+                                    <p className="text-red-500 text-sm">{errors.general}</p>
+                                </div>
+                            )}
 
                             {/* Submit Button */}
                             <div className="text-center pt-4">
                                 <Button
                                     type="submit"
                                     disabled={isSubmitting}
-                                    className="bg-[#a5cd39] hover:bg-[#8fb32a] text-black px-12 py-4 text-sm font-semibold transition-all duration-200 rounded-md font-noto-kufi-arabic tracking-wider min-w-[200px] shadow-sm hover:shadow-md"
+                                    className="bg-[#a5cd39] hover:bg-[#8fb32a] text-black px-12 py-4 text-sm font-semibold transition-all duration-200 rounded-md font-noto-kufi-arabic tracking-wider min-w-[200px] shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     {isSubmitting ? (
                                         <>
@@ -290,11 +458,6 @@ const BoothRequirementsForm = () => {
                                         "SUBMIT REQUEST"
                                     )}
                                 </Button>
-                                {/* show this message on form submit */}
-                                {/* <p className="text-white/90 text-2xl font-markazi-text mt-4 max-w-lg mx-auto leading-relaxed">
-                                    Our team will review your requirements and
-                                    provide a detailed proposal within 24 hours.
-                                </p> */}
                             </div>
                         </motion.form>
 

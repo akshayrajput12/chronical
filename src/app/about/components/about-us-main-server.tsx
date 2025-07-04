@@ -9,140 +9,145 @@ interface AboutUsMainServerProps {
 }
 
 const AboutUsMainServer = ({ mainSectionData }: AboutUsMainServerProps) => {
-    // Default fallback data for when server data is not available
-    const defaultData: AboutMainSectionData = {
-        id: "",
-        section_label: "ABOUT US",
-        main_heading: "Electronics And Computer Software Export Promotion Council",
-        description: "Electronics & Computer Software Export Promotion Council or ESC, is India's apex trade promotion organization mandated to promote international cooperation in the field of electronics, telecom, and IT. Established with the support of Ministry of Commerce in the year 1989, Council has over 2300 members spread all over the country.",
-        cta_text: "Official website",
-        cta_url: "#",
-        video_url: "https://www.youtube.com/embed/02tEkxgRE2c",
-        video_title: "ESC India Video",
-        logo_image_id: undefined,
-        logo_image_url: undefined,
-        logo_image_alt: undefined,
-        logo_fallback_url: "https://images.unsplash.com/photo-1633409361618-c73427e4e206?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=80&q=80",
-        esc_main_text: "ESC",
-        esc_sub_text: "INDIA",
-        primary_color: "#a5cd39",
-        secondary_color: "#f0c419",
-        is_active: true,
-        created_at: "",
-        updated_at: "",
-    };
+    // Use only the provided data, no static fallback
+    if (!mainSectionData) {
+        return null;
+    }
 
-    // Use server data if available, otherwise use default data
-    const sectionData = mainSectionData || defaultData;
+    const sectionData = mainSectionData;
+
+    // Don't render if section is not active
+    if (!sectionData.is_active) {
+        return null;
+    }
+
+    // Determine logo image URL - only use if it's a valid non-empty string
+    const logoImageUrl = sectionData.logo_image_url && sectionData.logo_image_url.trim() !== ''
+        ? sectionData.logo_image_url
+        : (sectionData.logo_fallback_url && sectionData.logo_fallback_url.trim() !== ''
+            ? sectionData.logo_fallback_url
+            : null);
 
     return (
-        <section
-            className="py-16 px-4 md:px-8 lg:px-16"
-            style={{ backgroundColor: "#f9f7f7" }}
-        >
-            <div className="max-w-7xl mx-auto">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                    {/* Left Column - Content */}
-                    <div className="space-y-6">
-                        {/* Section Label */}
-                        <div className="flex items-center space-x-2">
-                            <div
-                                className="w-12 h-0.5"
-                                style={{
-                                    backgroundColor: sectionData.primary_color,
-                                }}
-                            ></div>
-                            <span
-                                className="text-sm font-medium tracking-wider uppercase"
-                                style={{ color: sectionData.primary_color }}
-                            >
-                                {sectionData.section_label}
-                            </span>
-                        </div>
+        <section className="pt-36 md:pt-32 lg:pt-42 pb-8 md:pb-12 lg:pb-16 bg-white overflow-hidden">
+            <div className="container mx-auto px-4">
+                <div className="max-w-6xl mx-auto">
+                    <div className="relative">
+                        {/* Main content container */}
+                        <div className="relative z-20 flex flex-wrap md:flex-nowrap gap-10 md:gap-16">
+                            {/* Left side - Video with ESC INDIA text */}
+                            <div className="relative ml-0 sm:ml-[-40px] md:ml-[-60px] lg:ml-[-80px] w-full md:w-[500px] lg:w-[550px]">
+                                {/* Top left colored box */}
+                                <div
+                                    className="absolute -left-16 -top-16 w-[270px] h-[240px] z-0"
+                                    style={{
+                                        backgroundColor:
+                                            sectionData.primary_color,
+                                    }}
+                                ></div>
 
-                        {/* Main Heading */}
-                        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
-                            {sectionData.main_heading}
-                        </h2>
+                                {/* Video container */}
+                                <div className="relative z-10">
+                                    <div className="relative bg-black">
+                                        {/* YouTube Video Embed */}
+                                        <div className="relative w-full h-[340px] bg-black">
+                                            {sectionData.video_url && sectionData.video_url.trim() !== '' ? (
+                                                <iframe
+                                                    src={sectionData.video_url}
+                                                    title={sectionData.video_title || "Video"}
+                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                    allowFullScreen
+                                                    className="absolute inset-0 w-full h-full"
+                                                ></iframe>
+                                            ) : (
+                                                <div className="absolute inset-0 w-full h-full flex items-center justify-center text-white">
+                                                    <p>No video available</p>
+                                                </div>
+                                            )}
+                                        </div>
 
-                        {/* Description */}
-                        <p className="text-gray-600 text-lg leading-relaxed">
-                            {sectionData.description}
-                        </p>
+                                        {/* ESC Logo overlay */}
+                                        {logoImageUrl && (
+                                            <div className="absolute top-6 right-6 z-20">
+                                                <Image
+                                                    src={logoImageUrl}
+                                                    alt={
+                                                        sectionData.logo_image_alt ||
+                                                        "ESC Logo"
+                                                    }
+                                                    width={40}
+                                                    height={40}
+                                                    className="object-contain"
+                                                />
+                                            </div>
+                                        )}
 
-                        {/* CTA Button */}
-                        <div className="pt-4">
-                            <a
-                                href={sectionData.cta_url}
-                                className="inline-flex items-center px-6 py-3 text-white font-medium rounded-lg transition-colors duration-200"
-                                style={{
-                                    backgroundColor: sectionData.primary_color,
-                                }}
-                                onMouseEnter={(e) => {
-                                    e.currentTarget.style.backgroundColor = sectionData.secondary_color;
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.currentTarget.style.backgroundColor = sectionData.primary_color;
-                                }}
-                            >
-                                {sectionData.cta_text}
-                                <svg
-                                    className="ml-2 w-4 h-4"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                                    />
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
+                                        {/* ESC INDIA text */}
+                                        <div className="absolute left-0 bottom-0 z-20">
+                                            <div className="flex flex-col">
+                                                <div className="bg-transparent px-8 py-1">
+                                                    <h3 className="text-white text-7xl font-bold leading-tight">
+                                                        {
+                                                            sectionData.esc_main_text
+                                                        }
+                                                    </h3>
+                                                </div>
+                                                <div className="bg-transparent px-8 py-1">
+                                                    <h4
+                                                        className="text-6xl font-bold leading-tight"
+                                                        style={{
+                                                            color: sectionData.secondary_color,
+                                                        }}
+                                                    >
+                                                        {
+                                                            sectionData.esc_sub_text
+                                                        }
+                                                    </h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-                    {/* Right Column - Video and Logo */}
-                    <div className="space-y-8">
-                        {/* Video Embed */}
-                        <div className="relative aspect-video rounded-lg overflow-hidden shadow-lg">
-                            <iframe
-                                src={sectionData.video_url}
-                                title={sectionData.video_title}
-                                className="w-full h-full"
-                                frameBorder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
-                            ></iframe>
-                        </div>
-
-                        {/* Logo Section */}
-                        <div className="flex items-center justify-center space-x-4 p-6 bg-white rounded-lg shadow-sm">
-                            {/* Logo Image */}
-                            <div className="relative w-16 h-16 rounded-full overflow-hidden">
-                                <Image
-                                    src={sectionData.logo_image_url || sectionData.logo_fallback_url || "/placeholder-logo.png"}
-                                    alt={sectionData.logo_image_alt || "Company Logo"}
-                                    fill
-                                    className="object-cover"
-                                />
+                                {/* Bottom right colored box */}
+                                <div
+                                    className="absolute -right-24 top-[200px] sm:top-[200px] md:top-[200px] lg:top-[200px] w-[280px] h-[180px] z-0"
+                                    style={{
+                                        backgroundColor:
+                                            sectionData.secondary_color,
+                                    }}
+                                ></div>
                             </div>
 
-                            {/* ESC Text */}
-                            <div className="text-center">
-                                <div
-                                    className="text-2xl font-bold"
-                                    style={{ color: sectionData.primary_color }}
-                                >
-                                    {sectionData.esc_main_text}
+                            {/* Right side - Text content */}
+                            <div className="w-full ml-0 sm:ml-[40px] md:ml-[60px] lg:ml-[80px] md:w-[500px] lg:w-[550px] pt-8 md:pt-0">
+                                <div>
+                                    <h2 className="text-3xl text-center md:text-4xl font-rubik font-bold mb-2">
+                                        {sectionData.main_heading}
+                                    </h2>
+                                    <div className="flex justify-center">
+                                        <div className="h-1 bg-[#a5cd39] w-16 mt-2 mb-6"></div>
+                                    </div>
                                 </div>
-                                <div
-                                    className="text-sm font-medium"
-                                    style={{ color: sectionData.secondary_color }}
-                                >
-                                    {sectionData.esc_sub_text}
-                                </div>
+
+                                <p className="text-gray-600 mb-6 leading-relaxed text-base font-nunito">
+                                    {sectionData.description}
+                                </p>
+
+                                {sectionData.cta_url && sectionData.cta_url.trim() !== '' && sectionData.cta_text && (
+                                    <div className="mt-8">
+                                        <a
+                                            href={sectionData.cta_url}
+                                            className="bg-[#a5cd39] text-white px-6 py-1 rounded-md font-medium hover:bg-[#94b933] transition-colors duration-300 font-noto-kufi-arabic text-sm"
+                                            style={{
+                                                backgroundColor:
+                                                    sectionData.primary_color,
+                                            }}
+                                        >
+                                            {sectionData.cta_text}
+                                        </a>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>

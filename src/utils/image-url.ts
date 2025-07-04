@@ -45,6 +45,10 @@ export const getImageUrlForBucket = {
     events: (imagePath: string | null | undefined) => getImageUrl(imagePath, "event_images"),
     blogs: (imagePath: string | null | undefined) => getImageUrl(imagePath, "blog_images"),
     cities: (imagePath: string | null | undefined) => getImageUrl(imagePath, "city-images"),
+    aboutDedication: (imagePath: string | null | undefined) => getImageUrl(imagePath, "about-dedication"),
+    aboutHero: (imagePath: string | null | undefined) => getImageUrl(imagePath, "about-hero"),
+    aboutMain: (imagePath: string | null | undefined) => getImageUrl(imagePath, "about-main"),
+    aboutDescription: (imagePath: string | null | undefined) => getImageUrl(imagePath, "about-description"),
     general: (imagePath: string | null | undefined) => getImageUrl(imagePath, "images"),
 };
 

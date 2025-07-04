@@ -53,13 +53,19 @@ const AboutUsDescriptionServer = ({ descriptionSectionData }: AboutUsDescription
                     {/* Service 1 */}
                     <div className="bg-white rounded-lg p-8 shadow-sm hover:shadow-md transition-shadow duration-200 text-center">
                         <div className="w-16 h-16 mx-auto mb-6 flex items-center justify-center bg-gray-50 rounded-full">
-                            <Image
-                                src={sectionData.service_1_icon_url}
-                                alt={sectionData.service_1_title}
-                                width={32}
-                                height={32}
-                                className="w-8 h-8"
-                            />
+                            {sectionData.service_1_icon_url && sectionData.service_1_icon_url.trim() !== '' ? (
+                                <Image
+                                    src={sectionData.service_1_icon_url}
+                                    alt={sectionData.service_1_title}
+                                    width={32}
+                                    height={32}
+                                    className="w-8 h-8"
+                                />
+                            ) : (
+                                <div className="w-8 h-8 bg-gray-300 rounded flex items-center justify-center">
+                                    <span className="text-gray-500 text-xs">Icon</span>
+                                </div>
+                            )}
                         </div>
                         <h3 className="text-xl font-semibold text-gray-900 mb-4">
                             {sectionData.service_1_title}
@@ -74,13 +80,19 @@ const AboutUsDescriptionServer = ({ descriptionSectionData }: AboutUsDescription
                     {/* Service 2 */}
                     <div className="bg-white rounded-lg p-8 shadow-sm hover:shadow-md transition-shadow duration-200 text-center">
                         <div className="w-16 h-16 mx-auto mb-6 flex items-center justify-center bg-gray-50 rounded-full">
-                            <Image
-                                src={sectionData.service_2_icon_url}
-                                alt={sectionData.service_2_title}
-                                width={32}
-                                height={32}
-                                className="w-8 h-8"
-                            />
+                            {sectionData.service_2_icon_url && sectionData.service_2_icon_url.trim() !== '' ? (
+                                <Image
+                                    src={sectionData.service_2_icon_url}
+                                    alt={sectionData.service_2_title}
+                                    width={32}
+                                    height={32}
+                                    className="w-8 h-8"
+                                />
+                            ) : (
+                                <div className="w-8 h-8 bg-gray-300 rounded flex items-center justify-center">
+                                    <span className="text-gray-500 text-xs">Icon</span>
+                                </div>
+                            )}
                         </div>
                         <h3 className="text-xl font-semibold text-gray-900 mb-4">
                             {sectionData.service_2_title}
@@ -95,13 +107,19 @@ const AboutUsDescriptionServer = ({ descriptionSectionData }: AboutUsDescription
                     {/* Service 3 */}
                     <div className="bg-white rounded-lg p-8 shadow-sm hover:shadow-md transition-shadow duration-200 text-center">
                         <div className="w-16 h-16 mx-auto mb-6 flex items-center justify-center bg-gray-50 rounded-full">
-                            <Image
-                                src={sectionData.service_3_icon_url}
-                                alt={sectionData.service_3_title}
-                                width={32}
-                                height={32}
-                                className="w-8 h-8"
-                            />
+                            {sectionData.service_3_icon_url && sectionData.service_3_icon_url.trim() !== '' ? (
+                                <Image
+                                    src={sectionData.service_3_icon_url}
+                                    alt={sectionData.service_3_title}
+                                    width={32}
+                                    height={32}
+                                    className="w-8 h-8"
+                                />
+                            ) : (
+                                <div className="w-8 h-8 bg-gray-300 rounded flex items-center justify-center">
+                                    <span className="text-gray-500 text-xs">Icon</span>
+                                </div>
+                            )}
                         </div>
                         <h3 className="text-xl font-semibold text-gray-900 mb-4">
                             {sectionData.service_3_title}

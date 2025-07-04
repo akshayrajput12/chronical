@@ -24,18 +24,22 @@ const Footer = () => {
                             </h3>
                             <ul className="space-y-1.5 text-sm">
                                 <FooterLink
+                                    key="expo-services"
                                     href="/expo-services"
                                     label="Expo Services"
                                 />
                                 <FooterLink
+                                    key="congress-services"
                                     href="/congress-services"
                                     label="Congress Services"
                                 />
                                 <FooterLink
+                                    key="kiosk-services"
                                     href="/kiosk-services"
                                     label="Kiosk Services"
                                 />
                                 <FooterLink
+                                    key="custom-stands"
                                     href="/custom-stands"
                                     label="Custom Stands"
                                 />
@@ -67,6 +71,7 @@ const Footer = () => {
                                         ))}
                                         {cities.length > 6 && (
                                             <FooterLink
+                                                key="view-all-locations"
                                                 href="/cities"
                                                 label="View All Locations"
                                             />
@@ -87,9 +92,10 @@ const Footer = () => {
                                 RESOURCES
                             </h3>
                             <ul className="space-y-1.5 text-sm">
-                                <FooterLink href="/about-us" label="About Us" />
-                                <FooterLink href="/blog" label="Blog" />
+                                <FooterLink key="about-us" href="/about-us" label="About Us" />
+                                <FooterLink key="blog" href="/blog" label="Blog" />
                                 <FooterLink
+                                    key="contact-us"
                                     href="/contact-us"
                                     label="Contact Us"
                                 />

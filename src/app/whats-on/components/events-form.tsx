@@ -9,6 +9,14 @@ interface EventsFormProps {
     className?: string;
 }
 
+interface EventFormErrors {
+    name?: string;
+    email?: string;
+    message?: string;
+    file?: string;
+    general?: string;
+}
+
 export const EventsForm: React.FC<EventsFormProps> = ({
     eventId,
     onSubmit,
@@ -30,6 +38,44 @@ export const EventsForm: React.FC<EventsFormProps> = ({
         type: "success" | "error" | null;
         message: string;
     }>({ type: null, message: "" });
+    const [errors, setErrors] = useState<EventFormErrors>({});
+
+    // Validation function
+    const validateForm = (): boolean => {
+        const newErrors: EventFormErrors = {};
+
+        // Required field validation
+        if (!formData.name.trim()) {
+            newErrors.name = "Name is required";
+        }
+
+        if (!formData.email.trim()) {
+            newErrors.email = "Email is required";
+        } else if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(formData.email)) {
+            newErrors.email = "Invalid email format";
+        }
+
+        if (!formData.message.trim()) {
+            newErrors.message = "Message is required";
+        }
+
+        // File validation
+        if (formData.file) {
+            const maxSize = 10 * 1024 * 1024; // 10MB
+            if (formData.file.size > maxSize) {
+                newErrors.file = "File size must be less than 10MB";
+            }
+
+            const allowedTypes = ['.pdf', '.doc', '.docx', '.jpg', '.jpeg', '.png'];
+            const fileExtension = '.' + formData.file.name.split('.').pop()?.toLowerCase();
+            if (!allowedTypes.includes(fileExtension)) {
+                newErrors.file = `File type not allowed. Allowed types: ${allowedTypes.join(', ')}`;
+            }
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
 
     // Handler for input changes
     const handleInputChange = (
@@ -42,6 +88,13 @@ export const EventsForm: React.FC<EventsFormProps> = ({
             ...prev,
             [name]: value,
         }));
+        // Clear error when user starts typing
+        if (errors[name as keyof EventFormErrors]) {
+            setErrors(prev => ({
+                ...prev,
+                [name]: undefined,
+            }));
+        }
     };
 
     // Handler for file input change
@@ -51,13 +104,26 @@ export const EventsForm: React.FC<EventsFormProps> = ({
             ...prev,
             file,
         }));
+        // Clear file error when user selects a file
+        if (errors.file) {
+            setErrors(prev => ({
+                ...prev,
+                file: undefined,
+            }));
+        }
     };
 
     // Handler for form submission
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (!validateForm()) {
+            return;
+        }
+
         setIsSubmitting(true);
         setSubmitStatus({ type: null, message: "" });
+        setErrors({});
 
         try {
             const attachmentUrl = "";
@@ -140,6 +206,9 @@ export const EventsForm: React.FC<EventsFormProps> = ({
             }
         } catch (error) {
             console.error("Error submitting form:", error);
+            setErrors({
+                general: "An error occurred while submitting the form. Please try again."
+            });
             setSubmitStatus({
                 type: "error",
                 message:
@@ -178,16 +247,25 @@ export const EventsForm: React.FC<EventsFormProps> = ({
                     <form onSubmit={handleSubmit} className="space-y-4">
                         {/* Simple responsive grid for all main fields */}
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            <input
-                                type="text"
-                                name="name"
-                                placeholder="Name *"
-                                value={formData.name}
-                                onChange={handleInputChange}
-                                className="h-8 px-2 py-1 text-xs border border-gray-300 rounded-md w-full focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] placeholder:text-gray-500 transition-all duration-200"
-                                required
-                                disabled={isSubmitting}
-                            />
+                            <div className="space-y-1">
+                                <input
+                                    type="text"
+                                    name="name"
+                                    placeholder="Name *"
+                                    value={formData.name}
+                                    onChange={handleInputChange}
+                                    className={`h-8 px-2 py-1 text-xs border ${
+                                        errors.name
+                                            ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+                                            : 'border-gray-300 focus:border-[#a5cd39] focus:ring-[#a5cd39]'
+                                    } rounded-md w-full focus:ring-1 placeholder:text-gray-500 transition-all duration-200`}
+                                    required
+                                    disabled={isSubmitting}
+                                />
+                                {errors.name && (
+                                    <p className="text-red-500 text-xs">{errors.name}</p>
+                                )}
+                            </div>
                             <input
                                 type="text"
                                 name="exhibition_name"
@@ -206,16 +284,25 @@ export const EventsForm: React.FC<EventsFormProps> = ({
                                 className="h-8 px-2 py-1 text-xs border border-gray-300 rounded-md w-full focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] placeholder:text-gray-500 transition-all duration-200"
                                 disabled={isSubmitting}
                             />
-                            <input
-                                type="email"
-                                name="email"
-                                placeholder="Email *"
-                                value={formData.email}
-                                onChange={handleInputChange}
-                                className="h-8 px-2 py-1 text-xs border border-gray-300 rounded-md w-full focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] placeholder:text-gray-500 transition-all duration-200"
-                                required
-                                disabled={isSubmitting}
-                            />
+                            <div className="space-y-1">
+                                <input
+                                    type="email"
+                                    name="email"
+                                    placeholder="Email *"
+                                    value={formData.email}
+                                    onChange={handleInputChange}
+                                    className={`h-8 px-2 py-1 text-xs border ${
+                                        errors.email
+                                            ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+                                            : 'border-gray-300 focus:border-[#a5cd39] focus:ring-[#a5cd39]'
+                                    } rounded-md w-full focus:ring-1 placeholder:text-gray-500 transition-all duration-200`}
+                                    required
+                                    disabled={isSubmitting}
+                                />
+                                {errors.email && (
+                                    <p className="text-red-500 text-xs">{errors.email}</p>
+                                )}
+                            </div>
                             <input
                                 type="tel"
                                 name="phone"
@@ -245,8 +332,13 @@ export const EventsForm: React.FC<EventsFormProps> = ({
                                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                                     accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                                     title="Upload File (PDF, DOC, JPG, PNG)"
+                                    disabled={isSubmitting}
                                 />
-                                <div className="flex items-center justify-between w-full h-10 px-1 pl-2 py-2 text-sm bg-white border border-gray-300 hover:border-[#a5cd39] focus-within:border-[#a5cd39] rounded-md cursor-pointer transition-all duration-200">
+                                <div className={`flex items-center justify-between w-full h-10 px-1 pl-2 py-2 text-sm bg-white border ${
+                                    errors.file
+                                        ? 'border-red-500 hover:border-red-500 focus-within:border-red-500'
+                                        : 'border-gray-300 hover:border-[#a5cd39] focus-within:border-[#a5cd39]'
+                                } rounded-md cursor-pointer transition-all duration-200`}>
                                     <span
                                         className={`${
                                             formData.file
@@ -263,24 +355,42 @@ export const EventsForm: React.FC<EventsFormProps> = ({
                                     </span>
                                 </div>
                             </div>
+                            {errors.file && (
+                                <p className="text-red-500 text-xs">{errors.file}</p>
+                            )}
                         </div>
                         {/* Textarea full width */}
-                        <div>
+                        <div className="space-y-1">
                             <textarea
                                 name="message"
                                 placeholder="Tell us about your event requirements, booth specifications, or any questions you have..."
                                 value={formData.message}
                                 onChange={handleInputChange}
-                                className="min-h-[40px] h-16 px-2 py-1 text-xs border border-gray-300 rounded-md w-full focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] placeholder:text-gray-500 transition-all duration-200 resize-none"
+                                className={`min-h-[40px] h-16 px-2 py-1 text-xs border ${
+                                    errors.message
+                                        ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+                                        : 'border-gray-300 focus:border-[#a5cd39] focus:ring-[#a5cd39]'
+                                } rounded-md w-full focus:ring-1 placeholder:text-gray-500 transition-all duration-200 resize-none`}
                                 disabled={isSubmitting}
+                                required
                             />
+                            {errors.message && (
+                                <p className="text-red-500 text-xs">{errors.message}</p>
+                            )}
                         </div>
+                        {/* Error Display */}
+                        {errors.general && (
+                            <div className="text-center">
+                                <p className="text-red-500 text-sm">{errors.general}</p>
+                            </div>
+                        )}
+
                         {/* Submit button centered */}
                         <div className="flex justify-center pt-2">
                             <button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className={`px-6 py-2 rounded-md font-medium transition-colors duration-300 text-sm ${
+                                className={`px-6 py-2 rounded-md font-medium transition-colors duration-300 text-sm disabled:opacity-50 disabled:cursor-not-allowed ${
                                     isSubmitting
                                         ? "bg-gray-400 text-gray-200 cursor-not-allowed"
                                         : "bg-[#a5cd39] text-white hover:bg-[#94b933]"

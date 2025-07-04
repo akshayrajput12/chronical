@@ -262,12 +262,6 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
                                                         unoptimized={event.logo_image_url.startsWith(
                                                             "/",
                                                         )}
-                                                        onError={() => {
-                                                            console.error(
-                                                                "Logo image failed to load:",
-                                                                event.logo_image_url,
-                                                            );
-                                                        }}
                                                     />
                                                 </div>
                                             </div>
