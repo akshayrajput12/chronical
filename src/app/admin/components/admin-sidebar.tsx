@@ -636,13 +636,6 @@ const AdminSidebar = ({
                                             pathname === "/admin/pages/events/hero"
                                         }
                                     />
-                                    <SubNavItem
-                                        href="/admin/pages/events/submissions"
-                                        label="Form Submissions"
-                                        isActive={
-                                            pathname === "/admin/pages/events/submissions"
-                                        }
-                                    />
                                 </div>
                             </motion.div>
                         )}
@@ -906,33 +899,7 @@ const AdminSidebar = ({
                     isActive={pathname.includes("/admin/pages/portfolio")}
                 />
 
-                {/* Media & Settings */}
-                <div className="pt-4 pb-2">
-                    <p className="px-4 text-xs font-medium text-sidebar-foreground/60 uppercase tracking-wider">
-                        System
-                    </p>
-                </div>
 
-                <NavItem
-                    href="/admin/media"
-                    label="Media Library"
-                    icon={<ImageIcon size={18} />}
-                    isActive={pathname.includes("/admin/media")}
-                />
-
-                <NavItem
-                    href="/admin/settings"
-                    label="Settings"
-                    icon={<Settings size={18} />}
-                    isActive={pathname.includes("/admin/settings")}
-                />
-
-                <NavItem
-                    href="/admin/site-settings"
-                    label="Site Settings"
-                    icon={<Globe size={18} />}
-                    isActive={pathname.includes("/admin/site-settings")}
-                />
 
                 {/* Logout */}
                 <div className="pt-4 pb-2">

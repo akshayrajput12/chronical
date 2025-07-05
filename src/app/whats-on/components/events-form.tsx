@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 import { EventFormSubmissionInput } from "@/types/events";
+import { contactPageService } from "@/services/contact-page.service";
+import { PhoneInput } from "@/components/ui/phone-input";
 
 interface EventsFormProps {
     eventId?: string;
@@ -12,6 +14,7 @@ interface EventsFormProps {
 interface EventFormErrors {
     name?: string;
     email?: string;
+    phone?: string;
     message?: string;
     file?: string;
     general?: string;
@@ -57,6 +60,15 @@ export const EventsForm: React.FC<EventsFormProps> = ({
 
         if (!formData.message.trim()) {
             newErrors.message = "Message is required";
+        }
+
+        // Phone validation (optional but if provided should be valid)
+        if (formData.phone && formData.phone.trim()) {
+            // Basic phone validation - should contain at least 7 digits
+            const phoneDigits = formData.phone.replace(/\D/g, '');
+            if (phoneDigits.length < 7) {
+                newErrors.phone = "Please enter a valid phone number";
+            }
         }
 
         // File validation
@@ -126,16 +138,30 @@ export const EventsForm: React.FC<EventsFormProps> = ({
         setErrors({});
 
         try {
-            const attachmentUrl = "";
+            let attachmentUrl = "";
             let attachmentFilename = "";
             let attachmentSize = 0;
 
             // Upload file if present
             if (formData.file) {
-                // TODO: Implement file upload to Supabase storage
-                // For now, we'll just store the file info
-                attachmentFilename = formData.file.name;
-                attachmentSize = formData.file.size;
+                try {
+                    const uploadResult = await contactPageService.uploadFile(formData.file);
+                    if (uploadResult.success && uploadResult.url) {
+                        attachmentUrl = uploadResult.url;
+                        attachmentFilename = formData.file.name;
+                        attachmentSize = formData.file.size;
+                    } else {
+                        console.error("File upload failed:", uploadResult.error);
+                        setErrors({ file: uploadResult.error || "Failed to upload file. Please try again." });
+                        setIsSubmitting(false);
+                        return;
+                    }
+                } catch (uploadError) {
+                    console.error("File upload error:", uploadError);
+                    setErrors({ file: "Failed to upload file. Please try again." });
+                    setIsSubmitting(false);
+                    return;
+                }
             }
 
             // Prepare submission data
@@ -153,13 +179,25 @@ export const EventsForm: React.FC<EventsFormProps> = ({
                 attachment_size: attachmentSize || undefined,
             };
 
-            // Submit to API
-            const response = await fetch("/api/events/submissions", {
+            // Submit to contact API for unified form management
+            const response = await fetch("/api/contact/submit", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(submissionData),
+                body: JSON.stringify({
+                    name: formData.name,
+                    exhibition_name: formData.exhibition_name || undefined,
+                    company_name: formData.company_name || undefined,
+                    email: formData.email,
+                    phone: formData.phone || undefined,
+                    budget: formData.budget || undefined,
+                    message: `[EVENT INQUIRY] ${eventId ? `Event ID: ${eventId} - ` : ''}${formData.message || 'Event inquiry submission'}`,
+                    attachment_url: attachmentUrl || undefined,
+                    attachment_filename: attachmentFilename || undefined,
+                    attachment_size: attachmentSize || undefined,
+                    agreed_to_terms: true, // Event forms don't require explicit terms agreement
+                }),
             });
 
             const result = await response.json();
@@ -303,15 +341,20 @@ export const EventsForm: React.FC<EventsFormProps> = ({
                                     <p className="text-red-500 text-xs">{errors.email}</p>
                                 )}
                             </div>
-                            <input
-                                type="tel"
-                                name="phone"
-                                placeholder="Phone (with country code)"
-                                value={formData.phone}
-                                onChange={handleInputChange}
-                                className="h-8 px-2 py-1 text-xs border border-gray-300 rounded-md w-full focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] placeholder:text-gray-500 transition-all duration-200"
-                                disabled={isSubmitting}
-                            />
+                            <div className="space-y-1">
+                                <PhoneInput
+                                    value={formData.phone}
+                                    onChange={(value: string) => setFormData(prev => ({ ...prev, phone: value }))}
+                                    placeholder="Phone number"
+                                    className="w-full"
+                                    disabled={isSubmitting}
+                                    error={!!errors.phone}
+                                    name="phone"
+                                />
+                                {errors.phone && (
+                                    <p className="text-red-500 text-xs">{errors.phone}</p>
+                                )}
+                            </div>
                             <input
                                 type="text"
                                 name="budget"

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { ContactFormSubmissionInput, ContactFormSubmissionResponse, SpamDetectionResult } from "@/types/contact";
+import { web3FormsService, Web3FormsService } from "@/lib/services/web3forms";
 
 // Simple spam detection function
 function detectSpam(submission: ContactFormSubmissionInput): SpamDetectionResult {
@@ -69,9 +70,11 @@ function detectSpam(submission: ContactFormSubmissionInput): SpamDetectionResult
 // POST /api/contact/submit - Submit contact form
 export async function POST(request: NextRequest) {
     try {
+        console.log("Contact form submission started");
         const supabase = await createClient(true); // Use service role for public form submissions
-        
+
         const submissionData: ContactFormSubmissionInput = await request.json();
+        console.log("Received submission data:", submissionData);
 
         // Validate required fields
         if (!submissionData.name?.trim()) {
@@ -121,6 +124,7 @@ export async function POST(request: NextRequest) {
             company_name: submissionData.company_name?.trim() || null,
             email: submissionData.email.trim().toLowerCase(),
             phone: submissionData.phone?.trim() || null,
+            budget: submissionData.budget?.trim() || null,
             message: submissionData.message.trim(),
             attachment_url: submissionData.attachment_url || null,
             attachment_filename: submissionData.attachment_filename || null,
@@ -136,6 +140,7 @@ export async function POST(request: NextRequest) {
         };
 
         // Insert submission into database
+        console.log("Inserting submission with metadata:", submissionWithMetadata);
         const { data: insertedSubmission, error: insertError } = await supabase
             .from("contact_form_submissions")
             .insert(submissionWithMetadata)
@@ -144,8 +149,16 @@ export async function POST(request: NextRequest) {
 
         if (insertError) {
             console.error("Database insert error:", insertError);
+            console.error("Error details:", {
+                message: insertError.message,
+                details: insertError.details,
+                hint: insertError.hint,
+                code: insertError.code
+            });
             throw insertError;
         }
+
+        console.log("Successfully inserted submission:", insertedSubmission);
 
         // Log spam detection if applicable
         if (spamResult.isSpam) {
@@ -155,6 +168,42 @@ export async function POST(request: NextRequest) {
                 reasons: spamResult.reasons,
                 email: submissionData.email
             });
+        }
+
+        // Send email notification via Web3Forms (only for non-spam submissions)
+        if (!spamResult.isSpam) {
+            try {
+                const formType = Web3FormsService.getFormTypeFromMessage(submissionData.message);
+                const baseUrl = request.headers.get('origin') || 'https://chronicleexhibits.ae';
+                const submissionUrl = `${baseUrl}/admin/contact/submissions`;
+
+                // Extract event ID from message if it's an event inquiry
+                let eventId: string | undefined;
+                if (formType === 'event') {
+                    const eventIdMatch = submissionData.message.match(/Event ID: ([a-f0-9-]+)/);
+                    eventId = eventIdMatch ? eventIdMatch[1] : undefined;
+                }
+
+                await web3FormsService.sendFormNotification({
+                    name: submissionData.name,
+                    email: submissionData.email,
+                    phone: submissionData.phone,
+                    exhibition_name: submissionData.exhibition_name,
+                    company_name: submissionData.company_name,
+                    budget: submissionData.budget,
+                    message: submissionData.message,
+                    form_type: formType,
+                    event_id: eventId,
+                    submission_url: submissionUrl,
+                    referrer: referrer
+                });
+
+                console.log("Email notification sent successfully via Web3Forms");
+            } catch (emailError) {
+                console.error("Failed to send email notification:", emailError);
+                // Don't fail the entire request if email fails
+                // The form submission is still saved in the database
+            }
         }
 
         const response: ContactFormSubmissionResponse = {

@@ -5,12 +5,15 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { PhoneInput } from "@/components/ui/phone-input";
 import { CheckCircle } from "lucide-react";
 import { contactPageService } from "@/services/contact-page.service";
 
 interface BoothFormErrors {
     name?: string;
     email?: string;
+    phone?: string;
+    budget?: string;
     message?: string;
     file?: string;
     general?: string;
@@ -79,6 +82,15 @@ const BoothRequirementsForm = () => {
             newErrors.message = "Message is required";
         }
 
+        // Phone validation (optional but if provided should be valid)
+        if (formData.phone && formData.phone.trim()) {
+            // Basic phone validation - should contain at least 7 digits
+            const phoneDigits = formData.phone.replace(/\D/g, '');
+            if (phoneDigits.length < 7) {
+                newErrors.phone = "Please enter a valid phone number";
+            }
+        }
+
         // File validation
         if (formData.file) {
             const maxSize = 10 * 1024 * 1024; // 10MB
@@ -136,24 +148,33 @@ const BoothRequirementsForm = () => {
                 }
             }
 
-            // Submit form data to contact form submissions (booth requirements use same table)
-            const submitResult = await contactPageService.submitForm({
-                name: formData.name,
-                exhibition_name: formData.exhibitionName || undefined,
-                company_name: formData.companyName || undefined,
-                email: formData.email,
-                phone: formData.phone || undefined,
-                message: formData.message,
-                attachment_url: attachmentUrl || undefined,
-                attachment_filename: attachmentFilename || undefined,
-                attachment_size: attachmentSize || undefined,
-                attachment_type: attachmentType || undefined,
-                agreed_to_terms: true, // Booth requirements don't require explicit terms agreement
+            // Submit form data via API endpoint (booth requirements use same table as contact forms)
+            const response = await fetch("/api/contact/submit", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    name: formData.name,
+                    exhibition_name: formData.exhibitionName || undefined,
+                    company_name: formData.companyName || undefined,
+                    email: formData.email,
+                    phone: formData.phone || undefined,
+                    budget: formData.budget || undefined,
+                    message: `[BOOTH REQUIREMENTS] ${formData.message}`,
+                    attachment_url: attachmentUrl || undefined,
+                    attachment_filename: attachmentFilename || undefined,
+                    attachment_size: attachmentSize || undefined,
+                    attachment_type: attachmentType || undefined,
+                    agreed_to_terms: true, // Booth requirements don't require explicit terms agreement
+                }),
             });
 
-            if (!submitResult.success) {
-                console.error("Form submission failed:", submitResult.error);
-                setErrors({ general: submitResult.error || "Failed to submit form. Please try again." });
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                console.error("Form submission failed:", result.error);
+                setErrors({ general: result.error || "Failed to submit form. Please try again." });
                 setIsSubmitting(false);
                 return;
             }
@@ -341,14 +362,32 @@ const BoothRequirementsForm = () => {
                                     )}
                                 </div>
                                 <div className="space-y-2">
-                                    <Input
-                                        id="phone"
-                                        type="tel"
-                                        placeholder="Enter phone number with country code"
+                                    <PhoneInput
                                         value={formData.phone}
+                                        onChange={(value: string) => handleInputChange("phone", value)}
+                                        placeholder="Enter phone number"
+                                        className="w-full"
+                                        disabled={isSubmitting}
+                                        error={!!errors.phone}
+                                        name="phone"
+                                    />
+                                    {errors.phone && (
+                                        <p className="text-red-500 text-xs mt-1">{errors.phone}</p>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Row 2: Company Name and Budget */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <Input
+                                        id="companyName"
+                                        type="text"
+                                        placeholder="Enter Company name"
+                                        value={formData.companyName}
                                         onChange={e =>
                                             handleInputChange(
-                                                "phone",
+                                                "companyName",
                                                 e.target.value,
                                             )
                                         }
@@ -356,22 +395,29 @@ const BoothRequirementsForm = () => {
                                         disabled={isSubmitting}
                                     />
                                 </div>
-                            </div>
-                            <div className="space-y-2">
-                                <Input
-                                    id="companyName"
-                                    type="text"
-                                    placeholder="Enter Company name"
-                                    value={formData.companyName}
-                                    onChange={e =>
-                                        handleInputChange(
-                                            "companyName",
-                                            e.target.value,
-                                        )
-                                    }
-                                    className="w-full h-10 px-4 py-3 text-sm bg-white border border-gray-300 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] rounded-md placeholder:text-gray-500 transition-all duration-200"
-                                    disabled={isSubmitting}
-                                />
+                                <div className="space-y-2">
+                                    <Input
+                                        id="budget"
+                                        type="text"
+                                        placeholder="Enter your budget range (e.g., $10,000 - $20,000)"
+                                        value={formData.budget}
+                                        onChange={e =>
+                                            handleInputChange(
+                                                "budget",
+                                                e.target.value,
+                                            )
+                                        }
+                                        className={`w-full h-10 px-4 py-3 text-sm bg-white border ${
+                                            errors.budget
+                                                ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+                                                : 'border-gray-300 focus:border-[#a5cd39] focus:ring-[#a5cd39]'
+                                        } focus:ring-1 rounded-md placeholder:text-gray-500 transition-all duration-200`}
+                                        disabled={isSubmitting}
+                                    />
+                                    {errors.budget && (
+                                        <p className="text-red-500 text-xs mt-1">{errors.budget}</p>
+                                    )}
+                                </div>
                             </div>
                             {/* Row 2: File Upload */}
                             <div className="space-y-2">

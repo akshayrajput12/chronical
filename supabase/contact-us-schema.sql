@@ -113,6 +113,7 @@ CREATE TABLE IF NOT EXISTS contact_form_submissions (
     company_name TEXT,
     email TEXT NOT NULL,
     phone TEXT,
+    budget TEXT, -- Budget range for booth requirements
     message TEXT NOT NULL,
     
     -- File Upload

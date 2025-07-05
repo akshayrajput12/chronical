@@ -10,6 +10,7 @@ import { CheckCircle } from "lucide-react";
 import Link from "next/link";
 import { ContactFormSettings, ContactFormData, ContactFormErrors } from "@/types/contact";
 import { contactPageService } from "@/lib/services/contact";
+import { PhoneInput } from "@/components/ui/phone-input";
 
 interface ContactFormProps {
     formSettings: ContactFormSettings | null;
@@ -69,6 +70,15 @@ const ContactForm: React.FC<ContactFormProps> = ({ formSettings }) => {
 
         if (!formData.message.trim()) {
             newErrors.message = "Message is required";
+        }
+
+        // Phone validation (optional but if provided should be valid)
+        if (formData.phone && formData.phone.trim()) {
+            // Basic phone validation - should contain at least 7 digits
+            const phoneDigits = formData.phone.replace(/\D/g, '');
+            if (phoneDigits.length < 7) {
+                newErrors.phone = "Please enter a valid phone number";
+            }
         }
 
         if (displaySettings.require_terms_agreement && !formData.agreedToTerms) {
@@ -144,7 +154,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ formSettings }) => {
                 company_name: formData.companyName || undefined,
                 email: formData.email,
                 phone: formData.phone || undefined,
-                message: formData.message,
+                message: `[CONTACT FORM] ${formData.message}`,
                 attachment_url: attachmentUrl || undefined,
                 attachment_filename: attachmentFilename || undefined,
                 attachment_size: attachmentSize || undefined,
@@ -317,20 +327,19 @@ const ContactForm: React.FC<ContactFormProps> = ({ formSettings }) => {
                                     >
                                         Phone Number*
                                     </Label>
-                                    <Input
-                                        id="phone"
-                                        type="tel"
-                                        placeholder="Enter phone number with country code"
+                                    <PhoneInput
                                         value={formData.phone}
-                                        onChange={e =>
-                                            handleInputChange(
-                                                "phone",
-                                                e.target.value,
-                                            )
-                                        }
-                                        className="w-full h-9 px-4 py-3 text-base border border-gray-300 focus:ring-2 focus:ring-[#a5cd39] focus:border-[#a5cd39] bg-gray-100 rounded-md shadow-sm"
+                                        onChange={(value: string) => handleInputChange("phone", value)}
+                                        placeholder="Enter phone number"
+                                        className="w-full"
+                                        disabled={isSubmitting}
+                                        error={!!errors.phone}
+                                        name="phone"
                                         required
                                     />
+                                    {errors.phone && (
+                                        <p className="text-red-500 text-xs mt-1">{errors.phone}</p>
+                                    )}
                                 </div>
                             </div>
 

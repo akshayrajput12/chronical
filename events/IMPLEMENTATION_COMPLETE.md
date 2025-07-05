@@ -29,9 +29,9 @@ The Events Management System has been successfully implemented and is now **comp
 - ✅ `/api/events/[id]` - Individual event operations
 - ✅ `/api/events/categories` - Categories management
 - ✅ `/api/events/hero` - Hero content management
-- ✅ `/api/events/submissions` - Form submissions handling
 - ✅ `/api/events/statistics` - Dashboard statistics
 - ✅ `/api/events/search` - Advanced search with relevance scoring
+- ✅ Event form submissions handled via `/api/contact/submit` (unified system)
 
 #### **Database Functions**
 - ✅ `get_events_with_categories()` - Events with category info
@@ -157,7 +157,6 @@ src/
 │   │       ├── [id]/route.ts          ✅ Individual event API
 │   │       ├── categories/route.ts    ✅ Categories API
 │   │       ├── hero/route.ts          ✅ Hero content API
-│   │       ├── submissions/route.ts   ✅ Form submissions API
 │   │       ├── statistics/route.ts    ✅ Statistics API
 │   │       └── search/route.ts        ✅ Search API
 │   ├── admin/

@@ -12,15 +12,15 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Textarea } from '@/components/ui/textarea';
 import { contactAdminService } from '@/lib/services/contact';
 import { ContactFormSubmission, ContactFormSubmissionStatus } from '@/types/contact';
-import { 
-    Search, 
-    Filter, 
-    Eye, 
-    Reply, 
-    Trash2, 
+import {
+    Search,
+    Filter,
+    Eye,
+    Reply,
+    Trash2,
     Download,
-    Loader2, 
-    AlertCircle, 
+    Loader2,
+    AlertCircle,
     CheckCircle,
     Mail,
     Phone,
@@ -28,19 +28,58 @@ import {
     User,
     MessageSquare,
     Archive,
-    Star
+    Star,
+    FileText,
+    ExternalLink
 } from 'lucide-react';
 
 interface ContactSubmissionsTabProps {
     onStatsUpdate?: () => void;
 }
 
+// Helper function to detect form type based on submission content
+const getFormType = (submission: ContactFormSubmission): 'contact' | 'booth' | 'event' | 'quotation' => {
+    const message = submission.message?.toLowerCase() || '';
+
+    if (message.includes('[event inquiry]')) {
+        return 'event';
+    }
+    if (message.includes('[quotation request]')) {
+        return 'quotation';
+    }
+    if (message.includes('booth') ||
+        message.includes('exhibition') ||
+        submission.exhibition_name ||
+        submission.budget) {
+        return 'booth';
+    }
+    return 'contact';
+};
+
+// Helper function to get form type badge
+const getFormTypeBadge = (submission: ContactFormSubmission) => {
+    const formType = getFormType(submission);
+
+    switch (formType) {
+        case 'event':
+            return <Badge variant="secondary" className="bg-purple-100 text-purple-800 border-purple-200">Event Inquiry</Badge>;
+        case 'quotation':
+            return <Badge variant="secondary" className="bg-orange-100 text-orange-800 border-orange-200">Quotation Request</Badge>;
+        case 'booth':
+            return <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200">Booth Requirements</Badge>;
+        case 'contact':
+            return <Badge variant="secondary" className="bg-blue-100 text-blue-800 border-blue-200">General Contact</Badge>;
+        default:
+            return null;
+    }
+};
+
 export default function ContactSubmissionsTab({ onStatsUpdate }: ContactSubmissionsTabProps) {
     const [submissions, setSubmissions] = useState<ContactFormSubmission[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState<ContactFormSubmissionStatus | 'all'>('all');
-    const [formTypeFilter, setFormTypeFilter] = useState<'all' | 'contact' | 'booth'>('all');
+    const [formTypeFilter, setFormTypeFilter] = useState<'all' | 'contact' | 'booth' | 'event' | 'quotation'>('all');
     const [selectedSubmission, setSelectedSubmission] = useState<ContactFormSubmission | null>(null);
     const [showViewDialog, setShowViewDialog] = useState(false);
     const [showReplyDialog, setShowReplyDialog] = useState(false);
@@ -77,14 +116,9 @@ export default function ContactSubmissionsTab({ onStatsUpdate }: ContactSubmissi
 
         const matchesStatus = statusFilter === 'all' || submission.status === statusFilter;
 
-        // Determine form type based on message content or exhibition_name presence
-        const isBoothRequirement = submission.message.toLowerCase().includes('booth') ||
-                                 submission.message.toLowerCase().includes('exhibition') ||
-                                 (submission.exhibition_name && submission.exhibition_name.trim() !== '');
-
-        const matchesFormType = formTypeFilter === 'all' ||
-                               (formTypeFilter === 'booth' && isBoothRequirement) ||
-                               (formTypeFilter === 'contact' && !isBoothRequirement);
+        // Determine form type using the helper function
+        const formType = getFormType(submission);
+        const matchesFormType = formTypeFilter === 'all' || formType === formTypeFilter;
 
         return matchesSearch && matchesStatus && matchesFormType;
     });
@@ -304,8 +338,10 @@ export default function ContactSubmissionsTab({ onStatsUpdate }: ContactSubmissi
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="all">All Forms</SelectItem>
-                                    <SelectItem value="contact">Contact Forms</SelectItem>
+                                    <SelectItem value="contact">General Contact</SelectItem>
                                     <SelectItem value="booth">Booth Requirements</SelectItem>
+                                    <SelectItem value="event">Event Inquiries</SelectItem>
+                                    <SelectItem value="quotation">Quotation Requests</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
@@ -347,13 +383,7 @@ export default function ContactSubmissionsTab({ onStatsUpdate }: ContactSubmissi
                                             </h3>
                                             {getStatusBadge(submission.status)}
                                             {/* Form type indicator */}
-                                            {(submission.message.toLowerCase().includes('booth') ||
-                                              submission.message.toLowerCase().includes('exhibition') ||
-                                              (submission.exhibition_name && submission.exhibition_name.trim() !== '')) && (
-                                                <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200">
-                                                    Booth Requirements
-                                                </Badge>
-                                            )}
+                                            {getFormTypeBadge(submission)}
                                             {submission.status === 'new' && <Star className="h-4 w-4 text-blue-500" />}
                                         </div>
                                         <div className="flex flex-wrap gap-4 text-sm text-gray-600 mb-3">
@@ -375,6 +405,12 @@ export default function ContactSubmissionsTab({ onStatsUpdate }: ContactSubmissi
                                                 <Calendar className="h-4 w-4" />
                                                 <span>{formatDate(submission.created_at)}</span>
                                             </div>
+                                            {submission.attachment_url && (
+                                                <div className="flex items-center gap-1 text-blue-600">
+                                                    <FileText className="h-4 w-4" />
+                                                    <span>Has Attachment</span>
+                                                </div>
+                                            )}
                                         </div>
                                         <p className="text-gray-700 line-clamp-2">{submission.message}</p>
                                     </div>
@@ -469,6 +505,12 @@ export default function ContactSubmissionsTab({ onStatsUpdate }: ContactSubmissi
                                         <p className="font-medium">{selectedSubmission.exhibition_name}</p>
                                     </div>
                                 )}
+                                {selectedSubmission.budget && (
+                                    <div>
+                                        <Label>Budget</Label>
+                                        <p className="font-medium">{selectedSubmission.budget}</p>
+                                    </div>
+                                )}
                                 <div>
                                     <Label>Status</Label>
                                     <div className="mt-1">
@@ -483,11 +525,68 @@ export default function ContactSubmissionsTab({ onStatsUpdate }: ContactSubmissi
                                     <p className="whitespace-pre-wrap">{selectedSubmission.message}</p>
                                 </div>
                             </div>
+
+                            {/* Document Attachment Section */}
+                            {selectedSubmission.attachment_url && (
+                                <div>
+                                    <Label>Attached Document</Label>
+                                    <div className="mt-1 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center space-x-3">
+                                                <FileText className="h-5 w-5 text-blue-600" />
+                                                <div>
+                                                    <p className="font-medium text-blue-900">
+                                                        {selectedSubmission.attachment_filename || 'Uploaded Document'}
+                                                    </p>
+                                                    {selectedSubmission.attachment_size && (
+                                                        <p className="text-sm text-blue-600">
+                                                            {(selectedSubmission.attachment_size / 1024 / 1024).toFixed(2)} MB
+                                                        </p>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <div className="flex space-x-2">
+                                                <Button
+                                                    variant="outline"
+                                                    size="sm"
+                                                    onClick={() => window.open(selectedSubmission.attachment_url, '_blank')}
+                                                    className="flex items-center space-x-1"
+                                                >
+                                                    <ExternalLink className="h-4 w-4" />
+                                                    <span>View</span>
+                                                </Button>
+                                                <Button
+                                                    variant="outline"
+                                                    size="sm"
+                                                    onClick={() => {
+                                                        const link = document.createElement('a');
+                                                        link.href = selectedSubmission.attachment_url!;
+                                                        link.download = selectedSubmission.attachment_filename || 'document';
+                                                        document.body.appendChild(link);
+                                                        link.click();
+                                                        document.body.removeChild(link);
+                                                    }}
+                                                    className="flex items-center space-x-1"
+                                                >
+                                                    <Download className="h-4 w-4" />
+                                                    <span>Download</span>
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                             
-                            <div className="text-sm text-gray-500">
+                            <div className="text-sm text-gray-500 space-y-1">
                                 <p>Submitted: {formatDate(selectedSubmission.created_at)}</p>
                                 {selectedSubmission.updated_at !== selectedSubmission.created_at && (
                                     <p>Updated: {formatDate(selectedSubmission.updated_at)}</p>
+                                )}
+                                {selectedSubmission.referrer && selectedSubmission.referrer !== 'direct' && (
+                                    <p>Source: {selectedSubmission.referrer}</p>
+                                )}
+                                {selectedSubmission.ip_address && (
+                                    <p>IP Address: {selectedSubmission.ip_address}</p>
                                 )}
                             </div>
                         </div>

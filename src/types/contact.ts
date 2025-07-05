@@ -110,6 +110,7 @@ export interface ContactFormSubmission extends BaseEntity {
     company_name?: string;
     email: string;
     phone?: string;
+    budget?: string; // Budget range for booth requirements
     message: string;
     attachment_url?: string;
     attachment_filename?: string;
@@ -127,12 +128,65 @@ export interface ContactFormSubmission extends BaseEntity {
     referrer?: string;
 }
 
+// =====================================================
+// UNIFIED FORM SUBMISSIONS (Contact + Event)
+// =====================================================
+
+export type FormSubmissionType = 'contact' | 'event';
+
+export interface UnifiedFormSubmission extends BaseEntity {
+    // Basic fields common to both forms
+    name: string;
+    email: string;
+    phone?: string;
+    message?: string;
+
+    // Form-specific fields
+    exhibition_name?: string;
+    company_name?: string;
+    budget?: string; // Event form specific
+
+    // File attachment
+    attachment_url?: string;
+    attachment_filename?: string;
+    attachment_size?: number;
+    attachment_type?: string;
+
+    // Contact form specific
+    agreed_to_terms?: boolean;
+
+    // Status and processing
+    status: ContactFormSubmissionStatus;
+    is_spam: boolean;
+    spam_score: number;
+    admin_notes?: string;
+    handled_by?: string;
+    handled_at?: string;
+
+    // Metadata
+    ip_address?: string;
+    user_agent?: string;
+    referrer?: string;
+
+    // Form type identification
+    form_type: FormSubmissionType;
+
+    // Event-specific data
+    event_id?: string;
+    event?: {
+        id: string;
+        title: string;
+        slug: string;
+    };
+}
+
 export interface ContactFormSubmissionInput {
     name: string;
     exhibition_name?: string;
     company_name?: string;
     email: string;
     phone?: string;
+    budget?: string; // Budget range for booth requirements
     message: string;
     attachment_url?: string;
     attachment_filename?: string;
