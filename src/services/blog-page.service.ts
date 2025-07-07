@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createStaticClient } from "@/lib/supabase/server";
 import { BlogPostSummary, BlogPostWithDetails } from "@/types/blog";
 
 export interface BlogPageData {
@@ -131,6 +131,42 @@ export async function getBlogPageData(
             currentPage: page,
             totalPages: 0
         };
+    }
+}
+
+/**
+ * Fetches all published blog post slugs for static generation
+ * Used by generateStaticParams in blog detail pages
+ * Optimized for SSG with timeout and error handling
+ */
+export async function getAllBlogSlugs(): Promise<string[]> {
+    try {
+        const supabase = createStaticClient();
+
+        // Add timeout for build-time reliability
+        const timeoutPromise = new Promise<never>((_, reject) => {
+            setTimeout(() => reject(new Error('Timeout fetching blog slugs')), 10000);
+        });
+
+        const dataPromise = supabase
+            .from("blog_posts")
+            .select("slug")
+            .eq("status", "published")
+            .not("slug", "is", null)
+            .limit(1000); // Reasonable limit for static generation
+
+        const { data, error } = await Promise.race([dataPromise, timeoutPromise]);
+
+        if (error) {
+            console.error("Error fetching blog slugs:", error);
+            return [];
+        }
+
+        return data?.map(post => post.slug).filter(Boolean) || [];
+    } catch (error) {
+        console.error("Error in getAllBlogSlugs:", error);
+        // Return empty array to allow build to continue
+        return [];
     }
 }
 

@@ -4,6 +4,9 @@ import EventsHeroServer from './components/events-hero-server'
 import EventsGalleryServer from './components/events-gallery-server'
 import { getEventsPageData } from '@/services/event-page.service'
 
+// Enable ISR - revalidate every 30 minutes (1800 seconds) for fresh event content
+export const revalidate = 1800;
+
 export const metadata: Metadata = {
   title: "What's On | Chronicle Exhibits - Upcoming Exhibitions & Events",
   description: 'Discover upcoming exhibitions and events at Chronicle Exhibits. Stay updated with the latest trade shows, conferences, and industry events in Dubai.',

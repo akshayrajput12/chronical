@@ -24,19 +24,17 @@ export interface HomePageData {
 /**
  * Fetches all home page data in a single server-side call
  * This replaces multiple useEffect calls for better SEO performance
+ * Optimized for SSG with timeout and error handling
  */
 export async function getHomePageData(): Promise<HomePageData> {
     try {
+        // Add timeout for build-time reliability
+        const timeoutPromise = new Promise<never>((_, reject) => {
+            setTimeout(() => reject(new Error('Timeout fetching home page data')), 15000);
+        });
+
         // Fetch all data in parallel for better performance
-        const [
-            heroData,
-            businessData,
-            whySectionData,
-            essentialSupportData,
-            setupProcessData,
-            newCompanyData,
-            dynamicCellData
-        ] = await Promise.all([
+        const dataPromise = Promise.all([
             getHeroSectionData(),
             getBusinessSectionData(),
             getWhySectionData(),
@@ -45,6 +43,16 @@ export async function getHomePageData(): Promise<HomePageData> {
             getNewCompanyData(),
             getDynamicCellData()
         ]);
+
+        const [
+            heroData,
+            businessData,
+            whySectionData,
+            essentialSupportData,
+            setupProcessData,
+            newCompanyData,
+            dynamicCellData
+        ] = await Promise.race([dataPromise, timeoutPromise]);
 
         return {
             hero: heroData,

@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createStaticClient } from "@/lib/supabase/server";
 import { City, LegacyCity } from "@/types/cities";
 
 // Interface for cities page data
@@ -56,6 +56,42 @@ export async function getCitiesPageData(): Promise<CitiesPageData> {
             cities: [],
             total: 0
         };
+    }
+}
+
+/**
+ * Fetches all active city slugs for static generation
+ * Used by generateStaticParams in city detail pages
+ * Optimized for SSG with timeout and error handling
+ */
+export async function getAllCitySlugs(): Promise<string[]> {
+    try {
+        const supabase = createStaticClient();
+
+        // Add timeout for build-time reliability
+        const timeoutPromise = new Promise<never>((_, reject) => {
+            setTimeout(() => reject(new Error('Timeout fetching city slugs')), 10000);
+        });
+
+        const dataPromise = supabase
+            .from("cities")
+            .select("slug")
+            .eq("is_active", true)
+            .not("slug", "is", null)
+            .limit(100); // Reasonable limit for cities
+
+        const { data, error } = await Promise.race([dataPromise, timeoutPromise]);
+
+        if (error) {
+            console.error("Error fetching city slugs:", error);
+            return [];
+        }
+
+        return data?.map(city => city.slug).filter(Boolean) || [];
+    } catch (error) {
+        console.error("Error in getAllCitySlugs:", error);
+        // Return empty array to allow build to continue
+        return [];
     }
 }
 

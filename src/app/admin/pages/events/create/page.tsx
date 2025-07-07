@@ -144,7 +144,8 @@ const CreateEventPage = () => {
             const slug = formData.title
                 .toLowerCase()
                 .replace(/[^a-z0-9]+/g, '-')
-                .replace(/(^-|-$)/g, '');
+                .replace(/(^-|-$)/g, '')
+                .replace(/\/+$/, ''); // Remove trailing slashes
             setFormData(prev => ({ ...prev, slug }));
         }
     }, [formData.title, formData.slug]);
@@ -169,6 +170,11 @@ const CreateEventPage = () => {
     };
 
     const handleInputChange = (field: keyof EventInput, value: any) => {
+        // Clean slug input to remove trailing slashes
+        if (field === 'slug' && typeof value === 'string') {
+            value = value.replace(/\/+$/, '');
+        }
+
         setFormData(prev => ({
             ...prev,
             [field]: value,
@@ -247,6 +253,12 @@ const CreateEventPage = () => {
 
             if (!formData.slug.trim()) {
                 alert('Please enter an event slug');
+                setSaving(false);
+                return;
+            }
+
+            if (formData.slug.endsWith('/')) {
+                alert('Event slug cannot end with a slash (/)');
                 setSaving(false);
                 return;
             }
@@ -587,6 +599,28 @@ const CreateEventPage = () => {
                                     </div>
                                 </div>
 
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="start_date">Start Date</Label>
+                                        <Input
+                                            id="start_date"
+                                            type="datetime-local"
+                                            value={formData.start_date}
+                                            onChange={(e) => handleInputChange("start_date", e.target.value)}
+                                        />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label htmlFor="end_date">End Date</Label>
+                                        <Input
+                                            id="end_date"
+                                            type="datetime-local"
+                                            value={formData.end_date}
+                                            onChange={(e) => handleInputChange("end_date", e.target.value)}
+                                        />
+                                    </div>
+                                </div>
+
                                 <div className="grid grid-cols-1 gap-6">
                                     <div className="space-y-2">
                                         <Label htmlFor="date_range">Display Date Range</Label>
@@ -596,6 +630,9 @@ const CreateEventPage = () => {
                                             value={formData.date_range}
                                             onChange={(e) => handleInputChange("date_range", e.target.value)}
                                         />
+                                        <p className="text-sm text-gray-500">
+                                            Optional: Custom display format for the date range
+                                        </p>
                                     </div>
                                 </div>
                             </TabsContent>

@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createStaticClient } from "@/lib/supabase/server";
 import { Event, EventsHero } from "@/types/events";
 import { BlogPostSummary } from "@/types/blog";
 
@@ -16,6 +16,43 @@ export interface EventDetailPageData {
     relatedEvents: Event[];
     galleryImages: any[];
     blogPosts: BlogPostSummary[];
+}
+
+/**
+ * Fetches all published event slugs for static generation
+ * Used by generateStaticParams in event detail pages
+ * Optimized for SSG with timeout and error handling
+ */
+export async function getAllEventSlugs(): Promise<string[]> {
+    try {
+        const supabase = createStaticClient();
+
+        // Add timeout for build-time reliability
+        const timeoutPromise = new Promise<never>((_, reject) => {
+            setTimeout(() => reject(new Error('Timeout fetching event slugs')), 10000);
+        });
+
+        const dataPromise = supabase
+            .from("events")
+            .select("slug")
+            .eq("is_active", true)
+            .not("published_at", "is", null)
+            .not("slug", "is", null)
+            .limit(1000); // Reasonable limit for static generation
+
+        const { data, error } = await Promise.race([dataPromise, timeoutPromise]);
+
+        if (error) {
+            console.error("Error fetching event slugs:", error);
+            return [];
+        }
+
+        return data?.map(event => event.slug).filter(Boolean) || [];
+    } catch (error) {
+        console.error("Error in getAllEventSlugs:", error);
+        // Return empty array to allow build to continue
+        return [];
+    }
 }
 
 /**
@@ -171,7 +208,7 @@ export async function getEventDetailPageData(slug: string): Promise<EventDetailP
                     published_at,
                     view_count,
                     category_id,
-                    blog_categories!inner(name, slug, color)
+                    blog_categories(name, slug, color)
                 `)
                 .eq('status', 'published')
                 .not('published_at', 'is', null)
@@ -201,20 +238,26 @@ export async function getEventDetailPageData(slug: string): Promise<EventDetailP
         const galleryImages = galleryImagesResult.data || [];
 
         // Transform blog posts
-        const blogPosts: BlogPostSummary[] = (blogPostsResult.data || []).map(post => ({
-            id: post.id,
-            title: post.title,
-            slug: post.slug,
-            excerpt: post.excerpt || "",
-            featured_image_url: post.featured_image_url || "",
-            featured_image_alt: "",
-            published_at: post.published_at || "",
-            view_count: post.view_count || 0,
-            tags: [], // TODO: Implement tags relationship when available
-            category_name: post.blog_categories?.[0]?.name || "",
-            category_slug: post.blog_categories?.[0]?.slug || "",
-            category_color: post.blog_categories?.[0]?.color || "",
-        }));
+        const blogPosts: BlogPostSummary[] = (blogPostsResult.data || []).map(post => {
+            // Handle blog_categories which might be null, object, or array
+            const category = post.blog_categories;
+            const categoryData = Array.isArray(category) ? category[0] : category;
+
+            return {
+                id: post.id,
+                title: post.title,
+                slug: post.slug,
+                excerpt: post.excerpt || "",
+                featured_image_url: post.featured_image_url || "",
+                featured_image_alt: "",
+                published_at: post.published_at || "",
+                view_count: post.view_count || 0,
+                tags: [], // TODO: Implement tags relationship when available
+                category_name: categoryData?.name || "",
+                category_slug: categoryData?.slug || "",
+                category_color: categoryData?.color || "#a5cd39",
+            };
+        });
 
         return {
             event: transformedEvent,

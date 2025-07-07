@@ -63,7 +63,21 @@ export default function ContactFormSettingsTab() {
             }
         } catch (error) {
             console.error('Failed to load form settings:', error);
-            setError('Failed to load form settings');
+
+            // Extract meaningful error message from Supabase error
+            let errorMessage = 'Failed to load form settings';
+
+            if (error && typeof error === 'object') {
+                if ('message' in error && error.message) {
+                    errorMessage = error.message;
+                } else if ('details' in error && error.details) {
+                    errorMessage = error.details;
+                }
+            } else if (typeof error === 'string') {
+                errorMessage = error;
+            }
+
+            setError(errorMessage);
         } finally {
             setLoading(false);
         }
@@ -110,6 +124,14 @@ export default function ContactFormSettingsTab() {
                 setError('Sidebar address is required');
                 return;
             }
+            if (formData.max_file_size_mb <= 0) {
+                setError('Maximum file size must be greater than 0');
+                return;
+            }
+            if (!formData.terms_text.trim() && formData.require_terms_agreement) {
+                setError('Terms text is required when terms agreement is enabled');
+                return;
+            }
 
             let result;
             if (formSettings) {
@@ -132,7 +154,36 @@ export default function ContactFormSettingsTab() {
             }
         } catch (error) {
             console.error('Save error:', error);
-            setError('Failed to save form settings');
+
+            // Extract meaningful error message from Supabase error
+            let errorMessage = 'Failed to save form settings';
+
+            if (error && typeof error === 'object') {
+                // Handle Supabase error object
+                if ('message' in error && error.message) {
+                    errorMessage = error.message;
+                } else if ('details' in error && error.details) {
+                    errorMessage = error.details;
+                } else if ('hint' in error && error.hint) {
+                    errorMessage = error.hint;
+                } else if ('code' in error && error.code) {
+                    // Handle specific database constraint errors
+                    switch (error.code) {
+                        case '23514': // Check constraint violation
+                            errorMessage = 'Please check that all required fields are properly filled and file size is greater than 0';
+                            break;
+                        case '23505': // Unique constraint violation
+                            errorMessage = 'A form settings record already exists';
+                            break;
+                        default:
+                            errorMessage = `Database error (${error.code}): Please check your input`;
+                    }
+                }
+            } else if (typeof error === 'string') {
+                errorMessage = error;
+            }
+
+            setError(errorMessage);
         } finally {
             setSaving(false);
         }

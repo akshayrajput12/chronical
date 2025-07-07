@@ -9,6 +9,9 @@ import NewCompany from "./components/new-company";
 import EssentialSupport from "./components/essential-support";
 import BoothRequirementsForm from "./components/booth-requirements-form";
 
+// Enable ISR - revalidate every 1 hour (3600 seconds)
+export const revalidate = 3600;
+
 // Server component that fetches data at build/request time for better SEO
 async function page() {
     // Fetch all home page data server-side for SEO optimization

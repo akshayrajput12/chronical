@@ -48,3 +48,21 @@ export async function createClient(useServiceRole: boolean = false) {
     }
   )
 }
+
+/**
+ * Create a Supabase client for static generation (SSG)
+ * This client doesn't use cookies and is safe for build-time data fetching
+ */
+export function createStaticClient(useServiceRole: boolean = false) {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const supabaseKey = useServiceRole
+    ? process.env.SUPABASE_SERVICE_ROLE_KEY!
+    : process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+
+  return createSupabaseClient(supabaseUrl, supabaseKey, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+    },
+  });
+}

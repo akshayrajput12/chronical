@@ -8,6 +8,9 @@ import PortfolioGridServer from "./components/portfolio-grid-server";
 import BoothRequirementsForm from "../home/components/booth-requirements-form";
 import ExpoPavilionParagraphSectionServer from "./components/expo-pavilion-paragraph-section-server";
 
+// Enable ISR - revalidate every 6 hours (21600 seconds)
+export const revalidate = 21600;
+
 export const metadata: Metadata = {
     title: "Country Pavilion Expo Booth Design UAE | Chronicle Exhibits",
     description:

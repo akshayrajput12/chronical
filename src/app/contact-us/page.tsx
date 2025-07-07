@@ -6,6 +6,9 @@ import ContactInfo from "./components/contact-info";
 import ContactForm from "./components/contact-form";
 import ContactMap from "./components/contact-map";
 
+// Enable ISR - revalidate every 4 hours (14400 seconds)
+export const revalidate = 14400;
+
 // Generate dynamic metadata based on contact page data
 export async function generateMetadata(): Promise<Metadata> {
     try {

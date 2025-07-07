@@ -317,11 +317,17 @@ const EditEventPage = () => {
         return title
             .toLowerCase()
             .replace(/[^a-z0-9]+/g, '-')
-            .replace(/(^-|-$)/g, '');
+            .replace(/(^-|-$)/g, '')
+            .replace(/\/+$/, ''); // Remove trailing slashes
     };
 
     // Handle input changes
     const handleInputChange = (field: keyof EventInput, value: any) => {
+        // Clean slug input to remove trailing slashes
+        if (field === 'slug' && typeof value === 'string') {
+            value = value.replace(/\/+$/, '');
+        }
+
         setFormData(prev => ({
             ...prev,
             [field]: value
@@ -498,6 +504,9 @@ const EditEventPage = () => {
             }
             if (!formData.slug?.trim()) {
                 throw new Error('Event slug is required');
+            }
+            if (formData.slug?.endsWith('/')) {
+                throw new Error('Event slug cannot end with a slash (/)');
             }
 
             // Upload deferred images first
@@ -927,6 +936,28 @@ const EditEventPage = () => {
                                     </div>
                                 </div>
 
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="start_date">Start Date</Label>
+                                        <Input
+                                            id="start_date"
+                                            type="datetime-local"
+                                            value={formData.start_date}
+                                            onChange={(e) => handleInputChange("start_date", e.target.value)}
+                                        />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label htmlFor="end_date">End Date</Label>
+                                        <Input
+                                            id="end_date"
+                                            type="datetime-local"
+                                            value={formData.end_date}
+                                            onChange={(e) => handleInputChange("end_date", e.target.value)}
+                                        />
+                                    </div>
+                                </div>
+
                                 <div className="grid grid-cols-1 gap-6">
                                     <div className="space-y-2">
                                         <Label htmlFor="date_range">Display Date Range</Label>
@@ -936,6 +967,9 @@ const EditEventPage = () => {
                                             value={formData.date_range}
                                             onChange={(e) => handleInputChange("date_range", e.target.value)}
                                         />
+                                        <p className="text-sm text-gray-500">
+                                            Optional: Custom display format for the date range
+                                        </p>
                                     </div>
                                 </div>
                             </TabsContent>

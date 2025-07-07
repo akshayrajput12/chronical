@@ -1,5 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Enable static generation and ISR
+  output: 'standalone',
+
+  // Configure experimental features for better SSG performance
+  experimental: {
+    // Enable static generation optimizations
+    optimizePackageImports: ['@supabase/supabase-js', 'lucide-react'],
+  },
+
+  // Image optimization configuration
   images: {
     remotePatterns: [
       {
@@ -23,7 +33,54 @@ const nextConfig = {
         hostname: 'encrypted-tbn0.gstatic.com',
       },
     ],
-  }
+    // Optimize images for static generation
+    formats: ['image/webp', 'image/avif'],
+    minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days
+  },
+
+  // Configure caching for better performance
+  onDemandEntries: {
+    // Period (in ms) where the server will keep pages in the buffer
+    maxInactiveAge: 25 * 1000,
+    // Number of pages that should be kept simultaneously without being disposed
+    pagesBufferLength: 2,
+  },
+
+  // Enable compression for better performance
+  compress: true,
+
+  // Configure headers for better caching
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block',
+          },
+        ],
+      },
+      {
+        // Cache static assets
+        source: '/images/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+    ];
+  },
 }
 
 module.exports = nextConfig

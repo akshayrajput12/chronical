@@ -8,7 +8,7 @@ import CityComponentsSection from "@/components/cities/city-components-section";
 import CityPortfolioSection from "@/components/cities/city-portfolio-section";
 import CityWhyBestSection from "@/components/cities/city-why-best-section";
 import CityStatisticsSection from "@/components/cities/city-statistics-section";
-import { getCityBySlug } from "@/services/cities-page.service";
+import { getCityBySlug, getAllCitySlugs } from "@/services/cities-page.service";
 import { ServicesGrid } from "./services-grid";
 import BoothRequirementsForm from "@/app/home/components/booth-requirements-form";
 
@@ -16,6 +16,22 @@ interface CityDetailPageProps {
     params: Promise<{
         slug: string;
     }>;
+}
+
+// Enable ISR - revalidate every 4 hours (14400 seconds) for cities
+export const revalidate = 14400;
+
+// Generate static params for all cities
+export async function generateStaticParams() {
+    try {
+        const slugs = await getAllCitySlugs();
+        return slugs.map((slug) => ({
+            slug,
+        }));
+    } catch (error) {
+        console.error("Error generating static params for cities:", error);
+        return [];
+    }
 }
 
 // Generate metadata for SEO

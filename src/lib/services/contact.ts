@@ -595,46 +595,93 @@ export class ContactAdminService {
 
     // Form Settings Management
     async getFormSettings(): Promise<ContactFormSettings | null> {
-        const { data, error } = await this.supabase
-            .from("contact_form_settings")
-            .select("*")
-            .eq("is_active", true)
-            .single();
+        try {
+            const response = await fetch('/api/contact/form-settings', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
 
-        if (error && error.code !== 'PGRST116') { // PGRST116 is "not found"
+            const result = await response.json();
+
+            if (!result.success) {
+                throw new Error(result.error || 'Failed to fetch form settings');
+            }
+
+            return result.data;
+        } catch (error) {
+            console.error('Error fetching form settings:', error);
             throw error;
         }
-
-        return data || null;
     }
 
     async createFormSettings(settings: ContactFormSettingsInput): Promise<ContactFormSettings> {
-        const { data, error } = await this.supabase
-            .from("contact_form_settings")
-            .insert(settings)
-            .select()
-            .single();
+        try {
+            const response = await fetch('/api/contact/form-settings', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(settings),
+            });
 
-        if (error) {
+            const result = await response.json();
+
+            if (!result.success) {
+                throw new Error(result.error || 'Failed to create form settings');
+            }
+
+            return result.data;
+        } catch (error) {
+            console.error('Error creating form settings:', error);
             throw error;
         }
-
-        return data;
     }
 
     async updateFormSettings(id: string, updates: Partial<ContactFormSettingsInput>): Promise<ContactFormSettings> {
-        const { data, error } = await this.supabase
-            .from("contact_form_settings")
-            .update({ ...updates, updated_at: new Date().toISOString() })
-            .eq("id", id)
-            .select()
-            .single();
+        try {
+            const response = await fetch(`/api/contact/form-settings/${id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updates),
+            });
 
-        if (error) {
+            const result = await response.json();
+
+            if (!result.success) {
+                throw new Error(result.error || 'Failed to update form settings');
+            }
+
+            return result.data;
+        } catch (error) {
+            console.error('Error updating form settings:', error);
             throw error;
         }
+    }
 
-        return data;
+    async deleteFormSettings(id: string): Promise<boolean> {
+        try {
+            const response = await fetch(`/api/contact/form-settings/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            const result = await response.json();
+
+            if (!result.success) {
+                throw new Error(result.error || 'Failed to delete form settings');
+            }
+
+            return true;
+        } catch (error) {
+            console.error('Error deleting form settings:', error);
+            throw error;
+        }
     }
 
     // Map Settings Management

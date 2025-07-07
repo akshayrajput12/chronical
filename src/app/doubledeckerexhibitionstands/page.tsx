@@ -7,6 +7,9 @@ import BoothRequirementsForm from "../home/components/booth-requirements-form";
 import DoubleDeckersPortfolio from "./components/double-decker-portfolio";
 import DoubleDeckerParagraphSection from "./components/double-decker-paragraph-section";
 
+// Enable ISR - revalidate every 6 hours (21600 seconds)
+export const revalidate = 21600;
+
 export const metadata: Metadata = {
     title: "Double Decker Exhibition Stands Dubai | Chronicle Exhibits",
     description:

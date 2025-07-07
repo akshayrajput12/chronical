@@ -5,6 +5,9 @@ import BoothRequirements from "./components/booth-requirements";
 import PortfolioHero from "./components/portfolio-hero";
 import { getPortfolioPageData } from "@/services/portfolio-page.service";
 
+// Enable ISR - revalidate every 6 hours (21600 seconds)
+export const revalidate = 21600;
+
 export const metadata: Metadata = {
     title: "Portfolio | Chronicle Exhibits - Exhibition Stand Design Gallery",
     description:

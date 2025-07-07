@@ -6,6 +6,9 @@ import { BlogPostSummary } from "@/types/blog";
 import BoothRequirements from "../portfolio/components/booth-requirements";
 import { getBlogPageData } from "@/services/blog-page.service";
 
+// Enable ISR - revalidate every 30 minutes (1800 seconds) for fresh blog content
+export const revalidate = 1800;
+
 interface BlogPageProps {
     searchParams?: Promise<{
         page?: string;

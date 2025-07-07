@@ -5,6 +5,9 @@ import AboutUsMainServer from './components/about-us-main-server'
 import AboutUsDescriptionServer from './components/about-us-description-server'
 import DedicationSectionServer from './components/dedication-section-server'
 
+// Enable ISR - revalidate every 2 hours (7200 seconds)
+export const revalidate = 7200;
+
 // Server component that fetches data at build/request time for better SEO
 async function AboutPage() {
   // Fetch all about page data server-side for SEO optimization

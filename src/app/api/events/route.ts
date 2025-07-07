@@ -12,12 +12,14 @@ export async function GET(request: NextRequest) {
         const page = parseInt(searchParams.get('page') || '1');
         const limit = parseInt(searchParams.get('limit') || '10');
         const category_slug = searchParams.get('category_slug');
-        const is_featured = searchParams.get('is_featured') === 'true' ? true : 
+        const is_featured = searchParams.get('is_featured') === 'true' ? true :
                            searchParams.get('is_featured') === 'false' ? false : null;
         const search = searchParams.get('search');
         const sort_by = searchParams.get('sort_by') || 'created_at';
         const sort_order = searchParams.get('sort_order') || 'desc';
         const is_active = searchParams.get('is_active') !== 'false'; // Default to true for public API
+        const start_date = searchParams.get('start_date');
+        const end_date = searchParams.get('end_date');
         
         const offset = (page - 1) * limit;
 
@@ -51,6 +53,15 @@ export async function GET(request: NextRequest) {
 
         if (search) {
             query = query.or(`title.ilike.%${search}%,description.ilike.%${search}%,organizer.ilike.%${search}%`);
+        }
+
+        // Apply date filters
+        if (start_date) {
+            query = query.gte('start_date', start_date);
+        }
+
+        if (end_date) {
+            query = query.lte('end_date', end_date);
         }
 
         // Apply sorting

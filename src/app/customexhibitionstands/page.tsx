@@ -11,6 +11,9 @@ import BoothRequirementsForm from "../home/components/booth-requirements-form";
 import PortfolioSection from "./components/portfolio-section";
 import CustomParagraphSection from "./components/custom-paragraph-section";
 
+// Enable ISR - revalidate every 6 hours (21600 seconds)
+export const revalidate = 21600;
+
 export const metadata: Metadata = {
     title: "Custom Exhibition Stands Dubai | Chronicle Exhibits - Leading Contractor",
     description:

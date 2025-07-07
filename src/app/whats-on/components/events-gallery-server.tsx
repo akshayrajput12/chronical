@@ -80,13 +80,25 @@ const EventsGalleryServer = ({ events, totalCount, hasMore }: EventsGalleryServe
         return events.filter(event => {
             if (!event.start_date) return false;
 
-            const eventDate = new Date(event.start_date);
-            const eventMonthYear = eventDate.toLocaleDateString('en-US', {
-                month: 'long',
-                year: 'numeric'
-            });
+            // Parse the selected filter (e.g., "July 2025")
+            const [selectedMonth, selectedYear] = selectedFilter.split(' ');
+            const selectedDate = new Date(`${selectedMonth} 1, ${selectedYear}`);
+            const selectedMonthStart = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
+            const selectedMonthEnd = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0, 23, 59, 59);
 
-            return eventMonthYear === selectedFilter;
+            // Parse event dates
+            const eventStartDate = new Date(event.start_date);
+            const eventEndDate = event.end_date ? new Date(event.end_date) : eventStartDate;
+
+            // Event matches if:
+            // 1. Event starts in the selected month
+            // 2. Event ends in the selected month
+            // 3. Event spans across the selected month (starts before and ends after)
+            const startsInMonth = eventStartDate >= selectedMonthStart && eventStartDate <= selectedMonthEnd;
+            const endsInMonth = eventEndDate >= selectedMonthStart && eventEndDate <= selectedMonthEnd;
+            const spansMonth = eventStartDate < selectedMonthStart && eventEndDate > selectedMonthEnd;
+
+            return startsInMonth || endsInMonth || spansMonth;
         });
     };
 

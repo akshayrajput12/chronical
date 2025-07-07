@@ -16,13 +16,29 @@ import EventGallery from "../components/event-gallery";
 import BlogCarousel from "@/components/blog/blog-carousel";
 import { EventsForm } from "../components/events-form";
 import EventContent from "@/components/events/event-content";
-import { getEventDetailPageData, incrementEventViews } from "@/services/event-page.service";
+import { getEventDetailPageData, incrementEventViews, getAllEventSlugs } from "@/services/event-page.service";
 import RelatedEventsClient from "../components/related-events-client";
 
 interface EventDetailPageProps {
     params: Promise<{
         slug: string;
     }>;
+}
+
+// Enable ISR - revalidate every 30 minutes (1800 seconds) for events
+export const revalidate = 1800;
+
+// Generate static params for all events
+export async function generateStaticParams() {
+    try {
+        const slugs = await getAllEventSlugs();
+        return slugs.map((slug) => ({
+            slug,
+        }));
+    } catch (error) {
+        console.error("Error generating static params for events:", error);
+        return [];
+    }
 }
 
 // Generate metadata for SEO
