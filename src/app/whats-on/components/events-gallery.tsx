@@ -30,17 +30,19 @@ const EventsGallery = () => {
         setError(null);
 
         try {
-            const eventsResponse = await fetch('/api/events?limit=50&is_active=true');
+            const eventsResponse = await fetch(
+                "/api/events?limit=50&is_active=true",
+            );
 
             if (!eventsResponse.ok) {
-                throw new Error('Failed to fetch events');
+                throw new Error("Failed to fetch events");
             }
 
             const eventsData = await eventsResponse.json();
             setEvents(eventsData.events || []);
         } catch (error) {
-            console.error('Error fetching events:', error);
-            setError('Failed to load events. Please try again later.');
+            console.error("Error fetching events:", error);
+            setError("Failed to load events. Please try again later.");
             setEvents([]);
         } finally {
             setLoading(false);
@@ -93,7 +95,7 @@ const EventsGallery = () => {
         "November 2025",
         "December 2025",
         "January 2026",
-        "February 2026"
+        "February 2026",
     ];
 
     // Filter events based on selected date-month
@@ -106,22 +108,43 @@ const EventsGallery = () => {
             if (!event.start_date) return false;
 
             // Parse the selected filter (e.g., "July 2025")
-            const [selectedMonth, selectedYear] = selectedFilter.split(' ');
-            const selectedDate = new Date(`${selectedMonth} 1, ${selectedYear}`);
-            const selectedMonthStart = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
-            const selectedMonthEnd = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0, 23, 59, 59);
+            const [selectedMonth, selectedYear] = selectedFilter.split(" ");
+            const selectedDate = new Date(
+                `${selectedMonth} 1, ${selectedYear}`,
+            );
+            const selectedMonthStart = new Date(
+                selectedDate.getFullYear(),
+                selectedDate.getMonth(),
+                1,
+            );
+            const selectedMonthEnd = new Date(
+                selectedDate.getFullYear(),
+                selectedDate.getMonth() + 1,
+                0,
+                23,
+                59,
+                59,
+            );
 
             // Parse event dates
             const eventStartDate = new Date(event.start_date);
-            const eventEndDate = event.end_date ? new Date(event.end_date) : eventStartDate;
+            const eventEndDate = event.end_date
+                ? new Date(event.end_date)
+                : eventStartDate;
 
             // Event matches if:
             // 1. Event starts in the selected month
             // 2. Event ends in the selected month
             // 3. Event spans across the selected month (starts before and ends after)
-            const startsInMonth = eventStartDate >= selectedMonthStart && eventStartDate <= selectedMonthEnd;
-            const endsInMonth = eventEndDate >= selectedMonthStart && eventEndDate <= selectedMonthEnd;
-            const spansMonth = eventStartDate < selectedMonthStart && eventEndDate > selectedMonthEnd;
+            const startsInMonth =
+                eventStartDate >= selectedMonthStart &&
+                eventStartDate <= selectedMonthEnd;
+            const endsInMonth =
+                eventEndDate >= selectedMonthStart &&
+                eventEndDate <= selectedMonthEnd;
+            const spansMonth =
+                eventStartDate < selectedMonthStart &&
+                eventEndDate > selectedMonthEnd;
 
             return startsInMonth || endsInMonth || spansMonth;
         });
@@ -171,8 +194,11 @@ const EventsGallery = () => {
                         <div className="animate-pulse">
                             <div className="h-8 bg-gray-300 rounded w-64 mx-auto mb-8"></div>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                {[1, 2, 3].map((i) => (
-                                    <div key={i} className="bg-white rounded-lg p-6">
+                                {[1, 2, 3].map(i => (
+                                    <div
+                                        key={i}
+                                        className="bg-white rounded-lg p-6"
+                                    >
                                         <div className="h-48 bg-gray-300 rounded mb-4"></div>
                                         <div className="h-4 bg-gray-300 rounded mb-2"></div>
                                         <div className="h-4 bg-gray-300 rounded w-3/4"></div>
@@ -227,7 +253,7 @@ const EventsGallery = () => {
                 >
                     <div className="text-center sm:text-left flex-1 mb-4 sm:mb-0">
                         <h2 className=".whatson-heading font-rubik text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-                            Explore DWTC Events
+                            Explore Middle East Events
                         </h2>
                     </div>
                 </motion.div>
@@ -297,7 +323,8 @@ const EventsGallery = () => {
                                     className="flex gap-4"
                                     style={{
                                         width: `${
-                                            filteredEvents.length * (cardWidth + 16)
+                                            filteredEvents.length *
+                                            (cardWidth + 16)
                                         }px`, // cardWidth + gap
                                         transform: `translateX(-${
                                             currentIndex * (cardWidth + 16)
@@ -351,7 +378,8 @@ const EventsGallery = () => {
                                                     className="absolute top-0 left-0 w-8 sm:w-12 md:w-16 h-1"
                                                     style={{
                                                         backgroundColor:
-                                                            event.category_color || "#22c55e",
+                                                            event.category_color ||
+                                                            "#22c55e",
                                                         zIndex: 10,
                                                     }}
                                                 ></div>
@@ -359,7 +387,10 @@ const EventsGallery = () => {
                                                 {/* Image */}
                                                 <div className="relative flex-1 overflow-hidden h-48 sm:h-56 md:h-64 lg:h-72">
                                                     <Image
-                                                        src={event.featured_image_url || '/placeholder-event.jpg'}
+                                                        src={
+                                                            event.featured_image_url ||
+                                                            "/placeholder-event.jpg"
+                                                        }
                                                         alt={event.title}
                                                         fill
                                                         className="object-cover transition-transform duration-300 hover:scale-105"
@@ -381,7 +412,8 @@ const EventsGallery = () => {
                                                                 "1px",
                                                         }}
                                                     >
-                                                        {event.date_range || 'Date TBD'}
+                                                        {event.date_range ||
+                                                            "Date TBD"}
                                                     </div>
 
                                                     {/* Title */}
@@ -397,7 +429,8 @@ const EventsGallery = () => {
                                                                 "1px",
                                                         }}
                                                     >
-                                                        {event.category_name || 'Uncategorized'}
+                                                        {event.category_name ||
+                                                            "Uncategorized"}
                                                     </p>
                                                 </div>
                                             </div>

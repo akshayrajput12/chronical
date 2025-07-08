@@ -15,7 +15,11 @@ interface EventsGalleryServerProps {
     hasMore: boolean;
 }
 
-const EventsGalleryServer = ({ events, totalCount, hasMore }: EventsGalleryServerProps) => {
+const EventsGalleryServer = ({
+    events,
+    totalCount,
+    hasMore,
+}: EventsGalleryServerProps) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [selectedFilter, setSelectedFilter] = useState("All");
     const [cardsToShow, setCardsToShow] = useState(3);
@@ -68,7 +72,7 @@ const EventsGalleryServer = ({ events, totalCount, hasMore }: EventsGalleryServe
         "November 2025",
         "December 2025",
         "January 2026",
-        "February 2026"
+        "February 2026",
     ];
 
     // Filter events based on selected date-month
@@ -81,22 +85,43 @@ const EventsGalleryServer = ({ events, totalCount, hasMore }: EventsGalleryServe
             if (!event.start_date) return false;
 
             // Parse the selected filter (e.g., "July 2025")
-            const [selectedMonth, selectedYear] = selectedFilter.split(' ');
-            const selectedDate = new Date(`${selectedMonth} 1, ${selectedYear}`);
-            const selectedMonthStart = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
-            const selectedMonthEnd = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0, 23, 59, 59);
+            const [selectedMonth, selectedYear] = selectedFilter.split(" ");
+            const selectedDate = new Date(
+                `${selectedMonth} 1, ${selectedYear}`,
+            );
+            const selectedMonthStart = new Date(
+                selectedDate.getFullYear(),
+                selectedDate.getMonth(),
+                1,
+            );
+            const selectedMonthEnd = new Date(
+                selectedDate.getFullYear(),
+                selectedDate.getMonth() + 1,
+                0,
+                23,
+                59,
+                59,
+            );
 
             // Parse event dates
             const eventStartDate = new Date(event.start_date);
-            const eventEndDate = event.end_date ? new Date(event.end_date) : eventStartDate;
+            const eventEndDate = event.end_date
+                ? new Date(event.end_date)
+                : eventStartDate;
 
             // Event matches if:
             // 1. Event starts in the selected month
             // 2. Event ends in the selected month
             // 3. Event spans across the selected month (starts before and ends after)
-            const startsInMonth = eventStartDate >= selectedMonthStart && eventStartDate <= selectedMonthEnd;
-            const endsInMonth = eventEndDate >= selectedMonthStart && eventEndDate <= selectedMonthEnd;
-            const spansMonth = eventStartDate < selectedMonthStart && eventEndDate > selectedMonthEnd;
+            const startsInMonth =
+                eventStartDate >= selectedMonthStart &&
+                eventStartDate <= selectedMonthEnd;
+            const endsInMonth =
+                eventEndDate >= selectedMonthStart &&
+                eventEndDate <= selectedMonthEnd;
+            const spansMonth =
+                eventStartDate < selectedMonthStart &&
+                eventEndDate > selectedMonthEnd;
 
             return startsInMonth || endsInMonth || spansMonth;
         });
@@ -171,7 +196,7 @@ const EventsGalleryServer = ({ events, totalCount, hasMore }: EventsGalleryServe
                 >
                     <div className="text-center sm:text-left flex-1 mb-4 sm:mb-0">
                         <h2 className=".whatson-heading font-rubik text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-                            Explore DWTC Events
+                            Explore Middle East Events
                         </h2>
                     </div>
                 </motion.div>
@@ -241,7 +266,8 @@ const EventsGalleryServer = ({ events, totalCount, hasMore }: EventsGalleryServe
                                     className="flex gap-4"
                                     style={{
                                         width: `${
-                                            filteredEvents.length * (cardWidth + 16)
+                                            filteredEvents.length *
+                                            (cardWidth + 16)
                                         }px`, // cardWidth + gap
                                         transform: `translateX(-${
                                             currentIndex * (cardWidth + 16)
@@ -295,7 +321,8 @@ const EventsGalleryServer = ({ events, totalCount, hasMore }: EventsGalleryServe
                                                     className="absolute top-0 left-0 w-8 sm:w-12 md:w-16 h-1"
                                                     style={{
                                                         backgroundColor:
-                                                            event.category_color || "#22c55e",
+                                                            event.category_color ||
+                                                            "#22c55e",
                                                         zIndex: 10,
                                                     }}
                                                 ></div>
@@ -303,7 +330,10 @@ const EventsGalleryServer = ({ events, totalCount, hasMore }: EventsGalleryServe
                                                 {/* Image */}
                                                 <div className="relative flex-1 overflow-hidden h-48 sm:h-56 md:h-64 lg:h-72">
                                                     <Image
-                                                        src={event.featured_image_url || '/placeholder-event.jpg'}
+                                                        src={
+                                                            event.featured_image_url ||
+                                                            "/placeholder-event.jpg"
+                                                        }
                                                         alt={event.title}
                                                         fill
                                                         className="object-cover transition-transform duration-300 hover:scale-105"
@@ -325,7 +355,8 @@ const EventsGalleryServer = ({ events, totalCount, hasMore }: EventsGalleryServe
                                                                 "1px",
                                                         }}
                                                     >
-                                                        {event.date_range || 'Date TBD'}
+                                                        {event.date_range ||
+                                                            "Date TBD"}
                                                     </div>
 
                                                     {/* Title */}
@@ -341,7 +372,8 @@ const EventsGalleryServer = ({ events, totalCount, hasMore }: EventsGalleryServe
                                                                 "1px",
                                                         }}
                                                     >
-                                                        {event.category_name || 'Uncategorized'}
+                                                        {event.category_name ||
+                                                            "Uncategorized"}
                                                     </p>
                                                 </div>
                                             </div>
