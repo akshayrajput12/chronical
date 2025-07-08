@@ -1,39 +1,52 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Separator } from '@/components/ui/separator';
-import { contactAdminService } from '@/lib/services/contact';
-import { ContactFormSettings, ContactFormSettingsInput } from '@/types/contact';
-import { Save, Loader2, AlertCircle, CheckCircle, Settings } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Separator } from "@/components/ui/separator";
+import { contactAdminService } from "@/lib/services/contact";
+import { ContactFormSettings, ContactFormSettingsInput } from "@/types/contact";
+import {
+    Save,
+    Loader2,
+    AlertCircle,
+    CheckCircle,
+    Settings,
+} from "lucide-react";
 
 export default function ContactFormSettingsTab() {
-    const [formSettings, setFormSettings] = useState<ContactFormSettings | null>(null);
+    const [formSettings, setFormSettings] =
+        useState<ContactFormSettings | null>(null);
     const [formData, setFormData] = useState<ContactFormSettingsInput>({
-        form_title: '',
-        form_subtitle: '',
-        success_message: '',
-        success_description: '',
-        sidebar_phone: '',
-        sidebar_email: '',
-        sidebar_address: '',
+        form_title: "",
+        form_subtitle: "",
+        success_message: "",
+        success_description: "",
+        sidebar_phone: "",
+        sidebar_email: "",
+        sidebar_address: "",
         max_file_size_mb: 10,
-        allowed_file_types: ['.pdf', '.doc', '.docx', '.jpg', '.jpeg', '.png'],
+        allowed_file_types: [".pdf", ".doc", ".docx", ".jpg", ".jpeg", ".png"],
         enable_file_upload: true,
         require_terms_agreement: true,
-        terms_text: '',
-        is_active: true
+        terms_text: "",
+        is_active: true,
     });
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
-    const [error, setError] = useState<string>('');
-    const [success, setSuccess] = useState<string>('');
+    const [error, setError] = useState<string>("");
+    const [success, setSuccess] = useState<string>("");
 
     useEffect(() => {
         loadFormSettings();
@@ -47,7 +60,7 @@ export default function ContactFormSettingsTab() {
                 setFormSettings(data);
                 setFormData({
                     form_title: data.form_title,
-                    form_subtitle: data.form_subtitle || '',
+                    form_subtitle: data.form_subtitle || "",
                     success_message: data.success_message,
                     success_description: data.success_description,
                     sidebar_phone: data.sidebar_phone,
@@ -58,22 +71,22 @@ export default function ContactFormSettingsTab() {
                     enable_file_upload: data.enable_file_upload,
                     require_terms_agreement: data.require_terms_agreement,
                     terms_text: data.terms_text,
-                    is_active: data.is_active
+                    is_active: data.is_active,
                 });
             }
         } catch (error) {
-            console.error('Failed to load form settings:', error);
+            console.error("Failed to load form settings:", error);
 
             // Extract meaningful error message from Supabase error
-            let errorMessage = 'Failed to load form settings';
+            let errorMessage = "Failed to load form settings";
 
-            if (error && typeof error === 'object') {
-                if ('message' in error && error.message) {
-                    errorMessage = error.message;
-                } else if ('details' in error && error.details) {
-                    errorMessage = error.details;
+            if (error && typeof error === "object") {
+                if ("message" in error && error.message) {
+                    errorMessage = String(error.message);
+                } else if ("details" in error && error.details) {
+                    errorMessage = String(error.details);
                 }
-            } else if (typeof error === 'string') {
+            } else if (typeof error === "string") {
                 errorMessage = error;
             }
 
@@ -83,103 +96,116 @@ export default function ContactFormSettingsTab() {
         }
     };
 
-    const handleInputChange = (field: keyof ContactFormSettingsInput, value: string | number | boolean | string[]) => {
+    const handleInputChange = (
+        field: keyof ContactFormSettingsInput,
+        value: string | number | boolean | string[],
+    ) => {
         setFormData(prev => ({
             ...prev,
-            [field]: value
+            [field]: value,
         }));
         // Clear messages when user starts editing
-        if (error) setError('');
-        if (success) setSuccess('');
+        if (error) setError("");
+        if (success) setSuccess("");
     };
 
     const handleSave = async () => {
         try {
             setSaving(true);
-            setError('');
-            setSuccess('');
+            setError("");
+            setSuccess("");
 
             // Validate required fields
             if (!formData.form_title.trim()) {
-                setError('Form title is required');
+                setError("Form title is required");
                 return;
             }
             if (!formData.success_message.trim()) {
-                setError('Success message is required');
+                setError("Success message is required");
                 return;
             }
             if (!formData.success_description.trim()) {
-                setError('Success description is required');
+                setError("Success description is required");
                 return;
             }
             if (!formData.sidebar_phone.trim()) {
-                setError('Sidebar phone is required');
+                setError("Sidebar phone is required");
                 return;
             }
             if (!formData.sidebar_email.trim()) {
-                setError('Sidebar email is required');
+                setError("Sidebar email is required");
                 return;
             }
             if (!formData.sidebar_address.trim()) {
-                setError('Sidebar address is required');
+                setError("Sidebar address is required");
                 return;
             }
-            if (formData.max_file_size_mb <= 0) {
-                setError('Maximum file size must be greater than 0');
+            if ((formData.max_file_size_mb ?? 0) <= 0) {
+                setError("Maximum file size must be greater than 0");
                 return;
             }
-            if (!formData.terms_text.trim() && formData.require_terms_agreement) {
-                setError('Terms text is required when terms agreement is enabled');
+            if (
+                !formData.terms_text.trim() &&
+                formData.require_terms_agreement
+            ) {
+                setError(
+                    "Terms text is required when terms agreement is enabled",
+                );
                 return;
             }
 
             let result;
             if (formSettings) {
                 // Update existing
-                result = await contactAdminService.updateFormSettings(formSettings.id, formData);
+                result = await contactAdminService.updateFormSettings(
+                    formSettings.id,
+                    formData,
+                );
             } else {
                 // Create new
                 result = await contactAdminService.createFormSettings(formData);
             }
 
             if (result) {
-                setSuccess('Form settings saved successfully!');
+                setSuccess("Form settings saved successfully!");
                 setFormSettings(result);
                 // Reload data to ensure consistency
                 setTimeout(() => {
                     loadFormSettings();
                 }, 1000);
             } else {
-                setError('Failed to save form settings');
+                setError("Failed to save form settings");
             }
         } catch (error) {
-            console.error('Save error:', error);
+            console.error("Save error:", error);
 
             // Extract meaningful error message from Supabase error
-            let errorMessage = 'Failed to save form settings';
+            let errorMessage = "Failed to save form settings";
 
-            if (error && typeof error === 'object') {
+            if (error && typeof error === "object") {
                 // Handle Supabase error object
-                if ('message' in error && error.message) {
-                    errorMessage = error.message;
-                } else if ('details' in error && error.details) {
-                    errorMessage = error.details;
-                } else if ('hint' in error && error.hint) {
-                    errorMessage = error.hint;
-                } else if ('code' in error && error.code) {
+                if ("message" in error && error.message) {
+                    errorMessage = String(error.message);
+                } else if ("details" in error && error.details) {
+                    errorMessage = String(error.details);
+                } else if ("hint" in error && error.hint) {
+                    errorMessage = String(error.hint);
+                } else if ("code" in error && error.code) {
                     // Handle specific database constraint errors
                     switch (error.code) {
-                        case '23514': // Check constraint violation
-                            errorMessage = 'Please check that all required fields are properly filled and file size is greater than 0';
+                        case "23514": // Check constraint violation
+                            errorMessage =
+                                "Please check that all required fields are properly filled and file size is greater than 0";
                             break;
-                        case '23505': // Unique constraint violation
-                            errorMessage = 'A form settings record already exists';
+                        case "23505": // Unique constraint violation
+                            errorMessage =
+                                "A form settings record already exists";
                             break;
                         default:
                             errorMessage = `Database error (${error.code}): Please check your input`;
                     }
                 }
-            } else if (typeof error === 'string') {
+            } else if (typeof error === "string") {
                 errorMessage = error;
             }
 
@@ -210,7 +236,9 @@ export default function ContactFormSettingsTab() {
             {success && (
                 <Alert className="border-green-200 bg-green-50">
                     <CheckCircle className="h-4 w-4 text-green-600" />
-                    <AlertDescription className="text-green-800">{success}</AlertDescription>
+                    <AlertDescription className="text-green-800">
+                        {success}
+                    </AlertDescription>
                 </Alert>
             )}
 
@@ -232,7 +260,12 @@ export default function ContactFormSettingsTab() {
                             <Input
                                 id="form_title"
                                 value={formData.form_title}
-                                onChange={(e) => handleInputChange('form_title', e.target.value)}
+                                onChange={e =>
+                                    handleInputChange(
+                                        "form_title",
+                                        e.target.value,
+                                    )
+                                }
                                 placeholder="Enter form title"
                                 className="mt-1"
                             />
@@ -242,8 +275,13 @@ export default function ContactFormSettingsTab() {
                             <Label htmlFor="form_subtitle">Form Subtitle</Label>
                             <Input
                                 id="form_subtitle"
-                                value={formData.form_subtitle || ''}
-                                onChange={(e) => handleInputChange('form_subtitle', e.target.value)}
+                                value={formData.form_subtitle || ""}
+                                onChange={e =>
+                                    handleInputChange(
+                                        "form_subtitle",
+                                        e.target.value,
+                                    )
+                                }
                                 placeholder="Enter form subtitle (optional)"
                                 className="mt-1"
                             />
@@ -259,7 +297,8 @@ export default function ContactFormSettingsTab() {
                             Sidebar Contact Information
                         </CardTitle>
                         <CardDescription>
-                            Configure the contact information displayed in the form sidebar
+                            Configure the contact information displayed in the
+                            form sidebar
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
@@ -268,7 +307,12 @@ export default function ContactFormSettingsTab() {
                             <Input
                                 id="sidebar_phone"
                                 value={formData.sidebar_phone}
-                                onChange={(e) => handleInputChange('sidebar_phone', e.target.value)}
+                                onChange={e =>
+                                    handleInputChange(
+                                        "sidebar_phone",
+                                        e.target.value,
+                                    )
+                                }
                                 placeholder="Enter phone number"
                                 className="mt-1"
                             />
@@ -279,7 +323,12 @@ export default function ContactFormSettingsTab() {
                             <Input
                                 id="sidebar_email"
                                 value={formData.sidebar_email}
-                                onChange={(e) => handleInputChange('sidebar_email', e.target.value)}
+                                onChange={e =>
+                                    handleInputChange(
+                                        "sidebar_email",
+                                        e.target.value,
+                                    )
+                                }
                                 placeholder="Enter email address"
                                 className="mt-1"
                             />
@@ -290,7 +339,12 @@ export default function ContactFormSettingsTab() {
                             <Textarea
                                 id="sidebar_address"
                                 value={formData.sidebar_address}
-                                onChange={(e) => handleInputChange('sidebar_address', e.target.value)}
+                                onChange={e =>
+                                    handleInputChange(
+                                        "sidebar_address",
+                                        e.target.value,
+                                    )
+                                }
                                 placeholder="Enter address"
                                 rows={3}
                                 className="mt-1"
@@ -309,11 +363,18 @@ export default function ContactFormSettingsTab() {
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div>
-                            <Label htmlFor="success_message">Success Message *</Label>
+                            <Label htmlFor="success_message">
+                                Success Message *
+                            </Label>
                             <Textarea
                                 id="success_message"
                                 value={formData.success_message}
-                                onChange={(e) => handleInputChange('success_message', e.target.value)}
+                                onChange={e =>
+                                    handleInputChange(
+                                        "success_message",
+                                        e.target.value,
+                                    )
+                                }
                                 placeholder="Message shown when form is submitted successfully"
                                 rows={3}
                                 className="mt-1"
@@ -321,11 +382,18 @@ export default function ContactFormSettingsTab() {
                         </div>
 
                         <div>
-                            <Label htmlFor="success_description">Success Description *</Label>
+                            <Label htmlFor="success_description">
+                                Success Description *
+                            </Label>
                             <Textarea
                                 id="success_description"
                                 value={formData.success_description}
-                                onChange={(e) => handleInputChange('success_description', e.target.value)}
+                                onChange={e =>
+                                    handleInputChange(
+                                        "success_description",
+                                        e.target.value,
+                                    )
+                                }
                                 placeholder="Detailed description shown after successful submission"
                                 rows={3}
                                 className="mt-1"
@@ -348,41 +416,69 @@ export default function ContactFormSettingsTab() {
                         <Switch
                             id="enable_file_upload"
                             checked={formData.enable_file_upload}
-                            onCheckedChange={(checked) => handleInputChange('enable_file_upload', checked)}
+                            onCheckedChange={checked =>
+                                handleInputChange("enable_file_upload", checked)
+                            }
                         />
-                        <Label htmlFor="enable_file_upload">Enable File Upload</Label>
+                        <Label htmlFor="enable_file_upload">
+                            Enable File Upload
+                        </Label>
                     </div>
 
                     {formData.enable_file_upload && (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pl-6">
                             <div>
-                                <Label htmlFor="max_file_size_mb">Max File Size (MB)</Label>
+                                <Label htmlFor="max_file_size_mb">
+                                    Max File Size (MB)
+                                </Label>
                                 <Input
                                     id="max_file_size_mb"
                                     type="number"
                                     min="1"
                                     max="100"
                                     value={formData.max_file_size_mb}
-                                    onChange={(e) => handleInputChange('max_file_size_mb', parseInt(e.target.value) || 10)}
+                                    onChange={e =>
+                                        handleInputChange(
+                                            "max_file_size_mb",
+                                            parseInt(e.target.value) || 10,
+                                        )
+                                    }
                                     className="mt-1"
                                 />
                             </div>
 
                             <div>
-                                <Label htmlFor="allowed_file_types">Allowed File Types</Label>
+                                <Label htmlFor="allowed_file_types">
+                                    Allowed File Types
+                                </Label>
                                 <Input
                                     id="allowed_file_types"
-                                    value={Array.isArray(formData.allowed_file_types) ? formData.allowed_file_types.join(',') : ''}
-                                    onChange={(e) => {
+                                    value={
+                                        Array.isArray(
+                                            formData.allowed_file_types,
+                                        )
+                                            ? formData.allowed_file_types.join(
+                                                  ",",
+                                              )
+                                            : ""
+                                    }
+                                    onChange={e => {
                                         const value = e.target.value;
-                                        const arrayValue = value.split(',').map(type => type.trim()).filter(type => type.length > 0);
-                                        handleInputChange('allowed_file_types', arrayValue);
+                                        const arrayValue = value
+                                            .split(",")
+                                            .map(type => type.trim())
+                                            .filter(type => type.length > 0);
+                                        handleInputChange(
+                                            "allowed_file_types",
+                                            arrayValue,
+                                        );
                                     }}
                                     placeholder="e.g., .pdf,.doc,.docx,.jpg,.png"
                                     className="mt-1"
                                 />
                                 <p className="text-xs text-gray-500 mt-1">
-                                    Comma-separated list of allowed file extensions (include the dot, e.g., .pdf)
+                                    Comma-separated list of allowed file
+                                    extensions (include the dot, e.g., .pdf)
                                 </p>
                             </div>
                         </div>
@@ -403,9 +499,16 @@ export default function ContactFormSettingsTab() {
                         <Switch
                             id="require_terms_agreement"
                             checked={formData.require_terms_agreement}
-                            onCheckedChange={(checked) => handleInputChange('require_terms_agreement', checked)}
+                            onCheckedChange={checked =>
+                                handleInputChange(
+                                    "require_terms_agreement",
+                                    checked,
+                                )
+                            }
                         />
-                        <Label htmlFor="require_terms_agreement">Require Terms Agreement</Label>
+                        <Label htmlFor="require_terms_agreement">
+                            Require Terms Agreement
+                        </Label>
                     </div>
 
                     {formData.require_terms_agreement && (
@@ -415,7 +518,12 @@ export default function ContactFormSettingsTab() {
                                 <Input
                                     id="terms_text"
                                     value={formData.terms_text}
-                                    onChange={(e) => handleInputChange('terms_text', e.target.value)}
+                                    onChange={e =>
+                                        handleInputChange(
+                                            "terms_text",
+                                            e.target.value,
+                                        )
+                                    }
                                     placeholder="I agree to the terms and conditions"
                                     className="mt-1"
                                 />
@@ -429,16 +537,16 @@ export default function ContactFormSettingsTab() {
             <Card>
                 <CardHeader>
                     <CardTitle>Status Settings</CardTitle>
-                    <CardDescription>
-                        Configure form status
-                    </CardDescription>
+                    <CardDescription>Configure form status</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div className="flex items-center space-x-2">
                         <Switch
                             id="is_active"
                             checked={formData.is_active || false}
-                            onCheckedChange={(checked) => handleInputChange('is_active', checked)}
+                            onCheckedChange={checked =>
+                                handleInputChange("is_active", checked)
+                            }
                         />
                         <Label htmlFor="is_active">Form Active</Label>
                     </div>
@@ -447,8 +555,8 @@ export default function ContactFormSettingsTab() {
 
             {/* Save Button */}
             <div className="flex justify-end">
-                <Button 
-                    onClick={handleSave} 
+                <Button
+                    onClick={handleSave}
                     disabled={saving}
                     className="w-full sm:w-auto"
                 >
