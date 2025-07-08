@@ -32,8 +32,8 @@ export function RequestQuotationDialog({
     });
     const [isSubmitting, setIsSubmitting] = React.useState(false);
     const [isSubmitted, setIsSubmitted] = React.useState(false);
-    const [errors, setErrors] = React.useState<{[key: string]: string}>({});
-    const [submitError, setSubmitError] = React.useState<string>('');
+    const [errors, setErrors] = React.useState<{ [key: string]: string }>({});
+    const [submitError, setSubmitError] = React.useState<string>("");
 
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -43,12 +43,12 @@ export function RequestQuotationDialog({
 
         // Clear error when user starts typing
         if (errors[name]) {
-            setErrors({ ...errors, [name]: '' });
+            setErrors({ ...errors, [name]: "" });
         }
     };
 
     const validateForm = (): boolean => {
-        const newErrors: {[key: string]: string} = {};
+        const newErrors: { [key: string]: string } = {};
 
         // Required field validation
         if (!form.name.trim()) {
@@ -65,7 +65,9 @@ export function RequestQuotationDialog({
 
         if (!form.email.trim()) {
             newErrors.email = "Email is required";
-        } else if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(form.email)) {
+        } else if (
+            !/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(form.email)
+        ) {
             newErrors.email = "Invalid email format";
         }
 
@@ -73,7 +75,7 @@ export function RequestQuotationDialog({
             newErrors.phone = "Phone number is required";
         } else {
             // Basic phone validation - should contain at least 7 digits
-            const phoneDigits = form.phone.replace(/\D/g, '');
+            const phoneDigits = form.phone.replace(/\D/g, "");
             if (phoneDigits.length < 7) {
                 newErrors.phone = "Please enter a valid phone number";
             }
@@ -88,15 +90,16 @@ export function RequestQuotationDialog({
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
+        console.log("Submitting form");
         e.preventDefault();
-
+        console.log(validateForm());
         // Validate form before submission
         if (!validateForm()) {
             return;
         }
 
         setIsSubmitting(true);
-        setSubmitError('');
+        setSubmitError("");
 
         try {
             const submissionData = {
@@ -106,7 +109,9 @@ export function RequestQuotationDialog({
                 email: form.email,
                 phone: form.phone || undefined,
                 budget: form.budget || undefined,
-                message: `[QUOTATION REQUEST] ${form.message || 'Request for quotation'}`,
+                message: `[QUOTATION REQUEST] ${
+                    form.message || "Request for quotation"
+                }`,
                 agreed_to_terms: true, // Request quotation doesn't require explicit terms agreement
             };
 
@@ -146,16 +151,22 @@ export function RequestQuotationDialog({
                 }, 8000);
             } else {
                 console.error("Form submission failed:", result.error);
-                setSubmitError(result.error || 'Failed to submit request. Please try again.');
+                setSubmitError(
+                    result.error ||
+                        "Failed to submit request. Please try again.",
+                );
             }
         } catch (error) {
             console.error("Form submission error:", error);
             console.error("Error details:", {
-                name: error instanceof Error ? error.name : 'Unknown',
-                message: error instanceof Error ? error.message : 'Unknown error',
-                stack: error instanceof Error ? error.stack : 'No stack trace'
+                name: error instanceof Error ? error.name : "Unknown",
+                message:
+                    error instanceof Error ? error.message : "Unknown error",
+                stack: error instanceof Error ? error.stack : "No stack trace",
             });
-            setSubmitError('Failed to submit request. Please check your connection and try again.');
+            setSubmitError(
+                "Failed to submit request. Please check your connection and try again.",
+            );
         } finally {
             setIsSubmitting(false);
         }
@@ -165,10 +176,7 @@ export function RequestQuotationDialog({
         <Dialog>
             <DialogTrigger asChild>{trigger}</DialogTrigger>
             <DialogContent className="lg:max-w-xl w-full rounded-xl p-0 overflow-hidden">
-                <form
-                    onSubmit={handleSubmit}
-                    className="bg-white p-6 space-y-4"
-                >
+                <form className="bg-white p-6 space-y-4">
                     <DialogHeader>
                         <DialogTitle className="text-2xl font-bold text-[#a5cd39]">
                             Request a Quotation
@@ -178,22 +186,45 @@ export function RequestQuotationDialog({
                         <div className="text-center py-12 px-6">
                             <div className="mb-6">
                                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                    <svg
+                                        className="w-8 h-8 text-green-600"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M5 13l4 4L19 7"
+                                        />
                                     </svg>
                                 </div>
                                 <h3 className="text-2xl font-bold text-gray-900 mb-2">
                                     Request Submitted Successfully!
                                 </h3>
                                 <p className="text-gray-600 mb-4">
-                                    Thank you for your quotation request. Our team will review your requirements and get back to you within 24 hours.
+                                    Thank you for your quotation request. Our
+                                    team will review your requirements and get
+                                    back to you within 24 hours.
                                 </p>
                                 <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-sm text-green-800">
-                                    <p className="font-medium mb-1">What happens next?</p>
+                                    <p className="font-medium mb-1">
+                                        What happens next?
+                                    </p>
                                     <ul className="text-left space-y-1">
-                                        <li>• Our team will review your requirements</li>
-                                        <li>• We'll prepare a customized quotation</li>
-                                        <li>• You'll receive a detailed proposal via email</li>
+                                        <li>
+                                            • Our team will review your
+                                            requirements
+                                        </li>
+                                        <li>
+                                            • We'll prepare a customized
+                                            quotation
+                                        </li>
+                                        <li>
+                                            • You'll receive a detailed proposal
+                                            via email
+                                        </li>
                                     </ul>
                                 </div>
                                 <DialogClose asChild>
@@ -231,12 +262,16 @@ export function RequestQuotationDialog({
                                         id="name"
                                         name="name"
                                         value={form.name}
-                                        className={`h-8 ${errors.name ? 'border-red-500' : ''}`}
+                                        className={`h-8 ${
+                                            errors.name ? "border-red-500" : ""
+                                        }`}
                                         onChange={handleChange}
                                         required
                                     />
                                     {errors.name && (
-                                        <p className="text-red-500 text-xs mt-1">{errors.name}</p>
+                                        <p className="text-red-500 text-xs mt-1">
+                                            {errors.name}
+                                        </p>
                                     )}
                                 </div>
                                 <div>
@@ -247,12 +282,18 @@ export function RequestQuotationDialog({
                                         id="exhibitionName"
                                         name="exhibitionName"
                                         value={form.exhibitionName}
-                                        className={`h-8 ${errors.exhibitionName ? 'border-red-500' : ''}`}
+                                        className={`h-8 ${
+                                            errors.exhibitionName
+                                                ? "border-red-500"
+                                                : ""
+                                        }`}
                                         onChange={handleChange}
                                         required
                                     />
                                     {errors.exhibitionName && (
-                                        <p className="text-red-500 text-xs mt-1">{errors.exhibitionName}</p>
+                                        <p className="text-red-500 text-xs mt-1">
+                                            {errors.exhibitionName}
+                                        </p>
                                     )}
                                 </div>
                                 <div>
@@ -263,12 +304,18 @@ export function RequestQuotationDialog({
                                         id="companyName"
                                         name="companyName"
                                         value={form.companyName}
-                                        className={`h-8 ${errors.companyName ? 'border-red-500' : ''}`}
+                                        className={`h-8 ${
+                                            errors.companyName
+                                                ? "border-red-500"
+                                                : ""
+                                        }`}
                                         onChange={handleChange}
                                         required
                                     />
                                     {errors.companyName && (
-                                        <p className="text-red-500 text-xs mt-1">{errors.companyName}</p>
+                                        <p className="text-red-500 text-xs mt-1">
+                                            {errors.companyName}
+                                        </p>
                                     )}
                                 </div>
                                 <div>
@@ -280,12 +327,16 @@ export function RequestQuotationDialog({
                                         name="email"
                                         type="email"
                                         value={form.email}
-                                        className={`h-8 ${errors.email ? 'border-red-500' : ''}`}
+                                        className={`h-8 ${
+                                            errors.email ? "border-red-500" : ""
+                                        }`}
                                         onChange={handleChange}
                                         required
                                     />
                                     {errors.email && (
-                                        <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+                                        <p className="text-red-500 text-xs mt-1">
+                                            {errors.email}
+                                        </p>
                                     )}
                                 </div>
                                 <div>
@@ -295,7 +346,10 @@ export function RequestQuotationDialog({
                                         onChange={(value: string) => {
                                             setForm({ ...form, phone: value });
                                             if (errors.phone) {
-                                                setErrors({ ...errors, phone: '' });
+                                                setErrors({
+                                                    ...errors,
+                                                    phone: "",
+                                                });
                                             }
                                         }}
                                         placeholder="Enter phone number"
@@ -306,7 +360,9 @@ export function RequestQuotationDialog({
                                         required
                                     />
                                     {errors.phone && (
-                                        <p className="text-red-500 text-xs mt-1">{errors.phone}</p>
+                                        <p className="text-red-500 text-xs mt-1">
+                                            {errors.phone}
+                                        </p>
                                     )}
                                 </div>
                                 <div>
@@ -327,12 +383,18 @@ export function RequestQuotationDialog({
                                         id="message"
                                         name="message"
                                         value={form.message}
-                                        className={errors.message ? 'border-red-500' : ''}
+                                        className={
+                                            errors.message
+                                                ? "border-red-500"
+                                                : ""
+                                        }
                                         onChange={handleChange}
                                         required
                                     />
                                     {errors.message && (
-                                        <p className="text-red-500 text-xs mt-1">{errors.message}</p>
+                                        <p className="text-red-500 text-xs mt-1">
+                                            {errors.message}
+                                        </p>
                                     )}
                                 </div>
                             </div>
@@ -346,6 +408,7 @@ export function RequestQuotationDialog({
                                     type="submit"
                                     className="bg-[#a5cd39] hover:bg-[#8aaa30] text-white"
                                     disabled={isSubmitting}
+                                    onClick={handleSubmit}
                                 >
                                     {isSubmitting
                                         ? "Sending..."
