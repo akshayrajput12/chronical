@@ -45,7 +45,7 @@ import {
     Grid3X3,
     List,
 } from "lucide-react";
-import { revalidatePath } from "next/cache";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 export default function ContactImageLibraryTab() {
     const [images, setImages] = useState<ContactImageLibrary[]>([]);
@@ -137,7 +137,7 @@ export default function ContactImageLibraryTab() {
             console.error("Delete error:", error);
             setError("Failed to delete images");
         } finally {
-            revalidatePath("/contact-us");
+            revalidatePathAction("/contact-us");
             setActionLoading(false);
             setShowDeleteDialog(false);
         }

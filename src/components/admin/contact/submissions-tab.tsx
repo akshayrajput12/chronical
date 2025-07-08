@@ -54,7 +54,7 @@ import {
     FileText,
     ExternalLink,
 } from "lucide-react";
-import { revalidatePath } from "next/cache";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 interface ContactSubmissionsTabProps {
     onStatsUpdate?: () => void;
@@ -317,7 +317,7 @@ export default function ContactSubmissionsTab({
             console.error("Reply error:", error);
             setError("Failed to send reply");
         } finally {
-            revalidatePath("/contact-us");
+            revalidatePathAction("/contact-us");
             setActionLoading(false);
         }
     };

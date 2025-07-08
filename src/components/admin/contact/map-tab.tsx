@@ -18,7 +18,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { contactAdminService } from "@/lib/services/contact";
 import { ContactMapSettings, ContactMapSettingsInput } from "@/types/contact";
 import { Save, Loader2, AlertCircle, CheckCircle, MapPin } from "lucide-react";
-import { revalidatePath } from "next/cache";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 export default function ContactMapTab() {
     const [mapSettings, setMapSettings] = useState<ContactMapSettings | null>(
@@ -111,7 +111,7 @@ export default function ContactMapTab() {
             console.error("Save error:", error);
             setError("Failed to save map settings");
         } finally {
-            revalidatePath("/contact-us");
+            revalidatePathAction("/contact-us");
             setSaving(false);
         }
     };

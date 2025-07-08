@@ -18,7 +18,7 @@ import { ContactImageUpload } from "./image-upload";
 import { contactAdminService } from "@/lib/services/contact";
 import { ContactHeroSection, ContactHeroSectionInput } from "@/types/contact";
 import { Save, Loader2, AlertCircle, CheckCircle } from "lucide-react";
-import { revalidatePath } from "next/cache";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 export default function ContactHeroTab() {
     const [heroData, setHeroData] = useState<ContactHeroSection | null>(null);
@@ -121,7 +121,7 @@ export default function ContactHeroTab() {
                     : "Failed to save hero section";
             setError(errorMessage);
         } finally {
-            revalidatePath("/contact-us");
+            revalidatePathAction("/contact-us");
             setSaving(false);
         }
     };

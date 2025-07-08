@@ -24,7 +24,7 @@ import {
     CheckCircle,
     Settings,
 } from "lucide-react";
-import { revalidatePath } from "next/cache";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 export default function ContactFormSettingsTab() {
     const [formSettings, setFormSettings] =
@@ -212,7 +212,7 @@ export default function ContactFormSettingsTab() {
 
             setError(errorMessage);
         } finally {
-            revalidatePath("/contact-us");
+            revalidatePathAction("/contact-us");
             setSaving(false);
         }
     };

@@ -41,7 +41,7 @@ import {
     Mail,
     MapPin,
 } from "lucide-react";
-import { revalidatePath } from "next/cache";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 export default function ContactInfoTab() {
     const [companies, setCompanies] = useState<ContactGroupCompany[]>([]);
@@ -165,7 +165,7 @@ export default function ContactInfoTab() {
             console.error("Save error:", error);
             setError("Failed to save company");
         } finally {
-            revalidatePath("/contact-us");
+            revalidatePathAction("/contact-us");
             setSaving(false);
         }
     };
@@ -189,7 +189,7 @@ export default function ContactInfoTab() {
             console.error("Delete error:", error);
             setError("Failed to delete company");
         } finally {
-            revalidatePath("/contact-us");
+            revalidatePathAction("/contact-us");
         }
     };
 
