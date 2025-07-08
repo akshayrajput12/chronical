@@ -169,16 +169,61 @@ const CreateEventPage = () => {
         }
     };
 
+    // Generate display date range from start and end dates
+    const generateDateRange = (startDate: string, endDate: string) => {
+        if (!startDate) return '';
+
+        const start = new Date(startDate);
+        const end = endDate ? new Date(endDate) : start;
+
+        const formatOptions: Intl.DateTimeFormatOptions = {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric'
+        };
+
+        const startFormatted = start.toLocaleDateString('en-US', formatOptions).toUpperCase();
+
+        // If same date or no end date, show single date
+        if (!endDate || start.toDateString() === end.toDateString()) {
+            return startFormatted;
+        }
+
+        // If same year, don't repeat year
+        if (start.getFullYear() === end.getFullYear()) {
+            const endFormatted = end.toLocaleDateString('en-US', {
+                day: 'numeric',
+                month: 'short'
+            }).toUpperCase();
+            return `${startFormatted} - ${endFormatted}`;
+        }
+
+        // Different years, show full dates
+        const endFormatted = end.toLocaleDateString('en-US', formatOptions).toUpperCase();
+        return `${startFormatted} - ${endFormatted}`;
+    };
+
     const handleInputChange = (field: keyof EventInput, value: any) => {
         // Clean slug input to remove trailing slashes
         if (field === 'slug' && typeof value === 'string') {
             value = value.replace(/\/+$/, '');
         }
 
-        setFormData(prev => ({
-            ...prev,
-            [field]: value,
-        }));
+        setFormData(prev => {
+            const newData = {
+                ...prev,
+                [field]: value,
+            };
+
+            // Auto-generate date_range when start_date or end_date changes
+            if (field === 'start_date' || field === 'end_date') {
+                const startDate = field === 'start_date' ? value : prev.start_date;
+                const endDate = field === 'end_date' ? value : prev.end_date;
+                newData.date_range = generateDateRange(startDate, endDate);
+            }
+
+            return newData;
+        });
     };
 
     // Handle gallery image deletion
@@ -626,12 +671,13 @@ const CreateEventPage = () => {
                                         <Label htmlFor="date_range">Display Date Range</Label>
                                         <Input
                                             id="date_range"
-                                            placeholder="e.g., 24 MAY - 1 JUN 2025"
+                                            placeholder="Auto-generated from start and end dates"
                                             value={formData.date_range}
-                                            onChange={(e) => handleInputChange("date_range", e.target.value)}
+                                            readOnly
+                                            className="bg-gray-50 cursor-not-allowed"
                                         />
                                         <p className="text-sm text-gray-500">
-                                            Optional: Custom display format for the date range
+                                            This field is automatically generated from the start and end dates above
                                         </p>
                                     </div>
                                 </div>

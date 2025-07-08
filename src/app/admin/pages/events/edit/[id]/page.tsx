@@ -225,6 +225,10 @@ const EditEventPage = () => {
                 if (eventData.event) {
                     // Convert event data to form format
                     const event = eventData.event;
+                    // Format dates for datetime-local inputs (YYYY-MM-DDTHH:MM)
+                    const startDate = event.start_date ? event.start_date.slice(0, 16) : "";
+                    const endDate = event.end_date ? event.end_date.slice(0, 16) : "";
+
                     setFormData({
                         title: event.title || "",
                         slug: event.slug || "",
@@ -237,9 +241,9 @@ const EditEventPage = () => {
                         event_type: event.event_type || "",
                         industry: event.industry || "",
                         audience: event.audience || "",
-                        start_date: event.start_date ? event.start_date.split('T')[0] : "",
-                        end_date: event.end_date ? event.end_date.split('T')[0] : "",
-                        date_range: event.date_range || "",
+                        start_date: startDate,
+                        end_date: endDate,
+                        date_range: generateDateRange(startDate, endDate), // Auto-generate from dates
                         featured_image_url: event.featured_image_url || "",
                         hero_image_url: event.hero_image_url || "",
                         logo_image_url: event.logo_image_url || "",
@@ -321,6 +325,40 @@ const EditEventPage = () => {
             .replace(/\/+$/, ''); // Remove trailing slashes
     };
 
+    // Generate display date range from start and end dates
+    const generateDateRange = (startDate: string, endDate: string) => {
+        if (!startDate) return '';
+
+        const start = new Date(startDate);
+        const end = endDate ? new Date(endDate) : start;
+
+        const formatOptions: Intl.DateTimeFormatOptions = {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric'
+        };
+
+        const startFormatted = start.toLocaleDateString('en-US', formatOptions).toUpperCase();
+
+        // If same date or no end date, show single date
+        if (!endDate || start.toDateString() === end.toDateString()) {
+            return startFormatted;
+        }
+
+        // If same year, don't repeat year
+        if (start.getFullYear() === end.getFullYear()) {
+            const endFormatted = end.toLocaleDateString('en-US', {
+                day: 'numeric',
+                month: 'short'
+            }).toUpperCase();
+            return `${startFormatted} - ${endFormatted}`;
+        }
+
+        // Different years, show full dates
+        const endFormatted = end.toLocaleDateString('en-US', formatOptions).toUpperCase();
+        return `${startFormatted} - ${endFormatted}`;
+    };
+
     // Handle input changes
     const handleInputChange = (field: keyof EventInput, value: any) => {
         // Clean slug input to remove trailing slashes
@@ -328,10 +366,21 @@ const EditEventPage = () => {
             value = value.replace(/\/+$/, '');
         }
 
-        setFormData(prev => ({
-            ...prev,
-            [field]: value
-        }));
+        setFormData(prev => {
+            const newData = {
+                ...prev,
+                [field]: value
+            };
+
+            // Auto-generate date_range when start_date or end_date changes
+            if (field === 'start_date' || field === 'end_date') {
+                const startDate = field === 'start_date' ? value : prev.start_date;
+                const endDate = field === 'end_date' ? value : prev.end_date;
+                newData.date_range = generateDateRange(startDate, endDate);
+            }
+
+            return newData;
+        });
 
         // Auto-generate slug when title changes
         if (field === 'title' && value) {
@@ -963,12 +1012,13 @@ const EditEventPage = () => {
                                         <Label htmlFor="date_range">Display Date Range</Label>
                                         <Input
                                             id="date_range"
-                                            placeholder="e.g., 24 MAY - 1 JUN 2025"
+                                            placeholder="Auto-generated from start and end dates"
                                             value={formData.date_range}
-                                            onChange={(e) => handleInputChange("date_range", e.target.value)}
+                                            readOnly
+                                            className="bg-gray-50 cursor-not-allowed"
                                         />
                                         <p className="text-sm text-gray-500">
-                                            Optional: Custom display format for the date range
+                                            This field is automatically generated from the start and end dates above
                                         </p>
                                     </div>
                                 </div>
