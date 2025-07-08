@@ -1,17 +1,39 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Textarea } from '@/components/ui/textarea';
-import { contactAdminService } from '@/lib/services/contact';
-import { ContactFormSubmission, ContactFormSubmissionStatus } from '@/types/contact';
+import React, { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { contactAdminService } from "@/lib/services/contact";
+import {
+    ContactFormSubmission,
+    ContactFormSubmissionStatus,
+} from "@/types/contact";
 import {
     Search,
     Filter,
@@ -30,30 +52,35 @@ import {
     Archive,
     Star,
     FileText,
-    ExternalLink
-} from 'lucide-react';
+    ExternalLink,
+} from "lucide-react";
+import { revalidatePath } from "next/cache";
 
 interface ContactSubmissionsTabProps {
     onStatsUpdate?: () => void;
 }
 
 // Helper function to detect form type based on submission content
-const getFormType = (submission: ContactFormSubmission): 'contact' | 'booth' | 'event' | 'quotation' => {
-    const message = submission.message?.toLowerCase() || '';
+const getFormType = (
+    submission: ContactFormSubmission,
+): "contact" | "booth" | "event" | "quotation" => {
+    const message = submission.message?.toLowerCase() || "";
 
-    if (message.includes('[event inquiry]')) {
-        return 'event';
+    if (message.includes("[event inquiry]")) {
+        return "event";
     }
-    if (message.includes('[quotation request]')) {
-        return 'quotation';
+    if (message.includes("[quotation request]")) {
+        return "quotation";
     }
-    if (message.includes('booth') ||
-        message.includes('exhibition') ||
+    if (
+        message.includes("booth") ||
+        message.includes("exhibition") ||
         submission.exhibition_name ||
-        submission.budget) {
-        return 'booth';
+        submission.budget
+    ) {
+        return "booth";
     }
-    return 'contact';
+    return "contact";
 };
 
 // Helper function to get form type badge
@@ -61,31 +88,66 @@ const getFormTypeBadge = (submission: ContactFormSubmission) => {
     const formType = getFormType(submission);
 
     switch (formType) {
-        case 'event':
-            return <Badge variant="secondary" className="bg-purple-100 text-purple-800 border-purple-200">Event Inquiry</Badge>;
-        case 'quotation':
-            return <Badge variant="secondary" className="bg-orange-100 text-orange-800 border-orange-200">Quotation Request</Badge>;
-        case 'booth':
-            return <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200">Booth Requirements</Badge>;
-        case 'contact':
-            return <Badge variant="secondary" className="bg-blue-100 text-blue-800 border-blue-200">General Contact</Badge>;
+        case "event":
+            return (
+                <Badge
+                    variant="secondary"
+                    className="bg-purple-100 text-purple-800 border-purple-200"
+                >
+                    Event Inquiry
+                </Badge>
+            );
+        case "quotation":
+            return (
+                <Badge
+                    variant="secondary"
+                    className="bg-orange-100 text-orange-800 border-orange-200"
+                >
+                    Quotation Request
+                </Badge>
+            );
+        case "booth":
+            return (
+                <Badge
+                    variant="secondary"
+                    className="bg-green-100 text-green-800 border-green-200"
+                >
+                    Booth Requirements
+                </Badge>
+            );
+        case "contact":
+            return (
+                <Badge
+                    variant="secondary"
+                    className="bg-blue-100 text-blue-800 border-blue-200"
+                >
+                    General Contact
+                </Badge>
+            );
         default:
             return null;
     }
 };
 
-export default function ContactSubmissionsTab({ onStatsUpdate }: ContactSubmissionsTabProps) {
+export default function ContactSubmissionsTab({
+    onStatsUpdate,
+}: ContactSubmissionsTabProps) {
     const [submissions, setSubmissions] = useState<ContactFormSubmission[]>([]);
     const [loading, setLoading] = useState(true);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [statusFilter, setStatusFilter] = useState<ContactFormSubmissionStatus | 'all'>('all');
-    const [formTypeFilter, setFormTypeFilter] = useState<'all' | 'contact' | 'booth' | 'event' | 'quotation'>('all');
-    const [selectedSubmission, setSelectedSubmission] = useState<ContactFormSubmission | null>(null);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [statusFilter, setStatusFilter] = useState<
+        ContactFormSubmissionStatus | "all"
+    >("all");
+    const [formTypeFilter, setFormTypeFilter] = useState<
+        "all" | "contact" | "booth" | "event" | "quotation"
+    >("all");
+    const [selectedSubmission, setSelectedSubmission] =
+        useState<ContactFormSubmission | null>(null);
     const [showViewDialog, setShowViewDialog] = useState(false);
     const [showReplyDialog, setShowReplyDialog] = useState(false);
-    const [replyMessage, setReplyMessage] = useState('');
-    const [error, setError] = useState<string>('');
-    const [success, setSuccess] = useState<string>('');
+    const [replyMessage, setReplyMessage] = useState("");
+    const [error, setError] = useState<string>("");
+    const [success, setSuccess] = useState<string>("");
     const [actionLoading, setActionLoading] = useState(false);
 
     useEffect(() => {
@@ -96,107 +158,135 @@ export default function ContactSubmissionsTab({ onStatsUpdate }: ContactSubmissi
         try {
             setLoading(true);
             const data = await contactAdminService.getSubmissions();
-            console.log('Loaded submissions:', data); // Debug log
+            console.log("Loaded submissions:", data); // Debug log
             setSubmissions(data);
         } catch (error) {
-            console.error('Failed to load submissions:', error);
-            setError('Failed to load submissions');
+            console.error("Failed to load submissions:", error);
+            setError("Failed to load submissions");
         } finally {
             setLoading(false);
         }
     };
 
     const filteredSubmissions = submissions.filter(submission => {
-        const matchesSearch = !searchTerm ||
+        const matchesSearch =
+            !searchTerm ||
             submission.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             submission.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            (submission.company_name && submission.company_name.toLowerCase().includes(searchTerm.toLowerCase())) ||
-            (submission.exhibition_name && submission.exhibition_name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+            (submission.company_name &&
+                submission.company_name
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase())) ||
+            (submission.exhibition_name &&
+                submission.exhibition_name
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase())) ||
             submission.message.toLowerCase().includes(searchTerm.toLowerCase());
 
-        const matchesStatus = statusFilter === 'all' || submission.status === statusFilter;
+        const matchesStatus =
+            statusFilter === "all" || submission.status === statusFilter;
 
         // Determine form type using the helper function
         const formType = getFormType(submission);
-        const matchesFormType = formTypeFilter === 'all' || formType === formTypeFilter;
+        const matchesFormType =
+            formTypeFilter === "all" || formType === formTypeFilter;
 
         return matchesSearch && matchesStatus && matchesFormType;
     });
 
     // Debug logging
-    console.log('Total submissions:', submissions.length);
-    console.log('Filtered submissions:', filteredSubmissions.length);
-    console.log('Search term:', searchTerm);
-    console.log('Status filter:', statusFilter);
-    console.log('Form type filter:', formTypeFilter);
+    console.log("Total submissions:", submissions.length);
+    console.log("Filtered submissions:", filteredSubmissions.length);
+    console.log("Search term:", searchTerm);
+    console.log("Status filter:", statusFilter);
+    console.log("Form type filter:", formTypeFilter);
 
     // Count booth requirements vs contact forms
-    const boothRequirements = submissions.filter(s =>
-        s.message.toLowerCase().includes('booth') ||
-        s.message.toLowerCase().includes('exhibition') ||
-        (s.exhibition_name && s.exhibition_name.trim() !== '')
+    const boothRequirements = submissions.filter(
+        s =>
+            s.message.toLowerCase().includes("booth") ||
+            s.message.toLowerCase().includes("exhibition") ||
+            (s.exhibition_name && s.exhibition_name.trim() !== ""),
     ).length;
-    console.log('Booth requirements:', boothRequirements);
-    console.log('Contact forms:', submissions.length - boothRequirements);
+    console.log("Booth requirements:", boothRequirements);
+    console.log("Contact forms:", submissions.length - boothRequirements);
 
     const handleViewSubmission = (submission: ContactFormSubmission) => {
         setSelectedSubmission(submission);
         setShowViewDialog(true);
         // Mark as read if it's new
-        if (submission.status === 'new') {
-            handleStatusChange(submission.id, 'read');
+        if (submission.status === "new") {
+            handleStatusChange(submission.id, "read");
         }
     };
 
     const handleReplySubmission = (submission: ContactFormSubmission) => {
         setSelectedSubmission(submission);
-        setReplyMessage('');
+        setReplyMessage("");
         setShowReplyDialog(true);
     };
 
-    const handleStatusChange = async (submissionId: string, newStatus: ContactFormSubmissionStatus) => {
+    const handleStatusChange = async (
+        submissionId: string,
+        newStatus: ContactFormSubmissionStatus,
+    ) => {
         try {
             setActionLoading(true);
-            const success = await contactAdminService.updateSubmissionStatus(submissionId, newStatus);
+            const success = await contactAdminService.updateSubmissionStatus(
+                submissionId,
+                newStatus,
+            );
             if (success) {
-                setSubmissions(prev => 
-                    prev.map(sub => 
-                        sub.id === submissionId 
-                            ? { ...sub, status: newStatus, updated_at: new Date().toISOString() }
-                            : sub
-                    )
+                setSubmissions(prev =>
+                    prev.map(sub =>
+                        sub.id === submissionId
+                            ? {
+                                  ...sub,
+                                  status: newStatus,
+                                  updated_at: new Date().toISOString(),
+                              }
+                            : sub,
+                    ),
                 );
-                setSuccess('Status updated successfully');
+                setSuccess("Status updated successfully");
                 onStatsUpdate?.();
             } else {
-                setError('Failed to update status');
+                setError("Failed to update status");
             }
         } catch (error) {
-            console.error('Status update error:', error);
-            setError('Failed to update status');
+            console.error("Status update error:", error);
+            setError("Failed to update status");
         } finally {
             setActionLoading(false);
         }
     };
 
     const handleDeleteSubmission = async (submissionId: string) => {
-        if (!confirm('Are you sure you want to delete this submission? This action cannot be undone.')) {
+        if (
+            !confirm(
+                "Are you sure you want to delete this submission? This action cannot be undone.",
+            )
+        ) {
             return;
         }
 
         try {
             setActionLoading(true);
-            const success = await contactAdminService.deleteSubmission(submissionId);
+            const success = await contactAdminService.deleteSubmission(
+                submissionId,
+            );
             if (success) {
-                setSubmissions(prev => prev.filter(sub => sub.id !== submissionId));
-                setSuccess('Submission deleted successfully');
+                setSubmissions(prev =>
+                    prev.filter(sub => sub.id !== submissionId),
+                );
+                setSuccess("Submission deleted successfully");
                 onStatsUpdate?.();
             } else {
-                setError('Failed to delete submission');
+                setError("Failed to delete submission");
             }
         } catch (error) {
-            console.error('Delete error:', error);
-            setError('Failed to delete submission');
+            console.error("Delete error:", error);
+            setError("Failed to delete submission");
         } finally {
             setActionLoading(false);
         }
@@ -204,62 +294,62 @@ export default function ContactSubmissionsTab({ onStatsUpdate }: ContactSubmissi
 
     const handleSendReply = async () => {
         if (!selectedSubmission || !replyMessage.trim()) {
-            setError('Reply message is required');
+            setError("Reply message is required");
             return;
         }
 
         try {
             setActionLoading(true);
-            const success = await contactAdminService.sendReply(selectedSubmission.id, replyMessage);
+            const success = await contactAdminService.sendReply(
+                selectedSubmission.id,
+                replyMessage,
+            );
             if (success) {
-                setSuccess('Reply sent successfully');
+                setSuccess("Reply sent successfully");
                 setShowReplyDialog(false);
-                setReplyMessage('');
+                setReplyMessage("");
                 // Update status to replied
-                handleStatusChange(selectedSubmission.id, 'replied');
+                handleStatusChange(selectedSubmission.id, "replied");
             } else {
-                setError('Failed to send reply');
+                setError("Failed to send reply");
             }
         } catch (error) {
-            console.error('Reply error:', error);
-            setError('Failed to send reply');
+            console.error("Reply error:", error);
+            setError("Failed to send reply");
         } finally {
+            revalidatePath("/contact-us");
             setActionLoading(false);
         }
     };
 
     const getStatusBadge = (status: ContactFormSubmissionStatus) => {
         const variants = {
-            new: 'bg-blue-100 text-blue-800',
-            read: 'bg-gray-100 text-gray-800',
-            replied: 'bg-green-100 text-green-800',
-            archived: 'bg-yellow-100 text-yellow-800',
-            spam: 'bg-red-100 text-red-800'
+            new: "bg-blue-100 text-blue-800",
+            read: "bg-gray-100 text-gray-800",
+            replied: "bg-green-100 text-green-800",
+            archived: "bg-yellow-100 text-yellow-800",
+            spam: "bg-red-100 text-red-800",
         };
 
         const labels = {
-            new: 'New',
-            read: 'Read',
-            replied: 'Replied',
-            archived: 'Archived',
-            spam: 'Spam'
+            new: "New",
+            read: "Read",
+            replied: "Replied",
+            archived: "Archived",
+            spam: "Spam",
         };
 
-        return (
-            <Badge className={variants[status]}>
-                {labels[status]}
-            </Badge>
-        );
+        return <Badge className={variants[status]}>{labels[status]}</Badge>;
     };
 
     const formatDate = (dateString: string | undefined) => {
-        if (!dateString) return 'N/A';
-        return new Date(dateString).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
+        if (!dateString) return "N/A";
+        return new Date(dateString).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
         });
     };
 
@@ -284,7 +374,9 @@ export default function ContactSubmissionsTab({ onStatsUpdate }: ContactSubmissi
             {success && (
                 <Alert className="border-green-200 bg-green-50">
                     <CheckCircle className="h-4 w-4 text-green-600" />
-                    <AlertDescription className="text-green-800">{success}</AlertDescription>
+                    <AlertDescription className="text-green-800">
+                        {success}
+                    </AlertDescription>
                 </Alert>
             )}
 
@@ -296,7 +388,8 @@ export default function ContactSubmissionsTab({ onStatsUpdate }: ContactSubmissi
                         Form Submissions
                     </CardTitle>
                     <CardDescription>
-                        View and manage all contact form and booth requirement submissions
+                        View and manage all contact form and booth requirement
+                        submissions
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -308,40 +401,72 @@ export default function ContactSubmissionsTab({ onStatsUpdate }: ContactSubmissi
                                 <Input
                                     id="search"
                                     value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    onChange={e =>
+                                        setSearchTerm(e.target.value)
+                                    }
                                     placeholder="Search by name, email, company, exhibition, or message..."
                                     className="pl-10"
                                 />
                             </div>
                         </div>
                         <div className="sm:w-48">
-                            <Label htmlFor="status-filter">Filter by Status</Label>
-                            <Select value={statusFilter} onValueChange={(value: any) => setStatusFilter(value)}>
+                            <Label htmlFor="status-filter">
+                                Filter by Status
+                            </Label>
+                            <Select
+                                value={statusFilter}
+                                onValueChange={(value: any) =>
+                                    setStatusFilter(value)
+                                }
+                            >
                                 <SelectTrigger className="mt-1">
                                     <SelectValue placeholder="All statuses" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">All Statuses</SelectItem>
+                                    <SelectItem value="all">
+                                        All Statuses
+                                    </SelectItem>
                                     <SelectItem value="new">New</SelectItem>
                                     <SelectItem value="read">Read</SelectItem>
-                                    <SelectItem value="replied">Replied</SelectItem>
-                                    <SelectItem value="archived">Archived</SelectItem>
+                                    <SelectItem value="replied">
+                                        Replied
+                                    </SelectItem>
+                                    <SelectItem value="archived">
+                                        Archived
+                                    </SelectItem>
                                     <SelectItem value="spam">Spam</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
                         <div className="sm:w-48">
-                            <Label htmlFor="form-type-filter">Filter by Form Type</Label>
-                            <Select value={formTypeFilter} onValueChange={(value: any) => setFormTypeFilter(value)}>
+                            <Label htmlFor="form-type-filter">
+                                Filter by Form Type
+                            </Label>
+                            <Select
+                                value={formTypeFilter}
+                                onValueChange={(value: any) =>
+                                    setFormTypeFilter(value)
+                                }
+                            >
                                 <SelectTrigger className="mt-1">
                                     <SelectValue placeholder="All forms" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">All Forms</SelectItem>
-                                    <SelectItem value="contact">General Contact</SelectItem>
-                                    <SelectItem value="booth">Booth Requirements</SelectItem>
-                                    <SelectItem value="event">Event Inquiries</SelectItem>
-                                    <SelectItem value="quotation">Quotation Requests</SelectItem>
+                                    <SelectItem value="all">
+                                        All Forms
+                                    </SelectItem>
+                                    <SelectItem value="contact">
+                                        General Contact
+                                    </SelectItem>
+                                    <SelectItem value="booth">
+                                        Booth Requirements
+                                    </SelectItem>
+                                    <SelectItem value="event">
+                                        Event Inquiries
+                                    </SelectItem>
+                                    <SelectItem value="quotation">
+                                        Quotation Requests
+                                    </SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
@@ -356,19 +481,27 @@ export default function ContactSubmissionsTab({ onStatsUpdate }: ContactSubmissi
                         <CardContent className="text-center py-8">
                             <MessageSquare className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                             <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                                {searchTerm || statusFilter !== 'all' ? 'No Matching Submissions' : 'No Submissions Yet'}
+                                {searchTerm || statusFilter !== "all"
+                                    ? "No Matching Submissions"
+                                    : "No Submissions Yet"}
                             </h3>
                             <p className="text-gray-600">
-                                {searchTerm || statusFilter !== 'all' 
-                                    ? 'Try adjusting your search or filter criteria.'
-                                    : 'Contact form submissions will appear here when users submit the form.'
-                                }
+                                {searchTerm || statusFilter !== "all"
+                                    ? "Try adjusting your search or filter criteria."
+                                    : "Contact form submissions will appear here when users submit the form."}
                             </p>
                         </CardContent>
                     </Card>
                 ) : (
-                    filteredSubmissions.map((submission) => (
-                        <Card key={submission.id} className={`${submission.status === 'new' ? 'border-blue-200 bg-blue-50/30' : ''}`}>
+                    filteredSubmissions.map(submission => (
+                        <Card
+                            key={submission.id}
+                            className={`${
+                                submission.status === "new"
+                                    ? "border-blue-200 bg-blue-50/30"
+                                    : ""
+                            }`}
+                        >
                             <CardContent className="p-6">
                                 <div className="flex justify-between items-start mb-4">
                                     <div className="flex-1">
@@ -377,14 +510,15 @@ export default function ContactSubmissionsTab({ onStatsUpdate }: ContactSubmissi
                                                 {submission.exhibition_name
                                                     ? `${submission.name} - ${submission.exhibition_name}`
                                                     : submission.company_name
-                                                        ? `${submission.name} - ${submission.company_name}`
-                                                        : submission.name
-                                                }
+                                                    ? `${submission.name} - ${submission.company_name}`
+                                                    : submission.name}
                                             </h3>
                                             {getStatusBadge(submission.status)}
                                             {/* Form type indicator */}
                                             {getFormTypeBadge(submission)}
-                                            {submission.status === 'new' && <Star className="h-4 w-4 text-blue-500" />}
+                                            {submission.status === "new" && (
+                                                <Star className="h-4 w-4 text-blue-500" />
+                                            )}
                                         </div>
                                         <div className="flex flex-wrap gap-4 text-sm text-gray-600 mb-3">
                                             <div className="flex items-center gap-1">
@@ -398,12 +532,18 @@ export default function ContactSubmissionsTab({ onStatsUpdate }: ContactSubmissi
                                             {submission.phone && (
                                                 <div className="flex items-center gap-1">
                                                     <Phone className="h-4 w-4" />
-                                                    <span>{submission.phone}</span>
+                                                    <span>
+                                                        {submission.phone}
+                                                    </span>
                                                 </div>
                                             )}
                                             <div className="flex items-center gap-1">
                                                 <Calendar className="h-4 w-4" />
-                                                <span>{formatDate(submission.created_at)}</span>
+                                                <span>
+                                                    {formatDate(
+                                                        submission.created_at,
+                                                    )}
+                                                </span>
                                             </div>
                                             {submission.attachment_url && (
                                                 <div className="flex items-center gap-1 text-blue-600">
@@ -412,13 +552,17 @@ export default function ContactSubmissionsTab({ onStatsUpdate }: ContactSubmissi
                                                 </div>
                                             )}
                                         </div>
-                                        <p className="text-gray-700 line-clamp-2">{submission.message}</p>
+                                        <p className="text-gray-700 line-clamp-2">
+                                            {submission.message}
+                                        </p>
                                     </div>
                                     <div className="flex gap-2 ml-4">
                                         <Button
                                             variant="outline"
                                             size="sm"
-                                            onClick={() => handleViewSubmission(submission)}
+                                            onClick={() =>
+                                                handleViewSubmission(submission)
+                                            }
                                             className="flex items-center gap-1"
                                         >
                                             <Eye className="h-4 w-4" />
@@ -427,7 +571,11 @@ export default function ContactSubmissionsTab({ onStatsUpdate }: ContactSubmissi
                                         <Button
                                             variant="outline"
                                             size="sm"
-                                            onClick={() => handleReplySubmission(submission)}
+                                            onClick={() =>
+                                                handleReplySubmission(
+                                                    submission,
+                                                )
+                                            }
                                             className="flex items-center gap-1"
                                         >
                                             <Reply className="h-4 w-4" />
@@ -435,25 +583,44 @@ export default function ContactSubmissionsTab({ onStatsUpdate }: ContactSubmissi
                                         </Button>
                                         <Select
                                             value={submission.status}
-                                            onValueChange={(value: ContactFormSubmissionStatus) =>
-                                                handleStatusChange(submission.id, value)
+                                            onValueChange={(
+                                                value: ContactFormSubmissionStatus,
+                                            ) =>
+                                                handleStatusChange(
+                                                    submission.id,
+                                                    value,
+                                                )
                                             }
                                         >
                                             <SelectTrigger className="w-32">
                                                 <SelectValue />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                <SelectItem value="new">New</SelectItem>
-                                                <SelectItem value="read">Read</SelectItem>
-                                                <SelectItem value="replied">Replied</SelectItem>
-                                                <SelectItem value="archived">Archived</SelectItem>
-                                                <SelectItem value="spam">Spam</SelectItem>
+                                                <SelectItem value="new">
+                                                    New
+                                                </SelectItem>
+                                                <SelectItem value="read">
+                                                    Read
+                                                </SelectItem>
+                                                <SelectItem value="replied">
+                                                    Replied
+                                                </SelectItem>
+                                                <SelectItem value="archived">
+                                                    Archived
+                                                </SelectItem>
+                                                <SelectItem value="spam">
+                                                    Spam
+                                                </SelectItem>
                                             </SelectContent>
                                         </Select>
                                         <Button
                                             variant="outline"
                                             size="sm"
-                                            onClick={() => handleDeleteSubmission(submission.id)}
+                                            onClick={() =>
+                                                handleDeleteSubmission(
+                                                    submission.id,
+                                                )
+                                            }
                                             className="text-red-600 hover:text-red-700"
                                         >
                                             <Trash2 className="h-4 w-4" />
@@ -475,54 +642,70 @@ export default function ContactSubmissionsTab({ onStatsUpdate }: ContactSubmissi
                             Full details of the contact form submission
                         </DialogDescription>
                     </DialogHeader>
-                    
+
                     {selectedSubmission && (
                         <div className="space-y-4">
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <Label>Name</Label>
-                                    <p className="font-medium">{selectedSubmission.name}</p>
+                                    <p className="font-medium">
+                                        {selectedSubmission.name}
+                                    </p>
                                 </div>
                                 <div>
                                     <Label>Email</Label>
-                                    <p className="font-medium">{selectedSubmission.email}</p>
+                                    <p className="font-medium">
+                                        {selectedSubmission.email}
+                                    </p>
                                 </div>
                                 {selectedSubmission.phone && (
                                     <div>
                                         <Label>Phone</Label>
-                                        <p className="font-medium">{selectedSubmission.phone}</p>
+                                        <p className="font-medium">
+                                            {selectedSubmission.phone}
+                                        </p>
                                     </div>
                                 )}
                                 {selectedSubmission.company_name && (
                                     <div>
                                         <Label>Company Name</Label>
-                                        <p className="font-medium">{selectedSubmission.company_name}</p>
+                                        <p className="font-medium">
+                                            {selectedSubmission.company_name}
+                                        </p>
                                     </div>
                                 )}
                                 {selectedSubmission.exhibition_name && (
                                     <div>
                                         <Label>Exhibition Name</Label>
-                                        <p className="font-medium">{selectedSubmission.exhibition_name}</p>
+                                        <p className="font-medium">
+                                            {selectedSubmission.exhibition_name}
+                                        </p>
                                     </div>
                                 )}
                                 {selectedSubmission.budget && (
                                     <div>
                                         <Label>Budget</Label>
-                                        <p className="font-medium">{selectedSubmission.budget}</p>
+                                        <p className="font-medium">
+                                            {selectedSubmission.budget}
+                                        </p>
                                     </div>
                                 )}
                                 <div>
                                     <Label>Status</Label>
                                     <div className="mt-1">
-                                        {getStatusBadge(selectedSubmission.status)}
+                                        {getStatusBadge(
+                                            selectedSubmission.status,
+                                        )}
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div>
                                 <Label>Message</Label>
                                 <div className="mt-1 p-3 bg-gray-50 rounded-lg">
-                                    <p className="whitespace-pre-wrap">{selectedSubmission.message}</p>
+                                    <p className="whitespace-pre-wrap">
+                                        {selectedSubmission.message}
+                                    </p>
                                 </div>
                             </div>
 
@@ -536,11 +719,17 @@ export default function ContactSubmissionsTab({ onStatsUpdate }: ContactSubmissi
                                                 <FileText className="h-5 w-5 text-blue-600" />
                                                 <div>
                                                     <p className="font-medium text-blue-900">
-                                                        {selectedSubmission.attachment_filename || 'Uploaded Document'}
+                                                        {selectedSubmission.attachment_filename ||
+                                                            "Uploaded Document"}
                                                     </p>
                                                     {selectedSubmission.attachment_size && (
                                                         <p className="text-sm text-blue-600">
-                                                            {(selectedSubmission.attachment_size / 1024 / 1024).toFixed(2)} MB
+                                                            {(
+                                                                selectedSubmission.attachment_size /
+                                                                1024 /
+                                                                1024
+                                                            ).toFixed(2)}{" "}
+                                                            MB
                                                         </p>
                                                     )}
                                                 </div>
@@ -549,7 +738,12 @@ export default function ContactSubmissionsTab({ onStatsUpdate }: ContactSubmissi
                                                 <Button
                                                     variant="outline"
                                                     size="sm"
-                                                    onClick={() => window.open(selectedSubmission.attachment_url, '_blank')}
+                                                    onClick={() =>
+                                                        window.open(
+                                                            selectedSubmission.attachment_url,
+                                                            "_blank",
+                                                        )
+                                                    }
                                                     className="flex items-center space-x-1"
                                                 >
                                                     <ExternalLink className="h-4 w-4" />
@@ -559,12 +753,22 @@ export default function ContactSubmissionsTab({ onStatsUpdate }: ContactSubmissi
                                                     variant="outline"
                                                     size="sm"
                                                     onClick={() => {
-                                                        const link = document.createElement('a');
-                                                        link.href = selectedSubmission.attachment_url!;
-                                                        link.download = selectedSubmission.attachment_filename || 'document';
-                                                        document.body.appendChild(link);
+                                                        const link =
+                                                            document.createElement(
+                                                                "a",
+                                                            );
+                                                        link.href =
+                                                            selectedSubmission.attachment_url!;
+                                                        link.download =
+                                                            selectedSubmission.attachment_filename ||
+                                                            "document";
+                                                        document.body.appendChild(
+                                                            link,
+                                                        );
                                                         link.click();
-                                                        document.body.removeChild(link);
+                                                        document.body.removeChild(
+                                                            link,
+                                                        );
                                                     }}
                                                     className="flex items-center space-x-1"
                                                 >
@@ -576,31 +780,53 @@ export default function ContactSubmissionsTab({ onStatsUpdate }: ContactSubmissi
                                     </div>
                                 </div>
                             )}
-                            
+
                             <div className="text-sm text-gray-500 space-y-1">
-                                <p>Submitted: {formatDate(selectedSubmission.created_at)}</p>
-                                {selectedSubmission.updated_at !== selectedSubmission.created_at && (
-                                    <p>Updated: {formatDate(selectedSubmission.updated_at)}</p>
+                                <p>
+                                    Submitted:{" "}
+                                    {formatDate(selectedSubmission.created_at)}
+                                </p>
+                                {selectedSubmission.updated_at !==
+                                    selectedSubmission.created_at && (
+                                    <p>
+                                        Updated:{" "}
+                                        {formatDate(
+                                            selectedSubmission.updated_at,
+                                        )}
+                                    </p>
                                 )}
-                                {selectedSubmission.referrer && selectedSubmission.referrer !== 'direct' && (
-                                    <p>Source: {selectedSubmission.referrer}</p>
-                                )}
+                                {selectedSubmission.referrer &&
+                                    selectedSubmission.referrer !==
+                                        "direct" && (
+                                        <p>
+                                            Source:{" "}
+                                            {selectedSubmission.referrer}
+                                        </p>
+                                    )}
                                 {selectedSubmission.ip_address && (
-                                    <p>IP Address: {selectedSubmission.ip_address}</p>
+                                    <p>
+                                        IP Address:{" "}
+                                        {selectedSubmission.ip_address}
+                                    </p>
                                 )}
                             </div>
                         </div>
                     )}
-                    
+
                     <DialogFooter>
-                        <Button variant="outline" onClick={() => setShowViewDialog(false)}>
+                        <Button
+                            variant="outline"
+                            onClick={() => setShowViewDialog(false)}
+                        >
                             Close
                         </Button>
                         {selectedSubmission && (
-                            <Button onClick={() => {
-                                setShowViewDialog(false);
-                                handleReplySubmission(selectedSubmission);
-                            }}>
+                            <Button
+                                onClick={() => {
+                                    setShowViewDialog(false);
+                                    handleReplySubmission(selectedSubmission);
+                                }}
+                            >
                                 <Reply className="h-4 w-4 mr-2" />
                                 Reply
                             </Button>
@@ -615,33 +841,34 @@ export default function ContactSubmissionsTab({ onStatsUpdate }: ContactSubmissi
                     <DialogHeader>
                         <DialogTitle>Reply to Submission</DialogTitle>
                         <DialogDescription>
-                            Send a reply to {selectedSubmission?.name} ({selectedSubmission?.email})
+                            Send a reply to {selectedSubmission?.name} (
+                            {selectedSubmission?.email})
                         </DialogDescription>
                     </DialogHeader>
-                    
+
                     <div className="space-y-4">
                         <div>
                             <Label htmlFor="reply-message">Reply Message</Label>
                             <Textarea
                                 id="reply-message"
                                 value={replyMessage}
-                                onChange={(e) => setReplyMessage(e.target.value)}
+                                onChange={e => setReplyMessage(e.target.value)}
                                 placeholder="Type your reply message here..."
                                 rows={6}
                                 className="mt-1"
                             />
                         </div>
                     </div>
-                    
+
                     <DialogFooter>
-                        <Button 
-                            variant="outline" 
+                        <Button
+                            variant="outline"
                             onClick={() => setShowReplyDialog(false)}
                             disabled={actionLoading}
                         >
                             Cancel
                         </Button>
-                        <Button 
+                        <Button
                             onClick={handleSendReply}
                             disabled={actionLoading || !replyMessage.trim()}
                         >

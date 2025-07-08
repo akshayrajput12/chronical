@@ -1,43 +1,65 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { ContactImageUpload } from './image-upload';
-import { contactAdminService } from '@/lib/services/contact';
-import { ContactImageLibrary, ContactStorageBucket } from '@/types/contact';
-import { 
-    Search, 
-    Upload, 
-    Trash2, 
+import React, { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog";
+import { ContactImageUpload } from "./image-upload";
+import { contactAdminService } from "@/lib/services/contact";
+import { ContactImageLibrary, ContactStorageBucket } from "@/types/contact";
+import {
+    Search,
+    Upload,
+    Trash2,
     Download,
-    Loader2, 
-    AlertCircle, 
+    Loader2,
+    AlertCircle,
     CheckCircle,
     Image as ImageIcon,
     FolderOpen,
     Copy,
     ExternalLink,
     Grid3X3,
-    List
-} from 'lucide-react';
+    List,
+} from "lucide-react";
+import { revalidatePath } from "next/cache";
 
 export default function ContactImageLibraryTab() {
     const [images, setImages] = useState<ContactImageLibrary[]>([]);
     const [loading, setLoading] = useState(true);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [bucketFilter, setBucketFilter] = useState<ContactStorageBucket | 'all'>('all');
-    const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+    const [searchTerm, setSearchTerm] = useState("");
+    const [bucketFilter, setBucketFilter] = useState<
+        ContactStorageBucket | "all"
+    >("all");
+    const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
     const [selectedImages, setSelectedImages] = useState<string[]>([]);
     const [showUploadDialog, setShowUploadDialog] = useState(false);
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-    const [error, setError] = useState<string>('');
-    const [success, setSuccess] = useState<string>('');
+    const [error, setError] = useState<string>("");
+    const [success, setSuccess] = useState<string>("");
     const [actionLoading, setActionLoading] = useState(false);
 
     useEffect(() => {
@@ -50,28 +72,30 @@ export default function ContactImageLibraryTab() {
             const data = await contactAdminService.getImageLibrary();
             setImages(data);
         } catch (error) {
-            console.error('Failed to load images:', error);
-            setError('Failed to load image library');
+            console.error("Failed to load images:", error);
+            setError("Failed to load image library");
         } finally {
             setLoading(false);
         }
     };
 
     const filteredImages = images.filter(image => {
-        const matchesSearch = !searchTerm || 
+        const matchesSearch =
+            !searchTerm ||
             image.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             image.folder?.toLowerCase().includes(searchTerm.toLowerCase());
-        
-        const matchesBucket = bucketFilter === 'all' || image.bucket === bucketFilter;
-        
+
+        const matchesBucket =
+            bucketFilter === "all" || image.bucket === bucketFilter;
+
         return matchesSearch && matchesBucket;
     });
 
     const handleImageSelect = (imageId: string) => {
-        setSelectedImages(prev => 
-            prev.includes(imageId) 
+        setSelectedImages(prev =>
+            prev.includes(imageId)
                 ? prev.filter(id => id !== imageId)
-                : [...prev, imageId]
+                : [...prev, imageId],
         );
     };
 
@@ -91,7 +115,10 @@ export default function ContactImageLibraryTab() {
             const deletePromises = selectedImages.map(imageId => {
                 const image = images.find(img => img.id === imageId);
                 if (image && image.path) {
-                    return contactAdminService.deleteImage(image.bucket, image.path);
+                    return contactAdminService.deleteImage(
+                        image.bucket,
+                        image.path,
+                    );
                 }
                 return Promise.resolve(false);
             });
@@ -104,12 +131,13 @@ export default function ContactImageLibraryTab() {
                 setSelectedImages([]);
                 loadImages();
             } else {
-                setError('Failed to delete images');
+                setError("Failed to delete images");
             }
         } catch (error) {
-            console.error('Delete error:', error);
-            setError('Failed to delete images');
+            console.error("Delete error:", error);
+            setError("Failed to delete images");
         } finally {
+            revalidatePath("/contact-us");
             setActionLoading(false);
             setShowDeleteDialog(false);
         }
@@ -117,32 +145,32 @@ export default function ContactImageLibraryTab() {
 
     const handleCopyUrl = (url: string) => {
         navigator.clipboard.writeText(url);
-        setSuccess('Image URL copied to clipboard');
+        setSuccess("Image URL copied to clipboard");
     };
 
     const formatFileSize = (bytes: number) => {
-        if (bytes === 0) return '0 Bytes';
+        if (bytes === 0) return "0 Bytes";
         const k = 1024;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const sizes = ["Bytes", "KB", "MB", "GB"];
         const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
     };
 
     const formatDate = (dateString: string) => {
-        return new Date(dateString).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
+        return new Date(dateString).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
         });
     };
 
     const getBucketLabel = (bucket: ContactStorageBucket) => {
         const labels = {
-            'contact-images': 'Contact Images',
-            'contact-attachments': 'Form Attachments',
-            'contact-admin-uploads': 'Admin Uploads'
+            "contact-images": "Contact Images",
+            "contact-attachments": "Form Attachments",
+            "contact-admin-uploads": "Admin Uploads",
         };
         return labels[bucket] || bucket;
     };
@@ -168,7 +196,9 @@ export default function ContactImageLibraryTab() {
             {success && (
                 <Alert className="border-green-200 bg-green-50">
                     <CheckCircle className="h-4 w-4 text-green-600" />
-                    <AlertDescription className="text-green-800">{success}</AlertDescription>
+                    <AlertDescription className="text-green-800">
+                        {success}
+                    </AlertDescription>
                 </Alert>
             )}
 
@@ -192,23 +222,40 @@ export default function ContactImageLibraryTab() {
                                 <Input
                                     id="search"
                                     value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    onChange={e =>
+                                        setSearchTerm(e.target.value)
+                                    }
                                     placeholder="Search by filename or folder..."
                                     className="pl-10"
                                 />
                             </div>
                         </div>
                         <div className="lg:w-48">
-                            <Label htmlFor="bucket-filter">Filter by Bucket</Label>
-                            <Select value={bucketFilter} onValueChange={(value: any) => setBucketFilter(value)}>
+                            <Label htmlFor="bucket-filter">
+                                Filter by Bucket
+                            </Label>
+                            <Select
+                                value={bucketFilter}
+                                onValueChange={(value: any) =>
+                                    setBucketFilter(value)
+                                }
+                            >
                                 <SelectTrigger className="mt-1">
                                     <SelectValue placeholder="All buckets" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">All Buckets</SelectItem>
-                                    <SelectItem value="contact-images">Contact Images</SelectItem>
-                                    <SelectItem value="contact-attachments">Form Attachments</SelectItem>
-                                    <SelectItem value="contact-admin-uploads">Admin Uploads</SelectItem>
+                                    <SelectItem value="all">
+                                        All Buckets
+                                    </SelectItem>
+                                    <SelectItem value="contact-images">
+                                        Contact Images
+                                    </SelectItem>
+                                    <SelectItem value="contact-attachments">
+                                        Form Attachments
+                                    </SelectItem>
+                                    <SelectItem value="contact-admin-uploads">
+                                        Admin Uploads
+                                    </SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
@@ -216,11 +263,19 @@ export default function ContactImageLibraryTab() {
                             <Button
                                 variant="outline"
                                 size="sm"
-                                onClick={() => setViewMode(viewMode === 'grid' ? 'list' : 'grid')}
+                                onClick={() =>
+                                    setViewMode(
+                                        viewMode === "grid" ? "list" : "grid",
+                                    )
+                                }
                                 className="flex items-center gap-2"
                             >
-                                {viewMode === 'grid' ? <List className="h-4 w-4" /> : <Grid3X3 className="h-4 w-4" />}
-                                {viewMode === 'grid' ? 'List' : 'Grid'}
+                                {viewMode === "grid" ? (
+                                    <List className="h-4 w-4" />
+                                ) : (
+                                    <Grid3X3 className="h-4 w-4" />
+                                )}
+                                {viewMode === "grid" ? "List" : "Grid"}
                             </Button>
                             <Button
                                 onClick={() => setShowUploadDialog(true)}
@@ -248,7 +303,10 @@ export default function ContactImageLibraryTab() {
                                     size="sm"
                                     onClick={handleSelectAll}
                                 >
-                                    {selectedImages.length === filteredImages.length ? 'Deselect All' : 'Select All'}
+                                    {selectedImages.length ===
+                                    filteredImages.length
+                                        ? "Deselect All"
+                                        : "Select All"}
                                 </Button>
                             </div>
                             <div className="flex gap-2">
@@ -273,29 +331,33 @@ export default function ContactImageLibraryTab() {
                     <CardContent className="text-center py-8">
                         <ImageIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                         <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                            {searchTerm || bucketFilter !== 'all' ? 'No Matching Images' : 'No Images Uploaded'}
+                            {searchTerm || bucketFilter !== "all"
+                                ? "No Matching Images"
+                                : "No Images Uploaded"}
                         </h3>
                         <p className="text-gray-600 mb-4">
-                            {searchTerm || bucketFilter !== 'all' 
-                                ? 'Try adjusting your search or filter criteria.'
-                                : 'Upload your first images to get started with the image library.'
-                            }
+                            {searchTerm || bucketFilter !== "all"
+                                ? "Try adjusting your search or filter criteria."
+                                : "Upload your first images to get started with the image library."}
                         </p>
-                        <Button onClick={() => setShowUploadDialog(true)} className="flex items-center gap-2">
+                        <Button
+                            onClick={() => setShowUploadDialog(true)}
+                            className="flex items-center gap-2"
+                        >
                             <Upload className="h-4 w-4" />
                             Upload Images
                         </Button>
                     </CardContent>
                 </Card>
-            ) : viewMode === 'grid' ? (
+            ) : viewMode === "grid" ? (
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-                    {filteredImages.map((image) => (
-                        <Card 
-                            key={image.id} 
+                    {filteredImages.map(image => (
+                        <Card
+                            key={image.id}
                             className={`cursor-pointer transition-all ${
-                                selectedImages.includes(image.id) 
-                                    ? 'ring-2 ring-blue-500 bg-blue-50' 
-                                    : 'hover:shadow-md'
+                                selectedImages.includes(image.id)
+                                    ? "ring-2 ring-blue-500 bg-blue-50"
+                                    : "hover:shadow-md"
                             }`}
                             onClick={() => handleImageSelect(image.id)}
                         >
@@ -309,15 +371,20 @@ export default function ContactImageLibraryTab() {
                                     />
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-xs font-medium truncate" title={image.name}>
+                                    <p
+                                        className="text-xs font-medium truncate"
+                                        title={image.name}
+                                    >
                                         {image.name}
                                     </p>
                                     <div className="flex items-center justify-between text-xs text-gray-500">
-                                        <span>{formatFileSize(image.size)}</span>
+                                        <span>
+                                            {formatFileSize(image.size)}
+                                        </span>
                                         <Button
                                             variant="ghost"
                                             size="sm"
-                                            onClick={(e) => {
+                                            onClick={e => {
                                                 e.stopPropagation();
                                                 handleCopyUrl(image.url);
                                             }}
@@ -339,13 +406,13 @@ export default function ContactImageLibraryTab() {
                 <Card>
                     <CardContent className="p-0">
                         <div className="divide-y">
-                            {filteredImages.map((image) => (
-                                <div 
+                            {filteredImages.map(image => (
+                                <div
                                     key={image.id}
                                     className={`flex items-center gap-4 p-4 cursor-pointer transition-colors ${
-                                        selectedImages.includes(image.id) 
-                                            ? 'bg-blue-50' 
-                                            : 'hover:bg-gray-50'
+                                        selectedImages.includes(image.id)
+                                            ? "bg-blue-50"
+                                            : "hover:bg-gray-50"
                                     }`}
                                     onClick={() => handleImageSelect(image.id)}
                                 >
@@ -358,24 +425,32 @@ export default function ContactImageLibraryTab() {
                                         />
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <h4 className="font-medium truncate">{image.name}</h4>
+                                        <h4 className="font-medium truncate">
+                                            {image.name}
+                                        </h4>
                                         <div className="flex items-center gap-4 text-sm text-gray-500 mt-1">
-                                            <span>{formatFileSize(image.size)}</span>
-                                            <span>{getBucketLabel(image.bucket)}</span>
+                                            <span>
+                                                {formatFileSize(image.size)}
+                                            </span>
+                                            <span>
+                                                {getBucketLabel(image.bucket)}
+                                            </span>
                                             {image.folder && (
                                                 <span className="flex items-center gap-1">
                                                     <FolderOpen className="h-3 w-3" />
                                                     {image.folder}
                                                 </span>
                                             )}
-                                            <span>{formatDate(image.created_at)}</span>
+                                            <span>
+                                                {formatDate(image.created_at)}
+                                            </span>
                                         </div>
                                     </div>
                                     <div className="flex gap-2">
                                         <Button
                                             variant="ghost"
                                             size="sm"
-                                            onClick={(e) => {
+                                            onClick={e => {
                                                 e.stopPropagation();
                                                 handleCopyUrl(image.url);
                                             }}
@@ -387,9 +462,12 @@ export default function ContactImageLibraryTab() {
                                         <Button
                                             variant="ghost"
                                             size="sm"
-                                            onClick={(e) => {
+                                            onClick={e => {
                                                 e.stopPropagation();
-                                                window.open(image.url, '_blank');
+                                                window.open(
+                                                    image.url,
+                                                    "_blank",
+                                                );
                                             }}
                                             className="flex items-center gap-1"
                                         >
@@ -413,14 +491,14 @@ export default function ContactImageLibraryTab() {
                             Upload new images to the contact image library
                         </DialogDescription>
                     </DialogHeader>
-                    
+
                     <div className="space-y-4">
                         <ContactImageUpload
                             value=""
                             onChange={() => {
                                 // Refresh library after upload
                                 loadImages();
-                                setSuccess('Images uploaded successfully');
+                                setSuccess("Images uploaded successfully");
                             }}
                             bucket="contact-images"
                             folder="library"
@@ -429,9 +507,12 @@ export default function ContactImageLibraryTab() {
                             showLibrary={false}
                         />
                     </div>
-                    
+
                     <DialogFooter>
-                        <Button variant="outline" onClick={() => setShowUploadDialog(false)}>
+                        <Button
+                            variant="outline"
+                            onClick={() => setShowUploadDialog(false)}
+                        >
                             Close
                         </Button>
                     </DialogFooter>
@@ -444,20 +525,21 @@ export default function ContactImageLibraryTab() {
                     <DialogHeader>
                         <DialogTitle>Delete Images</DialogTitle>
                         <DialogDescription>
-                            Are you sure you want to delete {selectedImages.length} selected image(s)? 
-                            This action cannot be undone.
+                            Are you sure you want to delete{" "}
+                            {selectedImages.length} selected image(s)? This
+                            action cannot be undone.
                         </DialogDescription>
                     </DialogHeader>
-                    
+
                     <DialogFooter>
-                        <Button 
-                            variant="outline" 
+                        <Button
+                            variant="outline"
                             onClick={() => setShowDeleteDialog(false)}
                             disabled={actionLoading}
                         >
                             Cancel
                         </Button>
-                        <Button 
+                        <Button
                             variant="destructive"
                             onClick={handleDeleteSelected}
                             disabled={actionLoading}

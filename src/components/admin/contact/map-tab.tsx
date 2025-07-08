@@ -1,31 +1,39 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import React, { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
-
-import { contactAdminService } from '@/lib/services/contact';
-import { ContactMapSettings, ContactMapSettingsInput } from '@/types/contact';
-import { Save, Loader2, AlertCircle, CheckCircle, MapPin } from 'lucide-react';
+import { contactAdminService } from "@/lib/services/contact";
+import { ContactMapSettings, ContactMapSettingsInput } from "@/types/contact";
+import { Save, Loader2, AlertCircle, CheckCircle, MapPin } from "lucide-react";
+import { revalidatePath } from "next/cache";
 
 export default function ContactMapTab() {
-    const [mapSettings, setMapSettings] = useState<ContactMapSettings | null>(null);
+    const [mapSettings, setMapSettings] = useState<ContactMapSettings | null>(
+        null,
+    );
     const [formData, setFormData] = useState<ContactMapSettingsInput>({
-        map_embed_url: '',
-        map_title: '',
+        map_embed_url: "",
+        map_title: "",
         map_height: 400,
-        is_active: true
+        is_active: true,
     });
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
-    const [error, setError] = useState<string>('');
-    const [success, setSuccess] = useState<string>('');
+    const [error, setError] = useState<string>("");
+    const [success, setSuccess] = useState<string>("");
 
     useEffect(() => {
         loadMapSettings();
@@ -39,64 +47,71 @@ export default function ContactMapTab() {
                 setMapSettings(data);
                 setFormData({
                     map_embed_url: data.map_embed_url,
-                    map_title: data.map_title || '',
+                    map_title: data.map_title || "",
                     map_height: data.map_height || 400,
-                    is_active: data.is_active
+                    is_active: data.is_active,
                 });
             }
         } catch (error) {
-            console.error('Failed to load map settings:', error);
-            setError('Failed to load map settings');
+            console.error("Failed to load map settings:", error);
+            setError("Failed to load map settings");
         } finally {
             setLoading(false);
         }
     };
 
-    const handleInputChange = (field: keyof ContactMapSettingsInput, value: string | boolean | number) => {
+    const handleInputChange = (
+        field: keyof ContactMapSettingsInput,
+        value: string | boolean | number,
+    ) => {
         setFormData(prev => ({
             ...prev,
-            [field]: value
+            [field]: value,
         }));
         // Clear messages when user starts editing
-        if (error) setError('');
-        if (success) setSuccess('');
+        if (error) setError("");
+        if (success) setSuccess("");
     };
 
     const handleSave = async () => {
         try {
             setSaving(true);
-            setError('');
-            setSuccess('');
+            setError("");
+            setSuccess("");
 
             // Validate required fields
             if (!formData.map_embed_url.trim()) {
-                setError('Map embed URL is required');
+                setError("Map embed URL is required");
                 return;
             }
 
             let result;
             if (mapSettings) {
                 // Update existing
-                result = await contactAdminService.updateMapSettings(mapSettings.id, formData);
+                result = await contactAdminService.updateMapSettings(
+                    mapSettings.id,
+                    formData,
+                );
             } else {
                 // Create new
                 result = await contactAdminService.createMapSettings(formData);
             }
 
             if (result) {
-                setSuccess('Map settings saved successfully!');
+                setSuccess("Map settings saved successfully!");
                 setMapSettings(result);
                 // Reload data to ensure consistency
                 setTimeout(() => {
                     loadMapSettings();
                 }, 1000);
             } else {
-                setError('Failed to save map settings');
+                setError("Failed to save map settings");
             }
         } catch (error) {
-            console.error('Save error:', error);
-            setError('Failed to save map settings');
+            console.error("Save error:", error);
+            setError("Failed to save map settings");
         } finally {
+            revalidatePath("/contact-us");
             setSaving(false);
         }
     };
@@ -122,7 +137,9 @@ export default function ContactMapTab() {
             {success && (
                 <Alert className="border-green-200 bg-green-50">
                     <CheckCircle className="h-4 w-4 text-green-600" />
-                    <AlertDescription className="text-green-800">{success}</AlertDescription>
+                    <AlertDescription className="text-green-800">
+                        {success}
+                    </AlertDescription>
                 </Alert>
             )}
 
@@ -143,13 +160,19 @@ export default function ContactMapTab() {
                         <Textarea
                             id="map_embed_url"
                             value={formData.map_embed_url}
-                            onChange={(e) => handleInputChange('map_embed_url', e.target.value)}
+                            onChange={e =>
+                                handleInputChange(
+                                    "map_embed_url",
+                                    e.target.value,
+                                )
+                            }
                             placeholder="Enter Google Maps embed URL or iframe code"
                             rows={4}
                             className="mt-1"
                         />
                         <p className="text-xs text-gray-500 mt-1">
-                            You can paste the full iframe code from Google Maps or just the src URL
+                            You can paste the full iframe code from Google Maps
+                            or just the src URL
                         </p>
                     </div>
 
@@ -157,7 +180,9 @@ export default function ContactMapTab() {
                         <Switch
                             id="is_active"
                             checked={formData.is_active}
-                            onCheckedChange={(checked) => handleInputChange('is_active', checked)}
+                            onCheckedChange={checked =>
+                                handleInputChange("is_active", checked)
+                            }
                         />
                         <Label htmlFor="is_active">Map Active</Label>
                     </div>
@@ -181,7 +206,9 @@ export default function ContactMapTab() {
                         <Input
                             id="map_title"
                             value={formData.map_title}
-                            onChange={(e) => handleInputChange('map_title', e.target.value)}
+                            onChange={e =>
+                                handleInputChange("map_title", e.target.value)
+                            }
                             placeholder="Enter map section title"
                             className="mt-1"
                         />
@@ -193,7 +220,12 @@ export default function ContactMapTab() {
                             id="map_height"
                             type="number"
                             value={formData.map_height}
-                            onChange={(e) => handleInputChange('map_height', parseInt(e.target.value) || 400)}
+                            onChange={e =>
+                                handleInputChange(
+                                    "map_height",
+                                    parseInt(e.target.value) || 400,
+                                )
+                            }
                             placeholder="400"
                             min="200"
                             max="800"
@@ -212,7 +244,8 @@ export default function ContactMapTab() {
                     <CardHeader>
                         <CardTitle>Map Preview</CardTitle>
                         <CardDescription>
-                            Preview of how the map will appear on the contact page
+                            Preview of how the map will appear on the contact
+                            page
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -220,8 +253,12 @@ export default function ContactMapTab() {
                             className="bg-gray-100 rounded-lg overflow-hidden"
                             style={{ height: `${formData.map_height}px` }}
                         >
-                            {formData.map_embed_url.includes('<iframe') ? (
-                                <div dangerouslySetInnerHTML={{ __html: formData.map_embed_url }} />
+                            {formData.map_embed_url.includes("<iframe") ? (
+                                <div
+                                    dangerouslySetInnerHTML={{
+                                        __html: formData.map_embed_url,
+                                    }}
+                                />
                             ) : (
                                 <iframe
                                     src={formData.map_embed_url}
@@ -236,19 +273,18 @@ export default function ContactMapTab() {
                         </div>
                         {!formData.is_active && (
                             <div className="mt-2 text-sm text-amber-600 bg-amber-50 p-2 rounded">
-                                ⚠️ This map is currently inactive and will not be displayed on the website.
+                                ⚠️ This map is currently inactive and will not
+                                be displayed on the website.
                             </div>
                         )}
                     </CardContent>
                 </Card>
             )}
 
-
-
             {/* Save Button */}
             <div className="flex justify-end">
-                <Button 
-                    onClick={handleSave} 
+                <Button
+                    onClick={handleSave}
                     disabled={saving}
                     className="w-full sm:w-auto"
                 >

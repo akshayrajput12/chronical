@@ -8,7 +8,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { CheckCircle } from "lucide-react";
 import Link from "next/link";
-import { ContactFormSettings, ContactFormData, ContactFormErrors } from "@/types/contact";
+import {
+    ContactFormSettings,
+    ContactFormData,
+    ContactFormErrors,
+} from "@/types/contact";
 import { contactPageService } from "@/lib/services/contact";
 import { PhoneInput } from "@/components/ui/phone-input";
 
@@ -39,18 +43,20 @@ const ContactForm: React.FC<ContactFormProps> = ({ formSettings }) => {
         form_title: "Feel Free To Write",
         form_subtitle: "",
         success_message: "Thank You for Your Message!",
-        success_description: "We've received your inquiry and will get back to you within 24 hours.",
+        success_description:
+            "We've received your inquiry and will get back to you within 24 hours.",
         sidebar_phone: "+971 54 347 4645",
         sidebar_email: "info@chronicleexhibts.ae",
-        sidebar_address: "Al Qouz Industrial Area 1st. No. 5B, Warehouse 14 P.O. Box 128046, Dubai – UAE",
+        sidebar_address:
+            "Al Qouz Industrial Area 1st. No. 5B, Warehouse 14 P.O. Box 128046, Dubai – UAE",
         enable_file_upload: true,
         max_file_size_mb: 10,
-        allowed_file_types: ['.pdf', '.doc', '.docx', '.jpg', '.jpeg', '.png'],
+        allowed_file_types: [".pdf", ".doc", ".docx", ".jpg", ".jpeg", ".png"],
         require_terms_agreement: true,
         terms_text: "By clicking submit, you agree to our Terms and Conditions",
         is_active: true,
         created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
     };
 
     const displaySettings = formSettings || defaultFormSettings;
@@ -64,7 +70,11 @@ const ContactForm: React.FC<ContactFormProps> = ({ formSettings }) => {
 
         if (!formData.email.trim()) {
             newErrors.email = "Email is required";
-        } else if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(formData.email)) {
+        } else if (
+            !/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(
+                formData.email,
+            )
+        ) {
             newErrors.email = "Invalid email format";
         }
 
@@ -75,14 +85,18 @@ const ContactForm: React.FC<ContactFormProps> = ({ formSettings }) => {
         // Phone validation (optional but if provided should be valid)
         if (formData.phone && formData.phone.trim()) {
             // Basic phone validation - should contain at least 7 digits
-            const phoneDigits = formData.phone.replace(/\D/g, '');
+            const phoneDigits = formData.phone.replace(/\D/g, "");
             if (phoneDigits.length < 7) {
                 newErrors.phone = "Please enter a valid phone number";
             }
         }
 
-        if (displaySettings.require_terms_agreement && !formData.agreedToTerms) {
-            newErrors.agreedToTerms = "You must agree to the terms and conditions";
+        if (
+            displaySettings.require_terms_agreement &&
+            !formData.agreedToTerms
+        ) {
+            newErrors.agreedToTerms =
+                "You must agree to the terms and conditions";
         }
 
         // File validation
@@ -92,9 +106,12 @@ const ContactForm: React.FC<ContactFormProps> = ({ formSettings }) => {
                 newErrors.file = `File size must be less than ${displaySettings.max_file_size_mb}MB`;
             }
 
-            const fileExtension = '.' + formData.file.name.split('.').pop()?.toLowerCase();
+            const fileExtension =
+                "." + formData.file.name.split(".").pop()?.toLowerCase();
             if (!displaySettings.allowed_file_types.includes(fileExtension)) {
-                newErrors.file = `File type not allowed. Allowed types: ${displaySettings.allowed_file_types.join(', ')}`;
+                newErrors.file = `File type not allowed. Allowed types: ${displaySettings.allowed_file_types.join(
+                    ", ",
+                )}`;
             }
         }
 
@@ -102,7 +119,10 @@ const ContactForm: React.FC<ContactFormProps> = ({ formSettings }) => {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleInputChange = (field: keyof ContactFormData, value: string | boolean | File | null) => {
+    const handleInputChange = (
+        field: keyof ContactFormData,
+        value: string | boolean | File | null,
+    ) => {
         setFormData(prev => ({
             ...prev,
             [field]: value,
@@ -119,7 +139,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ formSettings }) => {
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0] || null;
-        handleInputChange('file', file);
+        handleInputChange("file", file);
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -179,10 +199,13 @@ const ContactForm: React.FC<ContactFormProps> = ({ formSettings }) => {
                 });
                 setErrors({});
             }, 5000);
-
         } catch (error) {
             console.error("Form submission error:", error);
-            setSubmitError(error instanceof Error ? error.message : "Failed to submit form. Please try again.");
+            setSubmitError(
+                error instanceof Error
+                    ? error.message
+                    : "Failed to submit form. Please try again.",
+            );
         } finally {
             setIsSubmitting(false);
         }
@@ -221,7 +244,9 @@ const ContactForm: React.FC<ContactFormProps> = ({ formSettings }) => {
                         {displaySettings.form_title}
                     </h2>
                     {displaySettings.form_subtitle && (
-                        <p className="text-lg text-gray-600 mb-2">{displaySettings.form_subtitle}</p>
+                        <p className="text-lg text-gray-600 mb-2">
+                            {displaySettings.form_subtitle}
+                        </p>
                     )}
                     <div className="flex !mb-2">
                         <div className="h-1 bg-[#a5cd39] w-16 mt-1 mb-6"></div>
@@ -229,7 +254,9 @@ const ContactForm: React.FC<ContactFormProps> = ({ formSettings }) => {
 
                     {submitError && (
                         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md">
-                            <p className="text-red-600 text-sm">{submitError}</p>
+                            <p className="text-red-600 text-sm">
+                                {submitError}
+                            </p>
                         </div>
                     )}
                     <div className="flex flex-col md:flex-row gap-12">
@@ -260,12 +287,16 @@ const ContactForm: React.FC<ContactFormProps> = ({ formSettings }) => {
                                             )
                                         }
                                         className={`w-full h-9 px-4 py-3 text-base border focus:ring-2 focus:ring-[#a5cd39] focus:border-[#a5cd39] bg-gray-100 rounded-md shadow-sm ${
-                                            errors.name ? 'border-red-300' : 'border-gray-300'
+                                            errors.name
+                                                ? "border-red-300"
+                                                : "border-gray-300"
                                         }`}
                                         required
                                     />
                                     {errors.name && (
-                                        <p className="text-red-500 text-xs mt-1">{errors.name}</p>
+                                        <p className="text-red-500 text-xs mt-1">
+                                            {errors.name}
+                                        </p>
                                     )}
                                 </div>
 
@@ -311,12 +342,16 @@ const ContactForm: React.FC<ContactFormProps> = ({ formSettings }) => {
                                             )
                                         }
                                         className={`w-full h-9 px-4 py-3 text-base border focus:ring-2 focus:ring-[#a5cd39] focus:border-[#a5cd39] bg-gray-100 rounded-md shadow-sm ${
-                                            errors.email ? 'border-red-300' : 'border-gray-300'
+                                            errors.email
+                                                ? "border-red-300"
+                                                : "border-gray-300"
                                         }`}
                                         required
                                     />
                                     {errors.email && (
-                                        <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+                                        <p className="text-red-500 text-xs mt-1">
+                                            {errors.email}
+                                        </p>
                                     )}
                                 </div>
 
@@ -329,7 +364,9 @@ const ContactForm: React.FC<ContactFormProps> = ({ formSettings }) => {
                                     </Label>
                                     <PhoneInput
                                         value={formData.phone}
-                                        onChange={(value: string) => handleInputChange("phone", value)}
+                                        onChange={(value: string) =>
+                                            handleInputChange("phone", value)
+                                        }
                                         placeholder="Enter phone number"
                                         className="w-full"
                                         disabled={isSubmitting}
@@ -338,7 +375,9 @@ const ContactForm: React.FC<ContactFormProps> = ({ formSettings }) => {
                                         required
                                     />
                                     {errors.phone && (
-                                        <p className="text-red-500 text-xs mt-1">{errors.phone}</p>
+                                        <p className="text-red-500 text-xs mt-1">
+                                            {errors.phone}
+                                        </p>
                                     )}
                                 </div>
                             </div>
@@ -379,13 +418,21 @@ const ContactForm: React.FC<ContactFormProps> = ({ formSettings }) => {
                                                 id="file-upload"
                                                 onChange={handleFileChange}
                                                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                                                accept={displaySettings.allowed_file_types.join(',')}
+                                                accept={displaySettings.allowed_file_types.join(
+                                                    ",",
+                                                )}
                                             />
-                                            <div className={`flex items-center justify-between w-full h-9 px-3 py-2 text-sm bg-gray-100 border hover:border-[#a5cd39] focus-within:border-[#a5cd39] rounded-md cursor-pointer transition-all duration-200 ${
-                                                errors.file ? 'border-red-300' : 'border-gray-300'
-                                            }`}>
+                                            <div
+                                                className={`flex items-center justify-between w-full h-9 px-3 py-2 text-sm bg-gray-100 border hover:border-[#a5cd39] focus-within:border-[#a5cd39] rounded-md cursor-pointer transition-all duration-200 ${
+                                                    errors.file
+                                                        ? "border-red-300"
+                                                        : "border-gray-300"
+                                                }`}
+                                            >
                                                 <span className="text-gray-600 text-xs truncate">
-                                                    {formData.file ? formData.file.name : 'No file selected'}
+                                                    {formData.file
+                                                        ? formData.file.name
+                                                        : "No file selected"}
                                                 </span>
                                                 <span className="text-xs text-gray-600 bg-gray-200 px-3 py-1 rounded-sm font-medium">
                                                     BROWSE
@@ -393,11 +440,17 @@ const ContactForm: React.FC<ContactFormProps> = ({ formSettings }) => {
                                             </div>
                                         </div>
                                         {errors.file && (
-                                            <p className="text-red-500 text-xs mt-1">{errors.file}</p>
+                                            <p className="text-red-500 text-xs mt-1">
+                                                {errors.file}
+                                            </p>
                                         )}
                                         <p className="text-xs text-gray-500">
-                                            Max file size: {displaySettings.max_file_size_mb}MB.
-                                            Allowed types: {displaySettings.allowed_file_types.join(', ')}
+                                            Max file size:{" "}
+                                            {displaySettings.max_file_size_mb}
+                                            MB. Allowed types:{" "}
+                                            {displaySettings.allowed_file_types.join(
+                                                ", ",
+                                            )}
                                         </p>
                                     </div>
                                 )}
@@ -422,12 +475,16 @@ const ContactForm: React.FC<ContactFormProps> = ({ formSettings }) => {
                                             )
                                         }
                                         className={`w-full h-32 px-4 py-3 text-base border focus:ring-2 focus:ring-[#a5cd39] focus:border-[#a5cd39] bg-gray-100 resize-none rounded-md shadow-sm ${
-                                            errors.message ? 'border-red-300' : 'border-gray-300'
+                                            errors.message
+                                                ? "border-red-300"
+                                                : "border-gray-300"
                                         }`}
                                         required
                                     />
                                     {errors.message && (
-                                        <p className="text-red-500 text-xs mt-1">{errors.message}</p>
+                                        <p className="text-red-500 text-xs mt-1">
+                                            {errors.message}
+                                        </p>
                                     )}
                                 </div>
                             </div>
@@ -440,7 +497,10 @@ const ContactForm: React.FC<ContactFormProps> = ({ formSettings }) => {
                                             id="terms"
                                             checked={formData.agreedToTerms}
                                             onChange={e =>
-                                                handleInputChange('agreedToTerms', e.target.checked)
+                                                handleInputChange(
+                                                    "agreedToTerms",
+                                                    e.target.checked,
+                                                )
                                             }
                                             className="mt-1 w-4 h-4 text-[#a5cd39] border-gray-300 rounded focus:ring-2 focus:ring-[#a5cd39]"
                                             required
@@ -453,14 +513,20 @@ const ContactForm: React.FC<ContactFormProps> = ({ formSettings }) => {
                                         </label>
                                     </div>
                                     {errors.agreedToTerms && (
-                                        <p className="text-red-500 text-xs mt-1">{errors.agreedToTerms}</p>
+                                        <p className="text-red-500 text-xs mt-1">
+                                            {errors.agreedToTerms}
+                                        </p>
                                     )}
                                 </div>
                             )}
 
                             <Button
                                 type="submit"
-                                disabled={isSubmitting || (displaySettings.require_terms_agreement && !formData.agreedToTerms)}
+                                disabled={
+                                    isSubmitting ||
+                                    (displaySettings.require_terms_agreement &&
+                                        !formData.agreedToTerms)
+                                }
                                 className="bg-[#007bff] hover:bg-[#0056b3] text-white px-8 py-3 text-sm font-medium transition-all duration-300 rounded-md tracking-wide shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 {isSubmitting ? (
@@ -485,7 +551,10 @@ const ContactForm: React.FC<ContactFormProps> = ({ formSettings }) => {
                                     </h3>
                                     <div className="text-base !font-bold text-gray-900 mb-2">
                                         <Link
-                                            href={`tel:${displaySettings.sidebar_phone.replace(/\s+/g, '')}`}
+                                            href={`tel:${displaySettings.sidebar_phone.replace(
+                                                /\s+/g,
+                                                "",
+                                            )}`}
                                             className="text-[#a5cd39] !text-base !font-semibold"
                                         >
                                             {displaySettings.sidebar_phone}
@@ -510,12 +579,18 @@ const ContactForm: React.FC<ContactFormProps> = ({ formSettings }) => {
                                         Visit Office
                                     </h3>
                                     <div className="text-base text-gray-700">
-                                        {displaySettings.sidebar_address.split(',').map((line, index) => (
-                                            <span key={index}>
-                                                {line.trim()}
-                                                {index < displaySettings.sidebar_address.split(',').length - 1 && <br />}
-                                            </span>
-                                        ))}
+                                        {displaySettings.sidebar_address
+                                            .split(",")
+                                            .map((line, index) => (
+                                                <span key={index}>
+                                                    {line.trim()}
+                                                    {index <
+                                                        displaySettings.sidebar_address.split(
+                                                            ",",
+                                                        ).length -
+                                                            1 && <br />}
+                                                </span>
+                                            ))}
                                     </div>
                                 </div>
                             </div>
