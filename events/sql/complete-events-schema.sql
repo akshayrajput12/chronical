@@ -88,6 +88,7 @@ CREATE TABLE IF NOT EXISTS events (
     -- Images (legacy support - will be migrated to image_library)
     featured_image_url TEXT,
     hero_image_url TEXT,
+    hero_image_credit TEXT, -- Image credit for hero image
     logo_image_url TEXT,
     logo_text TEXT,
     logo_subtext TEXT,

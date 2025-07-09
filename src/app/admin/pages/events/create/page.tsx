@@ -93,6 +93,7 @@ const CreateEventPage = () => {
         date_range: "",
         featured_image_url: "",
         hero_image_url: "",
+        hero_image_credit: "",
         logo_image_url: "",
         logo_text: "",
         logo_subtext: "",
@@ -185,27 +186,35 @@ const CreateEventPage = () => {
             year: "numeric",
         };
 
-        const startFormatted = start
-            .toLocaleDateString("en-US", formatOptions)
-            .toUpperCase();
+        const formatOptionsNoYear: Intl.DateTimeFormatOptions = {
+            day: "numeric",
+            month: "short",
+        };
 
         // If same date or no end date, show single date
         if (!endDate || start.toDateString() === end.toDateString()) {
+            const startFormatted = start
+                .toLocaleDateString("en-US", formatOptions)
+                .toUpperCase();
             return startFormatted;
         }
 
-        // If same year, don't repeat year
+        // If same year, show format: "JAN 15 - FEB 20, 2025"
         if (start.getFullYear() === end.getFullYear()) {
-            const endFormatted = end
-                .toLocaleDateString("en-US", {
-                    day: "numeric",
-                    month: "short",
-                })
+            const startFormatted = start
+                .toLocaleDateString("en-US", formatOptionsNoYear)
                 .toUpperCase();
-            return `${startFormatted} - ${endFormatted}`;
+            const endFormatted = end
+                .toLocaleDateString("en-US", formatOptionsNoYear)
+                .toUpperCase();
+            const year = start.getFullYear();
+            return `${startFormatted} - ${endFormatted}, ${year}`;
         }
 
         // Different years, show full dates
+        const startFormatted = start
+            .toLocaleDateString("en-US", formatOptions)
+            .toUpperCase();
         const endFormatted = end
             .toLocaleDateString("en-US", formatOptions)
             .toUpperCase();
@@ -729,38 +738,19 @@ const CreateEventPage = () => {
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="venue">Venue</Label>
-                                        <Input
-                                            id="venue"
-                                            placeholder="Event venue"
-                                            value={formData.venue}
-                                            onChange={e =>
-                                                handleInputChange(
-                                                    "venue",
-                                                    e.target.value,
-                                                )
-                                            }
-                                        />
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <Label htmlFor="event_type">
-                                            Event Type
-                                        </Label>
-                                        <Input
-                                            id="event_type"
-                                            placeholder="e.g., Conference, Exhibition, Workshop"
-                                            value={formData.event_type}
-                                            onChange={e =>
-                                                handleInputChange(
-                                                    "event_type",
-                                                    e.target.value,
-                                                )
-                                            }
-                                        />
-                                    </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="venue">Venue</Label>
+                                    <Input
+                                        id="venue"
+                                        placeholder="Event venue"
+                                        value={formData.venue}
+                                        onChange={e =>
+                                            handleInputChange(
+                                                "venue",
+                                                e.target.value,
+                                            )
+                                        }
+                                    />
                                 </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -959,6 +949,26 @@ const CreateEventPage = () => {
                                         description="Large background image for event detail page"
                                         currentUrl={formData.hero_image_url}
                                     />
+
+                                    <div className="space-y-2">
+                                        <Label htmlFor="hero_image_credit">
+                                            Hero Image Credit
+                                        </Label>
+                                        <Input
+                                            id="hero_image_credit"
+                                            placeholder="e.g., Photo by John Doe"
+                                            value={formData.hero_image_credit}
+                                            onChange={e =>
+                                                handleInputChange(
+                                                    "hero_image_credit",
+                                                    e.target.value,
+                                                )
+                                            }
+                                        />
+                                        <p className="text-sm text-gray-500">
+                                            Credit text displayed at bottom-right of hero image
+                                        </p>
+                                    </div>
                                 </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

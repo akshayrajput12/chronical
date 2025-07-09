@@ -155,7 +155,7 @@ export async function POST(request: NextRequest) {
             'title', 'slug', 'description', 'detailed_description', 'short_description',
             'category_id', 'organizer', 'organized_by', 'venue', 'event_type', 'industry', 'audience',
             'start_date', 'end_date', 'date_range',
-            'featured_image_url', 'hero_image_url', 'logo_image_url', 'logo_text', 'logo_subtext',
+            'featured_image_url', 'hero_image_url', 'hero_image_credit', 'logo_image_url', 'logo_text', 'logo_subtext',
             'meta_title', 'meta_description', 'meta_keywords',
             'is_active', 'is_featured', 'display_order', 'published_at'
         ];

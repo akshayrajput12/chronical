@@ -47,6 +47,7 @@ export interface Event {
     // Images
     featured_image_url?: string;
     hero_image_url?: string;
+    hero_image_credit?: string;
     logo_image_url?: string;
     logo_text?: string;
     logo_subtext?: string;
@@ -179,6 +180,7 @@ export interface EventInput {
     date_range?: string;
     featured_image_url?: string;
     hero_image_url?: string;
+    hero_image_credit?: string;
     logo_image_url?: string;
     logo_text?: string;
     logo_subtext?: string;

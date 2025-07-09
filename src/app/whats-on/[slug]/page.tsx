@@ -148,6 +148,15 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
                         </div>
                     </MotionDiv>
                 </div>
+
+                {/* Image Credit */}
+                {event.hero_image_credit && (
+                    <div className="absolute bottom-4 right-4 z-30">
+                        <p className="text-white text-xs opacity-75 bg-black/30 px-2 py-1 rounded">
+                            Image credits: {event.hero_image_credit}
+                        </p>
+                    </div>
+                )}
             </section>
 
             {/* Back to Event List */}

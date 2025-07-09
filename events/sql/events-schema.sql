@@ -82,6 +82,7 @@ CREATE TABLE IF NOT EXISTS events (
     -- Images
     featured_image_url TEXT,
     hero_image_url TEXT,
+    hero_image_credit TEXT, -- Image credit for hero image
     logo_image_url TEXT,
     logo_text TEXT,
     logo_subtext TEXT,

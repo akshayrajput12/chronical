@@ -9,7 +9,7 @@ export interface Event {
     organizer: string;
     organizedBy: string;
     venue: string;
-    eventType: string;
+    eventCategory: string;
     industry: string;
     audience: string;
     logoImage: string;
@@ -32,7 +32,7 @@ export const eventsData: Event[] = [
         organizedBy: "GENERAL TRADING",
         logoImage: "/event-logo.jpg",
         venue: "SHEIKH MAKTOUM HALL",
-        eventType: "BRAND SALE",
+        eventCategory: "BRAND SALE",
         industry: "CONSUMER GOODS",
         audience: "PUBLIC",
         logoText: "CBBC",
@@ -52,7 +52,7 @@ export const eventsData: Event[] = [
         organizedBy: "DESIGN TRADING",
         venue: "DUBAI WORLD TRADE CENTRE",
         logoImage: "/event-logo.jpg",
-        eventType: "TRADE FAIR",
+        eventCategory: "TRADE FAIR",
         industry: "GIFTS AND INTERIORS",
         audience: "TRADE ONLY",
         logoText: "INDEX",
@@ -72,7 +72,7 @@ export const eventsData: Event[] = [
         organizedBy: "HOSPITALITY TRADING",
         logoImage: "/event-logo.jpg",
         venue: "DUBAI WORLD TRADE CENTRE",
-        eventType: "TRADE FAIR",
+        eventCategory: "TRADE FAIR",
         industry: "FOOD, HOTEL AND CATERING",
         audience: "TRADE ONLY",
         logoText: "HOTEL",
@@ -92,7 +92,7 @@ export const eventsData: Event[] = [
         logoImage: "/event-logo.jpg",
         organizedBy: "INNOVATION TRADING",
         venue: "DUBAI INTERNATIONAL CONVENTION CENTRE",
-        eventType: "SUMMIT",
+        eventCategory: "SUMMIT",
         industry: "TECHNOLOGY",
         audience: "PUBLIC",
         logoText: "TECH",
@@ -112,7 +112,7 @@ export const eventsData: Event[] = [
         organizedBy: "MEDICAL TRADING",
         logoImage: "/event-logo.jpg",
         venue: "DUBAI WORLD TRADE CENTRE",
-        eventType: "EXPO",
+        eventCategory: "EXPO",
         industry: "MEDICAL & HEALTHCARE",
         audience: "TRADE ONLY",
         logoText: "HEALTH",
@@ -131,7 +131,7 @@ export const eventsData: Event[] = [
         organizer: "GREEN ENERGY FORUM",
         organizedBy: "SUSTAINABLE TRADING",
         venue: "DUBAI INTERNATIONAL CONVENTION CENTRE",
-        eventType: "FORUM",
+        eventCategory: "FORUM",
         logoImage: "/event-logo.jpg",
         industry: "ENERGY & ENVIRONMENT",
         audience: "PUBLIC",
@@ -152,7 +152,7 @@ export const eventsData: Event[] = [
         organizedBy: "FASHION TRADING",
         venue: "DUBAI DESIGN DISTRICT",
         logoImage: "/event-logo.jpg",
-        eventType: "FASHION WEEK",
+        eventCategory: "FASHION WEEK",
         industry: "FASHION & LIFESTYLE",
         audience: "PUBLIC",
         logoText: "FASHION",
@@ -172,7 +172,7 @@ export const eventsData: Event[] = [
         organizedBy: "AUTOMOTIVE TRADING",
         venue: "DUBAI WORLD TRADE CENTRE",
         logoImage: "/event-logo.jpg",
-        eventType: "AUTO SHOW",
+        eventCategory: "AUTO SHOW",
         industry: "AUTOMOTIVE",
         audience: "PUBLIC",
         logoText: "AUTO",
