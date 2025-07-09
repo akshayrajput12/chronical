@@ -193,13 +193,12 @@ const CreateEventPage = () => {
 
         // If same date or no end date, show single date
         if (!endDate || start.toDateString() === end.toDateString()) {
-            const startFormatted = start
+            return start
                 .toLocaleDateString("en-US", formatOptions)
                 .toUpperCase();
-            return startFormatted;
         }
 
-        // If same year, show format: "JAN 15 - FEB 20, 2025"
+        // If same year, show format: 'JAN 15 - FEB 20 2025'
         if (start.getFullYear() === end.getFullYear()) {
             const startFormatted = start
                 .toLocaleDateString("en-US", formatOptionsNoYear)
@@ -208,7 +207,7 @@ const CreateEventPage = () => {
                 .toLocaleDateString("en-US", formatOptionsNoYear)
                 .toUpperCase();
             const year = start.getFullYear();
-            return `${startFormatted} - ${endFormatted}, ${year}`;
+            return `${startFormatted} - ${endFormatted} ${year}`;
         }
 
         // Different years, show full dates
@@ -966,7 +965,8 @@ const CreateEventPage = () => {
                                             }
                                         />
                                         <p className="text-sm text-gray-500">
-                                            Credit text displayed at bottom-right of hero image
+                                            Credit text displayed at
+                                            bottom-right of hero image
                                         </p>
                                     </div>
                                 </div>
