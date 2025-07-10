@@ -16,7 +16,11 @@ import EventGallery from "../components/event-gallery";
 import BlogCarousel from "@/components/blog/blog-carousel";
 import { EventsForm } from "../components/events-form";
 import EventContent from "@/components/events/event-content";
-import { getEventDetailPageData, incrementEventViews, getAllEventSlugs } from "@/services/event-page.service";
+import {
+    getEventDetailPageData,
+    incrementEventViews,
+    getAllEventSlugs,
+} from "@/services/event-page.service";
 import RelatedEventsClient from "../components/related-events-client";
 
 interface EventDetailPageProps {
@@ -32,7 +36,7 @@ export const revalidate = 1800;
 export async function generateStaticParams() {
     try {
         const slugs = await getAllEventSlugs();
-        return slugs.map((slug) => ({
+        return slugs.map(slug => ({
             slug,
         }));
     } catch (error) {
@@ -42,7 +46,9 @@ export async function generateStaticParams() {
 }
 
 // Generate metadata for SEO
-export async function generateMetadata({ params }: EventDetailPageProps): Promise<Metadata> {
+export async function generateMetadata({
+    params,
+}: EventDetailPageProps): Promise<Metadata> {
     const resolvedParams = await params;
     const eventData = await getEventDetailPageData(resolvedParams.slug);
 
@@ -57,24 +63,37 @@ export async function generateMetadata({ params }: EventDetailPageProps): Promis
 
     return {
         title: `${event.title} | Chronicle Exhibits`,
-        description: event.short_description || event.description || `Join us for ${event.title} at Chronicle Exhibits.`,
-        keywords: `${event.title}, ${event.category_name || 'event'}, exhibition, Dubai, Chronicle Exhibits`,
+        description:
+            event.short_description ||
+            event.description ||
+            `Join us for ${event.title} at Chronicle Exhibits.`,
+        keywords: `${event.title}, ${
+            event.category_name || "event"
+        }, exhibition, Dubai, Chronicle Exhibits`,
         openGraph: {
             title: event.title,
-            description: event.short_description || event.description || `Join us for ${event.title}`,
+            description:
+                event.short_description ||
+                event.description ||
+                `Join us for ${event.title}`,
             images: event.featured_image_url ? [event.featured_image_url] : [],
-            type: 'article',
+            type: "article",
         },
         twitter: {
-            card: 'summary_large_image',
+            card: "summary_large_image",
             title: event.title,
-            description: event.short_description || event.description || `Join us for ${event.title}`,
+            description:
+                event.short_description ||
+                event.description ||
+                `Join us for ${event.title}`,
             images: event.featured_image_url ? [event.featured_image_url] : [],
         },
     };
 }
 
-export default async function EventDetailPage({ params }: EventDetailPageProps) {
+export default async function EventDetailPage({
+    params,
+}: EventDetailPageProps) {
     // Fetch event data server-side
     const resolvedParams = await params;
     const eventData = await getEventDetailPageData(resolvedParams.slug);
@@ -141,7 +160,7 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
                         className="max-w-4xl"
                     >
                         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold leading-tight mb-4 sm:mb-6">
-                            {event.title}
+                            {event.short_description}
                         </h1>
                         <div className="mt-4 absolute bottom-0 left-[50%] sm:mt-8">
                             <ChevronDown className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 mx-auto animate-bounce opacity-70" />
@@ -336,11 +355,6 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
                                 viewport={{ once: true }}
                             >
                                 <div className="flex flex-col justify-center my-auto">
-                                    {event.short_description && (
-                                        <p className="text-lg text-gray-800 font-medium mb-4 leading-relaxed">
-                                            {event.short_description}
-                                        </p>
-                                    )}
                                     <EventContent
                                         content={
                                             event.description ||
