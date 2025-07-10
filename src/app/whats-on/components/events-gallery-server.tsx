@@ -21,7 +21,6 @@ const EventsGalleryServer = ({
     hasMore,
 }: EventsGalleryServerProps) => {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [selectedFilter, setSelectedFilter] = useState("All");
     const [cardsToShow, setCardsToShow] = useState(3);
     const [cardWidth, setCardWidth] = useState(320);
     const router = useRouter();
@@ -75,9 +74,28 @@ const EventsGalleryServer = ({
         "February 2026",
     ];
 
+    const getCurrentMonthIndex = () => {
+        const now = new Date();
+        // filterOptions[0] is 'All', so start from 1
+        for (let i = 1; i < filterOptions.length; i++) {
+            const [month, year] = filterOptions[i].split(" ");
+            if (
+                now.getFullYear() === parseInt(year) &&
+                now.toLocaleString("en-US", { month: "long" }).toLowerCase() ===
+                    month.toLowerCase()
+            ) {
+                return i;
+            }
+        }
+        return 1; // fallback to first month if not found
+    };
+    const [currentMonthIndex, setCurrentMonthIndex] = useState(
+        getCurrentMonthIndex(),
+    );
+
     // Filter events based on selected date-month
     const getFilteredEvents = () => {
-        if (selectedFilter === "All") {
+        if (filterOptions[currentMonthIndex] === "All") {
             return events;
         }
 
@@ -85,7 +103,8 @@ const EventsGalleryServer = ({
             if (!event.start_date) return false;
 
             // Parse the selected filter (e.g., "July 2025")
-            const [selectedMonth, selectedYear] = selectedFilter.split(" ");
+            const [selectedMonth, selectedYear] =
+                filterOptions[currentMonthIndex].split(" ");
             const selectedDate = new Date(
                 `${selectedMonth} 1, ${selectedYear}`,
             );
@@ -132,7 +151,7 @@ const EventsGalleryServer = ({
     // Reset carousel index when filter changes
     useEffect(() => {
         setCurrentIndex(0);
-    }, [selectedFilter]);
+    }, [currentMonthIndex]);
 
     // Calculate max index
     const maxIndex = Math.max(0, filteredEvents.length - cardsToShow);
@@ -209,20 +228,67 @@ const EventsGalleryServer = ({
                     transition={{ duration: 0.6, delay: 0.2 }}
                     viewport={{ once: true }}
                 >
-                    <div className="flex flex-wrap gap-1 sm:gap-2 justify-center">
-                        {filterOptions.map(filter => (
-                            <button
-                                key={filter}
-                                onClick={() => setSelectedFilter(filter)}
-                                className={`px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-all duration-300 rounded ${
-                                    selectedFilter === filter
-                                        ? "bg-black text-white"
-                                        : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
-                                }`}
-                            >
-                                {filter}
-                            </button>
-                        ))}
+                    <div
+                        className="relative flex items-center justify-between mb-8"
+                        style={{ minHeight: 80 }}
+                    >
+                        {/* Left Arrow & Previous Month */}
+                        <button
+                            onClick={() =>
+                                setCurrentMonthIndex(i => Math.max(1, i - 1))
+                            }
+                            disabled={currentMonthIndex === 1}
+                            className="flex flex-col items-center text-gray-500 hover:text-black transition disabled:opacity-30"
+                            style={{ minWidth: 80 }}
+                            aria-label="Previous Month"
+                        >
+                            <span className="text-xs font-medium mb-1">
+                                {currentMonthIndex > 1
+                                    ? filterOptions[currentMonthIndex - 1]
+                                          .split(" ")[0]
+                                          .toUpperCase()
+                                    : ""}
+                            </span>
+                            <ChevronLeft className="w-6 h-6" />
+                        </button>
+
+                        {/* Centered Current Month/Year */}
+                        <div className="absolute left-1/2 top-0 -translate-x-1/2 flex flex-col items-center w-full pointer-events-none">
+                            <p className="text-4xl! font-markazi-text! font-bold text-gray-900">
+                                {filterOptions[currentMonthIndex]}
+                            </p>
+                            <span className="text-gray-500 text-base mt-1 font-medium">
+                                ({filteredEvents.length}{" "}
+                                {filteredEvents.length === 1
+                                    ? "Event"
+                                    : "Events"}
+                                )
+                            </span>
+                        </div>
+
+                        {/* Right Arrow & Next Month */}
+                        <button
+                            onClick={() =>
+                                setCurrentMonthIndex(i =>
+                                    Math.min(filterOptions.length - 1, i + 1),
+                                )
+                            }
+                            disabled={
+                                currentMonthIndex === filterOptions.length - 1
+                            }
+                            className="flex flex-col items-center text-gray-500 hover:text-black transition disabled:opacity-30"
+                            style={{ minWidth: 80 }}
+                            aria-label="Next Month"
+                        >
+                            <span className="text-xs font-medium mb-1">
+                                {currentMonthIndex < filterOptions.length - 1
+                                    ? filterOptions[currentMonthIndex + 1]
+                                          .split(" ")[0]
+                                          .toUpperCase()
+                                    : ""}
+                            </span>
+                            <ChevronRight className="w-6 h-6" />
+                        </button>
                     </div>
                 </motion.div>
 
@@ -386,7 +452,8 @@ const EventsGalleryServer = ({
                 ) : (
                     <div className="text-center py-12">
                         <p className="text-gray-500 text-lg">
-                            No events found for {selectedFilter}
+                            No events found for{" "}
+                            {filterOptions[currentMonthIndex]}
                         </p>
                     </div>
                 )}
