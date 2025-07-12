@@ -279,11 +279,11 @@ export default async function EventDetailPage({
             {/* Main Content Section */}
             <section className="py-16 bg-gray-50">
                 <div className="container mx-auto px-4">
-                    <div className="max-w-6xl mx-auto">
-                        <div className="flex flex-col lg:flex-row gap-12 items-start">
+                    <div className="max-w-8xl mx-auto">
+                        <div className="flex flex-col lg:flex-row lg:gap-16 sm:gap-8 gap-6 items-start">
                             {/* Left Column - Event Logo (30%) */}
                             <MotionDiv
-                                className="w-full lg:w-[30%]"
+                                className="w-full lg:w-[35%]"
                                 initial={{ opacity: 0, x: -30 }}
                                 whileInView={{ opacity: 1, x: 0 }}
                                 transition={{ duration: 0.8 }}
@@ -346,13 +346,16 @@ export default async function EventDetailPage({
                                             </p>
                                         )}
                                     </div>
-                                    <EventsForm eventId={event.id} />
+                                    <EventsForm
+                                        className="lg:py-8! py-6!"
+                                        eventId={event.id}
+                                    />
                                 </div>
                             </MotionDiv>
 
                             {/* Right Column - Description (70%) */}
                             <MotionDiv
-                                className="w-full lg:w-[70%] self-center flex flex-col justify-center"
+                                className="w-full lg:w-[65%] self-center flex flex-col justify-center"
                                 initial={{ opacity: 0, x: 30 }}
                                 whileInView={{ opacity: 1, x: 0 }}
                                 transition={{ duration: 0.8 }}

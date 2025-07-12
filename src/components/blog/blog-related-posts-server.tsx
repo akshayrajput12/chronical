@@ -13,7 +13,7 @@ interface BlogRelatedPostsServerProps {
 
 const BlogRelatedPostsServer = ({
     relatedPosts,
-    currentPostSlug
+    currentPostSlug,
 }: BlogRelatedPostsServerProps) => {
     const router = useRouter();
 
@@ -23,7 +23,7 @@ const BlogRelatedPostsServer = ({
 
     // Filter out current post if it somehow appears in related posts
     const filteredRelatedPosts = relatedPosts.filter(
-        post => post.slug !== currentPostSlug
+        post => post.slug !== currentPostSlug,
     );
 
     if (!filteredRelatedPosts || filteredRelatedPosts.length === 0) {
@@ -42,7 +42,7 @@ const BlogRelatedPostsServer = ({
     }
 
     return (
-        <aside className="w-[30%] bg-white sticky top-8 h-fit">
+        <aside className="w-full bg-white sticky top-8 h-fit">
             <motion.div
                 className="border border-gray-200 rounded-lg p-6 bg-white"
                 initial={{ opacity: 0, x: 30 }}
@@ -68,14 +68,19 @@ const BlogRelatedPostsServer = ({
                                     {post.featured_image_url ? (
                                         <Image
                                             src={post.featured_image_url}
-                                            alt={post.featured_image_alt || post.title}
+                                            alt={
+                                                post.featured_image_alt ||
+                                                post.title
+                                            }
                                             width={64}
                                             height={64}
                                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                         />
                                     ) : (
                                         <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                                            <span className="text-gray-400 text-xs">No image</span>
+                                            <span className="text-gray-400 text-xs">
+                                                No image
+                                            </span>
                                         </div>
                                     )}
                                 </div>
