@@ -6,7 +6,11 @@ import BlogDetailContent from "@/components/blog/blog-detail-content";
 import BlogRelatedPostsServer from "@/components/blog/blog-related-posts-server";
 import { BlogPostWithDetails } from "@/types/blog";
 import { EventsForm } from "@/app/whats-on/components/events-form";
-import { getBlogDetailPageData, incrementBlogPostViews, getAllBlogSlugs } from "@/services/blog-page.service";
+import {
+    getBlogDetailPageData,
+    incrementBlogPostViews,
+    getAllBlogSlugs,
+} from "@/services/blog-page.service";
 
 interface BlogDetailPageProps {
     params: Promise<{ slug: string }>;
@@ -19,7 +23,7 @@ export const revalidate = 3600;
 export async function generateStaticParams() {
     try {
         const slugs = await getAllBlogSlugs();
-        return slugs.map((slug) => ({
+        return slugs.map(slug => ({
             slug,
         }));
     } catch (error) {
@@ -177,18 +181,20 @@ const BlogDetailPage = async ({ params }: BlogDetailPageProps) => {
                     viewCount={blogPost.view_count}
                     author={blogPost.author_id ? "Admin" : undefined}
                 />
-                <div className="relative lg:mx-20 md:mx-12 sm:mx-8 mx-4 flex row-col justify-between xl:gap-8 lg:gap-4 gap-6">
+                <div className="relative lg:mx-12 md:mx-12 sm:mx-8 mx-4 flex row-col justify-between xl:gap-8 lg:gap-4 gap-6">
                     <BlogDetailContent
                         content={blogPost.content || ""}
                         excerpt={blogPost.excerpt}
                     />
-                    <BlogRelatedPostsServer
-                        relatedPosts={relatedPosts}
-                        currentPostSlug={blogPost.slug}
-                    />
+                    <div className="flex flex-col gap-6 w-[32%]">
+                        <BlogRelatedPostsServer
+                            relatedPosts={relatedPosts}
+                            currentPostSlug={blogPost.slug}
+                        />
+                        <EventsForm />
+                    </div>
                 </div>
             </div>
-            <EventsForm />
         </>
     );
 };
