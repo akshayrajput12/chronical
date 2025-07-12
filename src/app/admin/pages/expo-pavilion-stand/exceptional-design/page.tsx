@@ -5,7 +5,13 @@ import { motion } from "framer-motion";
 import { ArrowLeft, Save, Eye, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -31,7 +37,8 @@ interface DesignBenefit {
 }
 
 const ExpoPavilionExceptionalDesignEditor = () => {
-    const [designData, setDesignData] = useState<ExpoPavilionExceptionalDesign | null>(null);
+    const [designData, setDesignData] =
+        useState<ExpoPavilionExceptionalDesign | null>(null);
     const [benefits, setBenefits] = useState<DesignBenefit[]>([]);
 
     const [isLoading, setIsLoading] = useState(true);
@@ -49,7 +56,7 @@ const ExpoPavilionExceptionalDesignEditor = () => {
                 .eq("is_active", true)
                 .single();
 
-            if (designError && designError.code !== 'PGRST116') {
+            if (designError && designError.code !== "PGRST116") {
                 throw designError;
             }
 
@@ -57,12 +64,13 @@ const ExpoPavilionExceptionalDesignEditor = () => {
                 setDesignData(designSection);
 
                 // Load benefits for this section
-                const { data: benefitsData, error: benefitsError } = await supabase
-                    .from("expo_pavilion_design_benefits")
-                    .select("*")
-                    .eq("design_section_id", designSection.id)
-                    .eq("is_active", true)
-                    .order("display_order");
+                const { data: benefitsData, error: benefitsError } =
+                    await supabase
+                        .from("expo_pavilion_design_benefits")
+                        .select("*")
+                        .eq("design_section_id", designSection.id)
+                        .eq("is_active", true)
+                        .order("display_order");
 
                 if (benefitsError) throw benefitsError;
 
@@ -71,28 +79,49 @@ const ExpoPavilionExceptionalDesignEditor = () => {
                 }
             } else {
                 // Create default entry if none exists
-                const { data: newDesignData, error: insertError } = await supabase
-                    .from("expo_pavilion_exceptional_design")
-                    .insert({
-                        heading: 'EXCEPTIONAL DESIGN SERVICES FOR PAVILION BOOTHS',
-                        paragraph_1: 'Country Pavilion Expo Booth reflects a particular nation\'s culture, religion & way of living. It is a chain of small exhibition stands where you can display your products with the member exhibitors of your country. Explore companies across the globe pick out pavilion booths to promote their brand & sell out their products.',
-                        paragraph_2: 'Pavilion booths are highly beneficial for promoting brands & products. Let\'s quickly look into its pros →',
-                        image_url: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-                        image_alt: 'Country Pavilion Exhibition Booth',
-                        is_active: true,
-                    })
-                    .select()
-                    .single();
+                const { data: newDesignData, error: insertError } =
+                    await supabase
+                        .from("expo_pavilion_exceptional_design")
+                        .insert({
+                            heading:
+                                "EXCEPTIONAL DESIGN SERVICES FOR PAVILION BOOTHS",
+                            paragraph_1:
+                                "Country Pavilion Expo Booth reflects a particular nation's culture, religion & way of living. It is a chain of small exhibition stands where you can display your products with the member exhibitors of your country. Explore companies across the globe pick out pavilion booths to promote their brand & sell out their products.",
+                            paragraph_2:
+                                "Pavilion booths are highly beneficial for promoting brands & products. Let's quickly look into its pros →",
+                            image_url:
+                                "https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+                            image_alt: "Country Pavilion Exhibition Booth",
+                            is_active: true,
+                        })
+                        .select()
+                        .single();
 
                 if (insertError) throw insertError;
                 setDesignData(newDesignData);
 
                 // Create default benefits
                 const defaultBenefits = [
-                    { benefit_text: 'You can target a vast number of potential consumers.', display_order: 1 },
-                    { benefit_text: 'Enrich brand value by creating positive brand awareness.', display_order: 2 },
-                    { benefit_text: 'Gives you an excellent chance to interact with new consumers who may become your future clients.', display_order: 3 },
-                    { benefit_text: 'Allow you to make strong business networks and discover the latest business ideas.', display_order: 4 },
+                    {
+                        benefit_text:
+                            "You can target a vast number of potential consumers.",
+                        display_order: 1,
+                    },
+                    {
+                        benefit_text:
+                            "Enrich brand value by creating positive brand awareness.",
+                        display_order: 2,
+                    },
+                    {
+                        benefit_text:
+                            "Gives you an excellent chance to interact with new consumers who may become your future clients.",
+                        display_order: 3,
+                    },
+                    {
+                        benefit_text:
+                            "Allow you to make strong business networks and discover the latest business ideas.",
+                        display_order: 4,
+                    },
                 ];
 
                 for (const benefit of defaultBenefits) {
@@ -169,31 +198,39 @@ const ExpoPavilionExceptionalDesignEditor = () => {
         }
     };
 
-    const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImageUpload = async (
+        event: React.ChangeEvent<HTMLInputElement>,
+    ) => {
         const file = event.target.files?.[0];
         if (!file) return;
 
         setIsUploading(true);
         try {
-            const fileExt = file.name.split('.').pop();
+            const fileExt = file.name.split(".").pop();
             const fileName = `exceptional-design-${Date.now()}.${fileExt}`;
             const filePath = `${fileName}`;
 
             const { error: uploadError } = await supabase.storage
-                .from('expo-pavilion-images')
+                .from("expo-pavilion-images")
                 .upload(filePath, file);
 
             if (uploadError) throw uploadError;
 
-            const { data: { publicUrl } } = supabase.storage
-                .from('expo-pavilion-images')
+            const {
+                data: { publicUrl },
+            } = supabase.storage
+                .from("expo-pavilion-images")
                 .getPublicUrl(filePath);
 
             if (designData) {
-                setDesignData(prev => prev ? ({
-                    ...prev,
-                    image_url: publicUrl
-                }) : null);
+                setDesignData(prev =>
+                    prev
+                        ? {
+                              ...prev,
+                              image_url: publicUrl,
+                          }
+                        : null,
+                );
             }
 
             toast.success("Image uploaded successfully!");
@@ -207,14 +244,18 @@ const ExpoPavilionExceptionalDesignEditor = () => {
 
     const addBenefit = () => {
         const newBenefit: DesignBenefit = {
-            benefit_text: '',
+            benefit_text: "",
             display_order: benefits.length + 1,
             is_active: true,
         };
         setBenefits([...benefits, newBenefit]);
     };
 
-    const updateBenefit = (index: number, field: keyof DesignBenefit, value: any) => {
+    const updateBenefit = (
+        index: number,
+        field: keyof DesignBenefit,
+        value: any,
+    ) => {
         const updatedBenefits = [...benefits];
         updatedBenefits[index] = { ...updatedBenefits[index], [field]: value };
         setBenefits(updatedBenefits);
@@ -234,7 +275,9 @@ const ExpoPavilionExceptionalDesignEditor = () => {
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="text-center">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-                    <p className="mt-4 text-gray-600">Loading exceptional design section...</p>
+                    <p className="mt-4 text-gray-600">
+                        Loading exceptional design section...
+                    </p>
                 </div>
             </div>
         );
@@ -264,13 +307,14 @@ const ExpoPavilionExceptionalDesignEditor = () => {
                                     Exceptional Design Section
                                 </h1>
                                 <p className="text-gray-600">
-                                    Manage the exceptional design content and benefits
+                                    Manage the exceptional design content and
+                                    benefits
                                 </p>
                             </div>
                         </div>
                         <div className="flex items-center space-x-4">
                             <Link
-                                href="/countrypavilionexpoboothsolutions"
+                                href="/country-pavilion-expo-booth-solutions-in-dubai"
                                 target="_blank"
                                 className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
                             >
@@ -302,20 +346,28 @@ const ExpoPavilionExceptionalDesignEditor = () => {
                             <CardHeader>
                                 <CardTitle>Section Content</CardTitle>
                                 <CardDescription>
-                                    Edit the main content for the exceptional design section
+                                    Edit the main content for the exceptional
+                                    design section
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-6">
                                 <div>
-                                    <Label htmlFor="heading">Section Heading</Label>
+                                    <Label htmlFor="heading">
+                                        Section Heading
+                                    </Label>
                                     <Input
                                         id="heading"
                                         value={designData.heading}
-                                        onChange={(e) =>
-                                            setDesignData(prev => prev ? ({
-                                                ...prev,
-                                                heading: e.target.value
-                                            }) : null)
+                                        onChange={e =>
+                                            setDesignData(prev =>
+                                                prev
+                                                    ? {
+                                                          ...prev,
+                                                          heading:
+                                                              e.target.value,
+                                                      }
+                                                    : null,
+                                            )
                                         }
                                         placeholder="Enter section heading"
                                         className="mt-1"
@@ -323,15 +375,22 @@ const ExpoPavilionExceptionalDesignEditor = () => {
                                 </div>
 
                                 <div>
-                                    <Label htmlFor="paragraph_1">First Paragraph</Label>
+                                    <Label htmlFor="paragraph_1">
+                                        First Paragraph
+                                    </Label>
                                     <Textarea
                                         id="paragraph_1"
                                         value={designData.paragraph_1}
-                                        onChange={(e) =>
-                                            setDesignData(prev => prev ? ({
-                                                ...prev,
-                                                paragraph_1: e.target.value
-                                            }) : null)
+                                        onChange={e =>
+                                            setDesignData(prev =>
+                                                prev
+                                                    ? {
+                                                          ...prev,
+                                                          paragraph_1:
+                                                              e.target.value,
+                                                      }
+                                                    : null,
+                                            )
                                         }
                                         placeholder="Enter first paragraph content"
                                         rows={4}
@@ -340,15 +399,22 @@ const ExpoPavilionExceptionalDesignEditor = () => {
                                 </div>
 
                                 <div>
-                                    <Label htmlFor="paragraph_2">Second Paragraph</Label>
+                                    <Label htmlFor="paragraph_2">
+                                        Second Paragraph
+                                    </Label>
                                     <Textarea
                                         id="paragraph_2"
                                         value={designData.paragraph_2}
-                                        onChange={(e) =>
-                                            setDesignData(prev => prev ? ({
-                                                ...prev,
-                                                paragraph_2: e.target.value
-                                            }) : null)
+                                        onChange={e =>
+                                            setDesignData(prev =>
+                                                prev
+                                                    ? {
+                                                          ...prev,
+                                                          paragraph_2:
+                                                              e.target.value,
+                                                      }
+                                                    : null,
+                                            )
                                         }
                                         placeholder="Enter second paragraph content"
                                         rows={3}
@@ -360,11 +426,15 @@ const ExpoPavilionExceptionalDesignEditor = () => {
                                     <Switch
                                         id="is_active"
                                         checked={designData.is_active}
-                                        onCheckedChange={(checked) =>
-                                            setDesignData(prev => prev ? ({
-                                                ...prev,
-                                                is_active: checked
-                                            }) : null)
+                                        onCheckedChange={checked =>
+                                            setDesignData(prev =>
+                                                prev
+                                                    ? {
+                                                          ...prev,
+                                                          is_active: checked,
+                                                      }
+                                                    : null,
+                                            )
                                         }
                                     />
                                     <Label htmlFor="is_active">Active</Label>
@@ -386,11 +456,16 @@ const ExpoPavilionExceptionalDesignEditor = () => {
                                     <Input
                                         id="image_url"
                                         value={designData.image_url}
-                                        onChange={(e) =>
-                                            setDesignData(prev => prev ? ({
-                                                ...prev,
-                                                image_url: e.target.value
-                                            }) : null)
+                                        onChange={e =>
+                                            setDesignData(prev =>
+                                                prev
+                                                    ? {
+                                                          ...prev,
+                                                          image_url:
+                                                              e.target.value,
+                                                      }
+                                                    : null,
+                                            )
                                         }
                                         placeholder="Enter image URL"
                                         className="mt-1"
@@ -398,15 +473,22 @@ const ExpoPavilionExceptionalDesignEditor = () => {
                                 </div>
 
                                 <div>
-                                    <Label htmlFor="image_alt">Image Alt Text</Label>
+                                    <Label htmlFor="image_alt">
+                                        Image Alt Text
+                                    </Label>
                                     <Input
                                         id="image_alt"
                                         value={designData.image_alt}
-                                        onChange={(e) =>
-                                            setDesignData(prev => prev ? ({
-                                                ...prev,
-                                                image_alt: e.target.value
-                                            }) : null)
+                                        onChange={e =>
+                                            setDesignData(prev =>
+                                                prev
+                                                    ? {
+                                                          ...prev,
+                                                          image_alt:
+                                                              e.target.value,
+                                                      }
+                                                    : null,
+                                            )
                                         }
                                         placeholder="Enter image alt text"
                                         className="mt-1"
@@ -414,7 +496,9 @@ const ExpoPavilionExceptionalDesignEditor = () => {
                                 </div>
 
                                 <div>
-                                    <Label htmlFor="image-upload">Upload New Image</Label>
+                                    <Label htmlFor="image-upload">
+                                        Upload New Image
+                                    </Label>
                                     <div className="mt-1">
                                         <input
                                             id="image-upload"
@@ -425,7 +509,9 @@ const ExpoPavilionExceptionalDesignEditor = () => {
                                             className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                                         />
                                         {isUploading && (
-                                            <p className="text-sm text-blue-600 mt-2">Uploading...</p>
+                                            <p className="text-sm text-blue-600 mt-2">
+                                                Uploading...
+                                            </p>
                                         )}
                                     </div>
                                 </div>
@@ -447,7 +533,8 @@ const ExpoPavilionExceptionalDesignEditor = () => {
                                     <div>
                                         <CardTitle>Benefits List</CardTitle>
                                         <CardDescription>
-                                            Manage the bullet points for this section
+                                            Manage the bullet points for this
+                                            section
                                         </CardDescription>
                                     </div>
                                     <Button
@@ -462,11 +549,18 @@ const ExpoPavilionExceptionalDesignEditor = () => {
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 {benefits.map((benefit, index) => (
-                                    <div key={index} className="flex items-center space-x-2">
+                                    <div
+                                        key={index}
+                                        className="flex items-center space-x-2"
+                                    >
                                         <Input
                                             value={benefit.benefit_text}
-                                            onChange={(e) =>
-                                                updateBenefit(index, 'benefit_text', e.target.value)
+                                            onChange={e =>
+                                                updateBenefit(
+                                                    index,
+                                                    "benefit_text",
+                                                    e.target.value,
+                                                )
                                             }
                                             placeholder="Enter benefit text"
                                             className="flex-1"
@@ -496,7 +590,7 @@ const ExpoPavilionExceptionalDesignEditor = () => {
                                     <h3 className="text-lg font-bold text-gray-800 uppercase tracking-wide text-center">
                                         {designData.heading}
                                     </h3>
-                                    
+
                                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                                         <div className="space-y-3">
                                             <p className="text-sm text-gray-700 text-justify">
@@ -506,12 +600,23 @@ const ExpoPavilionExceptionalDesignEditor = () => {
                                                 {designData.paragraph_2}
                                             </p>
                                             <ul className="space-y-2 ml-4">
-                                                {benefits.map((benefit, index) => (
-                                                    <li key={index} className="flex items-start text-sm">
-                                                        <span className="text-[#a5cd39] mr-2">•</span>
-                                                        <span>{benefit.benefit_text}</span>
-                                                    </li>
-                                                ))}
+                                                {benefits.map(
+                                                    (benefit, index) => (
+                                                        <li
+                                                            key={index}
+                                                            className="flex items-start text-sm"
+                                                        >
+                                                            <span className="text-[#a5cd39] mr-2">
+                                                                •
+                                                            </span>
+                                                            <span>
+                                                                {
+                                                                    benefit.benefit_text
+                                                                }
+                                                            </span>
+                                                        </li>
+                                                    ),
+                                                )}
                                             </ul>
                                         </div>
                                         <div className="h-32 rounded overflow-hidden">

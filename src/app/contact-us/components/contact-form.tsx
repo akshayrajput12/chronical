@@ -527,7 +527,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ formSettings }) => {
                                     (displaySettings.require_terms_agreement &&
                                         !formData.agreedToTerms)
                                 }
-                                className="bg-[#007bff] hover:bg-[#0056b3] text-white px-8 py-3 text-sm font-medium transition-all duration-300 rounded-md tracking-wide shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="bg-[#a5cd39] hover:bg-[#a5cd39AA] text-white px-8 py-3 text-sm font-medium transition-all duration-300 rounded-md tracking-wide shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 {isSubmitting ? (
                                     <>

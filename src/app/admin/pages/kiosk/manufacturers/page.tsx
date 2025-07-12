@@ -141,7 +141,7 @@ const KioskManufacturersEditor = () => {
                     content_paragraph_2:
                         "Chronicle as Exhibition Stand Builders in UAE has years of experience & expertise as a custom kiosk manufacturers in Dubai. A proficient team of kiosk designers & engineers who have the caliber to build creative & innovative kiosks for your specific requirements. Also, deal in the manufacture of retail window exhibits, kiosk stands, exhibition stands & graphic displays. Reach out if you need performance-oriented & advanced custom kiosk solutions for trade shows & any of your business requirements.",
                     link_text: "Exhibition Stand Builders in UAE",
-                    link_url: "/about",
+                    link_url: "/about-us",
                     main_image_id: undefined,
                     is_active: true,
                 });
@@ -752,7 +752,7 @@ const KioskManufacturersEditor = () => {
                                                             e.target.value,
                                                     }))
                                                 }
-                                                placeholder="/about"
+                                                placeholder="/about-us"
                                                 className="pl-10"
                                             />
                                         </div>

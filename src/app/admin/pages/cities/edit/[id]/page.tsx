@@ -6,14 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import {
-    Save,
-    ArrowLeft,
-    Plus,
-    Trash2,
-    Upload,
-    X,
-} from "lucide-react";
+import { Save, ArrowLeft, Plus, Trash2, Upload, X } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
 interface CityFormData {
@@ -119,16 +112,24 @@ const EditCityPage = () => {
         is_active: true,
     });
 
-    const [contentSections, setContentSections] = useState<ContentSection[]>([]);
+    const [contentSections, setContentSections] = useState<ContentSection[]>(
+        [],
+    );
     const [services, setServices] = useState<Service[]>([]);
     const [components, setComponents] = useState<Component[]>([]);
     const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>([]);
-    const [preferredServices, setPreferredServices] = useState<PreferredService[]>([]);
+    const [preferredServices, setPreferredServices] = useState<
+        PreferredService[]
+    >([]);
     const [contactDetails, setContactDetails] = useState<ContactDetail[]>([]);
     const [statistics, setStatistics] = useState<Statistic[]>([]);
     const [showImageSelector, setShowImageSelector] = useState(false);
-    const [imageSelectionCallback, setImageSelectionCallback] = useState<((url: string) => void) | null>(null);
-    const [existingImages, setExistingImages] = useState<{name: string, url: string, folder: string}[]>([]);
+    const [imageSelectionCallback, setImageSelectionCallback] = useState<
+        ((url: string) => void) | null
+    >(null);
+    const [existingImages, setExistingImages] = useState<
+        { name: string; url: string; folder: string }[]
+    >([]);
     const [loadingImages, setLoadingImages] = useState(false);
 
     // Load existing city data
@@ -171,10 +172,18 @@ const EditCityPage = () => {
                 if (sectionsError) throw sectionsError;
 
                 // Ensure all section types exist
-                const sectionTypes = ["hero", "role", "content", "booth_design", "why_best"];
+                const sectionTypes = [
+                    "hero",
+                    "role",
+                    "content",
+                    "booth_design",
+                    "why_best",
+                ];
                 const existingSections = sections || [];
                 const allSections = sectionTypes.map(type => {
-                    const existing = existingSections.find(s => s.section_type === type);
+                    const existing = existingSections.find(
+                        s => s.section_type === type,
+                    );
                     if (existing) {
                         return existing;
                     }
@@ -183,8 +192,10 @@ const EditCityPage = () => {
                         return {
                             section_type: type,
                             title: "EXHIBITION STAND DESIGN BUILDER IN [CITY], UAE.",
-                            subtitle: "World-class exhibition solutions in the global business hub",
-                            content: "Chronicle Exhibition Organizing LLC is one of the most reputable exhibition stand design manufacturers, and contractors located in [CITY] offering an exhaustive array of stand-up services for exhibitions. We provide complete display stand solutions, including designing, planning, fabricating and erecting and putting up.",
+                            subtitle:
+                                "World-class exhibition solutions in the global business hub",
+                            content:
+                                "Chronicle Exhibition Organizing LLC is one of the most reputable exhibition stand design manufacturers, and contractors located in [CITY] offering an exhaustive array of stand-up services for exhibitions. We provide complete display stand solutions, including designing, planning, fabricating and erecting and putting up.",
                             image_url: "",
                         };
                     }
@@ -198,83 +209,157 @@ const EditCityPage = () => {
                 setContentSections(allSections);
 
                 // Load services
-                const { data: servicesData, error: servicesError } = await supabase
-                    .from("city_services")
-                    .select("*")
-                    .eq("city_id", cityId)
-                    .order("sort_order");
+                const { data: servicesData, error: servicesError } =
+                    await supabase
+                        .from("city_services")
+                        .select("*")
+                        .eq("city_id", cityId)
+                        .order("sort_order");
 
                 if (servicesError) throw servicesError;
-                setServices(servicesData || [{ name: "", description: "", href_link: "", sort_order: 1 }]);
+                setServices(
+                    servicesData || [
+                        {
+                            name: "",
+                            description: "",
+                            href_link: "",
+                            sort_order: 1,
+                        },
+                    ],
+                );
 
                 // Load components
-                const { data: componentsData, error: componentsError } = await supabase
-                    .from("city_components")
-                    .select("*")
-                    .eq("city_id", cityId)
-                    .order("sort_order");
+                const { data: componentsData, error: componentsError } =
+                    await supabase
+                        .from("city_components")
+                        .select("*")
+                        .eq("city_id", cityId)
+                        .order("sort_order");
 
                 if (componentsError) throw componentsError;
-                
+
                 // Ensure 6 components exist
                 const existingComponents = componentsData || [];
                 const allComponents = Array.from({ length: 6 }, (_, index) => {
-                    const existing = existingComponents.find(c => c.sort_order === index + 1);
-                    return existing || {
-                        title: "",
-                        description: "",
-                        icon_name: "",
-                        color: "#a5cd39",
-                        sort_order: index + 1,
-                    };
+                    const existing = existingComponents.find(
+                        c => c.sort_order === index + 1,
+                    );
+                    return (
+                        existing || {
+                            title: "",
+                            description: "",
+                            icon_name: "",
+                            color: "#a5cd39",
+                            sort_order: index + 1,
+                        }
+                    );
                 });
                 setComponents(allComponents);
 
                 // Load portfolio items
-                const { data: portfolioData, error: portfolioError } = await supabase
-                    .from("city_portfolio_items")
-                    .select("*")
-                    .eq("city_id", cityId)
-                    .order("sort_order");
+                const { data: portfolioData, error: portfolioError } =
+                    await supabase
+                        .from("city_portfolio_items")
+                        .select("*")
+                        .eq("city_id", cityId)
+                        .order("sort_order");
 
                 if (portfolioError) throw portfolioError;
-                setPortfolioItems(portfolioData || [{ title: "", description: "", image_url: "", alt_text: "", category: "", project_year: new Date().getFullYear(), client_name: "", is_featured: false, sort_order: 1 }]);
+                setPortfolioItems(
+                    portfolioData || [
+                        {
+                            title: "",
+                            description: "",
+                            image_url: "",
+                            alt_text: "",
+                            category: "",
+                            project_year: new Date().getFullYear(),
+                            client_name: "",
+                            is_featured: false,
+                            sort_order: 1,
+                        },
+                    ],
+                );
 
                 // Load preferred services
-                const { data: preferredData, error: preferredError } = await supabase
-                    .from("city_preferred_services")
-                    .select("*")
-                    .eq("city_id", cityId)
-                    .order("sort_order");
+                const { data: preferredData, error: preferredError } =
+                    await supabase
+                        .from("city_preferred_services")
+                        .select("*")
+                        .eq("city_id", cityId)
+                        .order("sort_order");
 
                 if (preferredError) throw preferredError;
-                setPreferredServices(preferredData || [{ service_text: "", sort_order: 1 }]);
+                setPreferredServices(
+                    preferredData || [{ service_text: "", sort_order: 1 }],
+                );
 
                 // Load contact details
-                const { data: contactsData, error: contactsError } = await supabase
-                    .from("city_contact_details")
-                    .select("*")
-                    .eq("city_id", cityId)
-                    .order("sort_order");
+                const { data: contactsData, error: contactsError } =
+                    await supabase
+                        .from("city_contact_details")
+                        .select("*")
+                        .eq("city_id", cityId)
+                        .order("sort_order");
 
                 if (contactsError) throw contactsError;
-                setContactDetails(contactsData || [{ contact_type: "phone", contact_value: "", display_text: "", is_primary: true, sort_order: 1 }]);
+                setContactDetails(
+                    contactsData || [
+                        {
+                            contact_type: "phone",
+                            contact_value: "",
+                            display_text: "",
+                            is_primary: true,
+                            sort_order: 1,
+                        },
+                    ],
+                );
 
                 // Load statistics
-                const { data: statisticsData, error: statisticsError } = await supabase
-                    .from("city_statistics")
-                    .select("*")
-                    .eq("city_id", cityId)
-                    .order("sort_order");
+                const { data: statisticsData, error: statisticsError } =
+                    await supabase
+                        .from("city_statistics")
+                        .select("*")
+                        .eq("city_id", cityId)
+                        .order("sort_order");
 
                 if (statisticsError) throw statisticsError;
-                setStatistics(statisticsData || [
-                    { statistic_type: "happy_clients", title: "Happy Clients", value: "4650+", icon_name: "users", color: "#4F46E5", sort_order: 1 },
-                    { statistic_type: "completed_projects", title: "Completed Projects", value: "20800+", icon_name: "briefcase", color: "#4F46E5", sort_order: 2 },
-                    { statistic_type: "customer_support", title: "Customer Support", value: "24X7", icon_name: "headphones", color: "#4F46E5", sort_order: 3 },
-                    { statistic_type: "exhibitions", title: "Exhibitions", value: "2050+", icon_name: "trophy", color: "#4F46E5", sort_order: 4 },
-                ]);
-
+                setStatistics(
+                    statisticsData || [
+                        {
+                            statistic_type: "happy_clients",
+                            title: "Happy Clients",
+                            value: "4650+",
+                            icon_name: "users",
+                            color: "#4F46E5",
+                            sort_order: 1,
+                        },
+                        {
+                            statistic_type: "completed_projects",
+                            title: "Completed Projects",
+                            value: "20800+",
+                            icon_name: "briefcase",
+                            color: "#4F46E5",
+                            sort_order: 2,
+                        },
+                        {
+                            statistic_type: "customer_support",
+                            title: "Customer Support",
+                            value: "24X7",
+                            icon_name: "headphones",
+                            color: "#4F46E5",
+                            sort_order: 3,
+                        },
+                        {
+                            statistic_type: "exhibitions",
+                            title: "Exhibitions",
+                            value: "2050+",
+                            icon_name: "trophy",
+                            color: "#4F46E5",
+                            sort_order: 4,
+                        },
+                    ],
+                );
             } catch (error) {
                 console.error("Error loading city data:", error);
                 alert("Failed to load city data");
@@ -293,15 +378,15 @@ const EditCityPage = () => {
     const generateSlug = (name: string) => {
         return name
             .toLowerCase()
-            .replace(/[^a-z0-9]+/g, '-')
-            .replace(/(^-|-$)/g, '');
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/(^-|-$)/g, "");
     };
 
     const handleNameChange = (name: string) => {
         setCityData(prev => ({
             ...prev,
             name,
-            slug: generateSlug(name)
+            slug: generateSlug(name),
         }));
     };
 
@@ -309,25 +394,35 @@ const EditCityPage = () => {
     const ensurePortfolioBucket = async () => {
         try {
             const { data: buckets } = await supabase.storage.listBuckets();
-            const portfolioBucketExists = buckets?.some(bucket => bucket.id === 'city-portfolio');
+            const portfolioBucketExists = buckets?.some(
+                bucket => bucket.id === "city-portfolio",
+            );
 
             if (!portfolioBucketExists) {
-                console.log('Creating city-portfolio bucket...');
-                const { error } = await supabase.storage.createBucket('city-portfolio', {
-                    public: true,
-                    fileSizeLimit: 52428800, // 50MB
-                    allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
-                });
+                console.log("Creating city-portfolio bucket...");
+                const { error } = await supabase.storage.createBucket(
+                    "city-portfolio",
+                    {
+                        public: true,
+                        fileSizeLimit: 52428800, // 50MB
+                        allowedMimeTypes: [
+                            "image/jpeg",
+                            "image/png",
+                            "image/webp",
+                            "image/gif",
+                        ],
+                    },
+                );
 
                 if (error) {
-                    console.warn('Failed to create portfolio bucket:', error);
+                    console.warn("Failed to create portfolio bucket:", error);
                     return false;
                 }
-                console.log('Portfolio bucket created successfully');
+                console.log("Portfolio bucket created successfully");
             }
             return true;
         } catch (error) {
-            console.warn('Error checking/creating portfolio bucket:', error);
+            console.warn("Error checking/creating portfolio bucket:", error);
             return false;
         }
     };
@@ -335,29 +430,36 @@ const EditCityPage = () => {
     // Image upload function
     const uploadImage = async (file: File, folder: string = "cities") => {
         try {
-            const fileExt = file.name.split('.').pop();
+            const fileExt = file.name.split(".").pop();
 
             // Generate unique filename for portfolio items
             let fileName;
-            if (folder === 'city-portfolio') {
+            if (folder === "city-portfolio") {
                 // Use the generate_portfolio_filename function format for consistency
                 const timestamp = Date.now();
-                fileName = `${cityId}_${timestamp}_${Math.floor(Math.random() * 1000)}.${fileExt}`;
+                fileName = `${cityId}_${timestamp}_${Math.floor(
+                    Math.random() * 1000,
+                )}.${fileExt}`;
             } else {
                 fileName = `${folder}/${Date.now()}.${fileExt}`;
             }
 
             // Determine bucket based on folder
-            let bucketName = folder === 'city-portfolio' ? 'city-portfolio' : 'city-images';
+            let bucketName =
+                folder === "city-portfolio" ? "city-portfolio" : "city-images";
 
             // Ensure portfolio bucket exists if needed
-            if (bucketName === 'city-portfolio') {
+            if (bucketName === "city-portfolio") {
                 const bucketExists = await ensurePortfolioBucket();
                 if (!bucketExists) {
-                    console.log('Portfolio bucket not available, using fallback');
-                    bucketName = 'city-images';
+                    console.log(
+                        "Portfolio bucket not available, using fallback",
+                    );
+                    bucketName = "city-images";
                     const timestamp = Date.now();
-                    const fallbackFileName = `portfolio/${cityId}_${timestamp}_${Math.floor(Math.random() * 1000)}.${fileExt}`;
+                    const fallbackFileName = `portfolio/${cityId}_${timestamp}_${Math.floor(
+                        Math.random() * 1000,
+                    )}.${fileExt}`;
 
                     const { error } = await supabase.storage
                         .from(bucketName)
@@ -365,7 +467,9 @@ const EditCityPage = () => {
 
                     if (error) throw error;
 
-                    const { data: { publicUrl } } = supabase.storage
+                    const {
+                        data: { publicUrl },
+                    } = supabase.storage
                         .from(bucketName)
                         .getPublicUrl(fallbackFileName);
 
@@ -373,18 +477,25 @@ const EditCityPage = () => {
                 }
             }
 
-            console.log(`Attempting to upload to bucket: ${bucketName}, file: ${fileName}`);
+            console.log(
+                `Attempting to upload to bucket: ${bucketName}, file: ${fileName}`,
+            );
 
             let { error } = await supabase.storage
                 .from(bucketName)
                 .upload(fileName, file);
 
             // If portfolio bucket fails, fallback to city-images bucket
-            if (error && bucketName === 'city-portfolio') {
-                console.warn('Portfolio bucket failed, falling back to city-images bucket:', error);
-                bucketName = 'city-images';
+            if (error && bucketName === "city-portfolio") {
+                console.warn(
+                    "Portfolio bucket failed, falling back to city-images bucket:",
+                    error,
+                );
+                bucketName = "city-images";
                 const timestamp = Date.now();
-                const fallbackFileName = `portfolio/${cityId}_${timestamp}_${Math.floor(Math.random() * 1000)}.${fileExt}`;
+                const fallbackFileName = `portfolio/${cityId}_${timestamp}_${Math.floor(
+                    Math.random() * 1000,
+                )}.${fileExt}`;
 
                 const fallbackResult = await supabase.storage
                     .from(bucketName)
@@ -393,8 +504,10 @@ const EditCityPage = () => {
                 error = fallbackResult.error;
 
                 if (!error) {
-                    console.log('Successfully uploaded to fallback bucket');
-                    const { data: { publicUrl } } = supabase.storage
+                    console.log("Successfully uploaded to fallback bucket");
+                    const {
+                        data: { publicUrl },
+                    } = supabase.storage
                         .from(bucketName)
                         .getPublicUrl(fallbackFileName);
                     return publicUrl;
@@ -402,24 +515,25 @@ const EditCityPage = () => {
             }
 
             if (error) {
-                console.error('Upload error details:', {
+                console.error("Upload error details:", {
                     message: error.message,
                     error: error,
                     bucket: bucketName,
-                    fileName: fileName
+                    fileName: fileName,
                 });
                 throw error;
             }
 
-            const { data: { publicUrl } } = supabase.storage
-                .from(bucketName)
-                .getPublicUrl(fileName);
+            const {
+                data: { publicUrl },
+            } = supabase.storage.from(bucketName).getPublicUrl(fileName);
 
-            console.log('Upload successful:', publicUrl);
+            console.log("Upload successful:", publicUrl);
             return publicUrl;
         } catch (error) {
-            console.error('Error uploading image:', error);
-            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            console.error("Error uploading image:", error);
+            const errorMessage =
+                error instanceof Error ? error.message : "Unknown error";
             alert(`Failed to upload image: ${errorMessage}`);
             return null;
         }
@@ -427,7 +541,7 @@ const EditCityPage = () => {
 
     // Handle image upload for content sections
     const handleContentImageUpload = async (index: number, file: File) => {
-        const imageUrl = await uploadImage(file, 'content-sections');
+        const imageUrl = await uploadImage(file, "content-sections");
         if (imageUrl) {
             const updatedSections = [...contentSections];
             updatedSections[index].image_url = imageUrl;
@@ -435,13 +549,9 @@ const EditCityPage = () => {
         }
     };
 
-
-
-
-
     // Handle image upload for portfolio items
     const handlePortfolioImageUpload = async (index: number, file: File) => {
-        const imageUrl = await uploadImage(file, 'city-portfolio');
+        const imageUrl = await uploadImage(file, "city-portfolio");
         if (imageUrl) {
             const updatedItems = [...portfolioItems];
             updatedItems[index].image_url = imageUrl;
@@ -450,7 +560,10 @@ const EditCityPage = () => {
     };
 
     // Fetch existing images from bucket
-    const fetchExistingImages = async (folder: string = '', bucketName: string = 'city-images') => {
+    const fetchExistingImages = async (
+        folder: string = "",
+        bucketName: string = "city-images",
+    ) => {
         try {
             const { data, error } = await supabase.storage
                 .from(bucketName)
@@ -461,19 +574,25 @@ const EditCityPage = () => {
 
             if (error) throw error;
 
-            return data?.map(file => {
-                const { data: { publicUrl } } = supabase.storage
-                    .from(bucketName)
-                    .getPublicUrl(folder ? `${folder}/${file.name}` : file.name);
-                return {
-                    name: file.name,
-                    url: publicUrl,
-                    folder: folder,
-                    bucket: bucketName
-                };
-            }) || [];
+            return (
+                data?.map(file => {
+                    const {
+                        data: { publicUrl },
+                    } = supabase.storage
+                        .from(bucketName)
+                        .getPublicUrl(
+                            folder ? `${folder}/${file.name}` : file.name,
+                        );
+                    return {
+                        name: file.name,
+                        url: publicUrl,
+                        folder: folder,
+                        bucket: bucketName,
+                    };
+                }) || []
+            );
         } catch (error) {
-            console.error('Error fetching images:', error);
+            console.error("Error fetching images:", error);
             return [];
         }
     };
@@ -485,19 +604,29 @@ const EditCityPage = () => {
 
         try {
             // Fetch images from all folders and buckets
-            const [citiesImages, servicesImages, contentImages, portfolioImages] = await Promise.all([
-                fetchExistingImages('cities', 'city-images'),
-                fetchExistingImages('services', 'city-images'),
-                fetchExistingImages('content-sections', 'city-images'),
-                fetchExistingImages('city-portfolio', 'city-portfolio')
+            const [
+                citiesImages,
+                servicesImages,
+                contentImages,
+                portfolioImages,
+            ] = await Promise.all([
+                fetchExistingImages("cities", "city-images"),
+                fetchExistingImages("services", "city-images"),
+                fetchExistingImages("content-sections", "city-images"),
+                fetchExistingImages("city-portfolio", "city-portfolio"),
             ]);
 
-            const allImages = [...citiesImages, ...servicesImages, ...contentImages, ...portfolioImages];
+            const allImages = [
+                ...citiesImages,
+                ...servicesImages,
+                ...contentImages,
+                ...portfolioImages,
+            ];
             setExistingImages(allImages);
             setShowImageSelector(true);
         } catch (error) {
-            console.error('Error loading images:', error);
-            alert('Failed to load existing images');
+            console.error("Error loading images:", error);
+            alert("Failed to load existing images");
         } finally {
             setLoadingImages(false);
         }
@@ -515,12 +644,15 @@ const EditCityPage = () => {
     // Add/Remove functions
     const addService = () => {
         if (services.length < 3) {
-            setServices([...services, {
-                name: "",
-                description: "",
-                href_link: "",
-                sort_order: services.length + 1
-            }]);
+            setServices([
+                ...services,
+                {
+                    name: "",
+                    description: "",
+                    href_link: "",
+                    sort_order: services.length + 1,
+                },
+            ]);
         } else {
             alert("Maximum 3 services allowed");
         }
@@ -531,17 +663,20 @@ const EditCityPage = () => {
     };
 
     const addPortfolioItem = () => {
-        setPortfolioItems([...portfolioItems, {
-            title: "",
-            description: "",
-            image_url: "",
-            alt_text: "",
-            category: "",
-            project_year: new Date().getFullYear(),
-            client_name: "",
-            is_featured: false,
-            sort_order: portfolioItems.length + 1
-        }]);
+        setPortfolioItems([
+            ...portfolioItems,
+            {
+                title: "",
+                description: "",
+                image_url: "",
+                alt_text: "",
+                category: "",
+                project_year: new Date().getFullYear(),
+                client_name: "",
+                is_featured: false,
+                sort_order: portfolioItems.length + 1,
+            },
+        ]);
     };
 
     const removePortfolioItem = (index: number) => {
@@ -549,10 +684,13 @@ const EditCityPage = () => {
     };
 
     const addPreferredService = () => {
-        setPreferredServices([...preferredServices, { 
-            service_text: "", 
-            sort_order: preferredServices.length + 1 
-        }]);
+        setPreferredServices([
+            ...preferredServices,
+            {
+                service_text: "",
+                sort_order: preferredServices.length + 1,
+            },
+        ]);
     };
 
     const removePreferredService = (index: number) => {
@@ -560,13 +698,16 @@ const EditCityPage = () => {
     };
 
     const addContactDetail = () => {
-        setContactDetails([...contactDetails, { 
-            contact_type: "phone", 
-            contact_value: "", 
-            display_text: "", 
-            is_primary: false, 
-            sort_order: contactDetails.length + 1 
-        }]);
+        setContactDetails([
+            ...contactDetails,
+            {
+                contact_type: "phone",
+                contact_value: "",
+                display_text: "",
+                is_primary: false,
+                sort_order: contactDetails.length + 1,
+            },
+        ]);
     };
 
     const removeContactDetail = (index: number) => {
@@ -592,15 +733,24 @@ const EditCityPage = () => {
 
             // Only include fields that have values
             if (cityData.slug.trim()) updateData.slug = cityData.slug.trim();
-            if (cityData.country.trim()) updateData.country = cityData.country.trim();
-            if (cityData.country_code.trim()) updateData.country_code = cityData.country_code.trim();
-            if (cityData.description.trim()) updateData.description = cityData.description.trim();
-            if (cityData.meta_title.trim()) updateData.meta_title = cityData.meta_title.trim();
-            if (cityData.meta_description.trim()) updateData.meta_description = cityData.meta_description.trim();
-            if (cityData.projects_completed > 0) updateData.projects_completed = cityData.projects_completed;
-            if (cityData.years_of_operation > 0) updateData.years_of_operation = cityData.years_of_operation;
-            if (cityData.clients_satisfied > 0) updateData.clients_satisfied = cityData.clients_satisfied;
-            if (cityData.team_size > 0) updateData.team_size = cityData.team_size;
+            if (cityData.country.trim())
+                updateData.country = cityData.country.trim();
+            if (cityData.country_code.trim())
+                updateData.country_code = cityData.country_code.trim();
+            if (cityData.description.trim())
+                updateData.description = cityData.description.trim();
+            if (cityData.meta_title.trim())
+                updateData.meta_title = cityData.meta_title.trim();
+            if (cityData.meta_description.trim())
+                updateData.meta_description = cityData.meta_description.trim();
+            if (cityData.projects_completed > 0)
+                updateData.projects_completed = cityData.projects_completed;
+            if (cityData.years_of_operation > 0)
+                updateData.years_of_operation = cityData.years_of_operation;
+            if (cityData.clients_satisfied > 0)
+                updateData.clients_satisfied = cityData.clients_satisfied;
+            if (cityData.team_size > 0)
+                updateData.team_size = cityData.team_size;
 
             // Update city basic info
             const { error: cityError } = await supabase
@@ -616,12 +766,30 @@ const EditCityPage = () => {
             // Delete existing related data (with error handling)
             try {
                 await Promise.all([
-                    supabase.from("city_content_sections").delete().eq("city_id", cityId),
-                    supabase.from("city_services").delete().eq("city_id", cityId),
-                    supabase.from("city_components").delete().eq("city_id", cityId),
-                    supabase.from("city_statistics").delete().eq("city_id", cityId),
-                    supabase.from("city_preferred_services").delete().eq("city_id", cityId),
-                    supabase.from("city_contact_details").delete().eq("city_id", cityId),
+                    supabase
+                        .from("city_content_sections")
+                        .delete()
+                        .eq("city_id", cityId),
+                    supabase
+                        .from("city_services")
+                        .delete()
+                        .eq("city_id", cityId),
+                    supabase
+                        .from("city_components")
+                        .delete()
+                        .eq("city_id", cityId),
+                    supabase
+                        .from("city_statistics")
+                        .delete()
+                        .eq("city_id", cityId),
+                    supabase
+                        .from("city_preferred_services")
+                        .delete()
+                        .eq("city_id", cityId),
+                    supabase
+                        .from("city_contact_details")
+                        .delete()
+                        .eq("city_id", cityId),
                 ]);
             } catch (deleteError) {
                 console.error("Error deleting existing data:", deleteError);
@@ -630,7 +798,9 @@ const EditCityPage = () => {
 
             // Insert updated content sections
             const contentSectionsData = contentSections
-                .filter(section => section.title?.trim() || section.content?.trim())
+                .filter(
+                    section => section.title?.trim() || section.content?.trim(),
+                )
                 .map((section, index) => ({
                     city_id: cityId,
                     section_type: section.section_type,
@@ -768,7 +938,12 @@ const EditCityPage = () => {
 
             // Insert updated statistics
             const statisticsData = statistics
-                .filter(stat => stat.title?.trim() && stat.value?.trim() && stat.statistic_type?.trim())
+                .filter(
+                    stat =>
+                        stat.title?.trim() &&
+                        stat.value?.trim() &&
+                        stat.statistic_type?.trim(),
+                )
                 .map((stat, index) => ({
                     city_id: cityId,
                     statistic_type: stat.statistic_type.trim(),
@@ -791,7 +966,6 @@ const EditCityPage = () => {
 
             alert("City updated successfully!");
             router.push("/admin/pages/cities");
-
         } catch (error: any) {
             console.error("Error updating city:", error);
 
@@ -844,7 +1018,9 @@ const EditCityPage = () => {
                         Back to Cities
                     </Button>
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-900">Edit City: {cityData.name}</h1>
+                        <h1 className="text-3xl font-bold text-gray-900">
+                            Edit City: {cityData.name}
+                        </h1>
                         <p className="text-gray-600 mt-2">
                             Update all the information for this city
                         </p>
@@ -863,7 +1039,7 @@ const EditCityPage = () => {
             {/* Tabs */}
             <div className="border-b border-gray-200 mb-8">
                 <nav className="-mb-px flex space-x-8">
-                    {tabs.map((tab) => (
+                    {tabs.map(tab => (
                         <button
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
@@ -888,7 +1064,7 @@ const EditCityPage = () => {
                         handleNameChange={handleNameChange}
                     />
                 )}
-                
+
                 {activeTab === "content" && (
                     <ContentSectionsTab
                         contentSections={contentSections}
@@ -897,7 +1073,7 @@ const EditCityPage = () => {
                         openImageSelector={openImageSelector}
                     />
                 )}
-                
+
                 {activeTab === "services" && (
                     <ServicesTab
                         services={services}
@@ -906,7 +1082,7 @@ const EditCityPage = () => {
                         removeService={removeService}
                     />
                 )}
-                
+
                 {activeTab === "components" && (
                     <ComponentsTab
                         components={components}
@@ -931,8 +1107,6 @@ const EditCityPage = () => {
                         openImageSelector={openImageSelector}
                     />
                 )}
-                
-
             </div>
 
             {/* Image Selector Modal */}
@@ -949,7 +1123,11 @@ const EditCityPage = () => {
 };
 
 // Basic Info Tab Component
-const BasicInfoTab = ({ cityData, setCityData, handleNameChange }: {
+const BasicInfoTab = ({
+    cityData,
+    setCityData,
+    handleNameChange,
+}: {
     cityData: CityFormData;
     setCityData: React.Dispatch<React.SetStateAction<CityFormData>>;
     handleNameChange: (name: string) => void;
@@ -961,7 +1139,7 @@ const BasicInfoTab = ({ cityData, setCityData, handleNameChange }: {
                 <Input
                     id="name"
                     value={cityData.name}
-                    onChange={(e) => handleNameChange(e.target.value)}
+                    onChange={e => handleNameChange(e.target.value)}
                     placeholder="Abu Dhabi"
                 />
             </div>
@@ -970,7 +1148,9 @@ const BasicInfoTab = ({ cityData, setCityData, handleNameChange }: {
                 <Input
                     id="slug"
                     value={cityData.slug}
-                    onChange={(e) => setCityData(prev => ({ ...prev, slug: e.target.value }))}
+                    onChange={e =>
+                        setCityData(prev => ({ ...prev, slug: e.target.value }))
+                    }
                     placeholder="abu-dhabi"
                 />
             </div>
@@ -982,7 +1162,12 @@ const BasicInfoTab = ({ cityData, setCityData, handleNameChange }: {
                 <Input
                     id="country"
                     value={cityData.country}
-                    onChange={(e) => setCityData(prev => ({ ...prev, country: e.target.value }))}
+                    onChange={e =>
+                        setCityData(prev => ({
+                            ...prev,
+                            country: e.target.value,
+                        }))
+                    }
                     placeholder="United Arab Emirates"
                 />
             </div>
@@ -991,7 +1176,12 @@ const BasicInfoTab = ({ cityData, setCityData, handleNameChange }: {
                 <Input
                     id="country_code"
                     value={cityData.country_code}
-                    onChange={(e) => setCityData(prev => ({ ...prev, country_code: e.target.value }))}
+                    onChange={e =>
+                        setCityData(prev => ({
+                            ...prev,
+                            country_code: e.target.value,
+                        }))
+                    }
                     placeholder="AE"
                 />
             </div>
@@ -1002,13 +1192,16 @@ const BasicInfoTab = ({ cityData, setCityData, handleNameChange }: {
             <Textarea
                 id="description"
                 value={cityData.description}
-                onChange={(e) => setCityData(prev => ({ ...prev, description: e.target.value }))}
+                onChange={e =>
+                    setCityData(prev => ({
+                        ...prev,
+                        description: e.target.value,
+                    }))
+                }
                 placeholder="Brief description of the city"
                 rows={3}
             />
         </div>
-
-
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
@@ -1016,7 +1209,12 @@ const BasicInfoTab = ({ cityData, setCityData, handleNameChange }: {
                 <Input
                     id="meta_title"
                     value={cityData.meta_title}
-                    onChange={(e) => setCityData(prev => ({ ...prev, meta_title: e.target.value }))}
+                    onChange={e =>
+                        setCityData(prev => ({
+                            ...prev,
+                            meta_title: e.target.value,
+                        }))
+                    }
                     placeholder="SEO title"
                 />
             </div>
@@ -1025,7 +1223,12 @@ const BasicInfoTab = ({ cityData, setCityData, handleNameChange }: {
                 <Input
                     id="meta_description"
                     value={cityData.meta_description}
-                    onChange={(e) => setCityData(prev => ({ ...prev, meta_description: e.target.value }))}
+                    onChange={e =>
+                        setCityData(prev => ({
+                            ...prev,
+                            meta_description: e.target.value,
+                        }))
+                    }
                     placeholder="SEO description"
                 />
             </div>
@@ -1038,7 +1241,12 @@ const BasicInfoTab = ({ cityData, setCityData, handleNameChange }: {
                     id="projects_completed"
                     type="number"
                     value={cityData.projects_completed}
-                    onChange={(e) => setCityData(prev => ({ ...prev, projects_completed: parseInt(e.target.value) || 0 }))}
+                    onChange={e =>
+                        setCityData(prev => ({
+                            ...prev,
+                            projects_completed: parseInt(e.target.value) || 0,
+                        }))
+                    }
                     placeholder="0"
                 />
             </div>
@@ -1048,7 +1256,12 @@ const BasicInfoTab = ({ cityData, setCityData, handleNameChange }: {
                     id="years_of_operation"
                     type="number"
                     value={cityData.years_of_operation}
-                    onChange={(e) => setCityData(prev => ({ ...prev, years_of_operation: parseInt(e.target.value) || 0 }))}
+                    onChange={e =>
+                        setCityData(prev => ({
+                            ...prev,
+                            years_of_operation: parseInt(e.target.value) || 0,
+                        }))
+                    }
                     placeholder="0"
                 />
             </div>
@@ -1058,7 +1271,12 @@ const BasicInfoTab = ({ cityData, setCityData, handleNameChange }: {
                     id="clients_satisfied"
                     type="number"
                     value={cityData.clients_satisfied}
-                    onChange={(e) => setCityData(prev => ({ ...prev, clients_satisfied: parseInt(e.target.value) || 0 }))}
+                    onChange={e =>
+                        setCityData(prev => ({
+                            ...prev,
+                            clients_satisfied: parseInt(e.target.value) || 0,
+                        }))
+                    }
                     placeholder="0"
                 />
             </div>
@@ -1068,7 +1286,12 @@ const BasicInfoTab = ({ cityData, setCityData, handleNameChange }: {
                     id="team_size"
                     type="number"
                     value={cityData.team_size}
-                    onChange={(e) => setCityData(prev => ({ ...prev, team_size: parseInt(e.target.value) || 0 }))}
+                    onChange={e =>
+                        setCityData(prev => ({
+                            ...prev,
+                            team_size: parseInt(e.target.value) || 0,
+                        }))
+                    }
                     placeholder="0"
                 />
             </div>
@@ -1079,7 +1302,12 @@ const BasicInfoTab = ({ cityData, setCityData, handleNameChange }: {
                 type="checkbox"
                 id="is_active"
                 checked={cityData.is_active}
-                onChange={(e) => setCityData(prev => ({ ...prev, is_active: e.target.checked }))}
+                onChange={e =>
+                    setCityData(prev => ({
+                        ...prev,
+                        is_active: e.target.checked,
+                    }))
+                }
                 className="rounded border-gray-300 text-[#a5cd39] focus:ring-[#a5cd39]"
             />
             <Label htmlFor="is_active">Active</Label>
@@ -1088,7 +1316,12 @@ const BasicInfoTab = ({ cityData, setCityData, handleNameChange }: {
 );
 
 // Content Sections Tab Component
-const ContentSectionsTab = ({ contentSections, setContentSections, handleImageUpload, openImageSelector }: {
+const ContentSectionsTab = ({
+    contentSections,
+    setContentSections,
+    handleImageUpload,
+    openImageSelector,
+}: {
     contentSections: ContentSection[];
     setContentSections: React.Dispatch<React.SetStateAction<ContentSection[]>>;
     handleImageUpload: (index: number, file: File) => void;
@@ -1102,7 +1335,11 @@ const ContentSectionsTab = ({ contentSections, setContentSections, handleImageUp
         why_best: "Why Best Section",
     };
 
-    const updateSection = (index: number, field: keyof ContentSection, value: string) => {
+    const updateSection = (
+        index: number,
+        field: keyof ContentSection,
+        value: string,
+    ) => {
         const updated = [...contentSections];
         updated[index] = { ...updated[index], [field]: value };
         setContentSections(updated);
@@ -1111,9 +1348,16 @@ const ContentSectionsTab = ({ contentSections, setContentSections, handleImageUp
     return (
         <div className="space-y-8">
             {contentSections.map((section, index) => (
-                <div key={section.section_type} className="border rounded-lg p-6">
+                <div
+                    key={section.section_type}
+                    className="border rounded-lg p-6"
+                >
                     <h3 className="text-lg font-semibold mb-4">
-                        {sectionLabels[section.section_type as keyof typeof sectionLabels]}
+                        {
+                            sectionLabels[
+                                section.section_type as keyof typeof sectionLabels
+                            ]
+                        }
                     </h3>
 
                     <div className="space-y-4">
@@ -1122,18 +1366,33 @@ const ContentSectionsTab = ({ contentSections, setContentSections, handleImageUp
                             <Input
                                 id={`title-${index}`}
                                 value={section.title}
-                                onChange={(e) => updateSection(index, 'title', e.target.value)}
+                                onChange={e =>
+                                    updateSection(
+                                        index,
+                                        "title",
+                                        e.target.value,
+                                    )
+                                }
                                 placeholder="Section title"
                             />
                         </div>
 
-                        {(section.section_type === 'content' || section.section_type === 'hero') && (
+                        {(section.section_type === "content" ||
+                            section.section_type === "hero") && (
                             <div>
-                                <Label htmlFor={`subtitle-${index}`}>Subtitle</Label>
+                                <Label htmlFor={`subtitle-${index}`}>
+                                    Subtitle
+                                </Label>
                                 <Input
                                     id={`subtitle-${index}`}
-                                    value={section.subtitle || ''}
-                                    onChange={(e) => updateSection(index, 'subtitle', e.target.value)}
+                                    value={section.subtitle || ""}
+                                    onChange={e =>
+                                        updateSection(
+                                            index,
+                                            "subtitle",
+                                            e.target.value,
+                                        )
+                                    }
                                     placeholder="Section subtitle"
                                 />
                             </div>
@@ -1144,28 +1403,42 @@ const ContentSectionsTab = ({ contentSections, setContentSections, handleImageUp
                             <Textarea
                                 id={`content-${index}`}
                                 value={section.content}
-                                onChange={(e) => updateSection(index, 'content', e.target.value)}
+                                onChange={e =>
+                                    updateSection(
+                                        index,
+                                        "content",
+                                        e.target.value,
+                                    )
+                                }
                                 placeholder="Section content"
                                 rows={6}
                             />
                         </div>
 
-                        {(section.section_type === 'content' || section.section_type === 'hero') && (
+                        {(section.section_type === "content" ||
+                            section.section_type === "hero") && (
                             <div>
                                 <Label htmlFor={`image-${index}`}>Image</Label>
                                 <div className="flex items-center space-x-4">
                                     <Input
                                         id={`image-${index}`}
-                                        value={section.image_url || ''}
-                                        onChange={(e) => updateSection(index, 'image_url', e.target.value)}
+                                        value={section.image_url || ""}
+                                        onChange={e =>
+                                            updateSection(
+                                                index,
+                                                "image_url",
+                                                e.target.value,
+                                            )
+                                        }
                                         placeholder="Image URL"
                                     />
                                     <input
                                         type="file"
                                         accept="image/*"
-                                        onChange={(e) => {
+                                        onChange={e => {
                                             const file = e.target.files?.[0];
-                                            if (file) handleImageUpload(index, file);
+                                            if (file)
+                                                handleImageUpload(index, file);
                                         }}
                                         className="hidden"
                                         id={`file-${index}`}
@@ -1173,7 +1446,11 @@ const ContentSectionsTab = ({ contentSections, setContentSections, handleImageUp
                                     <Button
                                         type="button"
                                         variant="outline"
-                                        onClick={() => document.getElementById(`file-${index}`)?.click()}
+                                        onClick={() =>
+                                            document
+                                                .getElementById(`file-${index}`)
+                                                ?.click()
+                                        }
                                     >
                                         <Upload className="w-4 h-4 mr-2" />
                                         Upload
@@ -1181,7 +1458,15 @@ const ContentSectionsTab = ({ contentSections, setContentSections, handleImageUp
                                     <Button
                                         type="button"
                                         variant="outline"
-                                        onClick={() => openImageSelector((url) => updateSection(index, 'image_url', url))}
+                                        onClick={() =>
+                                            openImageSelector(url =>
+                                                updateSection(
+                                                    index,
+                                                    "image_url",
+                                                    url,
+                                                ),
+                                            )
+                                        }
                                     >
                                         Select from Bucket
                                     </Button>
@@ -1203,13 +1488,22 @@ const ContentSectionsTab = ({ contentSections, setContentSections, handleImageUp
 };
 
 // Services Tab Component
-const ServicesTab = ({ services, setServices, addService, removeService }: {
+const ServicesTab = ({
+    services,
+    setServices,
+    addService,
+    removeService,
+}: {
     services: Service[];
     setServices: React.Dispatch<React.SetStateAction<Service[]>>;
     addService: () => void;
     removeService: (index: number) => void;
 }) => {
-    const updateService = (index: number, field: keyof Service, value: string | number) => {
+    const updateService = (
+        index: number,
+        field: keyof Service,
+        value: string | number,
+    ) => {
         const updated = [...services];
         updated[index] = { ...updated[index], [field]: value };
         setServices(updated);
@@ -1220,7 +1514,9 @@ const ServicesTab = ({ services, setServices, addService, removeService }: {
             <div className="flex justify-between items-center">
                 <div>
                     <h3 className="text-lg font-semibold">City Services</h3>
-                    <p className="text-sm text-gray-600">Maximum 3 services allowed ({services.length}/3)</p>
+                    <p className="text-sm text-gray-600">
+                        Maximum 3 services allowed ({services.length}/3)
+                    </p>
                 </div>
                 <Button
                     onClick={addService}
@@ -1250,31 +1546,51 @@ const ServicesTab = ({ services, setServices, addService, removeService }: {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <Label htmlFor={`service-name-${index}`}>Service Name</Label>
+                            <Label htmlFor={`service-name-${index}`}>
+                                Service Name
+                            </Label>
                             <Input
                                 id={`service-name-${index}`}
                                 value={service.name || ""}
-                                onChange={(e) => updateService(index, 'name', e.target.value)}
+                                onChange={e =>
+                                    updateService(index, "name", e.target.value)
+                                }
                                 placeholder="Service name"
                             />
                         </div>
                         <div>
-                            <Label htmlFor={`service-link-${index}`}>Link</Label>
+                            <Label htmlFor={`service-link-${index}`}>
+                                Link
+                            </Label>
                             <Input
                                 id={`service-link-${index}`}
                                 value={service.href_link || ""}
-                                onChange={(e) => updateService(index, 'href_link', e.target.value)}
-                                placeholder="/customexhibitionstands"
+                                onChange={e =>
+                                    updateService(
+                                        index,
+                                        "href_link",
+                                        e.target.value,
+                                    )
+                                }
+                                placeholder="/custom-exhibition-stands-dubai-uae"
                             />
                         </div>
                     </div>
 
                     <div className="mt-4">
-                        <Label htmlFor={`service-description-${index}`}>Description</Label>
+                        <Label htmlFor={`service-description-${index}`}>
+                            Description
+                        </Label>
                         <Textarea
                             id={`service-description-${index}`}
                             value={service.description || ""}
-                            onChange={(e) => updateService(index, 'description', e.target.value)}
+                            onChange={e =>
+                                updateService(
+                                    index,
+                                    "description",
+                                    e.target.value,
+                                )
+                            }
                             placeholder="Service description"
                             rows={3}
                         />
@@ -1286,11 +1602,18 @@ const ServicesTab = ({ services, setServices, addService, removeService }: {
 };
 
 // Components Tab Component
-const ComponentsTab = ({ components, setComponents }: {
+const ComponentsTab = ({
+    components,
+    setComponents,
+}: {
     components: Component[];
     setComponents: React.Dispatch<React.SetStateAction<Component[]>>;
 }) => {
-    const updateComponent = (index: number, field: keyof Component, value: string | number) => {
+    const updateComponent = (
+        index: number,
+        field: keyof Component,
+        value: string | number,
+    ) => {
         const updated = [...components];
         updated[index] = { ...updated[index], [field]: value };
         setComponents(updated);
@@ -1309,26 +1632,46 @@ const ComponentsTab = ({ components, setComponents }: {
                             >
                                 {index + 1}
                             </div>
-                            <h4 className="font-medium">Component {index + 1}</h4>
+                            <h4 className="font-medium">
+                                Component {index + 1}
+                            </h4>
                         </div>
 
                         <div className="space-y-4">
                             <div>
-                                <Label htmlFor={`component-title-${index}`}>Title</Label>
+                                <Label htmlFor={`component-title-${index}`}>
+                                    Title
+                                </Label>
                                 <Input
                                     id={`component-title-${index}`}
                                     value={component.title}
-                                    onChange={(e) => updateComponent(index, 'title', e.target.value)}
+                                    onChange={e =>
+                                        updateComponent(
+                                            index,
+                                            "title",
+                                            e.target.value,
+                                        )
+                                    }
                                     placeholder="Component title"
                                 />
                             </div>
 
                             <div>
-                                <Label htmlFor={`component-description-${index}`}>Description</Label>
+                                <Label
+                                    htmlFor={`component-description-${index}`}
+                                >
+                                    Description
+                                </Label>
                                 <Textarea
                                     id={`component-description-${index}`}
                                     value={component.description}
-                                    onChange={(e) => updateComponent(index, 'description', e.target.value)}
+                                    onChange={e =>
+                                        updateComponent(
+                                            index,
+                                            "description",
+                                            e.target.value,
+                                        )
+                                    }
                                     placeholder="Component description"
                                     rows={3}
                                 />
@@ -1336,27 +1679,49 @@ const ComponentsTab = ({ components, setComponents }: {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <Label htmlFor={`component-icon-${index}`}>Icon Name</Label>
+                                    <Label htmlFor={`component-icon-${index}`}>
+                                        Icon Name
+                                    </Label>
                                     <Input
                                         id={`component-icon-${index}`}
                                         value={component.icon_name}
-                                        onChange={(e) => updateComponent(index, 'icon_name', e.target.value)}
+                                        onChange={e =>
+                                            updateComponent(
+                                                index,
+                                                "icon_name",
+                                                e.target.value,
+                                            )
+                                        }
                                         placeholder="star, check, arrow"
                                     />
                                 </div>
                                 <div>
-                                    <Label htmlFor={`component-color-${index}`}>Color</Label>
+                                    <Label htmlFor={`component-color-${index}`}>
+                                        Color
+                                    </Label>
                                     <div className="flex items-center space-x-2">
                                         <input
                                             type="color"
                                             id={`component-color-${index}`}
                                             value={component.color}
-                                            onChange={(e) => updateComponent(index, 'color', e.target.value)}
+                                            onChange={e =>
+                                                updateComponent(
+                                                    index,
+                                                    "color",
+                                                    e.target.value,
+                                                )
+                                            }
                                             className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
                                         />
                                         <Input
                                             value={component.color}
-                                            onChange={(e) => updateComponent(index, 'color', e.target.value)}
+                                            onChange={e =>
+                                                updateComponent(
+                                                    index,
+                                                    "color",
+                                                    e.target.value,
+                                                )
+                                            }
                                             placeholder="#a5cd39"
                                             className="flex-1"
                                         />
@@ -1372,24 +1737,34 @@ const ComponentsTab = ({ components, setComponents }: {
 };
 
 // Statistics Tab Component
-const StatisticsTab = ({ statistics, setStatistics }: {
+const StatisticsTab = ({
+    statistics,
+    setStatistics,
+}: {
     statistics: Statistic[];
     setStatistics: React.Dispatch<React.SetStateAction<Statistic[]>>;
 }) => {
-    const updateStatistic = (index: number, field: keyof Statistic, value: string | number) => {
+    const updateStatistic = (
+        index: number,
+        field: keyof Statistic,
+        value: string | number,
+    ) => {
         const updated = [...statistics];
         updated[index] = { ...updated[index], [field]: value };
         setStatistics(updated);
     };
 
     const addStatistic = () => {
-        setStatistics([...statistics, {
-            statistic_type: "",
-            title: "",
-            value: "",
-            icon_name: "users",
-            sort_order: statistics.length + 1
-        }]);
+        setStatistics([
+            ...statistics,
+            {
+                statistic_type: "",
+                title: "",
+                value: "",
+                icon_name: "users",
+                sort_order: statistics.length + 1,
+            },
+        ]);
     };
 
     const removeStatistic = (index: number) => {
@@ -1407,7 +1782,10 @@ const StatisticsTab = ({ statistics, setStatistics }: {
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <h3 className="text-lg font-semibold">Statistics</h3>
-                <Button onClick={addStatistic} className="bg-[#a5cd39] hover:bg-[#8fb82e]">
+                <Button
+                    onClick={addStatistic}
+                    className="bg-[#a5cd39] hover:bg-[#8fb82e]"
+                >
                     <Plus className="w-4 h-4 mr-2" />
                     Add Statistic
                 </Button>
@@ -1417,7 +1795,9 @@ const StatisticsTab = ({ statistics, setStatistics }: {
                 {statistics.map((statistic, index) => (
                     <div key={index} className="border rounded-lg p-4">
                         <div className="flex justify-between items-start mb-4">
-                            <h4 className="font-medium">Statistic {index + 1}</h4>
+                            <h4 className="font-medium">
+                                Statistic {index + 1}
+                            </h4>
                             <Button
                                 variant="ghost"
                                 size="sm"
@@ -1430,45 +1810,80 @@ const StatisticsTab = ({ statistics, setStatistics }: {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <Label htmlFor={`statistic-type-${index}`}>Statistic Type</Label>
+                                <Label htmlFor={`statistic-type-${index}`}>
+                                    Statistic Type
+                                </Label>
                                 <Input
                                     id={`statistic-type-${index}`}
                                     value={statistic.statistic_type}
-                                    onChange={(e) => updateStatistic(index, "statistic_type", e.target.value)}
+                                    onChange={e =>
+                                        updateStatistic(
+                                            index,
+                                            "statistic_type",
+                                            e.target.value,
+                                        )
+                                    }
                                     placeholder="e.g., happy_clients"
                                 />
                             </div>
 
                             <div>
-                                <Label htmlFor={`statistic-title-${index}`}>Title</Label>
+                                <Label htmlFor={`statistic-title-${index}`}>
+                                    Title
+                                </Label>
                                 <Input
                                     id={`statistic-title-${index}`}
                                     value={statistic.title}
-                                    onChange={(e) => updateStatistic(index, "title", e.target.value)}
+                                    onChange={e =>
+                                        updateStatistic(
+                                            index,
+                                            "title",
+                                            e.target.value,
+                                        )
+                                    }
                                     placeholder="e.g., Happy Clients"
                                 />
                             </div>
 
                             <div>
-                                <Label htmlFor={`statistic-value-${index}`}>Value</Label>
+                                <Label htmlFor={`statistic-value-${index}`}>
+                                    Value
+                                </Label>
                                 <Input
                                     id={`statistic-value-${index}`}
                                     value={statistic.value}
-                                    onChange={(e) => updateStatistic(index, "value", e.target.value)}
+                                    onChange={e =>
+                                        updateStatistic(
+                                            index,
+                                            "value",
+                                            e.target.value,
+                                        )
+                                    }
                                     placeholder="e.g., 4650+"
                                 />
                             </div>
 
                             <div>
-                                <Label htmlFor={`statistic-icon-${index}`}>Icon</Label>
+                                <Label htmlFor={`statistic-icon-${index}`}>
+                                    Icon
+                                </Label>
                                 <select
                                     id={`statistic-icon-${index}`}
                                     value={statistic.icon_name}
-                                    onChange={(e) => updateStatistic(index, "icon_name", e.target.value)}
+                                    onChange={e =>
+                                        updateStatistic(
+                                            index,
+                                            "icon_name",
+                                            e.target.value,
+                                        )
+                                    }
                                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#a5cd39]"
                                 >
                                     {iconOptions.map(option => (
-                                        <option key={option.value} value={option.value}>
+                                        <option
+                                            key={option.value}
+                                            value={option.value}
+                                        >
                                             {option.label}
                                         </option>
                                     ))}
@@ -1476,12 +1891,20 @@ const StatisticsTab = ({ statistics, setStatistics }: {
                             </div>
 
                             <div>
-                                <Label htmlFor={`statistic-sort-${index}`}>Sort Order</Label>
+                                <Label htmlFor={`statistic-sort-${index}`}>
+                                    Sort Order
+                                </Label>
                                 <Input
                                     id={`statistic-sort-${index}`}
                                     type="number"
                                     value={statistic.sort_order}
-                                    onChange={(e) => updateStatistic(index, "sort_order", parseInt(e.target.value) || 0)}
+                                    onChange={e =>
+                                        updateStatistic(
+                                            index,
+                                            "sort_order",
+                                            parseInt(e.target.value) || 0,
+                                        )
+                                    }
                                     min="0"
                                 />
                             </div>
@@ -1494,13 +1917,24 @@ const StatisticsTab = ({ statistics, setStatistics }: {
 };
 
 // Preferred Services Tab Component
-const PreferredServicesTab = ({ preferredServices, setPreferredServices, addPreferredService, removePreferredService }: {
+const PreferredServicesTab = ({
+    preferredServices,
+    setPreferredServices,
+    addPreferredService,
+    removePreferredService,
+}: {
     preferredServices: PreferredService[];
-    setPreferredServices: React.Dispatch<React.SetStateAction<PreferredService[]>>;
+    setPreferredServices: React.Dispatch<
+        React.SetStateAction<PreferredService[]>
+    >;
     addPreferredService: () => void;
     removePreferredService: (index: number) => void;
 }) => {
-    const updatePreferredService = (index: number, field: keyof PreferredService, value: string | number) => {
+    const updatePreferredService = (
+        index: number,
+        field: keyof PreferredService,
+        value: string | number,
+    ) => {
         const updated = [...preferredServices];
         updated[index] = { ...updated[index], [field]: value };
         setPreferredServices(updated);
@@ -1527,7 +1961,13 @@ const PreferredServicesTab = ({ preferredServices, setPreferredServices, addPref
                         <div className="flex-1">
                             <Textarea
                                 value={service.service_text}
-                                onChange={(e) => updatePreferredService(index, 'service_text', e.target.value)}
+                                onChange={e =>
+                                    updatePreferredService(
+                                        index,
+                                        "service_text",
+                                        e.target.value,
+                                    )
+                                }
                                 placeholder="Describe the service offered..."
                                 rows={2}
                             />
@@ -1550,13 +1990,22 @@ const PreferredServicesTab = ({ preferredServices, setPreferredServices, addPref
 };
 
 // Contact Details Tab Component
-const ContactDetailsTab = ({ contactDetails, setContactDetails, addContactDetail, removeContactDetail }: {
+const ContactDetailsTab = ({
+    contactDetails,
+    setContactDetails,
+    addContactDetail,
+    removeContactDetail,
+}: {
     contactDetails: ContactDetail[];
     setContactDetails: React.Dispatch<React.SetStateAction<ContactDetail[]>>;
     addContactDetail: () => void;
     removeContactDetail: (index: number) => void;
 }) => {
-    const updateContactDetail = (index: number, field: keyof ContactDetail, value: string | boolean | number) => {
+    const updateContactDetail = (
+        index: number,
+        field: keyof ContactDetail,
+        value: string | boolean | number,
+    ) => {
         const updated = [...contactDetails];
         updated[index] = { ...updated[index], [field]: value };
         setContactDetails(updated);
@@ -1603,14 +2052,22 @@ const ContactDetailsTab = ({ contactDetails, setContactDetails, addContactDetail
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <Label htmlFor={`contact-type-${index}`}>Contact Type</Label>
+                            <Label htmlFor={`contact-type-${index}`}>
+                                Contact Type
+                            </Label>
                             <select
                                 id={`contact-type-${index}`}
                                 value={contact.contact_type}
-                                onChange={(e) => updateContactDetail(index, 'contact_type', e.target.value)}
+                                onChange={e =>
+                                    updateContactDetail(
+                                        index,
+                                        "contact_type",
+                                        e.target.value,
+                                    )
+                                }
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#a5cd39] focus:border-transparent"
                             >
-                                {contactTypes.map((type) => (
+                                {contactTypes.map(type => (
                                     <option key={type.value} value={type.value}>
                                         {type.label}
                                     </option>
@@ -1618,22 +2075,38 @@ const ContactDetailsTab = ({ contactDetails, setContactDetails, addContactDetail
                             </select>
                         </div>
                         <div>
-                            <Label htmlFor={`contact-value-${index}`}>Contact Value</Label>
+                            <Label htmlFor={`contact-value-${index}`}>
+                                Contact Value
+                            </Label>
                             <Input
                                 id={`contact-value-${index}`}
                                 value={contact.contact_value}
-                                onChange={(e) => updateContactDetail(index, 'contact_value', e.target.value)}
+                                onChange={e =>
+                                    updateContactDetail(
+                                        index,
+                                        "contact_value",
+                                        e.target.value,
+                                    )
+                                }
                                 placeholder="+971 543 474 645"
                             />
                         </div>
                     </div>
 
                     <div className="mt-4">
-                        <Label htmlFor={`contact-display-${index}`}>Display Text</Label>
+                        <Label htmlFor={`contact-display-${index}`}>
+                            Display Text
+                        </Label>
                         <Input
                             id={`contact-display-${index}`}
                             value={contact.display_text}
-                            onChange={(e) => updateContactDetail(index, 'display_text', e.target.value)}
+                            onChange={e =>
+                                updateContactDetail(
+                                    index,
+                                    "display_text",
+                                    e.target.value,
+                                )
+                            }
                             placeholder="How it should appear to users"
                         />
                     </div>
@@ -1643,10 +2116,18 @@ const ContactDetailsTab = ({ contactDetails, setContactDetails, addContactDetail
                             type="checkbox"
                             id={`contact-primary-${index}`}
                             checked={contact.is_primary}
-                            onChange={(e) => updateContactDetail(index, 'is_primary', e.target.checked)}
+                            onChange={e =>
+                                updateContactDetail(
+                                    index,
+                                    "is_primary",
+                                    e.target.checked,
+                                )
+                            }
                             className="rounded border-gray-300 text-[#a5cd39] focus:ring-[#a5cd39]"
                         />
-                        <Label htmlFor={`contact-primary-${index}`}>Primary Contact</Label>
+                        <Label htmlFor={`contact-primary-${index}`}>
+                            Primary Contact
+                        </Label>
                     </div>
                 </div>
             ))}
@@ -1655,8 +2136,13 @@ const ContactDetailsTab = ({ contactDetails, setContactDetails, addContactDetail
 };
 
 // Image Selector Modal Component
-const ImageSelectorModal = ({ images, onSelect, onClose, loading }: {
-    images: {name: string, url: string, folder: string}[];
+const ImageSelectorModal = ({
+    images,
+    onSelect,
+    onClose,
+    loading,
+}: {
+    images: { name: string; url: string; folder: string }[];
     onSelect: (url: string) => void;
     onClose: () => void;
     loading: boolean;
@@ -1693,8 +2179,12 @@ const ImageSelectorModal = ({ images, onSelect, onClose, loading }: {
                                     alt={image.name}
                                     className="w-full h-24 object-cover rounded mb-2"
                                 />
-                                <p className="text-xs text-gray-600 truncate">{image.name}</p>
-                                <p className="text-xs text-gray-400">{image.folder}</p>
+                                <p className="text-xs text-gray-600 truncate">
+                                    {image.name}
+                                </p>
+                                <p className="text-xs text-gray-400">
+                                    {image.folder}
+                                </p>
                             </div>
                         ))}
                     </div>
@@ -1705,7 +2195,14 @@ const ImageSelectorModal = ({ images, onSelect, onClose, loading }: {
 );
 
 // Portfolio Tab Component
-const PortfolioTab = ({ portfolioItems, setPortfolioItems, addPortfolioItem, removePortfolioItem, handleImageUpload, openImageSelector }: {
+const PortfolioTab = ({
+    portfolioItems,
+    setPortfolioItems,
+    addPortfolioItem,
+    removePortfolioItem,
+    handleImageUpload,
+    openImageSelector,
+}: {
     portfolioItems: PortfolioItem[];
     setPortfolioItems: React.Dispatch<React.SetStateAction<PortfolioItem[]>>;
     addPortfolioItem: () => void;
@@ -1713,7 +2210,11 @@ const PortfolioTab = ({ portfolioItems, setPortfolioItems, addPortfolioItem, rem
     handleImageUpload: (index: number, file: File) => void;
     openImageSelector: (callback: (url: string) => void) => void;
 }) => {
-    const updatePortfolioItem = (index: number, field: keyof PortfolioItem, value: string | number | boolean) => {
+    const updatePortfolioItem = (
+        index: number,
+        field: keyof PortfolioItem,
+        value: string | number | boolean,
+    ) => {
         const updated = [...portfolioItems];
         updated[index] = { ...updated[index], [field]: value };
         setPortfolioItems(updated);
@@ -1724,12 +2225,12 @@ const PortfolioTab = ({ portfolioItems, setPortfolioItems, addPortfolioItem, rem
             <div className="flex justify-between items-center">
                 <div>
                     <h3 className="text-lg font-semibold">Portfolio Items</h3>
-                    <p className="text-sm text-gray-600">Showcase your best work and projects. Images will be uploaded to the city-portfolio bucket.</p>
+                    <p className="text-sm text-gray-600">
+                        Showcase your best work and projects. Images will be
+                        uploaded to the city-portfolio bucket.
+                    </p>
                 </div>
-                <Button
-                    onClick={addPortfolioItem}
-                    variant="outline"
-                >
+                <Button onClick={addPortfolioItem} variant="outline">
                     <Plus className="w-4 h-4 mr-2" />
                     Add Portfolio Item
                 </Button>
@@ -1737,14 +2238,19 @@ const PortfolioTab = ({ portfolioItems, setPortfolioItems, addPortfolioItem, rem
 
             {portfolioItems.length === 0 && (
                 <div className="text-center py-8 border-2 border-dashed border-gray-300 rounded-lg">
-                    <p className="text-gray-500">No portfolio items yet. Add your first portfolio item to get started.</p>
+                    <p className="text-gray-500">
+                        No portfolio items yet. Add your first portfolio item to
+                        get started.
+                    </p>
                 </div>
             )}
 
             {portfolioItems.map((item, index) => (
                 <div key={index} className="border rounded-lg p-6">
                     <div className="flex justify-between items-center mb-4">
-                        <h4 className="font-medium">Portfolio Item {index + 1}</h4>
+                        <h4 className="font-medium">
+                            Portfolio Item {index + 1}
+                        </h4>
                         {portfolioItems.length > 1 && (
                             <Button
                                 onClick={() => removePortfolioItem(index)}
@@ -1759,49 +2265,81 @@ const PortfolioTab = ({ portfolioItems, setPortfolioItems, addPortfolioItem, rem
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <Label htmlFor={`portfolio-title-${index}`}>Title</Label>
+                            <Label htmlFor={`portfolio-title-${index}`}>
+                                Title
+                            </Label>
                             <Input
                                 id={`portfolio-title-${index}`}
                                 value={item.title || ""}
-                                onChange={(e) => updatePortfolioItem(index, 'title', e.target.value)}
+                                onChange={e =>
+                                    updatePortfolioItem(
+                                        index,
+                                        "title",
+                                        e.target.value,
+                                    )
+                                }
                                 placeholder="Project title"
                             />
                         </div>
                         <div>
-                            <Label htmlFor={`portfolio-category-${index}`}>Category</Label>
+                            <Label htmlFor={`portfolio-category-${index}`}>
+                                Category
+                            </Label>
                             <Input
                                 id={`portfolio-category-${index}`}
                                 value={item.category || ""}
-                                onChange={(e) => updatePortfolioItem(index, 'category', e.target.value)}
+                                onChange={e =>
+                                    updatePortfolioItem(
+                                        index,
+                                        "category",
+                                        e.target.value,
+                                    )
+                                }
                                 placeholder="e.g., Technology, Design, Corporate"
                             />
                         </div>
                     </div>
 
                     <div className="mt-4">
-                        <Label htmlFor={`portfolio-description-${index}`}>Description</Label>
+                        <Label htmlFor={`portfolio-description-${index}`}>
+                            Description
+                        </Label>
                         <Textarea
                             id={`portfolio-description-${index}`}
                             value={item.description || ""}
-                            onChange={(e) => updatePortfolioItem(index, 'description', e.target.value)}
+                            onChange={e =>
+                                updatePortfolioItem(
+                                    index,
+                                    "description",
+                                    e.target.value,
+                                )
+                            }
                             placeholder="Project description"
                             rows={3}
                         />
                     </div>
 
                     <div className="mt-4">
-                        <Label htmlFor={`portfolio-image-${index}`}>Image</Label>
+                        <Label htmlFor={`portfolio-image-${index}`}>
+                            Image
+                        </Label>
                         <div className="flex items-center space-x-4">
                             <Input
                                 id={`portfolio-image-${index}`}
                                 value={item.image_url || ""}
-                                onChange={(e) => updatePortfolioItem(index, 'image_url', e.target.value)}
+                                onChange={e =>
+                                    updatePortfolioItem(
+                                        index,
+                                        "image_url",
+                                        e.target.value,
+                                    )
+                                }
                                 placeholder="Image URL"
                             />
                             <input
                                 type="file"
                                 accept="image/*"
-                                onChange={(e) => {
+                                onChange={e => {
                                     const file = e.target.files?.[0];
                                     if (file) handleImageUpload(index, file);
                                 }}
@@ -1811,7 +2349,13 @@ const PortfolioTab = ({ portfolioItems, setPortfolioItems, addPortfolioItem, rem
                             <Button
                                 type="button"
                                 variant="outline"
-                                onClick={() => document.getElementById(`portfolio-file-${index}`)?.click()}
+                                onClick={() =>
+                                    document
+                                        .getElementById(
+                                            `portfolio-file-${index}`,
+                                        )
+                                        ?.click()
+                                }
                             >
                                 <Upload className="w-4 h-4 mr-2" />
                                 Upload
@@ -1819,7 +2363,15 @@ const PortfolioTab = ({ portfolioItems, setPortfolioItems, addPortfolioItem, rem
                             <Button
                                 type="button"
                                 variant="outline"
-                                onClick={() => openImageSelector((url) => updatePortfolioItem(index, 'image_url', url))}
+                                onClick={() =>
+                                    openImageSelector(url =>
+                                        updatePortfolioItem(
+                                            index,
+                                            "image_url",
+                                            url,
+                                        ),
+                                    )
+                                }
                             >
                                 Select from Bucket
                             </Button>
@@ -1831,38 +2383,65 @@ const PortfolioTab = ({ portfolioItems, setPortfolioItems, addPortfolioItem, rem
                                     alt="Portfolio preview"
                                     className="w-48 h-32 object-cover rounded-lg border border-gray-200 shadow-sm"
                                 />
-                                <p className="text-xs text-gray-500 mt-1">Preview</p>
+                                <p className="text-xs text-gray-500 mt-1">
+                                    Preview
+                                </p>
                             </div>
                         )}
                     </div>
 
                     <div className="mt-4">
-                        <Label htmlFor={`portfolio-alt-${index}`}>Alt Text</Label>
+                        <Label htmlFor={`portfolio-alt-${index}`}>
+                            Alt Text
+                        </Label>
                         <Input
                             id={`portfolio-alt-${index}`}
                             value={item.alt_text || ""}
-                            onChange={(e) => updatePortfolioItem(index, 'alt_text', e.target.value)}
+                            onChange={e =>
+                                updatePortfolioItem(
+                                    index,
+                                    "alt_text",
+                                    e.target.value,
+                                )
+                            }
                             placeholder="Descriptive alt text for the image"
                         />
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                         <div>
-                            <Label htmlFor={`portfolio-client-${index}`}>Client Name</Label>
+                            <Label htmlFor={`portfolio-client-${index}`}>
+                                Client Name
+                            </Label>
                             <Input
                                 id={`portfolio-client-${index}`}
                                 value={item.client_name || ""}
-                                onChange={(e) => updatePortfolioItem(index, 'client_name', e.target.value)}
+                                onChange={e =>
+                                    updatePortfolioItem(
+                                        index,
+                                        "client_name",
+                                        e.target.value,
+                                    )
+                                }
                                 placeholder="Client or company name"
                             />
                         </div>
                         <div>
-                            <Label htmlFor={`portfolio-year-${index}`}>Project Year</Label>
+                            <Label htmlFor={`portfolio-year-${index}`}>
+                                Project Year
+                            </Label>
                             <Input
                                 id={`portfolio-year-${index}`}
                                 type="number"
                                 value={item.project_year || ""}
-                                onChange={(e) => updatePortfolioItem(index, 'project_year', parseInt(e.target.value) || new Date().getFullYear())}
+                                onChange={e =>
+                                    updatePortfolioItem(
+                                        index,
+                                        "project_year",
+                                        parseInt(e.target.value) ||
+                                            new Date().getFullYear(),
+                                    )
+                                }
                                 placeholder="2024"
                                 min="2000"
                                 max="2030"
@@ -1875,10 +2454,18 @@ const PortfolioTab = ({ portfolioItems, setPortfolioItems, addPortfolioItem, rem
                             type="checkbox"
                             id={`portfolio-featured-${index}`}
                             checked={item.is_featured}
-                            onChange={(e) => updatePortfolioItem(index, 'is_featured', e.target.checked)}
+                            onChange={e =>
+                                updatePortfolioItem(
+                                    index,
+                                    "is_featured",
+                                    e.target.checked,
+                                )
+                            }
                             className="rounded"
                         />
-                        <Label htmlFor={`portfolio-featured-${index}`}>Featured Project</Label>
+                        <Label htmlFor={`portfolio-featured-${index}`}>
+                            Featured Project
+                        </Label>
                     </div>
                 </div>
             ))}

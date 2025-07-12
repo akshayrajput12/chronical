@@ -179,7 +179,9 @@ const EventsGallery = () => {
     };
 
     const handleEventClick = (eventSlug: string) => {
-        router.push(`/whats-on/${eventSlug}`);
+        router.push(
+            `/top-trade-shows-in-uae-saudi-arabia-middle-east/${eventSlug}`,
+        );
     };
 
     // Loading state

@@ -28,7 +28,9 @@ interface CommunicationSection {
 }
 
 const DoubleDeckersCommuncationAdminPage = () => {
-    const [sectionData, setSectionData] = useState<CommunicationSection | null>(null);
+    const [sectionData, setSectionData] = useState<CommunicationSection | null>(
+        null,
+    );
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [uploading, setUploading] = useState(false);
@@ -56,9 +58,12 @@ const DoubleDeckersCommuncationAdminPage = () => {
                     .from("double_decker_communication_sections")
                     .insert({
                         main_heading: "EFFECTIVELY COMMUNICATES YOUR MESSAGE",
-                        paragraph_1: "An exhibition booth makes you look different from other exhibitors & passes on the relevant brand message to the clients. We understand the importance of standing out. That's why we ensure your stand grabs attention and effectively communicates your message. From innovative layouts to bold graphics, we use the latest technology to create unforgettable experiences.",
-                        paragraph_2: "Our commitment extends beyond design. We provide comprehensive services, including fabrication and installation, ensuring timely delivery and high-quality standards. Trust us to bring your vision to life and achieve your exhibition goals.",
-                        section_image_url: "https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+                        paragraph_1:
+                            "An exhibition booth makes you look different from other exhibitors & passes on the relevant brand message to the clients. We understand the importance of standing out. That's why we ensure your stand grabs attention and effectively communicates your message. From innovative layouts to bold graphics, we use the latest technology to create unforgettable experiences.",
+                        paragraph_2:
+                            "Our commitment extends beyond design. We provide comprehensive services, including fabrication and installation, ensuring timely delivery and high-quality standards. Trust us to bring your vision to life and achieve your exhibition goals.",
+                        section_image_url:
+                            "https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
                         section_image_alt: "Exhibition Communication",
                         is_active: true,
                     })
@@ -110,30 +115,35 @@ const DoubleDeckersCommuncationAdminPage = () => {
     };
 
     // Handle image upload
-    const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImageUpload = async (
+        event: React.ChangeEvent<HTMLInputElement>,
+    ) => {
         const file = event.target.files?.[0];
         if (!file || !sectionData) return;
 
         try {
             setUploading(true);
-            const fileExt = file.name.split('.').pop();
+            const fileExt = file.name.split(".").pop();
             const fileName = `communication-${Date.now()}.${fileExt}`;
             const filePath = `${fileName}`;
 
             const { error: uploadError } = await supabase.storage
-                .from('double-decker-stands-images')
+                .from("double-decker-stands-images")
                 .upload(filePath, file);
 
             if (uploadError) throw uploadError;
 
-            const { data: { publicUrl } } = supabase.storage
-                .from('double-decker-stands-images')
+            const {
+                data: { publicUrl },
+            } = supabase.storage
+                .from("double-decker-stands-images")
                 .getPublicUrl(filePath);
 
             setSectionData({
                 ...sectionData,
                 section_image_url: publicUrl,
-                section_image_alt: sectionData.section_image_alt || "Exhibition Communication"
+                section_image_alt:
+                    sectionData.section_image_alt || "Exhibition Communication",
             });
 
             toast.success("Image uploaded successfully!");
@@ -158,9 +168,12 @@ const DoubleDeckersCommuncationAdminPage = () => {
             <div className="p-6 max-w-4xl mx-auto">
                 <div className="text-center">
                     <AlertCircle className="mx-auto h-12 w-12 text-gray-400" />
-                    <h3 className="mt-2 text-sm font-medium text-gray-900">No section found</h3>
+                    <h3 className="mt-2 text-sm font-medium text-gray-900">
+                        No section found
+                    </h3>
                     <p className="mt-1 text-sm text-gray-500">
-                        There was an error loading the communication section data.
+                        There was an error loading the communication section
+                        data.
                     </p>
                 </div>
             </div>
@@ -185,7 +198,8 @@ const DoubleDeckersCommuncationAdminPage = () => {
                     <CardHeader>
                         <CardTitle>Section Content</CardTitle>
                         <CardDescription>
-                            Edit the heading, content paragraphs, and section image
+                            Edit the heading, content paragraphs, and section
+                            image
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
@@ -195,7 +209,7 @@ const DoubleDeckersCommuncationAdminPage = () => {
                             <Textarea
                                 id="main_heading"
                                 value={sectionData.main_heading}
-                                onChange={(e) =>
+                                onChange={e =>
                                     setSectionData({
                                         ...sectionData,
                                         main_heading: e.target.value,
@@ -212,7 +226,7 @@ const DoubleDeckersCommuncationAdminPage = () => {
                             <Textarea
                                 id="paragraph_1"
                                 value={sectionData.paragraph_1}
-                                onChange={(e) =>
+                                onChange={e =>
                                     setSectionData({
                                         ...sectionData,
                                         paragraph_1: e.target.value,
@@ -225,11 +239,13 @@ const DoubleDeckersCommuncationAdminPage = () => {
 
                         {/* Second Paragraph */}
                         <div className="space-y-2">
-                            <Label htmlFor="paragraph_2">Second Paragraph</Label>
+                            <Label htmlFor="paragraph_2">
+                                Second Paragraph
+                            </Label>
                             <Textarea
                                 id="paragraph_2"
                                 value={sectionData.paragraph_2}
-                                onChange={(e) =>
+                                onChange={e =>
                                     setSectionData({
                                         ...sectionData,
                                         paragraph_2: e.target.value,
@@ -264,11 +280,13 @@ const DoubleDeckersCommuncationAdminPage = () => {
 
                         {/* Image Alt Text */}
                         <div className="space-y-2">
-                            <Label htmlFor="section_image_alt">Image Alt Text</Label>
+                            <Label htmlFor="section_image_alt">
+                                Image Alt Text
+                            </Label>
                             <Input
                                 id="section_image_alt"
                                 value={sectionData.section_image_alt || ""}
-                                onChange={(e) =>
+                                onChange={e =>
                                     setSectionData({
                                         ...sectionData,
                                         section_image_alt: e.target.value,
@@ -290,7 +308,7 @@ const DoubleDeckersCommuncationAdminPage = () => {
                             </Button>
                             <Button variant="outline" asChild>
                                 <a
-                                    href="/doubledeckerexhibitionstands"
+                                    href="/double-decker-exhibition-stands-in-dubai"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
@@ -337,7 +355,10 @@ const DoubleDeckersCommuncationAdminPage = () => {
                                     {sectionData.section_image_url && (
                                         <img
                                             src={sectionData.section_image_url}
-                                            alt={sectionData.section_image_alt || ""}
+                                            alt={
+                                                sectionData.section_image_alt ||
+                                                ""
+                                            }
                                             className="w-full h-48 object-cover rounded-lg"
                                         />
                                     )}

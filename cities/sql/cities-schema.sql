@@ -405,9 +405,9 @@ SELECT
 FROM cities c
 CROSS JOIN (
     VALUES
-        ('CUSTOM STANDS', 'Tailored exhibition solutions designed specifically for your brand', 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80', '/customexhibitionstands', 1),
-        ('DOUBLE STOREY STANDS', 'Multi-level exhibition stands for maximum impact', 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2069&q=80', '/doubledeckerexhibitionstands', 2),
-        ('PAVILION STANDS', 'National pavilion design and setup solutions', 'https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&auto=format&fit=crop&w=2069&q=80', '/countrypavilionexpoboothsolutions', 3)
+        ('CUSTOM STANDS', 'Tailored exhibition solutions designed specifically for your brand', 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80', '/custom-exhibition-stands-dubai-uae', 1),
+        ('DOUBLE STOREY STANDS', 'Multi-level exhibition stands for maximum impact', 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2069&q=80', '/double-decker-exhibition-stands-in-dubai', 2),
+        ('PAVILION STANDS', 'National pavilion design and setup solutions', 'https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&auto=format&fit=crop&w=2069&q=80', '/country-pavilion-expo-booth-solutions-in-dubai', 3)
 ) AS services(service_name, service_desc, service_image, service_link, service_order);
 
 -- Insert sample city content sections for all section types

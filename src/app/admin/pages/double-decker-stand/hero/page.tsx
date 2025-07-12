@@ -55,8 +55,10 @@ const DoubleDeckersHeroAdminPage = () => {
                     .from("double_decker_hero_sections")
                     .insert({
                         main_heading: "DOUBLE DECKER EXHIBITION STANDS",
-                        description: "Make your exhibit stand out and step up with our smartly created Double Decker Exhibition Stands. Engage your visitors with our stunning and innovative double-decker booths.",
-                        background_image_url: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+                        description:
+                            "Make your exhibit stand out and step up with our smartly created Double Decker Exhibition Stands. Engage your visitors with our stunning and innovative double-decker booths.",
+                        background_image_url:
+                            "https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
                         background_image_alt: "Double Decker Exhibition Stands",
                         is_active: true,
                     })
@@ -107,30 +109,36 @@ const DoubleDeckersHeroAdminPage = () => {
     };
 
     // Handle image upload
-    const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImageUpload = async (
+        event: React.ChangeEvent<HTMLInputElement>,
+    ) => {
         const file = event.target.files?.[0];
         if (!file || !heroData) return;
 
         try {
             setUploading(true);
-            const fileExt = file.name.split('.').pop();
+            const fileExt = file.name.split(".").pop();
             const fileName = `hero-${Date.now()}.${fileExt}`;
             const filePath = `${fileName}`;
 
             const { error: uploadError } = await supabase.storage
-                .from('double-decker-stands-images')
+                .from("double-decker-stands-images")
                 .upload(filePath, file);
 
             if (uploadError) throw uploadError;
 
-            const { data: { publicUrl } } = supabase.storage
-                .from('double-decker-stands-images')
+            const {
+                data: { publicUrl },
+            } = supabase.storage
+                .from("double-decker-stands-images")
                 .getPublicUrl(filePath);
 
             setHeroData({
                 ...heroData,
                 background_image_url: publicUrl,
-                background_image_alt: heroData.background_image_alt || "Double Decker Exhibition Stands"
+                background_image_alt:
+                    heroData.background_image_alt ||
+                    "Double Decker Exhibition Stands",
             });
 
             toast.success("Image uploaded successfully!");
@@ -155,7 +163,9 @@ const DoubleDeckersHeroAdminPage = () => {
             <div className="p-6 max-w-4xl mx-auto">
                 <div className="text-center">
                     <AlertCircle className="mx-auto h-12 w-12 text-gray-400" />
-                    <h3 className="mt-2 text-sm font-medium text-gray-900">No hero section found</h3>
+                    <h3 className="mt-2 text-sm font-medium text-gray-900">
+                        No hero section found
+                    </h3>
                     <p className="mt-1 text-sm text-gray-500">
                         There was an error loading the hero section data.
                     </p>
@@ -172,7 +182,8 @@ const DoubleDeckersHeroAdminPage = () => {
                     Hero Section Management
                 </h1>
                 <p className="text-gray-600 mt-2">
-                    Manage the main hero section of the double decker stands page
+                    Manage the main hero section of the double decker stands
+                    page
                 </p>
             </div>
 
@@ -182,7 +193,8 @@ const DoubleDeckersHeroAdminPage = () => {
                     <CardHeader>
                         <CardTitle>Hero Content</CardTitle>
                         <CardDescription>
-                            Edit the main heading, description, and background image
+                            Edit the main heading, description, and background
+                            image
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
@@ -192,7 +204,7 @@ const DoubleDeckersHeroAdminPage = () => {
                             <Input
                                 id="main_heading"
                                 value={heroData.main_heading}
-                                onChange={(e) =>
+                                onChange={e =>
                                     setHeroData({
                                         ...heroData,
                                         main_heading: e.target.value,
@@ -208,7 +220,7 @@ const DoubleDeckersHeroAdminPage = () => {
                             <Textarea
                                 id="description"
                                 value={heroData.description}
-                                onChange={(e) =>
+                                onChange={e =>
                                     setHeroData({
                                         ...heroData,
                                         description: e.target.value,
@@ -221,7 +233,9 @@ const DoubleDeckersHeroAdminPage = () => {
 
                         {/* Background Image */}
                         <div className="space-y-2">
-                            <Label htmlFor="background_image">Background Image</Label>
+                            <Label htmlFor="background_image">
+                                Background Image
+                            </Label>
                             <div className="flex items-center space-x-2">
                                 <Input
                                     type="file"
@@ -243,11 +257,13 @@ const DoubleDeckersHeroAdminPage = () => {
 
                         {/* Image Alt Text */}
                         <div className="space-y-2">
-                            <Label htmlFor="background_image_alt">Image Alt Text</Label>
+                            <Label htmlFor="background_image_alt">
+                                Image Alt Text
+                            </Label>
                             <Input
                                 id="background_image_alt"
                                 value={heroData.background_image_alt || ""}
-                                onChange={(e) =>
+                                onChange={e =>
                                     setHeroData({
                                         ...heroData,
                                         background_image_alt: e.target.value,
@@ -269,7 +285,7 @@ const DoubleDeckersHeroAdminPage = () => {
                             </Button>
                             <Button variant="outline" asChild>
                                 <a
-                                    href="/doubledeckerexhibitionstands"
+                                    href="/double-decker-exhibition-stands-in-dubai"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >

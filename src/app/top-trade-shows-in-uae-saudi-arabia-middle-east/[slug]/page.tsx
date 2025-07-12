@@ -68,9 +68,11 @@ export async function generateMetadata({
             event.short_description ||
             event.description ||
             `Join us for ${event.title} at Chronicle Exhibits.`,
-        keywords: event.meta_keywords || `${event.title}, ${
-            event.category_name || "event"
-        }, exhibition, Dubai, Chronicle Exhibits`,
+        keywords:
+            event.meta_keywords ||
+            `${event.title}, ${
+                event.category_name || "event"
+            }, exhibition, Dubai, Chronicle Exhibits`,
         openGraph: {
             title: event.meta_title || event.title,
             description:
@@ -123,7 +125,7 @@ export default async function EventDetailPage({
                         removed.
                     </p>
                     <div className="space-x-4">
-                        <Link href="/whats-on">
+                        <Link href="/top=trade-shows-in-uae-saudi-arabia-middle-east">
                             <Button className="bg-[#a5cd39] hover:bg-[#8fb82e] text-white">
                                 View All Events
                             </Button>
@@ -186,7 +188,7 @@ export default async function EventDetailPage({
                 <div className="container mx-auto px-4">
                     <div className="max-w-6xl mx-auto">
                         <Link
-                            href="/whats-on"
+                            href="/top-trade-shows-in-uae-saudi-arabia-middle-east"
                             className="inline-flex items-center text-gray-600 hover:text-[#a5cd39] transition-colors duration-300"
                         >
                             <ArrowLeft className="w-4 h-4 mr-2" />

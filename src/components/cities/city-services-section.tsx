@@ -15,19 +15,19 @@ const CityServicesSection = ({ city }: CityServicesSectionProps) => {
         {
             title: "CUSTOM STANDS",
             image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-            href: "/customexhibitionstands",
+            href: "/custom-exhibition-stands-dubai-uae",
             alt: "Custom Exhibition Stands",
         },
         {
             title: "DOUBLE STOREY STANDS",
             image: "https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80",
-            href: "/doubledeckerexhibitionstands",
+            href: "/double-decker-exhibition-stands-in-dubai",
             alt: "Double Decker Exhibition Stands",
         },
         {
             title: "PAVILION STANDS",
             image: "https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80",
-            href: "/countrypavilionexpoboothsolutions",
+            href: "/country-pavilion-expo-booth-solutions-dubai",
             alt: "Country Pavilion Expo Booth Solutions",
         },
     ];

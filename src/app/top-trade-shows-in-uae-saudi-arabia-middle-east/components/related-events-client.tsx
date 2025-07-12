@@ -17,7 +17,9 @@ const RelatedEventsClient = ({ relatedEvents }: RelatedEventsClientProps) => {
     const router = useRouter();
 
     const handleOtherEventClick = (otherEventSlug: string) => {
-        router.push(`/whats-on/${otherEventSlug}`);
+        router.push(
+            `/top-trade-shows-in-uae-saudi-arabia-middle-east/${otherEventSlug}`,
+        );
     };
 
     return (
@@ -71,7 +73,8 @@ const RelatedEventsClient = ({ relatedEvents }: RelatedEventsClientProps) => {
                                         className="absolute top-0 left-0 w-8 h-1 z-10"
                                         style={{
                                             backgroundColor:
-                                                relatedEvent.category_color || "#22c55e",
+                                                relatedEvent.category_color ||
+                                                "#22c55e",
                                         }}
                                     ></div>
                                     <Image
@@ -104,9 +107,11 @@ const RelatedEventsClient = ({ relatedEvents }: RelatedEventsClientProps) => {
                     </div>
                 ) : (
                     <div className="text-center py-12">
-                        <p className="text-gray-500">No related events found.</p>
+                        <p className="text-gray-500">
+                            No related events found.
+                        </p>
                         <Link
-                            href="/whats-on"
+                            href="/top-trade-shows-in-uae-saudi-arabia-middle-east"
                             className="text-[#a5cd39] hover:underline mt-2 inline-block"
                         >
                             View all events

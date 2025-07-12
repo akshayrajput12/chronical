@@ -105,7 +105,7 @@ const AboutDedicationEditor = () => {
         loadDedicationData();
         loadDedicationItems();
         loadDedicationImages();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const loadDedicationData = async () => {
@@ -729,7 +729,7 @@ const AboutDedicationEditor = () => {
                 <div className="flex items-center gap-2">
                     <Button
                         variant="outline"
-                        onClick={() => window.open("/about", "_blank")}
+                        onClick={() => window.open("/about-us", "_blank")}
                     >
                         <Eye className="w-4 h-4 mr-2" />
                         Preview
@@ -1249,7 +1249,7 @@ const AboutDedicationEditor = () => {
                                 <Button
                                     variant="outline"
                                     onClick={() =>
-                                        window.open("/about", "_blank")
+                                        window.open("/about-us", "_blank")
                                     }
                                     className="w-full"
                                 >

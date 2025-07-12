@@ -27,7 +27,9 @@ interface UniqueQualitySection {
 }
 
 const DoubleDeckersUniqueQualityAdminPage = () => {
-    const [sectionData, setSectionData] = useState<UniqueQualitySection | null>(null);
+    const [sectionData, setSectionData] = useState<UniqueQualitySection | null>(
+        null,
+    );
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const supabase = createClient();
@@ -53,9 +55,12 @@ const DoubleDeckersUniqueQualityAdminPage = () => {
                 const { data: newData, error: insertError } = await supabase
                     .from("double_decker_unique_quality_sections")
                     .insert({
-                        main_heading: "UNIQUE EXCELLENT QUALITY DOUBLE STOREY EXHIBITION BOOTHS",
-                        paragraph_1: "Welcome to Double Decker Exhibition Stands in Dubai – your premier destination for innovative exhibition solutions that elevate your brand presence. As Dubai's leading provider of double-decker stands, we specialize in creating impactful spaces that leave lasting impressions on your audience.",
-                        paragraph_2: "Our stands offer versatility and sophistication, providing the perfect platform for showcasing your products. Whether it's a trade show or conference, our team collaborates closely with you to reflecting your brand identity. Every element of these stands is manufactured to upgrade your brand image & meet your specific business requirements. These stands help you achieve your objectives and catch the convinced attention of the visitors.",
+                        main_heading:
+                            "UNIQUE EXCELLENT QUALITY DOUBLE STOREY EXHIBITION BOOTHS",
+                        paragraph_1:
+                            "Welcome to Double Decker Exhibition Stands in Dubai – your premier destination for innovative exhibition solutions that elevate your brand presence. As Dubai's leading provider of double-decker stands, we specialize in creating impactful spaces that leave lasting impressions on your audience.",
+                        paragraph_2:
+                            "Our stands offer versatility and sophistication, providing the perfect platform for showcasing your products. Whether it's a trade show or conference, our team collaborates closely with you to reflecting your brand identity. Every element of these stands is manufactured to upgrade your brand image & meet your specific business requirements. These stands help you achieve your objectives and catch the convinced attention of the visitors.",
                         highlighted_text: "design customized stands",
                         is_active: true,
                     })
@@ -118,9 +123,12 @@ const DoubleDeckersUniqueQualityAdminPage = () => {
             <div className="p-6 max-w-4xl mx-auto">
                 <div className="text-center">
                     <AlertCircle className="mx-auto h-12 w-12 text-gray-400" />
-                    <h3 className="mt-2 text-sm font-medium text-gray-900">No section found</h3>
+                    <h3 className="mt-2 text-sm font-medium text-gray-900">
+                        No section found
+                    </h3>
                     <p className="mt-1 text-sm text-gray-500">
-                        There was an error loading the unique quality section data.
+                        There was an error loading the unique quality section
+                        data.
                     </p>
                 </div>
             </div>
@@ -155,7 +163,7 @@ const DoubleDeckersUniqueQualityAdminPage = () => {
                             <Textarea
                                 id="main_heading"
                                 value={sectionData.main_heading}
-                                onChange={(e) =>
+                                onChange={e =>
                                     setSectionData({
                                         ...sectionData,
                                         main_heading: e.target.value,
@@ -172,7 +180,7 @@ const DoubleDeckersUniqueQualityAdminPage = () => {
                             <Textarea
                                 id="paragraph_1"
                                 value={sectionData.paragraph_1}
-                                onChange={(e) =>
+                                onChange={e =>
                                     setSectionData({
                                         ...sectionData,
                                         paragraph_1: e.target.value,
@@ -185,11 +193,13 @@ const DoubleDeckersUniqueQualityAdminPage = () => {
 
                         {/* Second Paragraph */}
                         <div className="space-y-2">
-                            <Label htmlFor="paragraph_2">Second Paragraph</Label>
+                            <Label htmlFor="paragraph_2">
+                                Second Paragraph
+                            </Label>
                             <Textarea
                                 id="paragraph_2"
                                 value={sectionData.paragraph_2}
-                                onChange={(e) =>
+                                onChange={e =>
                                     setSectionData({
                                         ...sectionData,
                                         paragraph_2: e.target.value,
@@ -202,11 +212,13 @@ const DoubleDeckersUniqueQualityAdminPage = () => {
 
                         {/* Highlighted Text */}
                         <div className="space-y-2">
-                            <Label htmlFor="highlighted_text">Highlighted Text (Green)</Label>
+                            <Label htmlFor="highlighted_text">
+                                Highlighted Text (Green)
+                            </Label>
                             <Input
                                 id="highlighted_text"
                                 value={sectionData.highlighted_text || ""}
-                                onChange={(e) =>
+                                onChange={e =>
                                     setSectionData({
                                         ...sectionData,
                                         highlighted_text: e.target.value,
@@ -215,7 +227,8 @@ const DoubleDeckersUniqueQualityAdminPage = () => {
                                 placeholder="Enter text to highlight in green"
                             />
                             <p className="text-sm text-gray-500">
-                                This text will appear in green color within the second paragraph
+                                This text will appear in green color within the
+                                second paragraph
                             </p>
                         </div>
 
@@ -231,7 +244,7 @@ const DoubleDeckersUniqueQualityAdminPage = () => {
                             </Button>
                             <Button variant="outline" asChild>
                                 <a
-                                    href="/doubledeckerexhibitionstands"
+                                    href="/double-decker-exhibition-stands-in-dubai"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
@@ -272,16 +285,21 @@ const DoubleDeckersUniqueQualityAdminPage = () => {
                             <p className="text-sm leading-relaxed text-justify text-gray-700">
                                 {sectionData.highlighted_text ? (
                                     <>
-                                        {sectionData.paragraph_2.split(sectionData.highlighted_text).map((part, index, array) => (
-                                            <React.Fragment key={index}>
-                                                {part}
-                                                {index < array.length - 1 && (
-                                                    <span className="text-[#a5cd39] font-medium">
-                                                        {sectionData.highlighted_text}
-                                                    </span>
-                                                )}
-                                            </React.Fragment>
-                                        ))}
+                                        {sectionData.paragraph_2
+                                            .split(sectionData.highlighted_text)
+                                            .map((part, index, array) => (
+                                                <React.Fragment key={index}>
+                                                    {part}
+                                                    {index <
+                                                        array.length - 1 && (
+                                                        <span className="text-[#a5cd39] font-medium">
+                                                            {
+                                                                sectionData.highlighted_text
+                                                            }
+                                                        </span>
+                                                    )}
+                                                </React.Fragment>
+                                            ))}
                                     </>
                                 ) : (
                                     sectionData.paragraph_2

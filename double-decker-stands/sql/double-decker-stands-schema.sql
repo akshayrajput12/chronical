@@ -505,7 +505,7 @@ CREATE INDEX IF NOT EXISTS idx_double_decker_portfolio_items_active_order ON dou
 --
 -- Next steps:
 -- 1. Test content management through the admin panel at /admin/pages/double-decker-stand
--- 2. Verify frontend integration at /doubledeckerexhibitionstands
+-- 2. Verify frontend integration at /double-decker-exhibition-stands-in-dubai
 -- 3. Ensure Next.js domains are configured for your Supabase project URL
 --
 -- Note: All components are fully dynamic with no static fallbacks.

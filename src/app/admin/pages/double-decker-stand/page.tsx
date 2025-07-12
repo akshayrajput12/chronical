@@ -35,7 +35,8 @@ const DoubleDeckersStandAdminPage = () => {
         {
             id: "unique-quality",
             title: "Unique Quality Section",
-            description: "Content about unique excellent quality double storey booths",
+            description:
+                "Content about unique excellent quality double storey booths",
             icon: <Star size={24} className="text-yellow-500" />,
             href: "/admin/pages/double-decker-stand/unique-quality",
             lastUpdated: "Recently updated",
@@ -44,7 +45,8 @@ const DoubleDeckersStandAdminPage = () => {
         {
             id: "communication",
             title: "Communication Section",
-            description: "Two-column layout with content and image about effective communication",
+            description:
+                "Two-column layout with content and image about effective communication",
             icon: <MessageSquare size={24} className="text-green-500" />,
             href: "/admin/pages/double-decker-stand/communication",
             lastUpdated: "Recently updated",
@@ -79,7 +81,8 @@ const DoubleDeckersStandAdminPage = () => {
                     Double Decker Stand Management
                 </h1>
                 <p className="text-gray-600 mt-2">
-                    Manage all sections of the double decker exhibition stands page
+                    Manage all sections of the double decker exhibition stands
+                    page
                 </p>
             </div>
 
@@ -166,7 +169,11 @@ const DoubleDeckersStandAdminPage = () => {
                                     Active Sections
                                 </p>
                                 <p className="text-2xl font-bold text-gray-900">
-                                    {sections.filter(s => s.status === "Active").length}
+                                    {
+                                        sections.filter(
+                                            s => s.status === "Active",
+                                        ).length
+                                    }
                                 </p>
                             </div>
                         </div>
@@ -213,7 +220,7 @@ const DoubleDeckersStandAdminPage = () => {
             {/* Page Preview Link */}
             <div className="mt-8 text-center">
                 <Link
-                    href="/doubledeckerexhibitionstands"
+                    href="/double-decker-exhibition-stands-in-dubai"
                     target="_blank"
                     className="inline-flex items-center px-6 py-3 bg-[#a5cd39] text-white rounded-lg hover:bg-[#8fb82e] transition-colors"
                 >

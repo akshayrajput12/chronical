@@ -17,18 +17,22 @@ const getStatisticIcon = (iconName?: string) => {
         headphones: Headphones,
         trophy: Trophy,
     };
-    
-    const IconComponent = iconName ? iconMap[iconName as keyof typeof iconMap] : Users;
+
+    const IconComponent = iconName
+        ? iconMap[iconName as keyof typeof iconMap]
+        : Users;
     return IconComponent || Users;
 };
 
 const CityStatisticsSection = ({ city }: CityStatisticsSectionProps) => {
     // Get statistics from admin - no static fallbacks
-    const statistics = city.statistics?.filter(stat =>
-        stat.is_active &&
-        stat.title?.trim() &&
-        stat.value?.trim()
-    ).sort((a, b) => a.sort_order - b.sort_order) || [];
+    const statistics =
+        city.statistics
+            ?.filter(
+                stat =>
+                    stat.is_active && stat.title?.trim() && stat.value?.trim(),
+            )
+            .sort((a, b) => a.sort_order - b.sort_order) || [];
 
     // Only render if we have statistics from admin
     if (statistics.length === 0) {
@@ -36,11 +40,22 @@ const CityStatisticsSection = ({ city }: CityStatisticsSectionProps) => {
     }
 
     return (
-        <section className="py-16 md:py-20 lg:py-24 bg-white">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="py-16 md:py-20 lg:py-24 bg-white relative">
+            {/* Background Image with Overlay */}
+            <div
+                className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                style={{
+                    backgroundImage: "url('/images/stats-bg.jpg')",
+                }}
+            />
+            <div className="absolute inset-0 bg-black/60" />{" "}
+            {/* Dark overlay */}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
                     {statistics.map((statistic, index) => {
-                        const IconComponent = getStatisticIcon(statistic.icon_name);
+                        const IconComponent = getStatisticIcon(
+                            statistic.icon_name,
+                        );
 
                         return (
                             <motion.div
@@ -48,31 +63,26 @@ const CityStatisticsSection = ({ city }: CityStatisticsSectionProps) => {
                                 className="text-center"
                                 initial={{ opacity: 0, y: 30 }}
                                 whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.8, delay: 0.1 * index }}
+                                transition={{
+                                    duration: 0.8,
+                                    delay: 0.1 * index,
+                                }}
                                 viewport={{ once: true }}
                             >
-                                {/* Icon Container */}
-                                <div className="flex justify-center mb-6">
-                                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-lg flex items-center justify-center bg-[#a5cd39]">
-                                        <IconComponent
-                                            className="w-8 h-8 md:w-10 md:h-10 text-white"
-                                        />
-                                    </div>
-                                </div>
-
                                 {/* Statistic Value */}
                                 <div className="mb-2">
-                                    <span className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900">
+                                    <h2 className="text-xl text-[#a5cd39] font-rubik! md:text-2xl lg:text-3xl xl:text-4xl ml-1 font-medium">
                                         {statistic.value}
-                                    </span>
+                                    </h2>
                                 </div>
 
-                                {/* Statistic Title */}
-                                <div>
-                                    <span className="text-sm md:text-base lg:text-lg text-gray-600 font-medium">
-                                        {statistic.title}
-                                    </span>
-                                </div>
+                                <h3
+                                    className={
+                                        "text-base sm:text-lg md:text-xl lg:text-2xl mt-2 hover:-translate-y-0.5 transition-transform duration-200 font-medium font-markazi-text text-white"
+                                    }
+                                >
+                                    {statistic.title}
+                                </h3>
                             </motion.div>
                         );
                     })}

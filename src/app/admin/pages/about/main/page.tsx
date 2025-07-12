@@ -396,7 +396,7 @@ const AboutMainEditor = () => {
                 <div className="flex items-center gap-2">
                     <Button
                         variant="outline"
-                        onClick={() => window.open("/about", "_blank")}
+                        onClick={() => window.open("/about-us", "_blank")}
                     >
                         <Eye className="w-4 h-4 mr-2" />
                         Preview
@@ -1003,7 +1003,7 @@ const AboutMainEditor = () => {
                                     <Button
                                         variant="outline"
                                         onClick={() =>
-                                            window.open("/about", "_blank")
+                                            window.open("/about-us", "_blank")
                                         }
                                     >
                                         <ExternalLink className="w-4 h-4 mr-2" />

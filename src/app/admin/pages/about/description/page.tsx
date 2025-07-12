@@ -108,7 +108,7 @@ const AboutDescriptionEditor = () => {
     useEffect(() => {
         loadDescriptionData();
         loadDescriptionImages();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const loadDescriptionData = async () => {
@@ -624,7 +624,7 @@ const AboutDescriptionEditor = () => {
                 <div className="flex items-center gap-2">
                     <Button
                         variant="outline"
-                        onClick={() => window.open("/about", "_blank")}
+                        onClick={() => window.open("/about-us", "_blank")}
                     >
                         <Eye className="w-4 h-4 mr-2" />
                         Preview
@@ -1226,7 +1226,7 @@ const AboutDescriptionEditor = () => {
                                 <Button
                                     variant="outline"
                                     onClick={() =>
-                                        window.open("/about", "_blank")
+                                        window.open("/about-us", "_blank")
                                     }
                                     className="w-full"
                                 >

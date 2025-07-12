@@ -18,7 +18,8 @@ const ExpoPavilionStandAdminPage = () => {
         {
             id: "hero",
             title: "Hero Section",
-            description: "Main banner with background image and headline for Country Pavilion Expo Booth",
+            description:
+                "Main banner with background image and headline for Country Pavilion Expo Booth",
             icon: <LayoutDashboard size={24} className="text-blue-500" />,
             href: "/admin/pages/expo-pavilion-stand/hero",
             lastUpdated: "Recently updated",
@@ -27,7 +28,8 @@ const ExpoPavilionStandAdminPage = () => {
         {
             id: "intro",
             title: "Intro Section",
-            description: "Introduction content about Country Pavilion Expo Booth services",
+            description:
+                "Introduction content about Country Pavilion Expo Booth services",
             icon: <FileText size={24} className="text-green-500" />,
             href: "/admin/pages/expo-pavilion-stand/intro",
             lastUpdated: "Recently updated",
@@ -36,7 +38,8 @@ const ExpoPavilionStandAdminPage = () => {
         {
             id: "exceptional-design",
             title: "Exceptional Design Section",
-            description: "Content about exceptional design services with benefits and features",
+            description:
+                "Content about exceptional design services with benefits and features",
             icon: <Star size={24} className="text-yellow-500" />,
             href: "/admin/pages/expo-pavilion-stand/exceptional-design",
             lastUpdated: "Recently updated",
@@ -45,7 +48,8 @@ const ExpoPavilionStandAdminPage = () => {
         {
             id: "portfolio",
             title: "Portfolio Section",
-            description: "Portfolio showcase with project gallery and CTA button",
+            description:
+                "Portfolio showcase with project gallery and CTA button",
             icon: <Briefcase size={24} className="text-purple-500" />,
             href: "/admin/pages/expo-pavilion-stand/portfolio",
             lastUpdated: "Recently updated",
@@ -99,12 +103,13 @@ const ExpoPavilionStandAdminPage = () => {
                                 Expo Pavilion Stand
                             </h1>
                             <p className="text-gray-600">
-                                Manage all content sections for the Country Pavilion Expo Booth Solutions page
+                                Manage all content sections for the Country
+                                Pavilion Expo Booth Solutions page
                             </p>
                         </div>
                         <div className="flex items-center space-x-4">
                             <Link
-                                href="/countrypavilionexpoboothsolutions"
+                                href="/country-pavilion-expo-booth-solutions-in-dubai"
                                 target="_blank"
                                 className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                             >
@@ -154,7 +159,11 @@ const ExpoPavilionStandAdminPage = () => {
                                     Active Sections
                                 </p>
                                 <p className="text-2xl font-bold text-gray-900">
-                                    {sections.filter(s => s.status === "Active").length}
+                                    {
+                                        sections.filter(
+                                            s => s.status === "Active",
+                                        ).length
+                                    }
                                 </p>
                             </div>
                         </div>
@@ -206,7 +215,7 @@ const ExpoPavilionStandAdminPage = () => {
                     initial="hidden"
                     animate="visible"
                 >
-                    {sections.map((section) => (
+                    {sections.map(section => (
                         <motion.div
                             key={section.id}
                             variants={itemVariants}
@@ -268,7 +277,7 @@ const ExpoPavilionStandAdminPage = () => {
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <Link
-                            href="/countrypavilionexpoboothsolutions"
+                            href="/country-pavilion-expo-booth-solutions-in-dubai"
                             target="_blank"
                             className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
                         >

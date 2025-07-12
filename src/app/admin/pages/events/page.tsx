@@ -49,7 +49,9 @@ const EventsAdminPage = () => {
     const [events, setEvents] = useState<EventWithCategory[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
-    const [statusFilter, setStatusFilter] = useState<EventStatus | "all">("all");
+    const [statusFilter, setStatusFilter] = useState<EventStatus | "all">(
+        "all",
+    );
     const [selectedEvents, setSelectedEvents] = useState<string[]>([]);
     const supabase = createClient();
 
@@ -59,18 +61,22 @@ const EventsAdminPage = () => {
             setLoading(true);
             let query = supabase
                 .from("events")
-                .select(`
+                .select(
+                    `
                     *,
                     event_categories (
                         name,
                         color
                     )
-                `)
+                `,
+                )
                 .order("created_at", { ascending: false });
 
             // Apply status filter based on is_active and published_at
             if (statusFilter === "published") {
-                query = query.eq("is_active", true).not("published_at", "is", null);
+                query = query
+                    .eq("is_active", true)
+                    .not("published_at", "is", null);
             } else if (statusFilter === "draft") {
                 query = query.is("published_at", null);
             } else if (statusFilter === "archived") {
@@ -79,7 +85,7 @@ const EventsAdminPage = () => {
 
             if (searchTerm) {
                 query = query.or(
-                    `title.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%,organizer.ilike.%${searchTerm}%`
+                    `title.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%,organizer.ilike.%${searchTerm}%`,
                 );
             }
 
@@ -90,17 +96,19 @@ const EventsAdminPage = () => {
                 return;
             }
 
-            const eventsWithCategory = data?.map(event => ({
-                ...event,
-                category_name: event.event_categories?.name,
-                category_color: event.event_categories?.color,
-                // Determine status based on is_active and published_at
-                status: event.published_at && event.is_active 
-                    ? "published" as EventStatus
-                    : !event.published_at 
-                    ? "draft" as EventStatus 
-                    : "archived" as EventStatus
-            })) || [];
+            const eventsWithCategory =
+                data?.map(event => ({
+                    ...event,
+                    category_name: event.event_categories?.name,
+                    category_color: event.event_categories?.color,
+                    // Determine status based on is_active and published_at
+                    status:
+                        event.published_at && event.is_active
+                            ? ("published" as EventStatus)
+                            : !event.published_at
+                            ? ("draft" as EventStatus)
+                            : ("archived" as EventStatus),
+                })) || [];
 
             setEvents(eventsWithCategory);
         } catch (error) {
@@ -112,7 +120,7 @@ const EventsAdminPage = () => {
 
     useEffect(() => {
         fetchEvents();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [statusFilter, searchTerm]);
 
     // Delete event
@@ -121,7 +129,7 @@ const EventsAdminPage = () => {
 
         try {
             const response = await fetch(`/api/events/${eventId}`, {
-                method: 'DELETE',
+                method: "DELETE",
             });
 
             if (!response.ok) {
@@ -136,7 +144,10 @@ const EventsAdminPage = () => {
     };
 
     // Update event status
-    const handleStatusChange = async (eventId: string, newStatus: EventStatus) => {
+    const handleStatusChange = async (
+        eventId: string,
+        newStatus: EventStatus,
+    ) => {
         try {
             let action = "";
             let value = null;
@@ -155,9 +166,9 @@ const EventsAdminPage = () => {
             }
 
             const response = await fetch(`/api/events/${eventId}`, {
-                method: 'PATCH',
+                method: "PATCH",
                 headers: {
-                    'Content-Type': 'application/json',
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ action, value }),
             });
@@ -175,16 +186,23 @@ const EventsAdminPage = () => {
 
     // Bulk actions
     const handleBulkDelete = async () => {
-        if (!confirm(`Are you sure you want to delete ${selectedEvents.length} events?`)) return;
+        if (
+            !confirm(
+                `Are you sure you want to delete ${selectedEvents.length} events?`,
+            )
+        )
+            return;
 
         try {
-            const deletePromises = selectedEvents.map(eventId => 
-                fetch(`/api/events/${eventId}`, { method: 'DELETE' })
+            const deletePromises = selectedEvents.map(eventId =>
+                fetch(`/api/events/${eventId}`, { method: "DELETE" }),
             );
 
             await Promise.all(deletePromises);
 
-            setEvents(events.filter(event => !selectedEvents.includes(event.id)));
+            setEvents(
+                events.filter(event => !selectedEvents.includes(event.id)),
+            );
             setSelectedEvents([]);
         } catch (error) {
             console.error("Error:", error);
@@ -199,7 +217,9 @@ const EventsAdminPage = () => {
         };
 
         return (
-            <span className={`px-2 py-1 rounded-full text-xs font-medium ${styles[status]}`}>
+            <span
+                className={`px-2 py-1 rounded-full text-xs font-medium ${styles[status]}`}
+            >
                 {status.charAt(0).toUpperCase() + status.slice(1)}
             </span>
         );
@@ -246,7 +266,11 @@ const EventsAdminPage = () => {
                     <div className="flex gap-2">
                         <select
                             value={statusFilter}
-                            onChange={e => setStatusFilter(e.target.value as EventStatus | "all")}
+                            onChange={e =>
+                                setStatusFilter(
+                                    e.target.value as EventStatus | "all",
+                                )
+                            }
                             className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#a5cd39]"
                         >
                             <option value="all">All Status</option>
@@ -292,10 +316,18 @@ const EventsAdminPage = () => {
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         <input
                                             type="checkbox"
-                                            checked={selectedEvents.length === events.length && events.length > 0}
+                                            checked={
+                                                selectedEvents.length ===
+                                                    events.length &&
+                                                events.length > 0
+                                            }
                                             onChange={e => {
                                                 if (e.target.checked) {
-                                                    setSelectedEvents(events.map(event => event.id));
+                                                    setSelectedEvents(
+                                                        events.map(
+                                                            event => event.id,
+                                                        ),
+                                                    );
                                                 } else {
                                                     setSelectedEvents([]);
                                                 }
@@ -325,16 +357,30 @@ const EventsAdminPage = () => {
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
                                 {events.map(event => (
-                                    <tr key={event.id} className="hover:bg-gray-50">
+                                    <tr
+                                        key={event.id}
+                                        className="hover:bg-gray-50"
+                                    >
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <input
                                                 type="checkbox"
-                                                checked={selectedEvents.includes(event.id)}
+                                                checked={selectedEvents.includes(
+                                                    event.id,
+                                                )}
                                                 onChange={e => {
                                                     if (e.target.checked) {
-                                                        setSelectedEvents([...selectedEvents, event.id]);
+                                                        setSelectedEvents([
+                                                            ...selectedEvents,
+                                                            event.id,
+                                                        ]);
                                                     } else {
-                                                        setSelectedEvents(selectedEvents.filter(id => id !== event.id));
+                                                        setSelectedEvents(
+                                                            selectedEvents.filter(
+                                                                id =>
+                                                                    id !==
+                                                                    event.id,
+                                                            ),
+                                                        );
                                                     }
                                                 }}
                                                 className="rounded border-gray-300 text-[#a5cd39] focus:ring-[#a5cd39]"
@@ -344,7 +390,9 @@ const EventsAdminPage = () => {
                                             <div className="flex items-center">
                                                 {event.featured_image_url && (
                                                     <img
-                                                        src={event.featured_image_url}
+                                                        src={
+                                                            event.featured_image_url
+                                                        }
                                                         alt={event.title}
                                                         className="w-10 h-10 rounded object-cover mr-3"
                                                     />
@@ -360,70 +408,114 @@ const EventsAdminPage = () => {
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            {getStatusBadge(event.status as EventStatus)}
+                                            {getStatusBadge(
+                                                event.status as EventStatus,
+                                            )}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             {event.category_name && (
                                                 <span
                                                     className="px-2 py-1 rounded-full text-xs font-medium text-white"
-                                                    style={{ backgroundColor: event.category_color }}
+                                                    style={{
+                                                        backgroundColor:
+                                                            event.category_color,
+                                                    }}
                                                 >
                                                     {event.category_name}
                                                 </span>
                                             )}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {event.published_at ? formatDate(event.published_at) : formatDate(event.created_at)}
+                                            {event.published_at
+                                                ? formatDate(event.published_at)
+                                                : formatDate(event.created_at)}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             {event.view_count || 0}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <div className="flex items-center justify-end gap-2">
-                                                {event.status === "published" && (
-                                                    <Link href={`/whats-on/${event.slug}`} target="_blank">
-                                                        <Button variant="ghost" size="sm">
+                                                {event.status ===
+                                                    "published" && (
+                                                    <Link
+                                                        href={`/top-trade-shows-in-uae-saudi-arabia-middle-east/${event.slug}`}
+                                                    >
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="sm"
+                                                        >
                                                             <Eye className="w-4 h-4" />
                                                         </Button>
                                                     </Link>
                                                 )}
-                                                <Link href={`/admin/pages/events/edit/${event.id}`}>
-                                                    <Button variant="ghost" size="sm">
+                                                <Link
+                                                    href={`/admin/pages/events/edit/${event.id}`}
+                                                >
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                    >
                                                         <Edit className="w-4 h-4" />
                                                     </Button>
                                                 </Link>
                                                 <div className="relative group">
-                                                    <Button variant="ghost" size="sm">
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                    >
                                                         <MoreHorizontal className="w-4 h-4" />
                                                     </Button>
                                                     <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
                                                         <div className="py-1">
-                                                            {event.status !== "published" && (
+                                                            {event.status !==
+                                                                "published" && (
                                                                 <button
-                                                                    onClick={() => handleStatusChange(event.id, "published")}
+                                                                    onClick={() =>
+                                                                        handleStatusChange(
+                                                                            event.id,
+                                                                            "published",
+                                                                        )
+                                                                    }
                                                                     className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                                                 >
                                                                     Publish
                                                                 </button>
                                                             )}
-                                                            {event.status !== "draft" && (
+                                                            {event.status !==
+                                                                "draft" && (
                                                                 <button
-                                                                    onClick={() => handleStatusChange(event.id, "draft")}
+                                                                    onClick={() =>
+                                                                        handleStatusChange(
+                                                                            event.id,
+                                                                            "draft",
+                                                                        )
+                                                                    }
                                                                     className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                                                 >
-                                                                    Move to Draft
+                                                                    Move to
+                                                                    Draft
                                                                 </button>
                                                             )}
-                                                            {event.status !== "archived" && (
+                                                            {event.status !==
+                                                                "archived" && (
                                                                 <button
-                                                                    onClick={() => handleStatusChange(event.id, "archived")}
+                                                                    onClick={() =>
+                                                                        handleStatusChange(
+                                                                            event.id,
+                                                                            "archived",
+                                                                        )
+                                                                    }
                                                                     className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                                                 >
                                                                     Archive
                                                                 </button>
                                                             )}
                                                             <button
-                                                                onClick={() => handleDelete(event.id)}
+                                                                onClick={() =>
+                                                                    handleDelete(
+                                                                        event.id,
+                                                                    )
+                                                                }
                                                                 className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
                                                             >
                                                                 Delete

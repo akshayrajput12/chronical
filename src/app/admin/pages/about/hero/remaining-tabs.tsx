@@ -192,7 +192,7 @@ const remainingTabs = `
                             <CardContent>
                                 <Button
                                     variant="outline"
-                                    onClick={() => window.open("/about", "_blank")}
+                                    onClick={() => window.open("/about-us", "_blank")}
                                     className="w-full"
                                 >
                                     <ExternalLink className="w-4 h-4 mr-2" />

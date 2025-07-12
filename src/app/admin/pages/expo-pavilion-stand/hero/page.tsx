@@ -5,7 +5,13 @@ import { motion } from "framer-motion";
 import { ArrowLeft, Save, Eye, Upload, X } from "lucide-react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -39,7 +45,7 @@ const ExpoPavilionHeroEditor = () => {
                 .eq("is_active", true)
                 .single();
 
-            if (error && error.code !== 'PGRST116') {
+            if (error && error.code !== "PGRST116") {
                 throw error;
             }
 
@@ -50,10 +56,13 @@ const ExpoPavilionHeroEditor = () => {
                 const { data: newData, error: insertError } = await supabase
                     .from("expo_pavilion_hero")
                     .insert({
-                        title: 'COUNTRY PAVILION EXPO BOOTH DESIGN IN UAE',
-                        subtitle: 'Chronicle Exhibition Organizing LLC masters the art of designing for country pavilion expo booth. Let your brand shine at international events by using our unique country pavilion exhibition stands. Explore stunning designs that captivate and engage.',
-                        background_image_url: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-                        background_image_alt: 'Country Pavilion Expo Booth Design',
+                        title: "COUNTRY PAVILION EXPO BOOTH DESIGN IN UAE",
+                        subtitle:
+                            "Chronicle Exhibition Organizing LLC masters the art of designing for country pavilion expo booth. Let your brand shine at international events by using our unique country pavilion exhibition stands. Explore stunning designs that captivate and engage.",
+                        background_image_url:
+                            "https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+                        background_image_alt:
+                            "Country Pavilion Expo Booth Design",
                         is_active: true,
                     })
                     .select()
@@ -97,31 +106,39 @@ const ExpoPavilionHeroEditor = () => {
         }
     };
 
-    const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImageUpload = async (
+        event: React.ChangeEvent<HTMLInputElement>,
+    ) => {
         const file = event.target.files?.[0];
         if (!file) return;
 
         setIsUploading(true);
         try {
-            const fileExt = file.name.split('.').pop();
+            const fileExt = file.name.split(".").pop();
             const fileName = `hero-${Date.now()}.${fileExt}`;
             const filePath = `${fileName}`;
 
             const { error: uploadError } = await supabase.storage
-                .from('expo-pavilion-images')
+                .from("expo-pavilion-images")
                 .upload(filePath, file);
 
             if (uploadError) throw uploadError;
 
-            const { data: { publicUrl } } = supabase.storage
-                .from('expo-pavilion-images')
+            const {
+                data: { publicUrl },
+            } = supabase.storage
+                .from("expo-pavilion-images")
                 .getPublicUrl(filePath);
 
             if (heroData) {
-                setHeroData(prev => prev ? ({
-                    ...prev,
-                    background_image_url: publicUrl
-                }) : null);
+                setHeroData(prev =>
+                    prev
+                        ? {
+                              ...prev,
+                              background_image_url: publicUrl,
+                          }
+                        : null,
+                );
             }
 
             toast.success("Image uploaded successfully!");
@@ -138,7 +155,9 @@ const ExpoPavilionHeroEditor = () => {
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="text-center">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-                    <p className="mt-4 text-gray-600">Loading hero section...</p>
+                    <p className="mt-4 text-gray-600">
+                        Loading hero section...
+                    </p>
                 </div>
             </div>
         );
@@ -168,13 +187,14 @@ const ExpoPavilionHeroEditor = () => {
                                     Hero Section
                                 </h1>
                                 <p className="text-gray-600">
-                                    Manage the main hero banner for Expo Pavilion Stand page
+                                    Manage the main hero banner for Expo
+                                    Pavilion Stand page
                                 </p>
                             </div>
                         </div>
                         <div className="flex items-center space-x-4">
                             <Link
-                                href="/countrypavilionexpoboothsolutions"
+                                href="/country-pavilion-expo-booth-solutions-in-dubai"
                                 target="_blank"
                                 className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
                             >
@@ -204,7 +224,8 @@ const ExpoPavilionHeroEditor = () => {
                             <CardHeader>
                                 <CardTitle>Hero Content</CardTitle>
                                 <CardDescription>
-                                    Edit the main headline and description for the hero section
+                                    Edit the main headline and description for
+                                    the hero section
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-6">
@@ -213,11 +234,15 @@ const ExpoPavilionHeroEditor = () => {
                                     <Input
                                         id="title"
                                         value={heroData.title}
-                                        onChange={(e) =>
-                                            setHeroData(prev => prev ? ({
-                                                ...prev,
-                                                title: e.target.value
-                                            }) : null)
+                                        onChange={e =>
+                                            setHeroData(prev =>
+                                                prev
+                                                    ? {
+                                                          ...prev,
+                                                          title: e.target.value,
+                                                      }
+                                                    : null,
+                                            )
                                         }
                                         placeholder="Enter hero title"
                                         className="mt-1"
@@ -229,11 +254,16 @@ const ExpoPavilionHeroEditor = () => {
                                     <Textarea
                                         id="subtitle"
                                         value={heroData.subtitle}
-                                        onChange={(e) =>
-                                            setHeroData(prev => prev ? ({
-                                                ...prev,
-                                                subtitle: e.target.value
-                                            }) : null)
+                                        onChange={e =>
+                                            setHeroData(prev =>
+                                                prev
+                                                    ? {
+                                                          ...prev,
+                                                          subtitle:
+                                                              e.target.value,
+                                                      }
+                                                    : null,
+                                            )
                                         }
                                         placeholder="Enter hero subtitle"
                                         rows={4}
@@ -242,15 +272,22 @@ const ExpoPavilionHeroEditor = () => {
                                 </div>
 
                                 <div>
-                                    <Label htmlFor="background_image_url">Background Image URL</Label>
+                                    <Label htmlFor="background_image_url">
+                                        Background Image URL
+                                    </Label>
                                     <Input
                                         id="background_image_url"
                                         value={heroData.background_image_url}
-                                        onChange={(e) =>
-                                            setHeroData(prev => prev ? ({
-                                                ...prev,
-                                                background_image_url: e.target.value
-                                            }) : null)
+                                        onChange={e =>
+                                            setHeroData(prev =>
+                                                prev
+                                                    ? {
+                                                          ...prev,
+                                                          background_image_url:
+                                                              e.target.value,
+                                                      }
+                                                    : null,
+                                            )
                                         }
                                         placeholder="Enter image URL"
                                         className="mt-1"
@@ -258,15 +295,22 @@ const ExpoPavilionHeroEditor = () => {
                                 </div>
 
                                 <div>
-                                    <Label htmlFor="background_image_alt">Image Alt Text</Label>
+                                    <Label htmlFor="background_image_alt">
+                                        Image Alt Text
+                                    </Label>
                                     <Input
                                         id="background_image_alt"
                                         value={heroData.background_image_alt}
-                                        onChange={(e) =>
-                                            setHeroData(prev => prev ? ({
-                                                ...prev,
-                                                background_image_alt: e.target.value
-                                            }) : null)
+                                        onChange={e =>
+                                            setHeroData(prev =>
+                                                prev
+                                                    ? {
+                                                          ...prev,
+                                                          background_image_alt:
+                                                              e.target.value,
+                                                      }
+                                                    : null,
+                                            )
                                         }
                                         placeholder="Enter image alt text"
                                         className="mt-1"
@@ -274,7 +318,9 @@ const ExpoPavilionHeroEditor = () => {
                                 </div>
 
                                 <div>
-                                    <Label htmlFor="image-upload">Upload New Image</Label>
+                                    <Label htmlFor="image-upload">
+                                        Upload New Image
+                                    </Label>
                                     <div className="mt-1">
                                         <input
                                             id="image-upload"
@@ -285,7 +331,9 @@ const ExpoPavilionHeroEditor = () => {
                                             className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                                         />
                                         {isUploading && (
-                                            <p className="text-sm text-blue-600 mt-2">Uploading...</p>
+                                            <p className="text-sm text-blue-600 mt-2">
+                                                Uploading...
+                                            </p>
                                         )}
                                     </div>
                                 </div>
@@ -294,11 +342,15 @@ const ExpoPavilionHeroEditor = () => {
                                     <Switch
                                         id="is_active"
                                         checked={heroData.is_active}
-                                        onCheckedChange={(checked) =>
-                                            setHeroData(prev => prev ? ({
-                                                ...prev,
-                                                is_active: checked
-                                            }) : null)
+                                        onCheckedChange={checked =>
+                                            setHeroData(prev =>
+                                                prev
+                                                    ? {
+                                                          ...prev,
+                                                          is_active: checked,
+                                                      }
+                                                    : null,
+                                            )
                                         }
                                     />
                                     <Label htmlFor="is_active">Active</Label>
@@ -334,7 +386,11 @@ const ExpoPavilionHeroEditor = () => {
                                                 {heroData.title}
                                             </h1>
                                             <p className="text-sm leading-relaxed">
-                                                {heroData.subtitle.substring(0, 150)}...
+                                                {heroData.subtitle.substring(
+                                                    0,
+                                                    150,
+                                                )}
+                                                ...
                                             </p>
                                         </div>
                                     </div>

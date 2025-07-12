@@ -38,31 +38,37 @@ const Header = () => {
     // Navigation mapping - determines which nav item should be active based on current pathname
     const getActiveNavigation = () => {
         // Left navigation (main tabs)
-        if (pathname === "/conference")
+        if (pathname === "/conference-organizers-in-dubai-uae")
             return { type: "main", key: "conference" };
         if (pathname === "/" || pathname === "/home")
             return { type: "main", key: "expo" };
-        if (pathname === "/kiosk") return { type: "main", key: "kiosk" };
+        if (pathname === "/kiosk-manufacturers-in-dubai-uae")
+            return { type: "main", key: "kiosk" };
 
         // Right navigation items
-        if (pathname === "/about") return { type: "right", key: "about" };
+        if (pathname === "/about-us") return { type: "right", key: "about" };
         if (pathname === "/support") return { type: "right", key: "support" };
         if (pathname === "/blog" || pathname.startsWith("/blog/"))
             return { type: "right", key: "blog" };
-        if (pathname === "/cities" || pathname.startsWith("/cities/"))
+        if (
+            pathname === "/experience-middle-east" ||
+            pathname.startsWith("/experience-middle-east/")
+        )
             return { type: "right", key: "cities" };
         if (pathname === "/contact-us")
             return { type: "right", key: "contact" };
 
         // Sub-navigation items (should show expo as active main tab)
         if (
-            pathname === "/visit-us" ||
-            pathname === "/customexhibitionstands" ||
-            pathname === "/doubledeckerexhibitionstands" ||
-            pathname === "/countrypavilionexpoboothsolutions" ||
-            pathname === "/whats-on" ||
-            pathname.startsWith("/whats-on/") ||
-            pathname === "/experience-dubai" ||
+            pathname === "/experience-middle-east" ||
+            pathname === "/custom-exhibition-stands-dubai-uae" ||
+            pathname === "/double-decker-exhibition-stands-in-dubai" ||
+            pathname === "/country-pavilion-expo-booth-solutions-in-dubai" ||
+            pathname === "/top-trade-shows-in-uae-saudi-arabia-middle-east" ||
+            pathname.startsWith(
+                "/top-trade-shows-in-uae-saudi-arabia-middle-east/",
+            ) ||
+            pathname === "/experience-middle-east" ||
             pathname === "/portfolio"
         ) {
             return { type: "main", key: "expo" };
@@ -202,7 +208,7 @@ const Header = () => {
                                 {/* Left Main Navigation Tabs */}
                                 <div className="hidden lg:flex items-center relative">
                                     <TabItem
-                                        href="/conference"
+                                        href="/conference-organizers-in-dubai-uae"
                                         label="CONFERENCE"
                                         isActive={
                                             activeSubMenu === "conference"
@@ -227,7 +233,7 @@ const Header = () => {
                                     />
 
                                     <TabItem
-                                        href="/kiosk"
+                                        href="/kiosk-manufacturers-in-dubai-uae"
                                         label="KIOSK"
                                         isActive={activeSubMenu === "kiosk"}
                                         className={cn(
@@ -243,7 +249,7 @@ const Header = () => {
                                 <div className="hidden lg:flex items-center justify-end flex-1 -mr-8 lg:-mr-12 xl:-mr-16 2xl:-mr-20 ml-16 lg:ml-24 xl:ml-32 2xl:ml-40">
                                     <div className="flex items-center space-x-2 md:space-x-3 lg:space-x-3 xl:space-x-5">
                                         <NavItem
-                                            href="/about"
+                                            href="/about-us"
                                             label="ABOUT US"
                                             isActive={
                                                 activeNavigation.type ===
@@ -330,7 +336,7 @@ const Header = () => {
                                                 >
                                                     <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
                                                 </svg>
-                                                <span className="hidden sm:inline">
+                                                <span className="">
                                                     WHATSAPP
                                                 </span>
                                             </Link>
@@ -386,13 +392,16 @@ const Header = () => {
                                                         {/* Visit Us with Horizontal Dropdown */}
                                                         <div className="relative group">
                                                             <SubNavItem
-                                                                href="/visit-us"
+                                                                href="#"
                                                                 label="EXHIBITION STANDS"
                                                                 subLabel="Bespoke designs, built to impress"
-                                                                isActive={
-                                                                    pathname ===
-                                                                    "/visit-us"
-                                                                }
+                                                                isActive={[
+                                                                    "/custom-exhibition-stands-dubai-uae",
+                                                                    "/double-decker-exhibition-stands-in-dubai",
+                                                                    "/country-pavilion-expo-booth-solutions-dubai",
+                                                                ].includes(
+                                                                    pathname,
+                                                                )}
                                                             />
 
                                                             {/* Horizontal Dropdown Menu - Only visible on hover */}
@@ -407,7 +416,7 @@ const Header = () => {
                                                             >
                                                                 <div className="flex space-x-8 px-4">
                                                                     <Link
-                                                                        href="/customexhibitionstands"
+                                                                        href="/custom-exhibition-stands-dubai-uae"
                                                                         className={cn(
                                                                             "text-xs uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
                                                                             (
@@ -423,7 +432,7 @@ const Header = () => {
                                                                         STANDS
                                                                     </Link>
                                                                     <Link
-                                                                        href="/doubledeckerexhibitionstands"
+                                                                        href="/double-decker-exhibition-stands-in-dubai"
                                                                         className={cn(
                                                                             "text-xs uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
                                                                             (
@@ -440,7 +449,7 @@ const Header = () => {
                                                                         STANDS
                                                                     </Link>
                                                                     <Link
-                                                                        href="/countrypavilionexpoboothsolutions"
+                                                                        href="/country-pavilion-expo-booth-solutions-dubai"
                                                                         className={cn(
                                                                             "text-xs uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
                                                                             (
@@ -472,14 +481,14 @@ const Header = () => {
                                                             )}
                                                         ></div>
                                                         <SubNavItem
-                                                            href="/whats-on"
+                                                            href="/top-trade-shows-in-uae-saudi-arabia-middle-east"
                                                             label="TOP EXHIBITIONS"
                                                             subLabel="Explore major upcoming exhibitions"
                                                             isActive={
                                                                 pathname ===
-                                                                    "/whats-on" ||
+                                                                    "/top-trade-shows-in-uae-saudi-arabia-middle-east" ||
                                                                 pathname.startsWith(
-                                                                    "/whats-on/",
+                                                                    "/top-trade-shows-in-uae-saudi-arabia-middle-east/",
                                                                 )
                                                             }
                                                         />
@@ -497,12 +506,12 @@ const Header = () => {
                                                         ></div>
                                                         <div className="relative group">
                                                             <SubNavItem
-                                                                href="/cities"
+                                                                href="/experience-middle-east"
                                                                 label="TOP EXPO LOCATIONS"
                                                                 subLabel="Premier venues across Dubai & the region"
                                                                 isActive={
                                                                     pathname ===
-                                                                    "/cities"
+                                                                    "/experience-middle-east"
                                                                 }
                                                             />
                                                         </div>
@@ -619,33 +628,33 @@ const Header = () => {
                                                                             className="pl-4 mt-2 space-y-2 overflow-hidden"
                                                                         >
                                                                             <MobileNavItem
-                                                                                href="/customexhibitionstands"
+                                                                                href="/custom-exhibition-stands-dubai-uae"
                                                                                 label="CUSTOM STANDS"
                                                                                 isActive={
                                                                                     pathname ===
-                                                                                    "/customexhibitionstands"
+                                                                                    "/custom-exhibition-stands-dubai-uae"
                                                                                 }
                                                                                 onClick={
                                                                                     closeMobileMenu
                                                                                 }
                                                                             />
                                                                             <MobileNavItem
-                                                                                href="/doubledeckerexhibitionstands"
+                                                                                href="/double-decker-exhibition-stands-in-dubai"
                                                                                 label="DOUBLE DECKER STANDS"
                                                                                 isActive={
                                                                                     pathname ===
-                                                                                    "/doubledeckerexhibitionstands"
+                                                                                    "/double-decker-exhibition-stands-in-dubai"
                                                                                 }
                                                                                 onClick={
                                                                                     closeMobileMenu
                                                                                 }
                                                                             />
                                                                             <MobileNavItem
-                                                                                href="/countrypavilionexpoboothsolutions"
+                                                                                href="/country-pavilion-expo-booth-solutions-dubai"
                                                                                 label="EXPO PAVILION STANDS"
                                                                                 isActive={
                                                                                     pathname ===
-                                                                                    "/countrypavilionexpoboothsolutions"
+                                                                                    "/country-pavilion-expo-booth-solutions-dubai"
                                                                                 }
                                                                                 onClick={
                                                                                     closeMobileMenu
@@ -656,22 +665,22 @@ const Header = () => {
                                                                 </AnimatePresence>
                                                             </div>
                                                             <MobileNavItem
-                                                                href="/whats-on"
+                                                                href="/top-trade-shows-in-uae-saudi-arabia-middle-east"
                                                                 label="TOP EXHIBITIONS"
                                                                 isActive={
                                                                     pathname ===
-                                                                    "/whats-on"
+                                                                    "/top-trade-shows-in-uae-saudi-arabia-middle-east"
                                                                 }
                                                                 onClick={
                                                                     closeMobileMenu
                                                                 }
                                                             />
                                                             <MobileNavItem
-                                                                href="/experience-dubai"
+                                                                href="/experience-middle-east"
                                                                 label="TOP EXPO LOCATIONS"
                                                                 isActive={
                                                                     pathname ===
-                                                                    "/experience-dubai"
+                                                                    "/experience-middle-east"
                                                                 }
                                                                 onClick={
                                                                     closeMobileMenu
@@ -694,17 +703,21 @@ const Header = () => {
                                             </div>
 
                                             <MobileNavItem
-                                                href="/conference"
+                                                href="/conference-organizers-in-dubai-uae"
                                                 label="CONFERENCE"
                                                 isActive={
-                                                    pathname === "/conference"
+                                                    pathname ===
+                                                    "/conference-organizers-in-dubai-uae"
                                                 }
                                                 onClick={closeMobileMenu}
                                             />
                                             <MobileNavItem
-                                                href="/kiosk"
+                                                href="/kiosk-manufacturers-in-dubai-uae"
                                                 label="KIOSK"
-                                                isActive={pathname === "/kiosk"}
+                                                isActive={
+                                                    pathname ===
+                                                    "/kiosk-manufacturers-in-dubai-uae"
+                                                }
                                                 onClick={closeMobileMenu}
                                             />
                                         </div>
@@ -716,9 +729,11 @@ const Header = () => {
                                             </h3>
 
                                             <MobileNavItem
-                                                href="/about"
+                                                href="/about-us"
                                                 label="ABOUT US"
-                                                isActive={pathname === "/about"}
+                                                isActive={
+                                                    pathname === "/about-us"
+                                                }
                                                 onClick={closeMobileMenu}
                                             />
                                             <MobileNavItem
@@ -750,12 +765,13 @@ const Header = () => {
                                                 onClick={closeMobileMenu}
                                             />
                                             <MobileNavItem
-                                                href="/cities"
+                                                href="/experience-middle-east"
                                                 label="CITIES"
                                                 isActive={
-                                                    pathname === "/cities" ||
+                                                    pathname ===
+                                                        "/experience-middle-east" ||
                                                     pathname.startsWith(
-                                                        "/cities/",
+                                                        "/experience-middle-east/",
                                                     )
                                                 }
                                                 onClick={closeMobileMenu}
@@ -768,13 +784,6 @@ const Header = () => {
                                                 }
                                                 onClick={closeMobileMenu}
                                             />
-                                            <MobileNavItem
-                                                href="/ar"
-                                                label="عربي"
-                                                isActive={pathname === "/ar"}
-                                                onClick={closeMobileMenu}
-                                            />
-
                                             {/* WhatsApp Button in Mobile/Tablet Menu */}
                                             <div className="mt-4 md:mt-6 pt-4 md:pt-6 border-t border-gray-200">
                                                 <Link

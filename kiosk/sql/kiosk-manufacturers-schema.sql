@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS kiosk_manufacturers_sections (
   
   -- Link Configuration
   link_text TEXT DEFAULT 'Exhibition Stand Builders in UAE',
-  link_url TEXT DEFAULT '/about',
+  link_url TEXT DEFAULT '/about-us',
   
   -- Image Association
   main_image_id UUID REFERENCES kiosk_manufacturers_images(id) ON DELETE SET NULL,
@@ -206,7 +206,7 @@ INSERT INTO kiosk_manufacturers_sections (
   'We are one of the topmost companies involved in custom kiosk manufacturing in Dubai & UAE, offering a broad range of kiosks including mall kiosks, jewelry showcases, and museums, cosmetics, Watch, perfume, electronic displays & much more. Have kiosks in different sizes & styles for you to choose from. Chronicle has showcased our top technology products. Consider all the factors such as floor position, the height of kiosk, safety, security & durability while designing the kiosk.',
   'Chronicle as Exhibition Stand Builders in UAE has years of experience & expertise as a custom kiosk manufacturers in Dubai. A proficient team of kiosk designers & engineers who have the caliber to build creative & innovative kiosks for your specific requirements. Also, deal in the manufacture of retail window exhibits, kiosk stands, exhibition stands & graphic displays. Reach out if you need performance-oriented & advanced custom kiosk solutions for trade shows & any of your business requirements.',
   'Exhibition Stand Builders in UAE',
-  '/about'
+  '/about-us'
 ) ON CONFLICT DO NOTHING;
 
 -- ============================================================================

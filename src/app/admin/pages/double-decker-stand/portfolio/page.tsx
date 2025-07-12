@@ -23,15 +23,15 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { createClient } from "@/lib/supabase/client";
-import { 
-    Upload, 
-    Save, 
-    Eye, 
-    AlertCircle, 
-    Plus, 
-    Edit, 
+import {
+    Upload,
+    Save,
+    Eye,
+    AlertCircle,
+    Plus,
+    Edit,
     Trash2,
-    Image as ImageIcon
+    Image as ImageIcon,
 } from "lucide-react";
 
 interface PortfolioSection {
@@ -54,7 +54,9 @@ interface PortfolioItem {
 }
 
 const DoubleDeckersPortfolioAdminPage = () => {
-    const [sectionData, setSectionData] = useState<PortfolioSection | null>(null);
+    const [sectionData, setSectionData] = useState<PortfolioSection | null>(
+        null,
+    );
     const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>([]);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
@@ -67,7 +69,7 @@ const DoubleDeckersPortfolioAdminPage = () => {
     const loadData = useCallback(async () => {
         try {
             setLoading(true);
-            
+
             // Load section data
             const { data: sectionData, error: sectionError } = await supabase
                 .from("double_decker_portfolio_sections")
@@ -83,17 +85,20 @@ const DoubleDeckersPortfolioAdminPage = () => {
                 setSectionData(sectionData);
             } else {
                 // Create default section if none exists
-                const { data: newSectionData, error: insertError } = await supabase
-                    .from("double_decker_portfolio_sections")
-                    .insert({
-                        main_heading: "OUR DOUBLE DECKER EXHIBITION STANDS PORTFOLIO",
-                        description: "Explore our impressive collection of double decker exhibition stands that showcase our expertise in creating multi-level displays that captivate and engage.",
-                        cta_button_text: "View All Projects",
-                        cta_button_url: "/portfolio",
-                        is_active: true,
-                    })
-                    .select()
-                    .single();
+                const { data: newSectionData, error: insertError } =
+                    await supabase
+                        .from("double_decker_portfolio_sections")
+                        .insert({
+                            main_heading:
+                                "OUR DOUBLE DECKER EXHIBITION STANDS PORTFOLIO",
+                            description:
+                                "Explore our impressive collection of double decker exhibition stands that showcase our expertise in creating multi-level displays that captivate and engage.",
+                            cta_button_text: "View All Projects",
+                            cta_button_url: "/portfolio",
+                            is_active: true,
+                        })
+                        .select()
+                        .single();
 
                 if (insertError) throw insertError;
                 setSectionData(newSectionData);
@@ -107,7 +112,6 @@ const DoubleDeckersPortfolioAdminPage = () => {
 
             if (itemsError) throw itemsError;
             setPortfolioItems(itemsData || []);
-
         } catch (error) {
             console.error("Error loading data:", error);
             toast.error("Failed to load portfolio data");
@@ -149,24 +153,28 @@ const DoubleDeckersPortfolioAdminPage = () => {
     };
 
     // Handle image upload
-    const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImageUpload = async (
+        event: React.ChangeEvent<HTMLInputElement>,
+    ) => {
         const file = event.target.files?.[0];
         if (!file) return;
 
         try {
             setUploading(true);
-            const fileExt = file.name.split('.').pop();
+            const fileExt = file.name.split(".").pop();
             const fileName = `portfolio-${Date.now()}.${fileExt}`;
             const filePath = `${fileName}`;
 
             const { error: uploadError } = await supabase.storage
-                .from('double-decker-portfolio-images')
+                .from("double-decker-portfolio-images")
                 .upload(filePath, file);
 
             if (uploadError) throw uploadError;
 
-            const { data: { publicUrl } } = supabase.storage
-                .from('double-decker-portfolio-images')
+            const {
+                data: { publicUrl },
+            } = supabase.storage
+                .from("double-decker-portfolio-images")
                 .getPublicUrl(filePath);
 
             return publicUrl;
@@ -184,7 +192,7 @@ const DoubleDeckersPortfolioAdminPage = () => {
         if (!editingItem) return;
 
         try {
-            if (editingItem.id === 'new') {
+            if (editingItem.id === "new") {
                 // Create new item
                 const { error } = await supabase
                     .from("double_decker_portfolio_items")
@@ -227,7 +235,8 @@ const DoubleDeckersPortfolioAdminPage = () => {
 
     // Handle portfolio item delete
     const handleDeleteItem = async (id: string) => {
-        if (!confirm("Are you sure you want to delete this portfolio item?")) return;
+        if (!confirm("Are you sure you want to delete this portfolio item?"))
+            return;
 
         try {
             const { error } = await supabase
@@ -258,7 +267,9 @@ const DoubleDeckersPortfolioAdminPage = () => {
             <div className="p-6 max-w-4xl mx-auto">
                 <div className="text-center">
                     <AlertCircle className="mx-auto h-12 w-12 text-gray-400" />
-                    <h3 className="mt-2 text-sm font-medium text-gray-900">No section found</h3>
+                    <h3 className="mt-2 text-sm font-medium text-gray-900">
+                        No section found
+                    </h3>
                     <p className="mt-1 text-sm text-gray-500">
                         There was an error loading the portfolio section data.
                     </p>
@@ -295,7 +306,7 @@ const DoubleDeckersPortfolioAdminPage = () => {
                             <Textarea
                                 id="main_heading"
                                 value={sectionData.main_heading}
-                                onChange={(e) =>
+                                onChange={e =>
                                     setSectionData({
                                         ...sectionData,
                                         main_heading: e.target.value,
@@ -312,7 +323,7 @@ const DoubleDeckersPortfolioAdminPage = () => {
                             <Textarea
                                 id="description"
                                 value={sectionData.description || ""}
-                                onChange={(e) =>
+                                onChange={e =>
                                     setSectionData({
                                         ...sectionData,
                                         description: e.target.value,
@@ -325,11 +336,13 @@ const DoubleDeckersPortfolioAdminPage = () => {
 
                         {/* CTA Button Text */}
                         <div className="space-y-2">
-                            <Label htmlFor="cta_button_text">CTA Button Text</Label>
+                            <Label htmlFor="cta_button_text">
+                                CTA Button Text
+                            </Label>
                             <Input
                                 id="cta_button_text"
                                 value={sectionData.cta_button_text}
-                                onChange={(e) =>
+                                onChange={e =>
                                     setSectionData({
                                         ...sectionData,
                                         cta_button_text: e.target.value,
@@ -341,11 +354,13 @@ const DoubleDeckersPortfolioAdminPage = () => {
 
                         {/* CTA Button URL */}
                         <div className="space-y-2">
-                            <Label htmlFor="cta_button_url">CTA Button URL</Label>
+                            <Label htmlFor="cta_button_url">
+                                CTA Button URL
+                            </Label>
                             <Input
                                 id="cta_button_url"
                                 value={sectionData.cta_button_url}
-                                onChange={(e) =>
+                                onChange={e =>
                                     setSectionData({
                                         ...sectionData,
                                         cta_button_url: e.target.value,
@@ -367,7 +382,7 @@ const DoubleDeckersPortfolioAdminPage = () => {
                             </Button>
                             <Button variant="outline" asChild>
                                 <a
-                                    href="/doubledeckerexhibitionstands"
+                                    href="/double-decker-exhibition-stands-in-dubai"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
@@ -397,7 +412,7 @@ const DoubleDeckersPortfolioAdminPage = () => {
                             <h2 className="text-lg font-bold uppercase tracking-wide">
                                 {sectionData.main_heading}
                             </h2>
-                            
+
                             {sectionData.description && (
                                 <p className="text-sm text-gray-300">
                                     {sectionData.description}
@@ -419,19 +434,23 @@ const DoubleDeckersPortfolioAdminPage = () => {
                         <div>
                             <CardTitle>Portfolio Items</CardTitle>
                             <CardDescription>
-                                Manage portfolio items for the double decker stands
+                                Manage portfolio items for the double decker
+                                stands
                             </CardDescription>
                         </div>
-                        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                        <Dialog
+                            open={isDialogOpen}
+                            onOpenChange={setIsDialogOpen}
+                        >
                             <DialogTrigger asChild>
                                 <Button
                                     onClick={() => {
                                         setEditingItem({
-                                            id: 'new',
-                                            title: '',
-                                            description: '',
-                                            alt_text: '',
-                                            image_url: '',
+                                            id: "new",
+                                            title: "",
+                                            description: "",
+                                            alt_text: "",
+                                            image_url: "",
                                             display_order: 0,
                                             is_active: true,
                                         });
@@ -445,20 +464,28 @@ const DoubleDeckersPortfolioAdminPage = () => {
                             <DialogContent className="max-w-md">
                                 <DialogHeader>
                                     <DialogTitle>
-                                        {editingItem?.id === 'new' ? 'Add' : 'Edit'} Portfolio Item
+                                        {editingItem?.id === "new"
+                                            ? "Add"
+                                            : "Edit"}{" "}
+                                        Portfolio Item
                                     </DialogTitle>
                                     <DialogDescription>
-                                        {editingItem?.id === 'new' ? 'Add a new' : 'Edit the'} portfolio item details
+                                        {editingItem?.id === "new"
+                                            ? "Add a new"
+                                            : "Edit the"}{" "}
+                                        portfolio item details
                                     </DialogDescription>
                                 </DialogHeader>
                                 {editingItem && (
                                     <div className="space-y-4">
                                         <div className="space-y-2">
-                                            <Label htmlFor="item_title">Title</Label>
+                                            <Label htmlFor="item_title">
+                                                Title
+                                            </Label>
                                             <Input
                                                 id="item_title"
                                                 value={editingItem.title || ""}
-                                                onChange={(e) =>
+                                                onChange={e =>
                                                     setEditingItem({
                                                         ...editingItem,
                                                         title: e.target.value,
@@ -469,14 +496,20 @@ const DoubleDeckersPortfolioAdminPage = () => {
                                         </div>
 
                                         <div className="space-y-2">
-                                            <Label htmlFor="item_description">Description</Label>
+                                            <Label htmlFor="item_description">
+                                                Description
+                                            </Label>
                                             <Textarea
                                                 id="item_description"
-                                                value={editingItem.description || ""}
-                                                onChange={(e) =>
+                                                value={
+                                                    editingItem.description ||
+                                                    ""
+                                                }
+                                                onChange={e =>
                                                     setEditingItem({
                                                         ...editingItem,
-                                                        description: e.target.value,
+                                                        description:
+                                                            e.target.value,
                                                     })
                                                 }
                                                 placeholder="Enter description"
@@ -485,14 +518,17 @@ const DoubleDeckersPortfolioAdminPage = () => {
                                         </div>
 
                                         <div className="space-y-2">
-                                            <Label htmlFor="item_alt_text">Alt Text</Label>
+                                            <Label htmlFor="item_alt_text">
+                                                Alt Text
+                                            </Label>
                                             <Input
                                                 id="item_alt_text"
                                                 value={editingItem.alt_text}
-                                                onChange={(e) =>
+                                                onChange={e =>
                                                     setEditingItem({
                                                         ...editingItem,
-                                                        alt_text: e.target.value,
+                                                        alt_text:
+                                                            e.target.value,
                                                     })
                                                 }
                                                 placeholder="Enter alt text"
@@ -500,13 +536,18 @@ const DoubleDeckersPortfolioAdminPage = () => {
                                         </div>
 
                                         <div className="space-y-2">
-                                            <Label htmlFor="item_image">Image</Label>
+                                            <Label htmlFor="item_image">
+                                                Image
+                                            </Label>
                                             <div className="flex items-center space-x-2">
                                                 <Input
                                                     type="file"
                                                     accept="image/*"
-                                                    onChange={async (e) => {
-                                                        const url = await handleImageUpload(e);
+                                                    onChange={async e => {
+                                                        const url =
+                                                            await handleImageUpload(
+                                                                e,
+                                                            );
                                                         if (url) {
                                                             setEditingItem({
                                                                 ...editingItem,
@@ -523,7 +564,9 @@ const DoubleDeckersPortfolioAdminPage = () => {
                                                     disabled={uploading}
                                                 >
                                                     <Upload className="w-4 h-4 mr-2" />
-                                                    {uploading ? "Uploading..." : "Upload"}
+                                                    {uploading
+                                                        ? "Uploading..."
+                                                        : "Upload"}
                                                 </Button>
                                             </div>
                                         </div>
@@ -568,24 +611,33 @@ const DoubleDeckersPortfolioAdminPage = () => {
                     {portfolioItems.length === 0 ? (
                         <div className="text-center py-8">
                             <ImageIcon className="mx-auto h-12 w-12 text-gray-400" />
-                            <h3 className="mt-2 text-sm font-medium text-gray-900">No portfolio items</h3>
+                            <h3 className="mt-2 text-sm font-medium text-gray-900">
+                                No portfolio items
+                            </h3>
                             <p className="mt-1 text-sm text-gray-500">
                                 Get started by adding your first portfolio item.
                             </p>
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {portfolioItems.map((item) => (
-                                <div key={item.id} className="border rounded-lg p-4 space-y-3">
+                            {portfolioItems.map(item => (
+                                <div
+                                    key={item.id}
+                                    className="border rounded-lg p-4 space-y-3"
+                                >
                                     <img
                                         src={item.image_url}
                                         alt={item.alt_text}
                                         className="w-full h-32 object-cover rounded-lg"
                                     />
                                     <div>
-                                        <h4 className="font-medium text-sm">{item.title || 'Untitled'}</h4>
+                                        <h4 className="font-medium text-sm">
+                                            {item.title || "Untitled"}
+                                        </h4>
                                         {item.description && (
-                                            <p className="text-xs text-gray-600 mt-1">{item.description}</p>
+                                            <p className="text-xs text-gray-600 mt-1">
+                                                {item.description}
+                                            </p>
                                         )}
                                     </div>
                                     <div className="flex space-x-2">
@@ -603,7 +655,9 @@ const DoubleDeckersPortfolioAdminPage = () => {
                                         <Button
                                             size="sm"
                                             variant="outline"
-                                            onClick={() => handleDeleteItem(item.id)}
+                                            onClick={() =>
+                                                handleDeleteItem(item.id)
+                                            }
                                         >
                                             <Trash2 className="w-3 h-3 mr-1" />
                                             Delete

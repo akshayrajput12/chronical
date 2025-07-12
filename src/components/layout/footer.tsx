@@ -25,22 +25,22 @@ const Footer = () => {
                             <ul className="space-y-1.5 text-sm">
                                 <FooterLink
                                     key="expo-services"
-                                    href="/expo-services"
+                                    href="/"
                                     label="Expo Services"
                                 />
                                 <FooterLink
-                                    key="congress-services"
-                                    href="/congress-services"
-                                    label="Congress Services"
+                                    key="conference-services"
+                                    href="/conference-organizers-in-dubai-uae"
+                                    label="Conference Services"
                                 />
                                 <FooterLink
                                     key="kiosk-services"
-                                    href="/kiosk-services"
+                                    href="/kiosk-manufacturers-in-dubai-uae"
                                     label="Kiosk Services"
                                 />
                                 <FooterLink
                                     key="custom-stands"
-                                    href="/custom-stands"
+                                    href="/custom-exhibition-stands-dubai-uae"
                                     label="Custom Stands"
                                 />
                             </ul>
@@ -65,14 +65,14 @@ const Footer = () => {
                                         {cities.slice(0, 6).map(city => (
                                             <FooterLink
                                                 key={city.id}
-                                                href={`/cities/${city.slug}`}
+                                                href={`/experience-middle-east/${city.slug}`}
                                                 label={city.name}
                                             />
                                         ))}
                                         {cities.length > 6 && (
                                             <FooterLink
                                                 key="view-all-locations"
-                                                href="/cities"
+                                                href="/experience-middle-east"
                                                 label="View All Locations"
                                             />
                                         )}
@@ -92,8 +92,16 @@ const Footer = () => {
                                 RESOURCES
                             </h3>
                             <ul className="space-y-1.5 text-sm">
-                                <FooterLink key="about-us" href="/about-us" label="About Us" />
-                                <FooterLink key="blog" href="/blog" label="Blog" />
+                                <FooterLink
+                                    key="about-us"
+                                    href="/about-us"
+                                    label="About Us"
+                                />
+                                <FooterLink
+                                    key="blog"
+                                    href="/blog"
+                                    label="Blog"
+                                />
                                 <FooterLink
                                     key="contact-us"
                                     href="/contact-us"

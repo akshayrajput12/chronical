@@ -2,7 +2,7 @@
 -- EXPO PAVILION STAND PAGE - DATABASE SCHEMA
 -- =====================================================
 -- This schema supports the Country Pavilion Expo Booth Solutions page
--- Route: /countrypavilionexpoboothsolutions
+-- Route: /country-pavilion-expo-booth-solutions-in-dubai
 -- Organized section-wise for better management
 
 -- =====================================================

@@ -5,7 +5,7 @@ import BlogDetailHero from "@/components/blog/blog-detail-hero";
 import BlogDetailContent from "@/components/blog/blog-detail-content";
 import BlogRelatedPostsServer from "@/components/blog/blog-related-posts-server";
 import { BlogPostWithDetails } from "@/types/blog";
-import { EventsForm } from "@/app/whats-on/components/events-form";
+import { EventsForm } from "@/app/top-trade-shows-in-uae-saudi-arabia-middle-east/components/events-form";
 import {
     getBlogDetailPageData,
     incrementBlogPostViews,
