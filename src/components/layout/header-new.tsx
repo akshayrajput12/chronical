@@ -290,7 +290,7 @@ const Header = () => {
                                     {/* WhatsApp button - extends to screen edge */}
                                     <div className="ml-3 md:ml-4 lg:ml-6 xl:ml-8">
                                         <Link
-                                            href="https://wa.me/yournumberhere"
+                                            href="https://wa.me/+971543474645"
                                             className="bg-transparent border border-[#a5cd39] text-[#a5cd39] hover:bg-[#a5cd39] hover:text-white transition-colors duration-300 rounded px-2 md:px-3 py-1.5 md:py-2 flex items-center space-x-1 md:space-x-2 text-xs md:text-sm font-medium whitespace-nowrap"
                                         >
                                             <svg
@@ -325,7 +325,7 @@ const Header = () => {
                                         <div className="flex items-center space-x-3 md:space-x-4 flex-shrink-0">
                                             {/* Mobile/Tablet WhatsApp Button */}
                                             <Link
-                                                href="https://wa.me/yournumberhere"
+                                                href="https://wa.me/+971543474645"
                                                 className="bg-transparent border border-[#a5cd39] text-[#a5cd39] hover:bg-[#a5cd39] hover:text-white transition-colors duration-300 rounded px-2 sm:px-3 md:px-4 py-1 sm:py-2 md:py-2.5 flex items-center space-x-1 sm:space-x-2 md:space-x-2 text-xs sm:text-sm md:text-base whitespace-nowrap flex-shrink-0"
                                             >
                                                 <svg
@@ -398,7 +398,7 @@ const Header = () => {
                                                                 isActive={[
                                                                     "/custom-exhibition-stands-dubai-uae",
                                                                     "/double-decker-exhibition-stands-in-dubai",
-                                                                    "/country-pavilion-expo-booth-solutions-dubai",
+                                                                    "/country-pavilion-expo-booth-solutions-in-dubai",
                                                                 ].includes(
                                                                     pathname,
                                                                 )}
@@ -449,7 +449,7 @@ const Header = () => {
                                                                         STANDS
                                                                     </Link>
                                                                     <Link
-                                                                        href="/country-pavilion-expo-booth-solutions-dubai"
+                                                                        href="/country-pavilion-expo-booth-solutions-in-dubai"
                                                                         className={cn(
                                                                             "text-xs uppercase font-medium hover:text-[#a5cd39] transition-colors px-4 py-2",
                                                                             (
@@ -650,11 +650,11 @@ const Header = () => {
                                                                                 }
                                                                             />
                                                                             <MobileNavItem
-                                                                                href="/country-pavilion-expo-booth-solutions-dubai"
+                                                                                href="/country-pavilion-expo-booth-solutions-in-dubai"
                                                                                 label="EXPO PAVILION STANDS"
                                                                                 isActive={
                                                                                     pathname ===
-                                                                                    "/country-pavilion-expo-booth-solutions-dubai"
+                                                                                    "/country-pavilion-expo-booth-solutions-in-dubai"
                                                                                 }
                                                                                 onClick={
                                                                                     closeMobileMenu
@@ -787,7 +787,7 @@ const Header = () => {
                                             {/* WhatsApp Button in Mobile/Tablet Menu */}
                                             <div className="mt-4 md:mt-6 pt-4 md:pt-6 border-t border-gray-200">
                                                 <Link
-                                                    href="https://wa.me/yournumberhere"
+                                                    href="https://wa.me/+971543474645"
                                                     className="bg-[#a5cd39] text-white hover:bg-[#8fb82f] transition-colors duration-300 rounded px-4 md:px-6 py-3 md:py-4 flex items-center justify-center space-x-2 md:space-x-3 w-full"
                                                     onClick={closeMobileMenu}
                                                 >

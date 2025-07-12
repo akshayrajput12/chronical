@@ -3,16 +3,19 @@
 import React from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { ExpoPavilionPortfolioSection, ExpoPavilionPortfolioItem } from "@/services/country-pavilion-page.service";
+import {
+    ExpoPavilionPortfolioSection,
+    ExpoPavilionPortfolioItem,
+} from "@/services/country-pavilion-page.service";
 
 interface PortfolioGridServerProps {
     portfolioSectionData: ExpoPavilionPortfolioSection | null;
     portfolioItemsData: ExpoPavilionPortfolioItem[];
 }
 
-const PortfolioGridServer = ({ 
-    portfolioSectionData, 
-    portfolioItemsData 
+const PortfolioGridServer = ({
+    portfolioSectionData,
+    portfolioItemsData,
 }: PortfolioGridServerProps) => {
     // Don't render if no data exists
     if (!portfolioSectionData) {
@@ -65,8 +68,8 @@ const PortfolioGridServer = ({
         <div className="relative">
             {/* Background with two sections */}
             <div className="absolute inset-0 w-full h-full pointer-events-none z-0">
-                <div className="h-[65%] bg-gray-200 w-full" />
-                <div className="h-[35%] bg-gray-100 w-full" />
+                <div className="h-[65%] bg-black/60 w-full" />
+                <div className="h-[35%] bg-white w-full" />
             </div>
 
             {/* Content */}
@@ -117,10 +120,10 @@ const PortfolioGridServer = ({
                                     className="object-cover transition-transform duration-500 group-hover:scale-110"
                                     sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                                 />
-                                
+
                                 {/* Overlay */}
                                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                                
+
                                 {/* Title overlay */}
                                 <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
                                     <h3 className="text-white font-medium text-lg">

@@ -58,7 +58,7 @@ const DoubleDeckersPortfolio = () => {
             <div className="relative">
                 {/* Split background: top black, bottom white */}
                 <div className="absolute inset-0 w-full h-full pointer-events-none z-0">
-                    <div className="h-[65%] bg-black w-full" />
+                    <div className="h-[65%] bg-black/60 w-full" />
                     <div className="h-[35%] bg-white w-full" />
                 </div>
                 <div className="relative z-10 px-4 max-w-7xl mx-auto pt-12 pb-12">
