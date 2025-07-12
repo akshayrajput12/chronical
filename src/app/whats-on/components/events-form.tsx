@@ -257,10 +257,10 @@ export const EventsForm: React.FC<EventsFormProps> = ({
         }
     };
     return (
-        <section className={`py-8 md:py-12 lg:py-16 ${className}`}>
+        <section className={`py-4 md:py-6 lg:py-8 ${className}`}>
             <div className="container mx-auto">
-                <div className="max-w-4xl mx-auto">
-                    <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 md:p-8">
+                <div className="max-w-5xl mx-auto">
+                    <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-4 md:p-6">
                     {/* Status Messages */}
                     {submitStatus.type && (
                         <div
@@ -274,9 +274,9 @@ export const EventsForm: React.FC<EventsFormProps> = ({
                         </div>
                     )}
 
-                    <form onSubmit={handleSubmit} className="space-y-4">
+                    <form onSubmit={handleSubmit} className="space-y-3">
                         {/* Simple responsive grid for all main fields */}
-                        <div className="flex flex-col gap-4">
+                        <div className="flex flex-col gap-3">
                             <div className="space-y-1">
                                 <input
                                     type="text"
@@ -401,7 +401,7 @@ export const EventsForm: React.FC<EventsFormProps> = ({
                                 placeholder="Tell us about your event requirements, booth specifications, or any questions you have..."
                                 value={formData.message}
                                 onChange={handleInputChange}
-                                className={`min-h-[100px] px-3 py-2 text-sm border-2 ${
+                                className={`min-h-[80px] px-3 py-2 text-sm border-2 ${
                                     errors.message
                                         ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
                                         : 'border-gray-200 focus:border-[#a5cd39] focus:ring-[#a5cd39]'
@@ -421,7 +421,7 @@ export const EventsForm: React.FC<EventsFormProps> = ({
                         )}
 
                         {/* Submit button centered */}
-                        <div className="flex justify-center pt-2">
+                        <div className="flex justify-center pt-1">
                             <button
                                 type="submit"
                                 disabled={isSubmitting}

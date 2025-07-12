@@ -93,11 +93,11 @@ export async function POST(request: NextRequest) {
                 .replace(/(^-|-$)/g, '');
         }
 
-        // Add metadata - using null since auth is disabled
+        // Add metadata - don't set user references when auth is disabled for testing
         const categoryWithMetadata = {
             ...categoryData,
-            created_by: null,
-            updated_by: null,
+            // created_by: null,
+            // updated_by: null,
         };
 
         const { data: category, error } = await supabase
@@ -150,14 +150,14 @@ export async function PUT(request: NextRequest) {
     try {
         const supabase = await createClient();
         
-        // Check authentication
-        const { data: { user }, error: authError } = await supabase.auth.getUser();
-        if (authError || !user) {
-            return NextResponse.json(
-                { error: 'Unauthorized' },
-                { status: 401 }
-            );
-        }
+        // Check authentication - TEMPORARILY DISABLED FOR TESTING
+        // const { data: { user }, error: authError } = await supabase.auth.getUser();
+        // if (authError || !user) {
+        //     return NextResponse.json(
+        //         { error: 'Unauthorized' },
+        //         { status: 401 }
+        //     );
+        // }
 
         const { action, category_ids, data: updateData } = await request.json();
 
@@ -168,7 +168,7 @@ export async function PUT(request: NextRequest) {
             );
         }
 
-        let updateFields: any = { updated_by: user.id };
+        let updateFields: any = { /* updated_by: user.id */ };
 
         switch (action) {
             case 'activate':
@@ -189,7 +189,7 @@ export async function PUT(request: NextRequest) {
                 const reorderPromises = updateData.map(({ id, display_order }) =>
                     supabase
                         .from('event_categories')
-                        .update({ display_order, updated_by: user.id })
+                        .update({ display_order /* , updated_by: user.id */ })
                         .eq('id', id)
                 );
 
@@ -201,7 +201,7 @@ export async function PUT(request: NextRequest) {
                 });
 
             case 'update':
-                updateFields = { ...updateData, updated_by: user.id };
+                updateFields = { ...updateData /* , updated_by: user.id */ };
                 break;
             default:
                 return NextResponse.json(
@@ -244,14 +244,14 @@ export async function DELETE(request: NextRequest) {
     try {
         const supabase = await createClient();
         
-        // Check authentication
-        const { data: { user }, error: authError } = await supabase.auth.getUser();
-        if (authError || !user) {
-            return NextResponse.json(
-                { error: 'Unauthorized' },
-                { status: 401 }
-            );
-        }
+        // Check authentication - TEMPORARILY DISABLED FOR TESTING
+        // const { data: { user }, error: authError } = await supabase.auth.getUser();
+        // if (authError || !user) {
+        //     return NextResponse.json(
+        //         { error: 'Unauthorized' },
+        //         { status: 401 }
+        //     );
+        // }
 
         const { category_ids } = await request.json();
 

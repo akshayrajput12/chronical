@@ -62,17 +62,19 @@ export async function generateMetadata({
     const { event } = eventData;
 
     return {
-        title: `${event.title} | Chronicle Exhibits`,
+        title: event.meta_title || `${event.title} | Chronicle Exhibits`,
         description:
+            event.meta_description ||
             event.short_description ||
             event.description ||
             `Join us for ${event.title} at Chronicle Exhibits.`,
-        keywords: `${event.title}, ${
+        keywords: event.meta_keywords || `${event.title}, ${
             event.category_name || "event"
         }, exhibition, Dubai, Chronicle Exhibits`,
         openGraph: {
-            title: event.title,
+            title: event.meta_title || event.title,
             description:
+                event.meta_description ||
                 event.short_description ||
                 event.description ||
                 `Join us for ${event.title}`,
@@ -81,8 +83,9 @@ export async function generateMetadata({
         },
         twitter: {
             card: "summary_large_image",
-            title: event.title,
+            title: event.meta_title || event.title,
             description:
+                event.meta_description ||
                 event.short_description ||
                 event.description ||
                 `Join us for ${event.title}`,
