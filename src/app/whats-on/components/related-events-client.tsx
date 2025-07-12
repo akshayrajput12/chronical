@@ -91,7 +91,7 @@ const RelatedEventsClient = ({ relatedEvents }: RelatedEventsClientProps) => {
                                         {relatedEvent.title}
                                     </h3>
                                     <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
-                                        {relatedEvent.category_name || "Event"}
+                                        {relatedEvent.category_name}
                                     </p>
                                     {relatedEvent.date_range && (
                                         <p className="text-xs text-gray-400 mt-1">

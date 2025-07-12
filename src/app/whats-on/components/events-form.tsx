@@ -257,18 +257,10 @@ export const EventsForm: React.FC<EventsFormProps> = ({
         }
     };
     return (
-        <section className={`py-16 bg-black/60 ${className}`}>
-            <div className="container mx-auto px-4">
-                <h2 className="text-3xl sm:text-4xl font-rubik font-bold text-center text-white mb-4">
-                    Get in Touch
-                    <div className="w-16 h-1 my-2 bg-[#a5cd39] mx-auto"></div>
-                </h2>
-                <p className="text-center text-white/80 mb-8 max-w-2xl mx-auto">
-                    Interested in this event? Fill out the form below and we'll
-                    get back to you with more information.
-                </p>
-
-                <div className="max-w-6xl mx-auto bg-white rounded-lg shadow p-6">
+        <section className={`py-8 md:py-12 lg:py-16 ${className}`}>
+            <div className="container mx-auto">
+                <div className="max-w-4xl mx-auto">
+                    <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 md:p-8">
                     {/* Status Messages */}
                     {submitStatus.type && (
                         <div
@@ -284,7 +276,7 @@ export const EventsForm: React.FC<EventsFormProps> = ({
 
                     <form onSubmit={handleSubmit} className="space-y-4">
                         {/* Simple responsive grid for all main fields */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div className="flex flex-col gap-4">
                             <div className="space-y-1">
                                 <input
                                     type="text"
@@ -292,11 +284,11 @@ export const EventsForm: React.FC<EventsFormProps> = ({
                                     placeholder="Name *"
                                     value={formData.name}
                                     onChange={handleInputChange}
-                                    className={`h-8 px-2 py-1 text-xs border ${
+                                    className={`h-10 px-3 py-2 text-sm border-2 ${
                                         errors.name
                                             ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
-                                            : 'border-gray-300 focus:border-[#a5cd39] focus:ring-[#a5cd39]'
-                                    } rounded-md w-full focus:ring-1 placeholder:text-gray-500 transition-all duration-200`}
+                                            : 'border-gray-200 focus:border-[#a5cd39] focus:ring-[#a5cd39]'
+                                    } rounded-lg w-full focus:ring-2 placeholder:text-gray-400 transition-all duration-300 bg-gray-50 focus:bg-white`}
                                     required
                                     disabled={isSubmitting}
                                 />
@@ -310,7 +302,7 @@ export const EventsForm: React.FC<EventsFormProps> = ({
                                 placeholder="Exhibition Name"
                                 value={formData.exhibition_name}
                                 onChange={handleInputChange}
-                                className="h-8 px-2 py-1 text-xs border border-gray-300 rounded-md w-full focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] placeholder:text-gray-500 transition-all duration-200"
+                                className="h-10 px-3 py-2 text-sm border-2 border-gray-200 rounded-lg w-full focus:border-[#a5cd39] focus:ring-2 focus:ring-[#a5cd39] placeholder:text-gray-400 transition-all duration-300 bg-gray-50 focus:bg-white"
                                 disabled={isSubmitting}
                             />
                             <input
@@ -319,7 +311,7 @@ export const EventsForm: React.FC<EventsFormProps> = ({
                                 placeholder="Company Name"
                                 value={formData.company_name}
                                 onChange={handleInputChange}
-                                className="h-8 px-2 py-1 text-xs border border-gray-300 rounded-md w-full focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] placeholder:text-gray-500 transition-all duration-200"
+                                className="h-10 px-3 py-2 text-sm border-2 border-gray-200 rounded-lg w-full focus:border-[#a5cd39] focus:ring-2 focus:ring-[#a5cd39] placeholder:text-gray-400 transition-all duration-300 bg-gray-50 focus:bg-white"
                                 disabled={isSubmitting}
                             />
                             <div className="space-y-1">
@@ -329,11 +321,11 @@ export const EventsForm: React.FC<EventsFormProps> = ({
                                     placeholder="Email *"
                                     value={formData.email}
                                     onChange={handleInputChange}
-                                    className={`h-8 px-2 py-1 text-xs border ${
+                                    className={`h-10 px-3 py-2 text-sm border-2 ${
                                         errors.email
                                             ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
-                                            : 'border-gray-300 focus:border-[#a5cd39] focus:ring-[#a5cd39]'
-                                    } rounded-md w-full focus:ring-1 placeholder:text-gray-500 transition-all duration-200`}
+                                            : 'border-gray-200 focus:border-[#a5cd39] focus:ring-[#a5cd39]'
+                                    } rounded-lg w-full focus:ring-2 placeholder:text-gray-400 transition-all duration-300 bg-gray-50 focus:bg-white`}
                                     required
                                     disabled={isSubmitting}
                                 />
@@ -361,7 +353,7 @@ export const EventsForm: React.FC<EventsFormProps> = ({
                                 placeholder="Budget"
                                 value={formData.budget}
                                 onChange={handleInputChange}
-                                className="h-8 px-2 py-1 text-xs border border-gray-300 rounded-md w-full focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39] placeholder:text-gray-500 transition-all duration-200"
+                                className="h-10 px-3 py-2 text-sm border-2 border-gray-200 rounded-lg w-full focus:border-[#a5cd39] focus:ring-2 focus:ring-[#a5cd39] placeholder:text-gray-400 transition-all duration-300 bg-gray-50 focus:bg-white"
                                 disabled={isSubmitting}
                             />
                         </div>
@@ -377,11 +369,11 @@ export const EventsForm: React.FC<EventsFormProps> = ({
                                     title="Upload File (PDF, DOC, JPG, PNG)"
                                     disabled={isSubmitting}
                                 />
-                                <div className={`flex items-center justify-between w-full h-10 px-1 pl-2 py-2 text-sm bg-white border ${
+                                <div className={`flex items-center justify-between w-full h-10 px-3 py-2 text-sm bg-gray-50 border-2 ${
                                     errors.file
                                         ? 'border-red-500 hover:border-red-500 focus-within:border-red-500'
-                                        : 'border-gray-300 hover:border-[#a5cd39] focus-within:border-[#a5cd39]'
-                                } rounded-md cursor-pointer transition-all duration-200`}>
+                                        : 'border-gray-200 hover:border-[#a5cd39] focus-within:border-[#a5cd39]'
+                                } rounded-lg cursor-pointer transition-all duration-300`}>
                                     <span
                                         className={`${
                                             formData.file
@@ -409,11 +401,11 @@ export const EventsForm: React.FC<EventsFormProps> = ({
                                 placeholder="Tell us about your event requirements, booth specifications, or any questions you have..."
                                 value={formData.message}
                                 onChange={handleInputChange}
-                                className={`min-h-[40px] h-16 px-2 py-1 text-xs border ${
+                                className={`min-h-[100px] px-3 py-2 text-sm border-2 ${
                                     errors.message
                                         ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
-                                        : 'border-gray-300 focus:border-[#a5cd39] focus:ring-[#a5cd39]'
-                                } rounded-md w-full focus:ring-1 placeholder:text-gray-500 transition-all duration-200 resize-none`}
+                                        : 'border-gray-200 focus:border-[#a5cd39] focus:ring-[#a5cd39]'
+                                } rounded-lg w-full focus:ring-2 placeholder:text-gray-400 transition-all duration-300 resize-none bg-gray-50 focus:bg-white`}
                                 disabled={isSubmitting}
                                 required
                             />
@@ -433,10 +425,10 @@ export const EventsForm: React.FC<EventsFormProps> = ({
                             <button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className={`px-6 py-2 rounded-md font-medium transition-colors duration-300 text-sm disabled:opacity-50 disabled:cursor-not-allowed ${
+                                className={`px-8 py-3 rounded-lg font-semibold transition-all duration-300 text-sm disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl ${
                                     isSubmitting
                                         ? "bg-gray-400 text-gray-200 cursor-not-allowed"
-                                        : "bg-[#a5cd39] text-white hover:bg-[#94b933]"
+                                        : "bg-[#a5cd39] text-white hover:bg-[#94b933] hover:scale-105"
                                 }`}
                             >
                                 {isSubmitting ? (
@@ -469,6 +461,7 @@ export const EventsForm: React.FC<EventsFormProps> = ({
                             </button>
                         </div>
                     </form>
+                    </div>
                 </div>
             </div>
         </section>

@@ -343,6 +343,7 @@ export default async function EventDetailPage({
                                             </p>
                                         )}
                                     </div>
+                                    <EventsForm eventId={event.id} />
                                 </div>
                             </MotionDiv>
 
@@ -367,7 +368,6 @@ export default async function EventDetailPage({
                     </div>
                 </div>
             </section>
-            <EventsForm eventId={event.id} />
 
             {/* Event Gallery Section */}
             <section className="py-8 md:py-12 lg:py-16 bg-white">
@@ -395,7 +395,7 @@ export default async function EventDetailPage({
                 </div>
             </section>
             {/* Related Blog Articles Section */}
-            <section
+            {/* <section
                 className="py-8 md:py-12 lg:py-16"
                 style={{ backgroundColor: "rgb(235, 235, 235)" }}
             >
@@ -415,7 +415,7 @@ export default async function EventDetailPage({
                         <BlogCarousel posts={blogPosts} />
                     </div>
                 </div>
-            </section>
+            </section> */}
         </div>
     );
 }
