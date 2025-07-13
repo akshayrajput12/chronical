@@ -44,7 +44,7 @@ export default function ContactAdminPage() {
         if (tab && tab !== activeTab) {
             setActiveTab(tab);
         }
-    }, [searchParams]);
+    }, [searchParams, activeTab]);
 
     const loadStats = async () => {
         try {

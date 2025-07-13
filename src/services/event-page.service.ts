@@ -1,4 +1,5 @@
-import { createClient, createStaticClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/service";
+import { createStaticClient } from "@/lib/supabase/server";
 import { Event, EventsHero } from "@/types/events";
 import { BlogPostSummary } from "@/types/blog";
 
@@ -70,7 +71,7 @@ export async function getEventsPageData(
     isActive: boolean = true,
 ): Promise<EventsPageData> {
     try {
-        const supabase = await createClient();
+        const supabase = createServiceClient();
 
         // Fetch hero data and events in parallel
         const [heroResult, eventsResult, countResult] = await Promise.all([
@@ -149,7 +150,7 @@ export async function getEventDetailPageData(
     slug: string,
 ): Promise<EventDetailPageData | null> {
     try {
-        const supabase = await createClient();
+        const supabase = createServiceClient();
 
         // Fetch the main event
         const { data: event, error: eventError } = await supabase

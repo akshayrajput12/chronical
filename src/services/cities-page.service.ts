@@ -1,4 +1,5 @@
-import { createClient, createStaticClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/service";
+import { createStaticClient } from "@/lib/supabase/server";
 import { City, LegacyCity } from "@/types/cities";
 
 // Interface for cities page data
@@ -21,7 +22,7 @@ export interface SimplifiedCity {
  */
 export async function getCitiesPageData(): Promise<CitiesPageData> {
     try {
-        const supabase = await createClient();
+        const supabase = createServiceClient();
         
         // Fetch active cities with only the fields needed for the listing page
         const { data, error, count } = await supabase
@@ -100,7 +101,7 @@ export async function getAllCitySlugs(): Promise<string[]> {
  */
 export async function getAllCitiesData(): Promise<City[]> {
     try {
-        const supabase = await createClient();
+        const supabase = createServiceClient();
         
         const { data, error } = await supabase
             .from("cities")
@@ -187,7 +188,7 @@ function transformToLegacyFormat(city: City): LegacyCity {
  */
 export async function getCityBySlug(slug: string): Promise<LegacyCity | null> {
     try {
-        const supabase = await createClient();
+        const supabase = createServiceClient();
 
         const { data, error } = await supabase
             .from("cities")

@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/service";
 import { AboutMainSectionData, AboutDescriptionSectionData } from "@/types/about";
 
 // Interface for about page data
@@ -14,7 +14,7 @@ export interface AboutPageData {
  */
 export async function getAboutMainSectionData(): Promise<AboutMainSectionData | null> {
     try {
-        const supabase = await createClient();
+        const supabase = createServiceClient();
         
         // Try to use the database function to get main data
         const { data, error } = await supabase.rpc("get_about_main_section");
@@ -41,7 +41,7 @@ export async function getAboutMainSectionData(): Promise<AboutMainSectionData | 
  */
 export async function getAboutDescriptionSectionData(): Promise<AboutDescriptionSectionData | null> {
     try {
-        const supabase = await createClient();
+        const supabase = createServiceClient();
         
         // Try to load section data from database
         const { data: sectionResponse, error: sectionError } = await supabase.rpc("get_about_description_section");
@@ -68,7 +68,7 @@ export async function getAboutDescriptionSectionData(): Promise<AboutDescription
  */
 export async function getAboutDedicationSectionData(): Promise<any | null> {
     try {
-        const supabase = await createClient();
+        const supabase = createServiceClient();
 
         // Use the database functions to get section and items data with proper image URLs
         const [sectionResult, itemsResult] = await Promise.all([

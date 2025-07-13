@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/service";
 import { AboutHeroSectionData } from "@/types/about";
 import type { PortfolioItemWithImage } from "@/types/portfolio-gallery";
 
@@ -14,7 +14,7 @@ export interface PortfolioPageData {
  */
 async function getPortfolioHeroData(): Promise<AboutHeroSectionData | null> {
     try {
-        const supabase = await createClient();
+        const supabase = createServiceClient();
         
         // Use the database function to get about hero data
         const { data, error } = await supabase.rpc("get_about_hero_section");
@@ -55,7 +55,7 @@ async function getPortfolioHeroData(): Promise<AboutHeroSectionData | null> {
  */
 async function getPortfolioItems(): Promise<PortfolioItemWithImage[]> {
     try {
-        const supabase = await createClient();
+        const supabase = createServiceClient();
         
         // Use the database function to get items with images
         const { data, error } = await supabase.rpc("get_portfolio_items_with_images");

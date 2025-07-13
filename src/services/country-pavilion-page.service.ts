@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/service";
 
 // Interfaces for country pavilion page data
 export interface ExpoPavilionHero {
@@ -80,7 +80,7 @@ export interface CountryPavilionPageData {
  */
 export async function getCountryPavilionPageData(): Promise<CountryPavilionPageData> {
     try {
-        const supabase = await createClient();
+        const supabase = createServiceClient();
         
         // Fetch all data in parallel for better performance
         const [
@@ -166,7 +166,7 @@ export async function getCountryPavilionPageData(): Promise<CountryPavilionPageD
 
 export async function getExpoPavilionHeroData(): Promise<ExpoPavilionHero | null> {
     try {
-        const supabase = await createClient();
+        const supabase = createServiceClient();
         const { data, error } = await supabase
             .from("expo_pavilion_hero")
             .select("*")
@@ -187,7 +187,7 @@ export async function getExpoPavilionHeroData(): Promise<ExpoPavilionHero | null
 
 export async function getExpoPavilionIntroData(): Promise<ExpoPavilionIntro | null> {
     try {
-        const supabase = await createClient();
+        const supabase = createServiceClient();
         const { data, error } = await supabase
             .from("expo_pavilion_intro")
             .select("*")
@@ -208,7 +208,7 @@ export async function getExpoPavilionIntroData(): Promise<ExpoPavilionIntro | nu
 
 export async function getExpoPavilionExceptionalDesignData(): Promise<{ design: ExpoPavilionExceptionalDesign | null; benefits: DesignBenefit[] }> {
     try {
-        const supabase = await createClient();
+        const supabase = createServiceClient();
         
         const { data: designData, error: designError } = await supabase
             .from("expo_pavilion_exceptional_design")
@@ -245,7 +245,7 @@ export async function getExpoPavilionExceptionalDesignData(): Promise<{ design: 
 
 export async function getExpoPavilionPortfolioData(): Promise<{ section: ExpoPavilionPortfolioSection | null; items: ExpoPavilionPortfolioItem[] }> {
     try {
-        const supabase = await createClient();
+        const supabase = createServiceClient();
         
         const [sectionResult, itemsResult] = await Promise.all([
             supabase

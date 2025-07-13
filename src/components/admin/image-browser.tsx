@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     Dialog,
@@ -94,7 +94,7 @@ const ImageBrowser: React.FC<ImageBrowserProps> = ({
         { value: "general", label: "General" },
     ];
 
-    const fetchImages = async (reset = false) => {
+    const fetchImages = useCallback(async (reset = false) => {
         setLoading(true);
         try {
             const params = new URLSearchParams({
@@ -128,7 +128,7 @@ const ImageBrowser: React.FC<ImageBrowserProps> = ({
         } finally {
             setLoading(false);
         }
-    };
+    }, [page, searchTerm, selectedCategory, eventId]);
 
     useEffect(() => {
         if (isOpen) {

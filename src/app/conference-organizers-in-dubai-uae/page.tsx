@@ -10,6 +10,10 @@ import PortfolioGallery from "../portfolio/components/portfolio-gallery";
 import ConferenceSolutionSection from "./components/conference-solution-section";
 import BoothRequirementsForm from "../home/components/booth-requirements-form";
 import { getPortfolioPageData } from "@/services/portfolio-page.service";
+import { getConferencePageData } from "@/services/conference-page.service";
+
+// Enable ISR - revalidate every 4 hours (14400 seconds)
+export const revalidate = 14400;
 
 export const metadata: Metadata = {
     title: "Conference Organizers in Dubai | Chronicle Exhibits - Event Management Services",
@@ -25,9 +29,13 @@ export const metadata: Metadata = {
     },
 };
 
+// Server component that fetches data at build/request time for better SEO
 async function ConferencePage() {
-    // Fetch portfolio data server-side
-    const portfolioData = await getPortfolioPageData();
+    // Fetch all conference page data and portfolio data server-side for SEO optimization
+    const [conferencePageData, portfolioData] = await Promise.all([
+        getConferencePageData(),
+        getPortfolioPageData()
+    ]);
 
     return (
         <div className="flex flex-col relative ">
@@ -36,6 +44,7 @@ async function ConferencePage() {
             <ConferenceManagementServices />
             <CommunicateSection />
             <VirtualEventsSection />
+            <ConferenceSolutionSection />
             <PortfolioGalleryHeading />
             <PortfolioGallery portfolioItems={portfolioData.portfolioItems} />
             <BoothRequirementsForm />

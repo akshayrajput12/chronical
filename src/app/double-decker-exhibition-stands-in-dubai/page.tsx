@@ -6,6 +6,7 @@ import EffectiveCommunicationSection from "./components/effective-communication-
 import BoothRequirementsForm from "../home/components/booth-requirements-form";
 import DoubleDeckersPortfolio from "./components/double-decker-portfolio";
 import DoubleDeckerParagraphSection from "./components/double-decker-paragraph-section";
+import { getDoubleDeckerPageData } from "@/services/double-decker-page.service";
 
 // Enable ISR - revalidate every 6 hours (21600 seconds)
 export const revalidate = 21600;
@@ -24,7 +25,11 @@ export const metadata: Metadata = {
     },
 };
 
-function DoubleDeckerExhibitionStandsPage() {
+// Server component that fetches data at build/request time for better SEO
+async function DoubleDeckerExhibitionStandsPage() {
+    // Fetch all double decker page data server-side for SEO optimization
+    const doubleDeckerPageData = await getDoubleDeckerPageData();
+
     return (
         <div className="flex flex-col relative">
             <DoubleDeckerHero />

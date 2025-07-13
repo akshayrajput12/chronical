@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/service";
 import { 
     CustomExhibitionHero,
     CustomExhibitionLeadingContractor,
@@ -28,7 +28,7 @@ export interface CustomExhibitionPageData {
  */
 export async function getCustomExhibitionPageData(): Promise<CustomExhibitionPageData> {
     try {
-        const supabase = await createClient();
+        const supabase = createServiceClient();
         
         // Use the existing database function to get all data at once
         const { data, error } = await supabase.rpc("get_custom_exhibition_page_data");
@@ -78,7 +78,7 @@ export async function getCustomExhibitionPageData(): Promise<CustomExhibitionPag
 
 export async function getCustomExhibitionHeroData(): Promise<CustomExhibitionHero | null> {
     try {
-        const supabase = await createClient();
+        const supabase = createServiceClient();
         const { data, error } = await supabase
             .from("custom_exhibition_hero")
             .select("*")
@@ -99,7 +99,7 @@ export async function getCustomExhibitionHeroData(): Promise<CustomExhibitionHer
 
 export async function getCustomExhibitionLeadingContractorData(): Promise<CustomExhibitionLeadingContractor | null> {
     try {
-        const supabase = await createClient();
+        const supabase = createServiceClient();
         const { data, error } = await supabase
             .from("custom_exhibition_leading_contractor")
             .select("*")
@@ -120,7 +120,7 @@ export async function getCustomExhibitionLeadingContractorData(): Promise<Custom
 
 export async function getCustomExhibitionPromoteBrandData(): Promise<CustomExhibitionPromoteBrand | null> {
     try {
-        const supabase = await createClient();
+        const supabase = createServiceClient();
         const { data, error } = await supabase
             .from("custom_exhibition_promote_brand")
             .select("*")
@@ -141,7 +141,7 @@ export async function getCustomExhibitionPromoteBrandData(): Promise<CustomExhib
 
 export async function getCustomExhibitionStrikingCustomizedData(): Promise<CustomExhibitionStrikingCustomized | null> {
     try {
-        const supabase = await createClient();
+        const supabase = createServiceClient();
         const { data, error } = await supabase
             .from("custom_exhibition_striking_customized")
             .select("*")
@@ -162,7 +162,7 @@ export async function getCustomExhibitionStrikingCustomizedData(): Promise<Custo
 
 export async function getCustomExhibitionReasonsToChooseData(): Promise<CustomExhibitionReasonsToChoose | null> {
     try {
-        const supabase = await createClient();
+        const supabase = createServiceClient();
         const { data, error } = await supabase
             .from("custom_exhibition_reasons_to_choose")
             .select("*")
@@ -183,7 +183,7 @@ export async function getCustomExhibitionReasonsToChooseData(): Promise<CustomEx
 
 export async function getCustomExhibitionFAQData(): Promise<{ section: CustomExhibitionFAQSection | null; items: CustomExhibitionFAQItem[] }> {
     try {
-        const supabase = await createClient();
+        const supabase = createServiceClient();
         
         const [sectionResult, itemsResult] = await Promise.all([
             supabase

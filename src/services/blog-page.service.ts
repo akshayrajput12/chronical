@@ -1,4 +1,5 @@
-import { createClient, createStaticClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/service";
+import { createStaticClient } from "@/lib/supabase/server";
 import { BlogPostSummary, BlogPostWithDetails } from "@/types/blog";
 
 export interface BlogPageData {
@@ -26,7 +27,7 @@ export async function getBlogPageData(
     featured?: boolean
 ): Promise<BlogPageData> {
     try {
-        const supabase = await createClient();
+        const supabase = createServiceClient();
 
         // Calculate offset
         const offset = (page - 1) * pageSize;
@@ -176,7 +177,7 @@ export async function getAllBlogSlugs(): Promise<string[]> {
  */
 export async function getBlogDetailPageData(slug: string): Promise<BlogDetailPageData | null> {
     try {
-        const supabase = await createClient();
+        const supabase = createServiceClient();
 
         // Fetch the main blog post
         const { data: post, error } = await supabase
@@ -296,7 +297,7 @@ export async function getBlogDetailPageData(slug: string): Promise<BlogDetailPag
  */
 export async function incrementBlogPostViews(postSlug: string): Promise<void> {
     try {
-        const supabase = await createClient();
+        const supabase = createServiceClient();
 
         const { error } = await supabase.rpc("increment_blog_post_views", {
             post_slug: postSlug
