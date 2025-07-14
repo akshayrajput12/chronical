@@ -84,6 +84,9 @@ const PortfolioGalleryEditor = () => {
         message: "",
     });
 
+    // Drag and drop state
+    const [dragOver, setDragOver] = useState(false);
+
     // Notification helper
     const showNotification = useCallback(
         (
@@ -99,9 +102,99 @@ const PortfolioGalleryEditor = () => {
         [],
     );
 
+    // Drag and drop handlers
+    const handleDragOver = useCallback((e: React.DragEvent) => {
+        e.preventDefault();
+        setDragOver(true);
+    }, []);
+
+    const handleDragLeave = useCallback((e: React.DragEvent) => {
+        e.preventDefault();
+        setDragOver(false);
+    }, []);
+
+    const handleDrop = useCallback((e: React.DragEvent, itemId?: string) => {
+        e.preventDefault();
+        setDragOver(false);
+
+        const files = Array.from(e.dataTransfer.files);
+        const imageFile = files.find(file => file.type.startsWith('image/'));
+
+        if (imageFile) {
+            // Create a fake event object for the upload handler
+            const fakeEvent = {
+                target: { files: [imageFile] }
+            } as React.ChangeEvent<HTMLInputElement>;
+
+            handleDirectImageUpload(fakeEvent, itemId);
+        }
+    }, []);
+
+    // Check and ensure storage bucket exists
+    const ensureStorageBucket = useCallback(async () => {
+        try {
+            const { data: buckets, error: listError } = await supabase.storage.listBuckets();
+
+            if (listError) {
+                console.error("Error listing buckets:", listError);
+                // Don't fail completely, just warn and continue
+                console.warn("Could not verify bucket existence, but continuing with upload attempt");
+                return true;
+            }
+
+            const portfolioBucket = buckets.find(bucket => bucket.id === 'portfolio-gallery-images');
+
+            if (!portfolioBucket) {
+                console.warn("Portfolio gallery images bucket not found in bucket list");
+                // Try to test bucket access directly instead of failing
+                try {
+                    const { error: testError } = await supabase.storage
+                        .from('portfolio-gallery-images')
+                        .list('', { limit: 1 });
+
+                    if (testError) {
+                        console.error("Bucket access test failed:", testError);
+                        showNotification(
+                            "error",
+                            "Storage Setup Required",
+                            "Portfolio gallery storage bucket is not accessible. Please run the setup script.",
+                        );
+                        return false;
+                    } else {
+                        console.log("Bucket access test passed, bucket exists but not in list");
+                        return true;
+                    }
+                } catch (accessError) {
+                    console.error("Bucket access test error:", accessError);
+                    showNotification(
+                        "error",
+                        "Storage Setup Required",
+                        "Portfolio gallery storage bucket is not configured. Please contact administrator.",
+                    );
+                    return false;
+                }
+            }
+
+            console.log("Portfolio gallery bucket found and verified");
+            return true;
+        } catch (error) {
+            console.error("Error checking storage bucket:", error);
+            // Don't fail completely, just warn and continue
+            console.warn("Bucket check failed, but continuing with upload attempt");
+            return true;
+        }
+    }, [showNotification]);
+
     const loadPortfolioData = useCallback(async () => {
         try {
             setLoading(true);
+
+            // Check storage bucket first
+            const bucketExists = await ensureStorageBucket();
+            if (!bucketExists) {
+                console.warn("Storage bucket check failed, but continuing with data load");
+            }
+
             const { data, error } = await supabase
                 .from("portfolio_items")
                 .select("*")
@@ -122,7 +215,7 @@ const PortfolioGalleryEditor = () => {
         } finally {
             setLoading(false);
         }
-    }, [showNotification]);
+    }, [showNotification, ensureStorageBucket]);
 
     // Load existing data
     useEffect(() => {
@@ -249,75 +342,141 @@ const PortfolioGalleryEditor = () => {
     // Direct image upload for portfolio items
     const handleDirectImageUpload = async (
         event: React.ChangeEvent<HTMLInputElement>,
-        itemId: string,
+        itemId?: string,
     ) => {
         const file = event.target.files?.[0];
         if (!file) return;
 
+        // Validate file type
+        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+        if (!allowedTypes.includes(file.type)) {
+            showNotification(
+                "error",
+                "Invalid File Type",
+                "Please upload a JPG, PNG, or WebP image.",
+            );
+            return;
+        }
+
+        // Validate file size (10MB limit)
+        const maxSize = 10 * 1024 * 1024; // 10MB
+        if (file.size > maxSize) {
+            showNotification(
+                "error",
+                "File Too Large",
+                "Please upload an image smaller than 10MB.",
+            );
+            return;
+        }
+
         setUploading(true);
         try {
+            console.log("Starting image upload for file:", file.name, "Size:", file.size, "Type:", file.type);
+
+            // Check if storage bucket exists (but don't fail if check fails)
+            const bucketExists = await ensureStorageBucket();
+            if (!bucketExists) {
+                console.warn("Bucket check failed, but attempting upload anyway");
+            }
+
             // Generate unique filename
             const fileExt = file.name.split(".").pop();
             const fileName = `${Date.now()}.${fileExt}`;
             const filePath = `portfolio-gallery/${fileName}`;
 
+            console.log("Uploading to path:", filePath);
+
             // Upload file to Supabase storage
-            const { error: uploadError } = await supabase.storage
+            const { data: uploadData, error: uploadError } = await supabase.storage
                 .from("portfolio-gallery-images")
                 .upload(filePath, file);
 
-            if (uploadError) throw uploadError;
+            if (uploadError) {
+                console.error("Storage upload error:", uploadError);
+                throw new Error(`Storage upload failed: ${uploadError.message}`);
+            }
+
+            console.log("File uploaded successfully:", uploadData);
 
             // Save image metadata to database
+            const imageMetadata = {
+                filename: fileName,
+                original_filename: file.name,
+                file_path: filePath,
+                file_size: file.size,
+                mime_type: file.type,
+                alt_text: "Portfolio gallery image",
+                is_active: true,
+                display_order: 1,
+            };
+
+            console.log("Saving image metadata:", imageMetadata);
+
             const { data: imageData, error: dbError } = await supabase
                 .from("portfolio_images")
-                .insert([
-                    {
-                        filename: fileName,
-                        original_filename: file.name,
-                        file_path: filePath,
-                        file_size: file.size,
-                        mime_type: file.type,
-                        alt_text: "Portfolio gallery image",
-                        is_active: true,
-                        display_order: 1,
-                    },
-                ])
+                .insert([imageMetadata])
                 .select()
                 .single();
 
-            if (dbError) throw dbError;
+            if (dbError) {
+                console.error("Database insert error:", dbError);
+                throw new Error(`Database insert failed: ${dbError.message}`);
+            }
+
+            console.log("Image metadata saved:", imageData);
 
             // Get the public URL for the uploaded image
             const { data: urlData } = supabase.storage
                 .from("portfolio-gallery-images")
                 .getPublicUrl(filePath);
 
-            // Update the portfolio item with the new image
-            const { error: updateError } = await supabase
-                .from("portfolio_items")
-                .update({
-                    image_id: imageData.id,
-                    image_url: urlData.publicUrl,
-                })
-                .eq("id", itemId);
+            console.log("Public URL generated:", urlData.publicUrl);
 
-            if (updateError) throw updateError;
+            // If itemId is provided, update existing item
+            if (itemId) {
+                console.log("Updating existing portfolio item:", itemId);
+                const { error: updateError } = await supabase
+                    .from("portfolio_items")
+                    .update({
+                        image_id: imageData.id,
+                        image_url: urlData.publicUrl,
+                    })
+                    .eq("id", itemId);
 
-            // Reload data
-            await loadPortfolioData();
+                if (updateError) {
+                    console.error("Portfolio item update error:", updateError);
+                    throw new Error(`Portfolio item update failed: ${updateError.message}`);
+                }
+                await loadPortfolioData();
+            } else {
+                // If no itemId, update the editing form
+                console.log("Updating editing form with new image");
+                if (editingItem) {
+                    setEditingItem(prev => ({
+                        ...prev!,
+                        image_id: imageData.id,
+                        image_url: urlData.publicUrl,
+                    }));
+                }
+            }
 
             showNotification(
                 "success",
                 "Success!",
-                "Image uploaded and assigned successfully!",
+                "Image uploaded successfully!",
             );
         } catch (error) {
-            console.error("Error uploading image:", error);
+            console.error("Error uploading image:", {
+                message: error instanceof Error ? error.message : 'Unknown error',
+                error: error,
+                stack: error instanceof Error ? error.stack : undefined
+            });
+
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
             showNotification(
                 "error",
                 "Upload Failed",
-                "Error uploading image. Please try again.",
+                errorMessage,
             );
         } finally {
             setUploading(false);
@@ -381,15 +540,17 @@ const PortfolioGalleryEditor = () => {
                 />
                 <div>
                     <h3 className="font-medium text-blue-700 mb-1">
-                        About Portfolio Gallery Management
+                        Portfolio Gallery Management
                     </h3>
-                    <p className="text-blue-600 text-sm">
-                        Manage your portfolio gallery with dynamic content.
-                        Upload images, create portfolio items with different
-                        grid sizes, and organize them with drag-and-drop
-                        ordering. All changes will be reflected on the portfolio
-                        page after saving.
+                    <p className="text-blue-600 text-sm mb-2">
+                        Manage your portfolio gallery with dynamic content and image uploads.
                     </p>
+                    <ul className="text-blue-600 text-sm space-y-1">
+                        <li>• <strong>Add Items:</strong> Click "Add Item" to create new portfolio entries</li>
+                        <li>• <strong>Upload Images:</strong> Click the upload areas or drag & drop images directly</li>
+                        <li>• <strong>Grid Sizes:</strong> Choose different sizes (1x1, 1x2, 1x3) for varied layouts</li>
+                        <li>• <strong>Organize:</strong> Use display order to arrange items as needed</li>
+                    </ul>
                 </div>
             </motion.div>
 
@@ -512,22 +673,107 @@ const PortfolioGalleryEditor = () => {
                                         />
                                     </div>
 
-                                    {/* Image URL */}
-                                    <div className="space-y-2">
-                                        <Label htmlFor="image_url">
-                                            Image URL
-                                        </Label>
-                                        <Input
-                                            id="image_url"
-                                            value={editingItem.image_url || ""}
-                                            onChange={e =>
-                                                handleInputChange(
-                                                    "image_url",
-                                                    e.target.value,
-                                                )
-                                            }
-                                            placeholder="Enter image URL or upload in Images tab"
-                                        />
+                                    {/* Image Upload Section */}
+                                    <div className="space-y-3">
+                                        <Label>Image</Label>
+                                        <div
+                                            className={`border-2 border-dashed rounded-lg p-6 transition-colors relative ${
+                                                uploading ? 'border-[#a5cd39] bg-green-50' :
+                                                dragOver ? 'border-[#a5cd39] bg-green-50' :
+                                                'border-gray-300 hover:border-gray-400'
+                                            }`}
+                                            onDragOver={handleDragOver}
+                                            onDragLeave={handleDragLeave}
+                                            onDrop={(e) => handleDrop(e, editingItem?.id)}
+                                        >
+                                            {uploading && (
+                                                <div className="absolute inset-0 bg-white/80 flex items-center justify-center rounded-lg z-10">
+                                                    <div className="flex items-center gap-2 text-[#a5cd39]">
+                                                        <div className="animate-spin rounded-full h-5 w-5 border-2 border-[#a5cd39] border-t-transparent"></div>
+                                                        <span className="text-sm font-medium">Uploading...</span>
+                                                    </div>
+                                                </div>
+                                            )}
+                                            {editingItem.image_url ? (
+                                                <div className="space-y-3">
+                                                    <div className="aspect-video bg-gray-100 rounded overflow-hidden">
+                                                        <img
+                                                            src={editingItem.image_url}
+                                                            alt={editingItem.alt_text || "Preview"}
+                                                            className="w-full h-full object-cover"
+                                                        />
+                                                    </div>
+                                                    <div className="flex items-center gap-2">
+                                                        <label
+                                                            htmlFor="form-image-upload"
+                                                            className={`cursor-pointer inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#a5cd39] ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                                        >
+                                                            <Upload className="w-4 h-4 mr-2" />
+                                                            Replace Image
+                                                        </label>
+                                                        <Button
+                                                            type="button"
+                                                            variant="outline"
+                                                            size="sm"
+                                                            onClick={() => handleInputChange("image_url", "")}
+                                                            disabled={uploading}
+                                                        >
+                                                            Remove
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <div className="text-center">
+                                                    <Upload className="mx-auto h-12 w-12 text-gray-400" />
+                                                    <div className="mt-4">
+                                                        <label
+                                                            htmlFor="form-image-upload"
+                                                            className={`cursor-pointer inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-[#a5cd39] hover:bg-[#94b933] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#a5cd39] ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                                        >
+                                                            <Upload className="w-4 h-4 mr-2" />
+                                                            Upload Image
+                                                        </label>
+                                                        <p className="mt-2 text-sm text-gray-500">
+                                                            Drag & drop an image here, or enter URL below
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            )}
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={e => {
+                                                    const file = e.target.files?.[0];
+                                                    if (file) {
+                                                        // For new items (no ID yet), pass undefined
+                                                        // For existing items, pass the ID
+                                                        handleDirectImageUpload(e, editingItem?.id);
+                                                    }
+                                                }}
+                                                disabled={uploading}
+                                                className="hidden"
+                                                id="form-image-upload"
+                                            />
+                                        </div>
+
+                                        {/* Manual URL Input */}
+                                        <div className="space-y-2">
+                                            <Label htmlFor="image_url" className="text-sm text-gray-600">
+                                                Or enter image URL manually
+                                            </Label>
+                                            <Input
+                                                id="image_url"
+                                                value={editingItem.image_url || ""}
+                                                onChange={e =>
+                                                    handleInputChange(
+                                                        "image_url",
+                                                        e.target.value,
+                                                    )
+                                                }
+                                                placeholder="https://example.com/image.jpg"
+                                                className="text-sm"
+                                            />
+                                        </div>
                                     </div>
 
                                     {/* Display Order */}
@@ -608,6 +854,9 @@ const PortfolioGalleryEditor = () => {
                                                 {/* Item Preview with Upload */}
                                                 <div
                                                     className={`aspect-video bg-gray-100 rounded overflow-hidden relative group ${item.grid_class}`}
+                                                    onDragOver={handleDragOver}
+                                                    onDragLeave={handleDragLeave}
+                                                    onDrop={(e) => handleDrop(e, item.id)}
                                                 >
                                                     {item.image_url ? (
                                                         <>
@@ -646,14 +895,19 @@ const PortfolioGalleryEditor = () => {
                                                             </div>
                                                         </>
                                                     ) : (
-                                                        <div className="w-full h-full flex items-center justify-center border-2 border-dashed border-gray-300">
+                                                        <div className="w-full h-full flex items-center justify-center border-2 border-dashed border-gray-300 hover:border-[#a5cd39] hover:bg-green-50 transition-colors">
                                                             <label
                                                                 htmlFor={`image-upload-${item.id}`}
-                                                                className="cursor-pointer flex flex-col items-center gap-2 text-gray-500 hover:text-gray-700 transition-colors"
+                                                                className="cursor-pointer flex flex-col items-center gap-2 text-gray-500 hover:text-[#a5cd39] transition-colors p-4"
                                                             >
-                                                                <Upload className="w-8 h-8" />
-                                                                <span className="text-sm font-medium">
-                                                                    Upload Image
+                                                                <div className="p-3 rounded-full bg-gray-100 hover:bg-[#a5cd39] hover:text-white transition-colors">
+                                                                    <Upload className="w-6 h-6" />
+                                                                </div>
+                                                                <span className="text-sm font-medium text-center">
+                                                                    Click or Drag to Upload
+                                                                </span>
+                                                                <span className="text-xs text-gray-400 text-center">
+                                                                    JPG, PNG, WebP up to 10MB
                                                                 </span>
                                                             </label>
                                                             <input

@@ -12,8 +12,14 @@
 -- ============================================================================
 
 -- Create storage bucket for portfolio gallery images
-INSERT INTO storage.buckets (id, name, public) 
-VALUES ('portfolio-gallery-images', 'portfolio-gallery-images', true)
+INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+VALUES (
+    'portfolio-gallery-images',
+    'portfolio-gallery-images',
+    true,
+    10485760, -- 10MB limit
+    ARRAY['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
+)
 ON CONFLICT (id) DO NOTHING;
 
 -- ============================================================================
@@ -87,10 +93,19 @@ CREATE TABLE IF NOT EXISTS portfolio_items (
 -- FOREIGN KEY CONSTRAINTS (Added after both tables exist)
 -- ============================================================================
 
--- Add foreign key constraint for image_id
-ALTER TABLE portfolio_items 
-ADD CONSTRAINT fk_portfolio_items_image_id 
-FOREIGN KEY (image_id) REFERENCES portfolio_images(id) ON DELETE SET NULL;
+-- Add foreign key constraint for image_id (only if it doesn't exist)
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.table_constraints
+        WHERE constraint_name = 'fk_portfolio_items_image_id'
+        AND table_name = 'portfolio_items'
+    ) THEN
+        ALTER TABLE portfolio_items
+        ADD CONSTRAINT fk_portfolio_items_image_id
+        FOREIGN KEY (image_id) REFERENCES portfolio_images(id) ON DELETE SET NULL;
+    END IF;
+END $$;
 
 -- ============================================================================
 -- INDEXES FOR PERFORMANCE
@@ -144,23 +159,27 @@ ALTER TABLE portfolio_images ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies for portfolio_items
 -- Public read access for active items
+DROP POLICY IF EXISTS "Public read access for active portfolio items" ON portfolio_items;
 CREATE POLICY "Public read access for active portfolio items"
     ON portfolio_items FOR SELECT
     USING (is_active = true);
 
 -- Authenticated users can read all items
+DROP POLICY IF EXISTS "Authenticated read access for portfolio items" ON portfolio_items;
 CREATE POLICY "Authenticated read access for portfolio items"
     ON portfolio_items FOR SELECT
     TO authenticated
     USING (true);
 
 -- Authenticated users can insert items
+DROP POLICY IF EXISTS "Authenticated insert access for portfolio items" ON portfolio_items;
 CREATE POLICY "Authenticated insert access for portfolio items"
     ON portfolio_items FOR INSERT
     TO authenticated
     WITH CHECK (true);
 
 -- Authenticated users can update items
+DROP POLICY IF EXISTS "Authenticated update access for portfolio items" ON portfolio_items;
 CREATE POLICY "Authenticated update access for portfolio items"
     ON portfolio_items FOR UPDATE
     TO authenticated
@@ -168,6 +187,7 @@ CREATE POLICY "Authenticated update access for portfolio items"
     WITH CHECK (true);
 
 -- Authenticated users can delete items
+DROP POLICY IF EXISTS "Authenticated delete access for portfolio items" ON portfolio_items;
 CREATE POLICY "Authenticated delete access for portfolio items"
     ON portfolio_items FOR DELETE
     TO authenticated
@@ -175,17 +195,20 @@ CREATE POLICY "Authenticated delete access for portfolio items"
 
 -- RLS Policies for portfolio_images
 -- Public read access for all images (needed for display)
+DROP POLICY IF EXISTS "Public read access for portfolio images" ON portfolio_images;
 CREATE POLICY "Public read access for portfolio images"
     ON portfolio_images FOR SELECT
     USING (true);
 
 -- Authenticated users can insert images
+DROP POLICY IF EXISTS "Authenticated insert access for portfolio images" ON portfolio_images;
 CREATE POLICY "Authenticated insert access for portfolio images"
     ON portfolio_images FOR INSERT
     TO authenticated
     WITH CHECK (true);
 
 -- Authenticated users can update images
+DROP POLICY IF EXISTS "Authenticated update access for portfolio images" ON portfolio_images;
 CREATE POLICY "Authenticated update access for portfolio images"
     ON portfolio_images FOR UPDATE
     TO authenticated
@@ -193,6 +216,7 @@ CREATE POLICY "Authenticated update access for portfolio images"
     WITH CHECK (true);
 
 -- Authenticated users can delete images
+DROP POLICY IF EXISTS "Authenticated delete access for portfolio images" ON portfolio_images;
 CREATE POLICY "Authenticated delete access for portfolio images"
     ON portfolio_images FOR DELETE
     TO authenticated
@@ -204,17 +228,20 @@ CREATE POLICY "Authenticated delete access for portfolio images"
 
 -- Storage policies for portfolio-gallery-images bucket
 -- Public read access
+DROP POLICY IF EXISTS "Public read access for portfolio gallery images" ON storage.objects;
 CREATE POLICY "Public read access for portfolio gallery images"
     ON storage.objects FOR SELECT
     USING (bucket_id = 'portfolio-gallery-images');
 
 -- Authenticated upload access
+DROP POLICY IF EXISTS "Authenticated upload access for portfolio gallery images" ON storage.objects;
 CREATE POLICY "Authenticated upload access for portfolio gallery images"
     ON storage.objects FOR INSERT
     TO authenticated
     WITH CHECK (bucket_id = 'portfolio-gallery-images');
 
 -- Authenticated update access
+DROP POLICY IF EXISTS "Authenticated update access for portfolio gallery images" ON storage.objects;
 CREATE POLICY "Authenticated update access for portfolio gallery images"
     ON storage.objects FOR UPDATE
     TO authenticated
@@ -222,6 +249,7 @@ CREATE POLICY "Authenticated update access for portfolio gallery images"
     WITH CHECK (bucket_id = 'portfolio-gallery-images');
 
 -- Authenticated delete access
+DROP POLICY IF EXISTS "Authenticated delete access for portfolio gallery images" ON storage.objects;
 CREATE POLICY "Authenticated delete access for portfolio gallery images"
     ON storage.objects FOR DELETE
     TO authenticated
@@ -232,6 +260,7 @@ CREATE POLICY "Authenticated delete access for portfolio gallery images"
 -- ============================================================================
 
 -- Function to get portfolio items with images
+DROP FUNCTION IF EXISTS get_portfolio_items_with_images();
 CREATE OR REPLACE FUNCTION get_portfolio_items_with_images()
 RETURNS TABLE (
     id UUID,
