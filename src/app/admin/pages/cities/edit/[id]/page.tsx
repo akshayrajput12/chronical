@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Save, ArrowLeft, Plus, Trash2, Upload, X } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 interface CityFormData {
     name: string;
@@ -981,6 +982,10 @@ const EditCityPage = () => {
 
             alert(errorMessage);
         } finally {
+            revalidatePathAction("/experience-middle-east");
+            if (cityData.slug) {
+                revalidatePathAction(`/experience-middle-east/${cityData.slug}`);
+            }
             setSaving(false);
         }
     };

@@ -38,6 +38,7 @@ import {
     AboutMainImageInput,
     AboutMainNotification,
 } from "@/types/about";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 const AboutMainEditor = () => {
     // Animation variants
@@ -306,6 +307,7 @@ const AboutMainEditor = () => {
                 `Failed to save main section: ${errorMessage}`,
             );
         } finally {
+            revalidatePathAction("/about-us");
             setSaving(false);
         }
     };

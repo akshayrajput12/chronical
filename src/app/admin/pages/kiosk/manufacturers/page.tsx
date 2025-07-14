@@ -36,6 +36,7 @@ import {
     KioskManufacturersImageInput,
     KioskManufacturersNotification,
 } from "@/types/kiosk";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 const KioskManufacturersEditor = () => {
     // Animation variants
@@ -314,6 +315,7 @@ const KioskManufacturersEditor = () => {
                 `Failed to save kiosk manufacturers section: ${errorMessage}`,
             );
         } finally {
+            revalidatePathAction("/kiosk-manufacturers-in-dubai-uae");
             setSaving(false);
         }
     };

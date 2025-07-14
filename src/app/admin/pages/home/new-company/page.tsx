@@ -15,6 +15,7 @@ import {
 import { toast } from 'sonner';
 import { NewCompanyService } from '@/services/new-company.service';
 import { NewCompanySection, NewCompanyImage } from '@/types/new-company';
+import { revalidatePathAction } from '@/services/revalidate.action';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -110,6 +111,7 @@ const NewCompanySectionEditor = () => {
       console.error('Error saving new company section:', error);
       toast.error('An error occurred while saving');
     } finally {
+      revalidatePathAction('/');
       setSaving(false);
     }
   };

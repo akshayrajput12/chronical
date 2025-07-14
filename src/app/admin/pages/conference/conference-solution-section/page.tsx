@@ -29,6 +29,7 @@ import type {
     ConferenceSolutionNotification,
 } from "@/types/conference-solution-section";
 import { BACKGROUND_COLORS } from "@/types/conference-solution-section";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 // Animation variants
 const containerVariants = {
@@ -196,6 +197,7 @@ const ConferenceSolutionSectionEditor = () => {
                 "Failed to save data. Please try again.",
             );
         } finally {
+            revalidatePathAction("/conference-organizers-in-dubai-uae");
             setSaving(false);
         }
     };

@@ -39,6 +39,7 @@ import {
     AboutDedicationImageInput,
     AboutDedicationNotification,
 } from "@/types/about";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 const AboutDedicationEditor = () => {
     // Animation variants
@@ -439,6 +440,7 @@ const AboutDedicationEditor = () => {
                 `Failed to save dedication section: ${errorMessage}`,
             );
         } finally {
+            revalidatePathAction("/about-us");
             setSaving(false);
         }
     };

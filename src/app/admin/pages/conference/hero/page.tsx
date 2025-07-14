@@ -34,6 +34,7 @@ import {
     ConferenceHeroSectionInput,
     ConferenceHeroImage,
 } from "@/types/conference";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 const ConferenceHeroEditor = () => {
     // Animation variants
@@ -214,6 +215,7 @@ const ConferenceHeroEditor = () => {
                 "Failed to save data. Please try again.",
             );
         } finally {
+            revalidatePathAction("/conference-organizers-in-dubai-uae");
             setSaving(false);
         }
     };

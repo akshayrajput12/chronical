@@ -32,6 +32,7 @@ import type {
     EventManagementImage,
     EventManagementNotification,
 } from "@/types/event-management-services";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 // Animation variants
 const containerVariants = {
@@ -225,6 +226,7 @@ const EventManagementServicesEditor = () => {
                 "Failed to save data. Please try again.",
             );
         } finally {
+            revalidatePathAction("/conference-organizers-in-dubai-uae");
             setSaving(false);
         }
     };

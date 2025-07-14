@@ -32,6 +32,7 @@ import {
     KioskConsultancySectionInput,
     KioskConsultancyNotification,
 } from "@/types/kiosk";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 const KioskConsultancyEditor = () => {
     // Animation variants
@@ -295,6 +296,7 @@ const KioskConsultancyEditor = () => {
                 `Failed to save kiosk consultancy section: ${errorMessage}`,
             );
         } finally {
+            revalidatePathAction("/kiosk-manufacturers-in-dubai-uae");
             setSaving(false);
         }
     };

@@ -22,6 +22,7 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { revalidatePathAction } from "@/services/revalidate.action";
 import { createClient } from "@/lib/supabase/client";
 import {
     Upload,
@@ -148,6 +149,7 @@ const DoubleDeckersPortfolioAdminPage = () => {
             console.error("Error saving section data:", error);
             toast.error("Failed to save portfolio section");
         } finally {
+            revalidatePathAction("/double-decker-exhibition-stands-in-dubai");
             setSaving(false);
         }
     };

@@ -35,6 +35,7 @@ import {
     KioskBenefitItemInput,
     KioskBenefitsNotification,
 } from "@/types/kiosk";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 const KioskBenefitsEditor = () => {
     // Animation variants
@@ -295,6 +296,7 @@ const KioskBenefitsEditor = () => {
                 `Failed to save kiosk benefits section: ${errorMessage}`,
             );
         } finally {
+            revalidatePathAction("/kiosk-manufacturers-in-dubai-uae");
             setSaving(false);
         }
     };

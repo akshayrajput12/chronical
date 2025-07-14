@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { BlogTag, CreateBlogTagRequest, UpdateBlogTagRequest } from "@/types/blog";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 const BlogTagsPage = () => {
     const [tags, setTags] = useState<BlogTag[]>([]);
@@ -140,6 +141,7 @@ const BlogTagsPage = () => {
 
             resetForm();
             fetchTags();
+            revalidatePathAction("/blog");
         } catch (error) {
             console.error("Error:", error);
             alert("An error occurred. Please try again.");

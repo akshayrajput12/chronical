@@ -14,6 +14,7 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { toast } from "sonner";
+import { revalidatePathAction } from "@/services/revalidate.action";
 import { createClient } from "@/lib/supabase/client";
 import { Upload, Save, Eye, AlertCircle } from "lucide-react";
 
@@ -104,6 +105,7 @@ const DoubleDeckersHeroAdminPage = () => {
             console.error("Error saving hero data:", error);
             toast.error("Failed to save hero section");
         } finally {
+            revalidatePathAction("/double-decker-exhibition-stands-in-dubai");
             setSaving(false);
         }
     };

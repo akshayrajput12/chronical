@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { BlogCategory, CreateBlogCategoryRequest, UpdateBlogCategoryRequest } from "@/types/blog";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 const BlogCategoriesPage = () => {
     const [categories, setCategories] = useState<BlogCategory[]>([]);
@@ -150,6 +151,7 @@ const BlogCategoriesPage = () => {
 
             resetForm();
             fetchCategories();
+            revalidatePathAction("/blog");
         } catch (error) {
             console.error("Error:", error);
             alert("An error occurred. Please try again.");
@@ -176,6 +178,7 @@ const BlogCategoriesPage = () => {
 
             alert("Category deleted successfully!");
             fetchCategories();
+            revalidatePathAction("/blog");
         } catch (error) {
             console.error("Error:", error);
             alert("An error occurred. Please try again.");

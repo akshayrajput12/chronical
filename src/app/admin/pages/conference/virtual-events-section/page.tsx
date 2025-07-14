@@ -32,6 +32,7 @@ import type {
     VirtualEventsImage,
     VirtualEventsNotification,
 } from "@/types/virtual-events-section";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 // Animation variants
 const containerVariants = {
@@ -220,6 +221,7 @@ const VirtualEventsSectionEditor = () => {
                 "Failed to save data. Please try again.",
             );
         } finally {
+            revalidatePathAction("/conference-organizers-in-dubai-uae");
             setSaving(false);
         }
     };

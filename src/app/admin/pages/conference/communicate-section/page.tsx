@@ -32,6 +32,7 @@ import type {
     CommunicateImage,
     CommunicateNotification,
 } from "@/types/communicate-section";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 // Animation variants
 const containerVariants = {
@@ -217,6 +218,7 @@ const CommunicateSectionEditor = () => {
                 "Failed to save data. Please try again.",
             );
         } finally {
+            revalidatePathAction("/conference-organizers-in-dubai-uae");
             setSaving(false);
         }
     };

@@ -14,6 +14,7 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { toast } from "sonner";
+import { revalidatePathAction } from "@/services/revalidate.action";
 import { createClient } from "@/lib/supabase/client";
 import { Upload, Save, Eye, AlertCircle } from "lucide-react";
 
@@ -110,6 +111,7 @@ const DoubleDeckersCommuncationAdminPage = () => {
             console.error("Error saving section data:", error);
             toast.error("Failed to save communication section");
         } finally {
+            revalidatePathAction("/double-decker-exhibition-stands-in-dubai");
             setSaving(false);
         }
     };

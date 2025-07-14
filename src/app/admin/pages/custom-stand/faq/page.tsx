@@ -24,6 +24,7 @@ import {
     CustomExhibitionFAQSection,
     CustomExhibitionFAQItem,
 } from "@/services/custom-exhibition-stands.service";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 const CustomStandFAQEditor = () => {
     const [faqSection, setFaqSection] = useState<CustomExhibitionFAQSection>({
@@ -74,6 +75,7 @@ const CustomStandFAQEditor = () => {
             console.error("Error saving FAQ section:", error);
             toast.error("Failed to save FAQ section");
         } finally {
+            revalidatePathAction("/custom-exhibition-stands-dubai-uae");
             setIsSaving(false);
         }
     };

@@ -25,6 +25,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 // Types
 interface DynamicCellImage {
@@ -228,6 +229,7 @@ const DynamicCellEditor = () => {
             setActiveImage(newActiveImage || null);
 
             toast.success("Background image updated successfully");
+            revalidatePathAction('/');
         } catch (error) {
             console.error("Error setting active image:", error);
             toast.error("Failed to set active image");
@@ -281,6 +283,7 @@ const DynamicCellEditor = () => {
             console.error("Error saving section:", error);
             toast.error("Failed to save section data");
         } finally {
+            revalidatePathAction('/');
             setSaving(false);
         }
     };

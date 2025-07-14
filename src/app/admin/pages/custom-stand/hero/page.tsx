@@ -21,6 +21,7 @@ import {
     CustomExhibitionHero,
 } from "@/services/custom-exhibition-stands.service";
 import { createClient } from "@/lib/supabase/client";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 const supabase = createClient();
 
@@ -70,6 +71,7 @@ const CustomStandHeroEditor = () => {
             console.error("Error saving hero data:", error);
             toast.error("Failed to save hero section");
         } finally {
+            revalidatePathAction("/custom-exhibition-stands-dubai-uae");
             setIsSaving(false);
         }
     };

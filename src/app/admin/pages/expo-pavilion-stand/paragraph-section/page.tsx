@@ -21,6 +21,7 @@ import {
     saveExpoPavilionParagraphSection,
     ExpoPavilionParagraphSection,
 } from "@/services/expo-pavilion-paragraph.service";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 const ExpoPavilionStandParagraphSectionEditor = () => {
     const [data, setData] = useState<ExpoPavilionParagraphSection>({
@@ -79,6 +80,7 @@ const ExpoPavilionStandParagraphSectionEditor = () => {
             console.error("Error saving paragraph section:", error);
             toast.error("Failed to save paragraph section");
         } finally {
+            revalidatePathAction("/country-pavilion-expo-booth-solutions-in-dubai");
             setIsSaving(false);
         }
     };

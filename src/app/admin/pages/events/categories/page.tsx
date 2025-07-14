@@ -43,6 +43,7 @@ import {
     Eye,
     EyeOff,
 } from "lucide-react";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 interface EventCategory {
     id: string;
@@ -195,6 +196,7 @@ const EventCategoriesPage = () => {
             console.error("Error saving category:", error);
             alert("Failed to save category");
         } finally {
+            revalidatePathAction("/top-trade-shows-in-uae-saudi-arabia-middle-east");
             setSaving(false);
         }
     };
@@ -216,6 +218,8 @@ const EventCategoriesPage = () => {
         } catch (error) {
             console.error("Error deleting category:", error);
             alert("Failed to delete category");
+        } finally {
+            revalidatePathAction("/top-trade-shows-in-uae-saudi-arabia-middle-east");
         }
     };
 

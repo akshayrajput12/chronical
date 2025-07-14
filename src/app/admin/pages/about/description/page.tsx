@@ -35,6 +35,7 @@ import {
     AboutDescriptionImageInput,
     AboutDescriptionNotification,
 } from "@/types/about";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 const AboutDescriptionEditor = () => {
     // Animation variants
@@ -380,6 +381,7 @@ const AboutDescriptionEditor = () => {
                 `Failed to save description section: ${errorMessage}`,
             );
         } finally {
+            revalidatePathAction("/about-us");
             setSaving(false);
         }
     };

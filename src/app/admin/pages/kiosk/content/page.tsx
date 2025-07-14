@@ -35,6 +35,7 @@ import {
     KioskContentImage,
     KioskContentNotification,
 } from "@/types/kiosk";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 const KioskContentEditor = () => {
     // Animation variants
@@ -214,6 +215,7 @@ const KioskContentEditor = () => {
                 "Failed to save kiosk content section",
             );
         } finally {
+            revalidatePathAction("/kiosk-manufacturers-in-dubai-uae");
             setSaving(false);
         }
     };

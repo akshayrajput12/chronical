@@ -21,6 +21,7 @@ import {
     saveDoubleDeckerParagraphSection,
     DoubleDeckerParagraphSection,
 } from "@/services/double-decker-paragraph.service";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 const DoubleDeckerStandParagraphSectionEditor = () => {
     const [data, setData] = useState<DoubleDeckerParagraphSection>({
@@ -79,6 +80,7 @@ const DoubleDeckerStandParagraphSectionEditor = () => {
             console.error("Error saving paragraph section:", error);
             toast.error("Failed to save paragraph section");
         } finally {
+            revalidatePathAction("/double-decker-exhibition-stands-in-dubai");
             setIsSaving(false);
         }
     };

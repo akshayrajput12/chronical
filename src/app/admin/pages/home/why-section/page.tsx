@@ -23,6 +23,7 @@ import {
     uploadWhySectionVideo,
     deleteWhySectionVideo,
 } from "@/services/why-section.service";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 const WhySectionEditor = () => {
     // Animation variants
@@ -350,6 +351,7 @@ const WhySectionEditor = () => {
                 message: "An error occurred while saving changes",
             });
         } finally {
+            revalidatePathAction('/');
             setIsSaving(false);
         }
     };

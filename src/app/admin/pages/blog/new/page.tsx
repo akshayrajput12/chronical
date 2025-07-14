@@ -22,6 +22,7 @@ import DeferredImageUpload, {
   DeferredImageData,
   createEmptyDeferredImage
 } from "@/components/admin/deferred-image-upload";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 const CreateBlogPostPage = () => {
     const router = useRouter();
@@ -211,6 +212,7 @@ const CreateBlogPostPage = () => {
             console.error("Error:", error);
             alert("An error occurred. Please try again.");
         } finally {
+            revalidatePathAction("/blog");
             setLoading(false);
         }
     };

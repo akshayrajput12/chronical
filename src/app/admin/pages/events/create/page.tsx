@@ -49,6 +49,7 @@ import DeferredImageUpload, {
     DeferredImageData,
     createEmptyDeferredImage,
 } from "@/components/admin/deferred-image-upload";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 // Animation variants
 const containerVariants = {
@@ -387,6 +388,7 @@ const CreateEventPage = () => {
                 error instanceof Error ? error.message : "Failed to save event",
             );
         } finally {
+            revalidatePathAction("/top-trade-shows-in-uae-saudi-arabia-middle-east");
             setSaving(false);
         }
     };

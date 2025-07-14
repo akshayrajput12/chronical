@@ -21,6 +21,7 @@ import {
   saveEssentialSupportSection
 } from '@/services/essential-support.service';
 import { EssentialSupportSectionInput } from '@/types/essential-support';
+import { revalidatePathAction } from '@/services/revalidate.action';
 
 const EssentialSupportEditor = () => {
   // Animation variants
@@ -273,6 +274,7 @@ const EssentialSupportEditor = () => {
       });
       toast.error('An error occurred while saving');
     } finally {
+      revalidatePathAction('/');
       setSaving(false);
     }
   };

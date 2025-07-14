@@ -18,6 +18,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 interface ExpoPavilionIntro {
     id?: string;
@@ -98,6 +99,7 @@ const ExpoPavilionIntroEditor = () => {
             console.error("Error saving intro data:", error);
             toast.error("Failed to save intro data");
         } finally {
+            revalidatePathAction("/country-pavilion-expo-booth-solutions-in-dubai");
             setIsSaving(false);
         }
     };

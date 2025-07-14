@@ -17,6 +17,7 @@ import {
   saveHeroSection
 } from '@/services/hero.service';
 import { HeroSectionWithTypingTexts } from '@/types/hero';
+import { revalidatePathAction } from '@/services/revalidate.action';
 
 const HeroSectionEditor = () => {
   // Animation variants
@@ -181,6 +182,7 @@ const HeroSectionEditor = () => {
       console.error('Error saving hero section:', error);
       toast.error('An error occurred while saving');
     } finally {
+      revalidatePathAction('/');
       setSaving(false);
     }
   };

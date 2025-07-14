@@ -10,6 +10,7 @@ import {
     saveCustomExhibitionLeadingContractor,
     CustomExhibitionLeadingContractor,
 } from "@/services/custom-exhibition-stands.service";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 const CustomStandLeadingContractorEditor = () => {
     const [data, setData] = useState<CustomExhibitionLeadingContractor>({
@@ -55,6 +56,7 @@ const CustomStandLeadingContractorEditor = () => {
             console.error("Error saving leading contractor data:", error);
             toast.error("Failed to save leading contractor section");
         } finally {
+            revalidatePathAction("/custom-exhibition-stands-dubai-uae");
             setIsSaving(false);
         }
     };

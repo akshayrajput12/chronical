@@ -9,6 +9,7 @@ import {
     saveBusinessSection,
 } from "@/services/business.service";
 import { BusinessSectionWithDetails } from "@/types/business";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 const BusinessSectionEditor = () => {
     // Animation variants
@@ -123,6 +124,7 @@ const BusinessSectionEditor = () => {
             console.error("Error saving business section:", error);
             toast.error("An error occurred while saving");
         } finally {
+            revalidatePathAction('/');
             setSaving(false);
         }
     };

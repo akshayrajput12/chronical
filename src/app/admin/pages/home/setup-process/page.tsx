@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
+import { revalidatePathAction } from "@/services/revalidate.action";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -506,6 +507,7 @@ const SetupProcessEditor = () => {
             console.error("Error saving setup process:", error);
             toast.error("Failed to save setup process");
         } finally {
+            revalidatePathAction('/');
             setSaving(false);
         }
     };

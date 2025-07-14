@@ -35,6 +35,7 @@ import {
     KioskHeroImage,
     KioskHeroNotification,
 } from "@/types/kiosk";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 const KioskHeroEditor = () => {
     // Animation variants
@@ -198,6 +199,7 @@ const KioskHeroEditor = () => {
                 "Failed to save kiosk hero section",
             );
         } finally {
+            revalidatePathAction("/kiosk-manufacturers-in-dubai-uae");
             setSaving(false);
         }
     };

@@ -24,6 +24,7 @@ import {
     UpdateBlogPostRequest,
 } from "@/types/blog";
 import TiptapEditor from "@/components/admin/tiptap-editor";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 type BlogFormData = {
     title: string;
@@ -314,6 +315,10 @@ const EditBlogPostPage = () => {
             }
             alert(errorMessage);
         } finally {
+            revalidatePathAction("/blog");
+            if (formData.slug) {
+                revalidatePathAction(`/blog/${formData.slug}`);
+            }
             setLoading(false);
         }
     };

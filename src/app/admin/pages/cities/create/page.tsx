@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Save, ArrowLeft, Plus, Trash2, Upload, X } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 interface CityFormData {
     // Basic city info
@@ -676,6 +677,10 @@ const CreateCityPage = () => {
                     : "Unknown error occurred";
             alert(`Failed to create city: ${errorMessage}`);
         } finally {
+            revalidatePathAction("/experience-middle-east");
+            if (formData.slug) {
+                revalidatePathAction(`/experience-middle-east/${formData.slug}`);
+            }
             setLoading(false);
         }
     };

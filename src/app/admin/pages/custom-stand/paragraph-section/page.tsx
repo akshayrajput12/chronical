@@ -21,6 +21,7 @@ import {
     saveCustomExhibitionParagraphSection,
     CustomExhibitionParagraphSection,
 } from "@/services/custom-exhibition-stands.service";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 const CustomStandParagraphSectionEditor = () => {
     const [data, setData] = useState<CustomExhibitionParagraphSection>({
@@ -79,6 +80,7 @@ const CustomStandParagraphSectionEditor = () => {
             console.error("Error saving paragraph section:", error);
             toast.error("Failed to save paragraph section");
         } finally {
+            revalidatePathAction("/custom-exhibition-stands-dubai-uae");
             setIsSaving(false);
         }
     };

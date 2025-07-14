@@ -18,6 +18,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 interface ExpoPavilionExceptionalDesign {
     id?: string;
@@ -194,6 +195,7 @@ const ExpoPavilionExceptionalDesignEditor = () => {
             console.error("Error saving data:", error);
             toast.error("Failed to save section data");
         } finally {
+            revalidatePathAction("/country-pavilion-expo-booth-solutions-in-dubai");
             setIsSaving(false);
         }
     };
