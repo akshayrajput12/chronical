@@ -678,8 +678,10 @@ const CreateCityPage = () => {
             alert(`Failed to create city: ${errorMessage}`);
         } finally {
             revalidatePathAction("/experience-middle-east");
-            if (formData.slug) {
-                revalidatePathAction(`/experience-middle-east/${formData.slug}`);
+            if (cityData.slug) {
+                revalidatePathAction(
+                    `/experience-middle-east/${cityData.slug}`,
+                );
             }
             setLoading(false);
         }

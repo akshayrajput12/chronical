@@ -118,13 +118,13 @@ const PortfolioGalleryEditor = () => {
         setDragOver(false);
 
         const files = Array.from(e.dataTransfer.files);
-        const imageFile = files.find(file => file.type.startsWith('image/'));
+        const imageFile = files.find(file => file.type.startsWith("image/"));
 
         if (imageFile) {
             // Create a fake event object for the upload handler
             const fakeEvent = {
-                target: { files: [imageFile] }
-            } as React.ChangeEvent<HTMLInputElement>;
+                target: { files: [imageFile] },
+            } as unknown as React.ChangeEvent<HTMLInputElement>;
 
             handleDirectImageUpload(fakeEvent, itemId);
         }
@@ -133,24 +133,31 @@ const PortfolioGalleryEditor = () => {
     // Check and ensure storage bucket exists
     const ensureStorageBucket = useCallback(async () => {
         try {
-            const { data: buckets, error: listError } = await supabase.storage.listBuckets();
+            const { data: buckets, error: listError } =
+                await supabase.storage.listBuckets();
 
             if (listError) {
                 console.error("Error listing buckets:", listError);
                 // Don't fail completely, just warn and continue
-                console.warn("Could not verify bucket existence, but continuing with upload attempt");
+                console.warn(
+                    "Could not verify bucket existence, but continuing with upload attempt",
+                );
                 return true;
             }
 
-            const portfolioBucket = buckets.find(bucket => bucket.id === 'portfolio-gallery-images');
+            const portfolioBucket = buckets.find(
+                bucket => bucket.id === "portfolio-gallery-images",
+            );
 
             if (!portfolioBucket) {
-                console.warn("Portfolio gallery images bucket not found in bucket list");
+                console.warn(
+                    "Portfolio gallery images bucket not found in bucket list",
+                );
                 // Try to test bucket access directly instead of failing
                 try {
                     const { error: testError } = await supabase.storage
-                        .from('portfolio-gallery-images')
-                        .list('', { limit: 1 });
+                        .from("portfolio-gallery-images")
+                        .list("", { limit: 1 });
 
                     if (testError) {
                         console.error("Bucket access test failed:", testError);
@@ -161,7 +168,9 @@ const PortfolioGalleryEditor = () => {
                         );
                         return false;
                     } else {
-                        console.log("Bucket access test passed, bucket exists but not in list");
+                        console.log(
+                            "Bucket access test passed, bucket exists but not in list",
+                        );
                         return true;
                     }
                 } catch (accessError) {
@@ -180,7 +189,9 @@ const PortfolioGalleryEditor = () => {
         } catch (error) {
             console.error("Error checking storage bucket:", error);
             // Don't fail completely, just warn and continue
-            console.warn("Bucket check failed, but continuing with upload attempt");
+            console.warn(
+                "Bucket check failed, but continuing with upload attempt",
+            );
             return true;
         }
     }, [showNotification]);
@@ -192,7 +203,9 @@ const PortfolioGalleryEditor = () => {
             // Check storage bucket first
             const bucketExists = await ensureStorageBucket();
             if (!bucketExists) {
-                console.warn("Storage bucket check failed, but continuing with data load");
+                console.warn(
+                    "Storage bucket check failed, but continuing with data load",
+                );
             }
 
             const { data, error } = await supabase
@@ -348,7 +361,12 @@ const PortfolioGalleryEditor = () => {
         if (!file) return;
 
         // Validate file type
-        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+        const allowedTypes = [
+            "image/jpeg",
+            "image/jpg",
+            "image/png",
+            "image/webp",
+        ];
         if (!allowedTypes.includes(file.type)) {
             showNotification(
                 "error",
@@ -371,12 +389,21 @@ const PortfolioGalleryEditor = () => {
 
         setUploading(true);
         try {
-            console.log("Starting image upload for file:", file.name, "Size:", file.size, "Type:", file.type);
+            console.log(
+                "Starting image upload for file:",
+                file.name,
+                "Size:",
+                file.size,
+                "Type:",
+                file.type,
+            );
 
             // Check if storage bucket exists (but don't fail if check fails)
             const bucketExists = await ensureStorageBucket();
             if (!bucketExists) {
-                console.warn("Bucket check failed, but attempting upload anyway");
+                console.warn(
+                    "Bucket check failed, but attempting upload anyway",
+                );
             }
 
             // Generate unique filename
@@ -387,13 +414,16 @@ const PortfolioGalleryEditor = () => {
             console.log("Uploading to path:", filePath);
 
             // Upload file to Supabase storage
-            const { data: uploadData, error: uploadError } = await supabase.storage
-                .from("portfolio-gallery-images")
-                .upload(filePath, file);
+            const { data: uploadData, error: uploadError } =
+                await supabase.storage
+                    .from("portfolio-gallery-images")
+                    .upload(filePath, file);
 
             if (uploadError) {
                 console.error("Storage upload error:", uploadError);
-                throw new Error(`Storage upload failed: ${uploadError.message}`);
+                throw new Error(
+                    `Storage upload failed: ${uploadError.message}`,
+                );
             }
 
             console.log("File uploaded successfully:", uploadData);
@@ -445,7 +475,9 @@ const PortfolioGalleryEditor = () => {
 
                 if (updateError) {
                     console.error("Portfolio item update error:", updateError);
-                    throw new Error(`Portfolio item update failed: ${updateError.message}`);
+                    throw new Error(
+                        `Portfolio item update failed: ${updateError.message}`,
+                    );
                 }
                 await loadPortfolioData();
             } else {
@@ -467,17 +499,17 @@ const PortfolioGalleryEditor = () => {
             );
         } catch (error) {
             console.error("Error uploading image:", {
-                message: error instanceof Error ? error.message : 'Unknown error',
+                message:
+                    error instanceof Error ? error.message : "Unknown error",
                 error: error,
-                stack: error instanceof Error ? error.stack : undefined
+                stack: error instanceof Error ? error.stack : undefined,
             });
 
-            const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-            showNotification(
-                "error",
-                "Upload Failed",
-                errorMessage,
-            );
+            const errorMessage =
+                error instanceof Error
+                    ? error.message
+                    : "Unknown error occurred";
+            showNotification("error", "Upload Failed", errorMessage);
         } finally {
             setUploading(false);
         }
@@ -543,13 +575,26 @@ const PortfolioGalleryEditor = () => {
                         Portfolio Gallery Management
                     </h3>
                     <p className="text-blue-600 text-sm mb-2">
-                        Manage your portfolio gallery with dynamic content and image uploads.
+                        Manage your portfolio gallery with dynamic content and
+                        image uploads.
                     </p>
                     <ul className="text-blue-600 text-sm space-y-1">
-                        <li>• <strong>Add Items:</strong> Click "Add Item" to create new portfolio entries</li>
-                        <li>• <strong>Upload Images:</strong> Click the upload areas or drag & drop images directly</li>
-                        <li>• <strong>Grid Sizes:</strong> Choose different sizes (1x1, 1x2, 1x3) for varied layouts</li>
-                        <li>• <strong>Organize:</strong> Use display order to arrange items as needed</li>
+                        <li>
+                            • <strong>Add Items:</strong> Click "Add Item" to
+                            create new portfolio entries
+                        </li>
+                        <li>
+                            • <strong>Upload Images:</strong> Click the upload
+                            areas or drag & drop images directly
+                        </li>
+                        <li>
+                            • <strong>Grid Sizes:</strong> Choose different
+                            sizes (1x1, 1x2, 1x3) for varied layouts
+                        </li>
+                        <li>
+                            • <strong>Organize:</strong> Use display order to
+                            arrange items as needed
+                        </li>
                     </ul>
                 </div>
             </motion.div>
@@ -678,19 +723,25 @@ const PortfolioGalleryEditor = () => {
                                         <Label>Image</Label>
                                         <div
                                             className={`border-2 border-dashed rounded-lg p-6 transition-colors relative ${
-                                                uploading ? 'border-[#a5cd39] bg-green-50' :
-                                                dragOver ? 'border-[#a5cd39] bg-green-50' :
-                                                'border-gray-300 hover:border-gray-400'
+                                                uploading
+                                                    ? "border-[#a5cd39] bg-green-50"
+                                                    : dragOver
+                                                    ? "border-[#a5cd39] bg-green-50"
+                                                    : "border-gray-300 hover:border-gray-400"
                                             }`}
                                             onDragOver={handleDragOver}
                                             onDragLeave={handleDragLeave}
-                                            onDrop={(e) => handleDrop(e, editingItem?.id)}
+                                            onDrop={e =>
+                                                handleDrop(e, editingItem?.id)
+                                            }
                                         >
                                             {uploading && (
                                                 <div className="absolute inset-0 bg-white/80 flex items-center justify-center rounded-lg z-10">
                                                     <div className="flex items-center gap-2 text-[#a5cd39]">
                                                         <div className="animate-spin rounded-full h-5 w-5 border-2 border-[#a5cd39] border-t-transparent"></div>
-                                                        <span className="text-sm font-medium">Uploading...</span>
+                                                        <span className="text-sm font-medium">
+                                                            Uploading...
+                                                        </span>
                                                     </div>
                                                 </div>
                                             )}
@@ -698,15 +749,24 @@ const PortfolioGalleryEditor = () => {
                                                 <div className="space-y-3">
                                                     <div className="aspect-video bg-gray-100 rounded overflow-hidden">
                                                         <img
-                                                            src={editingItem.image_url}
-                                                            alt={editingItem.alt_text || "Preview"}
+                                                            src={
+                                                                editingItem.image_url
+                                                            }
+                                                            alt={
+                                                                editingItem.alt_text ||
+                                                                "Preview"
+                                                            }
                                                             className="w-full h-full object-cover"
                                                         />
                                                     </div>
                                                     <div className="flex items-center gap-2">
                                                         <label
                                                             htmlFor="form-image-upload"
-                                                            className={`cursor-pointer inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#a5cd39] ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                                            className={`cursor-pointer inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#a5cd39] ${
+                                                                uploading
+                                                                    ? "opacity-50 cursor-not-allowed"
+                                                                    : ""
+                                                            }`}
                                                         >
                                                             <Upload className="w-4 h-4 mr-2" />
                                                             Replace Image
@@ -715,7 +775,12 @@ const PortfolioGalleryEditor = () => {
                                                             type="button"
                                                             variant="outline"
                                                             size="sm"
-                                                            onClick={() => handleInputChange("image_url", "")}
+                                                            onClick={() =>
+                                                                handleInputChange(
+                                                                    "image_url",
+                                                                    "",
+                                                                )
+                                                            }
                                                             disabled={uploading}
                                                         >
                                                             Remove
@@ -728,13 +793,19 @@ const PortfolioGalleryEditor = () => {
                                                     <div className="mt-4">
                                                         <label
                                                             htmlFor="form-image-upload"
-                                                            className={`cursor-pointer inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-[#a5cd39] hover:bg-[#94b933] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#a5cd39] ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                                            className={`cursor-pointer inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-[#a5cd39] hover:bg-[#94b933] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#a5cd39] ${
+                                                                uploading
+                                                                    ? "opacity-50 cursor-not-allowed"
+                                                                    : ""
+                                                            }`}
                                                         >
                                                             <Upload className="w-4 h-4 mr-2" />
                                                             Upload Image
                                                         </label>
                                                         <p className="mt-2 text-sm text-gray-500">
-                                                            Drag & drop an image here, or enter URL below
+                                                            Drag & drop an image
+                                                            here, or enter URL
+                                                            below
                                                         </p>
                                                     </div>
                                                 </div>
@@ -743,11 +814,15 @@ const PortfolioGalleryEditor = () => {
                                                 type="file"
                                                 accept="image/*"
                                                 onChange={e => {
-                                                    const file = e.target.files?.[0];
+                                                    const file =
+                                                        e.target.files?.[0];
                                                     if (file) {
                                                         // For new items (no ID yet), pass undefined
                                                         // For existing items, pass the ID
-                                                        handleDirectImageUpload(e, editingItem?.id);
+                                                        handleDirectImageUpload(
+                                                            e,
+                                                            editingItem?.id,
+                                                        );
                                                     }
                                                 }}
                                                 disabled={uploading}
@@ -758,12 +833,17 @@ const PortfolioGalleryEditor = () => {
 
                                         {/* Manual URL Input */}
                                         <div className="space-y-2">
-                                            <Label htmlFor="image_url" className="text-sm text-gray-600">
+                                            <Label
+                                                htmlFor="image_url"
+                                                className="text-sm text-gray-600"
+                                            >
                                                 Or enter image URL manually
                                             </Label>
                                             <Input
                                                 id="image_url"
-                                                value={editingItem.image_url || ""}
+                                                value={
+                                                    editingItem.image_url || ""
+                                                }
                                                 onChange={e =>
                                                     handleInputChange(
                                                         "image_url",
@@ -855,8 +935,12 @@ const PortfolioGalleryEditor = () => {
                                                 <div
                                                     className={`aspect-video bg-gray-100 rounded overflow-hidden relative group ${item.grid_class}`}
                                                     onDragOver={handleDragOver}
-                                                    onDragLeave={handleDragLeave}
-                                                    onDrop={(e) => handleDrop(e, item.id)}
+                                                    onDragLeave={
+                                                        handleDragLeave
+                                                    }
+                                                    onDrop={e =>
+                                                        handleDrop(e, item.id)
+                                                    }
                                                 >
                                                     {item.image_url ? (
                                                         <>
@@ -904,10 +988,14 @@ const PortfolioGalleryEditor = () => {
                                                                     <Upload className="w-6 h-6" />
                                                                 </div>
                                                                 <span className="text-sm font-medium text-center">
-                                                                    Click or Drag to Upload
+                                                                    Click or
+                                                                    Drag to
+                                                                    Upload
                                                                 </span>
                                                                 <span className="text-xs text-gray-400 text-center">
-                                                                    JPG, PNG, WebP up to 10MB
+                                                                    JPG, PNG,
+                                                                    WebP up to
+                                                                    10MB
                                                                 </span>
                                                             </label>
                                                             <input
