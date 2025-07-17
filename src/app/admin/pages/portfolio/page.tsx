@@ -45,6 +45,7 @@ import type {
     GridClass,
 } from "@/types/portfolio-gallery";
 import { GRID_CLASS_OPTIONS } from "@/types/portfolio-gallery";
+import { revalidatePathAction } from "@/services/revalidate.action";
 
 // Animation variants
 const containerVariants = {
@@ -305,6 +306,9 @@ const PortfolioGalleryEditor = () => {
             setEditingItemId(null);
             setIsEditing(false);
 
+            // Revalidate cache for portfolio page
+            await revalidatePathAction("/portfolio");
+
             showNotification(
                 "success",
                 "Success!",
@@ -337,6 +341,10 @@ const PortfolioGalleryEditor = () => {
             if (error) throw error;
 
             await loadPortfolioData();
+
+            // Revalidate cache for portfolio page
+            await revalidatePathAction("/portfolio");
+
             showNotification(
                 "success",
                 "Success!",
@@ -480,6 +488,9 @@ const PortfolioGalleryEditor = () => {
                     );
                 }
                 await loadPortfolioData();
+
+                // Revalidate cache for portfolio page
+                await revalidatePathAction("/portfolio");
             } else {
                 // If no itemId, update the editing form
                 console.log("Updating editing form with new image");
