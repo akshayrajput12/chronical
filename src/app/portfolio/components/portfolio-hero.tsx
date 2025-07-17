@@ -40,8 +40,7 @@ const PortfolioHero: React.FC<PortfolioHeroProps> = ({ heroData }) => {
     }
 
     // Determine background image URL
-    const backgroundImageUrl =
-        displayData.background_image_url || displayData.fallback_image_url;
+    const backgroundImageUrl = "/images/portfolio-hero.webp";
 
     return (
         <section
@@ -56,13 +55,7 @@ const PortfolioHero: React.FC<PortfolioHeroProps> = ({ heroData }) => {
             />
 
             {/* Dynamic Overlay */}
-            <div
-                className="absolute inset-0"
-                style={{
-                    backgroundColor: displayData.overlay_color,
-                    opacity: displayData.overlay_opacity,
-                }}
-            />
+            <div className="absolute inset-0 bg-black/50" />
 
             {/* Content */}
             <div
