@@ -350,7 +350,8 @@ const EditEventPage = () => {
         if (activeTab === "gallery" && eventId) {
             loadGalleryImages();
         }
-    }, [activeTab, eventId, loadGalleryImages]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [activeTab, eventId]);
 
     // Generate slug from title
     const generateSlug = (title: string) => {

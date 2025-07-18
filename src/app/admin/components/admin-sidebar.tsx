@@ -22,6 +22,7 @@ import {
     Monitor,
     Building2,
     MapPin,
+    Download,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import Logo from "@/components/layout/logo";
@@ -401,6 +402,14 @@ const AdminSidebar = ({
                                         isActive={
                                             pathname ===
                                             "/admin/pages/conference/conference-solution-section"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/conference/events-portfolio"
+                                        label="Events Portfolio"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/conference/events-portfolio"
                                         }
                                     />
                                 </div>
@@ -899,7 +908,19 @@ const AdminSidebar = ({
                     isActive={pathname.includes("/admin/pages/portfolio")}
                 />
 
+                {/* Site Settings Section */}
+                <div className="pt-4 pb-2">
+                    <p className="px-4 text-xs font-medium text-sidebar-foreground/60 uppercase tracking-wider">
+                        Site Settings
+                    </p>
+                </div>
 
+                <NavItem
+                    href="/admin/company-profile"
+                    label="Company Profile"
+                    icon={<Download size={18} />}
+                    isActive={pathname.includes("/admin/company-profile")}
+                />
 
                 {/* Logout */}
                 <div className="pt-4 pb-2">

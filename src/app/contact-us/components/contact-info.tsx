@@ -1,6 +1,6 @@
 "use client";
 
-import { Mail, PhoneCall } from "lucide-react";
+import { Mail, PhoneCall, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import { ContactGroupCompany } from "@/types/contact";
@@ -8,6 +8,15 @@ import { ContactGroupCompany } from "@/types/contact";
 function formatPhoneHref(phone: string) {
     // Remove spaces, parentheses, and dashes for tel: links
     return phone.replace(/[\s()-]/g, "");
+}
+
+function isValidUrl(url: string): boolean {
+    try {
+        new URL(url);
+        return true;
+    } catch {
+        return false;
+    }
 }
 
 interface ContactInfoProps {
@@ -37,40 +46,75 @@ const ContactInfo: React.FC<ContactInfoProps> = ({ groupCompanies }) => {
                     <div className="h-1 bg-[#a5cd39] w-16 mt-1 mb-6"></div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {groupCompanies.map(company => (
-                        <div
-                            key={company.id}
-                            className="bg-white shadow-lg p-8 border-t-4 border-[#a5cd39] flex flex-col h-full hover:-translate-y-1 hover:shadow-xl transition-all duration-300"
-                        >
-                            <h3 className="mb-2 text-lg font-semibold text-gray-900">{company.region}</h3>
-                            <div className="text-gray-500 mb-4">
-                                {company.address.split(',').map((line, index) => (
-                                    <span key={index}>
-                                        {line.trim()}
-                                        {index < company.address.split(',').length - 1 && <br />}
-                                    </span>
-                                ))}
+                    {groupCompanies.map(company => {
+                        const CardContent = (
+                            <>
+                                <div className="flex items-center justify-between mb-2">
+                                    <h3 className="text-lg font-semibold text-gray-900">{company.region}</h3>
+                                    {company.company_url && company.company_url.trim() && isValidUrl(company.company_url.trim()) && (
+                                        <ExternalLink className="w-4 h-4 text-[#a5cd39] opacity-70" />
+                                    )}
+                                </div>
+                                <div className="text-gray-500 mb-4">
+                                    {company.address && company.address.split(',').map((line, index) => (
+                                        <span key={index}>
+                                            {line.trim()}
+                                            {index < company.address.split(',').length - 1 && <br />}
+                                        </span>
+                                    ))}
+                                </div>
+                                {company.phone && (
+                                    <div className="mb-2 flex items-center gap-2 text-gray-900">
+                                        <PhoneCall className="w-4 h-4" />
+                                        <Link
+                                            href={`tel:${formatPhoneHref(company.phone)}`}
+                                            className="font-semibold hover:text-[#a5cd39] transition-colors"
+                                            onClick={(e) => e.stopPropagation()}
+                                        >
+                                            {company.phone}
+                                        </Link>
+                                    </div>
+                                )}
+                                {company.email && (
+                                    <div className="flex items-center gap-2 text-gray-900">
+                                        <Mail className="w-4 h-4" />
+                                        <Link
+                                            href={`mailto:${company.email}`}
+                                            className="font-semibold hover:text-[#a5cd39] transition-colors"
+                                            onClick={(e) => e.stopPropagation()}
+                                        >
+                                            {company.email}
+                                        </Link>
+                                    </div>
+                                )}
+                            </>
+                        );
+
+                        // Check if company has a valid URL
+                        const hasValidUrl = company.company_url &&
+                                          company.company_url.trim() !== '' &&
+                                          isValidUrl(company.company_url.trim());
+
+                        return hasValidUrl ? (
+                            <Link
+                                key={company.id}
+                                href={company.company_url!.trim()}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="bg-white shadow-lg p-8 border-t-4 border-[#a5cd39] flex flex-col h-full hover:-translate-y-1 hover:shadow-xl transition-all duration-300 cursor-pointer group"
+                                aria-label={`Visit ${company.region} website`}
+                            >
+                                {CardContent}
+                            </Link>
+                        ) : (
+                            <div
+                                key={company.id}
+                                className="bg-white shadow-lg p-8 border-t-4 border-[#a5cd39] flex flex-col h-full hover:-translate-y-1 hover:shadow-xl transition-all duration-300"
+                            >
+                                {CardContent}
                             </div>
-                            <div className="mb-2 flex items-center gap-2 text-gray-900">
-                                <PhoneCall className="w-4 h-4" />
-                                <Link
-                                    href={`tel:${formatPhoneHref(company.phone)}`}
-                                    className="font-semibold hover:text-[#a5cd39] transition-colors"
-                                >
-                                    {company.phone}
-                                </Link>
-                            </div>
-                            <div className="flex items-center gap-2 text-gray-900">
-                                <Mail className="w-4 h-4" />
-                                <Link
-                                    href={`mailto:${company.email}`}
-                                    className="font-semibold hover:text-[#a5cd39] transition-colors"
-                                >
-                                    {company.email}
-                                </Link>
-                            </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
             </div>
         </section>

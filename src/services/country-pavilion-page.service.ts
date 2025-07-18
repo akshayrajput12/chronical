@@ -59,7 +59,7 @@ export interface ExpoPavilionPortfolioItem {
 
 export interface ExpoPavilionParagraphSection {
     id: string;
-    content: string;
+    paragraph_content: string;
     is_active: boolean;
 }
 
@@ -118,7 +118,7 @@ export async function getCountryPavilionPageData(): Promise<CountryPavilionPageD
                 .order("display_order")
                 .limit(6),
             supabase
-                .from("expo_pavilion_paragraph_sections")
+                .from("expo_pavilion_paragraph_section")
                 .select("*")
                 .eq("is_active", true)
                 .single()
@@ -137,6 +137,9 @@ export async function getCountryPavilionPageData(): Promise<CountryPavilionPageD
             designBenefits = benefitsResult.data || [];
         }
         
+        // Debug logging
+        console.log('Country Pavilion Page Data - paragraphSectionResult:', paragraphSectionResult);
+
         return {
             hero: heroResult.data || null,
             intro: introResult.data || null,

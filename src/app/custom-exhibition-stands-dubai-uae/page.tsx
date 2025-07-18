@@ -4,7 +4,7 @@ import { getCustomExhibitionPageData } from "@/services/custom-exhibition-page.s
 import CustomExhibitionHeroServer from "./components/custom-exhibition-hero-server";
 import LeadingContractorSectionServer from "./components/leading-contractor-section-server";
 import PromoteBrandSectionServer from "./components/promote-brand-section-server";
-import StrikingCustomizedSectionServer from "./components/striking-customized-section-server";
+
 import ReasonsToChooseSectionServer from "./components/reasons-to-choose-section-server";
 import FAQSectionServer from "./components/faq-section-server";
 import BoothRequirementsForm from "../home/components/booth-requirements-form";
@@ -38,7 +38,7 @@ async function CustomExhibitionStandsPage() {
             <CustomExhibitionHeroServer heroData={customExhibitionPageData.hero} />
             <LeadingContractorSectionServer leadingContractorData={customExhibitionPageData.leadingContractor} />
             <PromoteBrandSectionServer promoteBrandData={customExhibitionPageData.promoteBrand} />
-            <StrikingCustomizedSectionServer strikingCustomizedData={customExhibitionPageData.strikingCustomized} />
+    
             <ReasonsToChooseSectionServer reasonsToChooseData={customExhibitionPageData.reasonsToChoose} />
             <FAQSectionServer faqSectionData={customExhibitionPageData.faqSection} faqItemsData={customExhibitionPageData.faqItems} />
             <PortfolioSection />

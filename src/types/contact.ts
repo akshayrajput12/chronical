@@ -73,6 +73,7 @@ export interface ContactGroupCompany extends BaseEntity {
     address: string;
     phone: string;
     email: string;
+    company_url?: string;
     sort_order: number;
     is_active: boolean;
 }
@@ -83,6 +84,7 @@ export interface ContactGroupCompanyInput {
     phone: string;
     email: string;
     address: string;
+    company_url?: string;
     sort_order?: number;
     is_active?: boolean;
 }
@@ -94,6 +96,7 @@ export interface ContactGroupCompanyFormInput {
     phone: string;
     email: string;
     address: string;     // Additional address field
+    company_url?: string; // Company website URL
     display_order?: number; // Maps to sort_order
     is_active?: boolean;
 }
@@ -352,6 +355,7 @@ export interface ContactGroupCompanyFormData {
     address: string;
     phone: string;
     email: string;
+    company_url?: string;
     sort_order: number;
     is_active: boolean;
 }

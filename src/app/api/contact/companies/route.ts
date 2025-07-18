@@ -72,6 +72,17 @@ export async function POST(request: NextRequest) {
             }, { status: 400 });
         }
 
+        // Validate URL format if provided
+        if (companyData.company_url && companyData.company_url.trim()) {
+            const urlPattern = /^https?:\/\/[^\s/$.?#].[^\s]*$/i;
+            if (!urlPattern.test(companyData.company_url.trim())) {
+                return NextResponse.json({
+                    success: false,
+                    error: "Please enter a valid URL (must start with http:// or https://)"
+                }, { status: 400 });
+            }
+        }
+
         // Set default sort_order if not provided
         if (companyData.sort_order === undefined) {
             const { count } = await supabase

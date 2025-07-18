@@ -67,7 +67,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
         };
 
         initializeCountry();
-    }, []);
+    }, [value]);
 
     // Update phone number when value changes externally
     useEffect(() => {

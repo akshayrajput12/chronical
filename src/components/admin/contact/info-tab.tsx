@@ -58,6 +58,7 @@ export default function ContactInfoTab() {
         phone: "",
         email: "",
         address: "",
+        company_url: "",
         is_active: true,
         display_order: 0,
     });
@@ -86,6 +87,7 @@ export default function ContactInfoTab() {
             phone: "",
             email: "",
             address: "",
+            company_url: "",
             is_active: true,
             display_order: companies.length,
         });
@@ -104,6 +106,7 @@ export default function ContactInfoTab() {
             phone: company.phone,
             email: company.email,
             address: company.address,
+            company_url: company.company_url || "",
             is_active: company.is_active,
             display_order: company.sort_order,
         });
@@ -414,6 +417,23 @@ export default function ContactInfoTab() {
                                 rows={2}
                                 className="mt-1"
                             />
+                        </div>
+
+                        <div>
+                            <Label htmlFor="company_url">Company Website URL</Label>
+                            <Input
+                                id="company_url"
+                                type="url"
+                                value={formData.company_url}
+                                onChange={e =>
+                                    handleInputChange("company_url", e.target.value)
+                                }
+                                placeholder="https://example.com (optional)"
+                                className="mt-1"
+                            />
+                            <p className="text-xs text-gray-500 mt-1">
+                                Optional: Makes the company card clickable to redirect to this URL
+                            </p>
                         </div>
 
                         <div>

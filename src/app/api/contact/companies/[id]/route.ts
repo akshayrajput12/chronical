@@ -88,6 +88,17 @@ export async function PATCH(
             }, { status: 400 });
         }
 
+        // Validate URL format if provided
+        if (updateData.company_url !== undefined && updateData.company_url && updateData.company_url.trim()) {
+            const urlPattern = /^https?:\/\/[^\s/$.?#].[^\s]*$/i;
+            if (!urlPattern.test(updateData.company_url.trim())) {
+                return NextResponse.json({
+                    success: false,
+                    error: "Please enter a valid URL (must start with http:// or https://)"
+                }, { status: 400 });
+            }
+        }
+
         // Add updated_at timestamp
         const updateObject = {
             ...updateData,

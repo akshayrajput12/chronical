@@ -129,6 +129,7 @@ const PortfolioGalleryEditor = () => {
 
             handleDirectImageUpload(fakeEvent, itemId);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // Check and ensure storage bucket exists
@@ -361,7 +362,7 @@ const PortfolioGalleryEditor = () => {
     };
 
     // Direct image upload for portfolio items
-    const handleDirectImageUpload = async (
+    const handleDirectImageUpload = useCallback(async (
         event: React.ChangeEvent<HTMLInputElement>,
         itemId?: string,
     ) => {
@@ -524,7 +525,7 @@ const PortfolioGalleryEditor = () => {
         } finally {
             setUploading(false);
         }
-    };
+    }, [ensureStorageBucket, showNotification, loadPortfolioData, editingItem, setEditingItem]);
 
     if (loading) {
         return (

@@ -6,10 +6,64 @@ import { Download, ChevronRight, MessageSquare, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SocialIcons from "./social-icons";
 import { useCities } from "@/hooks/use-cities";
+import { CompanyProfileDocument } from "@/types/company-profile";
 
 const Footer = () => {
     // Fetch cities for dynamic locations
     const { cities, isLoading } = useCities({ limit: 10, is_active: true });
+
+    // State for company profile document
+    const [companyProfile, setCompanyProfile] = useState<CompanyProfileDocument | null>(null);
+    const [profileLoading, setProfileLoading] = useState(false);
+    const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+
+    // Fetch current company profile document
+    useEffect(() => {
+        const fetchCompanyProfile = async () => {
+            try {
+                setProfileLoading(true);
+                const response = await fetch('/api/company-profile?current=true');
+
+                // Handle 404 response (no current document yet)
+                if (response.status === 404) {
+                    setCompanyProfile(null);
+                    setDownloadUrl(null);
+                    return;
+                }
+
+                const result = await response.json();
+
+                if (result.success && result.data) {
+                    setCompanyProfile(result.data.document);
+                    setDownloadUrl(result.data.downloadUrl);
+                } else {
+                    setCompanyProfile(null);
+                    setDownloadUrl(null);
+                }
+            } catch (error) {
+                console.error('Error fetching company profile:', error);
+                setCompanyProfile(null);
+                setDownloadUrl(null);
+            } finally {
+                setProfileLoading(false);
+            }
+        };
+
+        fetchCompanyProfile();
+    }, []);
+
+    // Handle download click
+    const handleDownload = () => {
+        if (downloadUrl && companyProfile) {
+            // Create a temporary link element to trigger download
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+            link.download = companyProfile.original_filename || 'company-profile.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    };
 
     return (
         <footer className="bg-[#2C2C2C] text-white relative">
@@ -160,10 +214,26 @@ const Footer = () => {
 
                         <Button
                             variant="outline"
-                            className="border-white bg-white text-[#a5cd39] hover:bg-transparent hover:text-white hover:border-white w-full h-10 text-sm transition-all duration-300 font-medium"
+                            onClick={handleDownload}
+                            disabled={profileLoading || !companyProfile || !downloadUrl}
+                            className="border-white bg-white text-[#a5cd39] hover:bg-transparent hover:text-white hover:border-white w-full h-10 text-sm transition-all duration-300 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            <Download className="w-4 h-4 mr-2" />
-                            DOWNLOAD NOW
+                            {profileLoading ? (
+                                <>
+                                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[#a5cd39] mr-2" />
+                                    LOADING...
+                                </>
+                            ) : companyProfile && downloadUrl ? (
+                                <>
+                                    <Download className="w-4 h-4 mr-2" />
+                                    DOWNLOAD NOW
+                                </>
+                            ) : (
+                                <>
+                                    <Download className="w-4 h-4 mr-2" />
+                                    NOT AVAILABLE
+                                </>
+                            )}
                         </Button>
                     </div>
                 </div>

@@ -46,7 +46,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ formSettings }) => {
         success_description:
             "We've received your inquiry and will get back to you within 24 hours.",
         sidebar_phone: "+971 54 347 4645",
-        sidebar_email: "info@chronicleexhibts.ae",
+        sidebar_email: "info@chronicleexhibits.ae",
         sidebar_address:
             "Al Qouz Industrial Area 1st. No. 5B, Warehouse 14 P.O. Box 128046, Dubai – UAE",
         enable_file_upload: true,

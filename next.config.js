@@ -7,6 +7,37 @@ const nextConfig = {
   experimental: {
     // Enable static generation optimizations
     optimizePackageImports: ['@supabase/supabase-js', 'lucide-react'],
+    // Reduce memory usage during build
+    workerThreads: false,
+    cpus: 1,
+  },
+
+  // Webpack configuration for memory optimization
+  webpack: (config, { dev, isServer }) => {
+    // Optimize for memory usage during build
+    if (!dev && !isServer) {
+      config.optimization.splitChunks = {
+        chunks: 'all',
+        cacheGroups: {
+          default: {
+            minChunks: 1,
+            priority: -20,
+            reuseExistingChunk: true,
+          },
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            priority: -10,
+            chunks: 'all',
+          },
+        },
+      };
+    }
+
+    // Reduce memory usage
+    config.optimization.minimize = true;
+
+    return config;
   },
 
   // Image optimization configuration

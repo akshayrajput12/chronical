@@ -8,11 +8,15 @@ interface ExpoPavilionParagraphSectionServerProps {
     paragraphSectionData: ExpoPavilionParagraphSection | null;
 }
 
-const ExpoPavilionParagraphSectionServer = ({ 
-    paragraphSectionData 
+const ExpoPavilionParagraphSectionServer = ({
+    paragraphSectionData
 }: ExpoPavilionParagraphSectionServerProps) => {
+    // Debug logging
+    console.log('ExpoPavilionParagraphSectionServer - paragraphSectionData:', paragraphSectionData);
+
     // Don't render if no data exists
     if (!paragraphSectionData) {
+        console.log('ExpoPavilionParagraphSectionServer - No paragraph section data, not rendering');
         return null;
     }
 
@@ -20,7 +24,7 @@ const ExpoPavilionParagraphSectionServer = ({
         <section className="py-8 md:py-12 lg:py-16 bg-white">
             <div className="container mx-auto px-4">
                 <div className="max-w-6xl mx-auto">
-                    <BlogContent content={paragraphSectionData.content} />
+                    <BlogContent content={paragraphSectionData.paragraph_content} />
                 </div>
             </div>
         </section>

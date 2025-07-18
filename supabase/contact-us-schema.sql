@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS contact_form_settings (
     
     -- Contact Info Sidebar
     sidebar_phone TEXT DEFAULT '+971 54 347 4645',
-    sidebar_email TEXT DEFAULT 'info@chronicleexhibts.ae',
+    sidebar_email TEXT DEFAULT 'info@chronicleexhibits.ae',
     sidebar_address TEXT DEFAULT 'Al Qouz Industrial Area 1st. No. 5B, Warehouse 14 P.O. Box 128046, Dubai – UAE',
     
     -- Form Settings
@@ -314,7 +314,7 @@ INSERT INTO contact_form_settings (
     'Thank You for Your Message!',
     'We''ve received your inquiry and will get back to you within 24 hours.',
     '+971 54 347 4645',
-    'info@chronicleexhibts.ae',
+    'info@chronicleexhibits.ae',
     'Al Qouz Industrial Area 1st. No. 5B, Warehouse 14 P.O. Box 128046, Dubai – UAE',
     true,
     10,

@@ -232,8 +232,6 @@ export class ContactPageService {
 // =====================================================
 
 export class ContactAdminService {
-    private supabase = createClient();
-
     // For admin operations, we'll use API routes that have service role access
 
     // ===== FORM SUBMISSIONS MANAGEMENT =====
@@ -456,6 +454,7 @@ export class ContactAdminService {
             phone: formData.phone,
             email: formData.email,
             address: formData.address,
+            company_url: formData.company_url && formData.company_url.trim() ? formData.company_url.trim() : undefined,
             sort_order: formData.display_order || formData.sort_order,
             is_active: formData.is_active
         };
