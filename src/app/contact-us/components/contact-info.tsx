@@ -49,27 +49,18 @@ const ContactInfo: React.FC<ContactInfoProps> = ({ groupCompanies }) => {
                     {groupCompanies.map(company => {
                         const CardContent = (
                             <>
-                                <div className="flex items-center justify-between mb-2">
-                                    <h3 className="text-lg font-semibold text-gray-900">{company.region}</h3>
-                                    {company.company_url && company.company_url.trim() && isValidUrl(company.company_url.trim()) && (
-                                        <ExternalLink className="w-4 h-4 text-[#a5cd39] opacity-70" />
-                                    )}
-                                </div>
-                                <div className="text-gray-500 mb-4">
-                                    {company.address && company.address.split(',').map((line, index) => (
-                                        <span key={index}>
-                                            {line.trim()}
-                                            {index < company.address.split(',').length - 1 && <br />}
-                                        </span>
-                                    ))}
+                                <div className="text-gray-500 mb-4 w-2/3">
+                                    {company.address}
                                 </div>
                                 {company.phone && (
                                     <div className="mb-2 flex items-center gap-2 text-gray-900">
                                         <PhoneCall className="w-4 h-4" />
                                         <Link
-                                            href={`tel:${formatPhoneHref(company.phone)}`}
+                                            href={`tel:${formatPhoneHref(
+                                                company.phone,
+                                            )}`}
                                             className="font-semibold hover:text-[#a5cd39] transition-colors"
-                                            onClick={(e) => e.stopPropagation()}
+                                            onClick={e => e.stopPropagation()}
                                         >
                                             {company.phone}
                                         </Link>
@@ -81,19 +72,38 @@ const ContactInfo: React.FC<ContactInfoProps> = ({ groupCompanies }) => {
                                         <Link
                                             href={`mailto:${company.email}`}
                                             className="font-semibold hover:text-[#a5cd39] transition-colors"
-                                            onClick={(e) => e.stopPropagation()}
+                                            onClick={e => e.stopPropagation()}
                                         >
                                             {company.email}
                                         </Link>
                                     </div>
                                 )}
+                                {company.company_url &&
+                                    company.company_url.trim() !== "" &&
+                                    isValidUrl(company.company_url.trim()) && (
+                                        <div className="mt-2">
+                                            <Link
+                                                href={company.company_url.trim()}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="inline-flex items-center gap-2 text-[#a5cd39] hover:text-[#8bb32f] transition-colors font-semibold"
+                                                onClick={e =>
+                                                    e.stopPropagation()
+                                                }
+                                            >
+                                                <ExternalLink className="w-3 h-3" />
+                                                Visit Website
+                                            </Link>
+                                        </div>
+                                    )}
                             </>
                         );
 
                         // Check if company has a valid URL
-                        const hasValidUrl = company.company_url &&
-                                          company.company_url.trim() !== '' &&
-                                          isValidUrl(company.company_url.trim());
+                        const hasValidUrl =
+                            company.company_url &&
+                            company.company_url.trim() !== "" &&
+                            isValidUrl(company.company_url.trim());
 
                         return hasValidUrl ? (
                             <Link
