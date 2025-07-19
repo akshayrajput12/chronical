@@ -31,11 +31,11 @@ const BlogPage = async ({ searchParams }: BlogPageProps) => {
     // Fetch blog data server-side
     const blogPageData = await getBlogPageData(
         page,
-        20, // pageSize
+        6, // pageSize
         "published", // status
         category,
         search,
-        featured
+        featured,
     );
 
     // Handle case where no posts are found
@@ -54,8 +54,7 @@ const BlogPage = async ({ searchParams }: BlogPageProps) => {
                                     ? `No posts found matching "${search}"`
                                     : category
                                     ? `No posts found in category "${category}"`
-                                    : "No blog posts are currently available."
-                                }
+                                    : "No blog posts are currently available."}
                             </p>
                         </div>
                     </div>
@@ -65,10 +64,21 @@ const BlogPage = async ({ searchParams }: BlogPageProps) => {
         );
     }
 
+    // Prepare search params for pagination (excluding page)
+    const paginationSearchParams: Record<string, string> = {};
+    if (category) paginationSearchParams.category = category;
+    if (search) paginationSearchParams.search = search;
+    if (featured) paginationSearchParams.featured = featured.toString();
+
     return (
         <div className="min-h-screen bg-white">
             <BlogHero />
-            <BlogPostsSection blogPosts={blogPageData.posts} />
+            <BlogPostsSection
+                blogPosts={blogPageData.posts}
+                currentPage={blogPageData.currentPage}
+                totalPages={blogPageData.totalPages}
+                searchParams={paginationSearchParams}
+            />
             <BoothRequirements />
         </div>
     );

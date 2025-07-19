@@ -333,7 +333,7 @@ export default function ContactInfoTab() {
 
             {/* Add/Edit Dialog */}
             <Dialog open={showDialog} onOpenChange={setShowDialog}>
-                <DialogContent className="max-w-md">
+                <DialogContent className="max-w-md max-h-[650px] overflow-auto">
                     <DialogHeader>
                         <DialogTitle>
                             {editingCompany
@@ -420,19 +420,25 @@ export default function ContactInfoTab() {
                         </div>
 
                         <div>
-                            <Label htmlFor="company_url">Company Website URL</Label>
+                            <Label htmlFor="company_url">
+                                Company Website URL
+                            </Label>
                             <Input
                                 id="company_url"
                                 type="url"
                                 value={formData.company_url}
                                 onChange={e =>
-                                    handleInputChange("company_url", e.target.value)
+                                    handleInputChange(
+                                        "company_url",
+                                        e.target.value,
+                                    )
                                 }
                                 placeholder="https://example.com (optional)"
                                 className="mt-1"
                             />
                             <p className="text-xs text-gray-500 mt-1">
-                                Optional: Makes the company card clickable to redirect to this URL
+                                Optional: Makes the company card clickable to
+                                redirect to this URL
                             </p>
                         </div>
 

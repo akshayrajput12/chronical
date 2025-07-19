@@ -3,13 +3,22 @@
 import React from "react";
 import { motion } from "framer-motion";
 import BlogCard from "./blog-card";
+import BlogPagination from "./blog-pagination";
 import { BlogPostSummary } from "@/types/blog";
 
 interface BlogPostsSectionProps {
     blogPosts: BlogPostSummary[];
+    currentPage: number;
+    totalPages: number;
+    searchParams?: Record<string, string>;
 }
 
-const BlogPostsSection = ({ blogPosts }: BlogPostsSectionProps) => {
+const BlogPostsSection = ({
+    blogPosts,
+    currentPage,
+    totalPages,
+    searchParams = {},
+}: BlogPostsSectionProps) => {
     return (
         <section id="blog-posts" className="py-8 md:py-12 lg:py-16 bg-gray-50">
             <div className="container mx-auto px-4">
@@ -34,6 +43,14 @@ const BlogPostsSection = ({ blogPosts }: BlogPostsSectionProps) => {
                             <BlogCard key={post.id} post={post} index={index} />
                         ))}
                     </div>
+
+                    {/* Pagination */}
+                    <BlogPagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        baseUrl="/blog"
+                        searchParams={searchParams}
+                    />
                 </div>
             </div>
         </section>
