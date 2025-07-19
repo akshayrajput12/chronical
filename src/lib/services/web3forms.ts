@@ -32,10 +32,11 @@ export interface Web3FormsResponse {
 
 export class Web3FormsService {
     private readonly apiUrl = 'https://api.web3forms.com/submit';
-    private readonly accessKey = '0c2e5f6f-5e07-48ef-8faf-6193752e0611';
+    private readonly accessKey1 = '0c2e5f6f-5e07-48ef-8faf-6193752e0611';
+    private readonly accessKey2 = 'YOUR_SECOND_ACCESS_KEY_HERE'; // Add your second access key here
 
     /**
-     * Send email notification via Web3Forms
+     * Send email notification via Web3Forms to both access keys
      */
     async sendFormNotification(data: {
         name: string;
@@ -62,8 +63,8 @@ export class Web3FormsService {
             // Format the email content with all form data
             const emailContent = this.formatEmailContent(data);
 
-            const submissionData: Web3FormsSubmissionData = {
-                access_key: this.accessKey,
+            // Create base submission data
+            const baseSubmissionData = {
                 subject: subjects[data.form_type],
                 email: data.email,
                 replyto: data.email,
@@ -80,34 +81,70 @@ export class Web3FormsService {
                 botcheck: false // Hidden field for spam protection
             };
 
-            console.log('Sending Web3Forms notification:', {
-                subject: submissionData.subject,
-                email: submissionData.email,
-                form_type: submissionData.form_type
+            console.log('Sending Web3Forms notification to both access keys:', {
+                subject: baseSubmissionData.subject,
+                email: baseSubmissionData.email,
+                form_type: baseSubmissionData.form_type
             });
 
-            const response = await fetch(this.apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(submissionData)
-            });
+            // Send to both access keys simultaneously
+            const [result1, result2] = await Promise.allSettled([
+                this.sendToAccessKey({ ...baseSubmissionData, access_key: this.accessKey1 }),
+                this.sendToAccessKey({ ...baseSubmissionData, access_key: this.accessKey2 })
+            ]);
 
-            const result: Web3FormsResponse = await response.json();
+            // Check results
+            const success1 = result1.status === 'fulfilled' && result1.value.success;
+            const success2 = result2.status === 'fulfilled' && result2.value.success;
 
-            if (!result.success) {
-                console.error('Web3Forms API error:', result);
-                throw new Error(`Web3Forms API error: ${result.body?.message || 'Unknown error'}`);
+            if (!success1 && !success2) {
+                const error1 = result1.status === 'rejected' ? result1.reason : result1.value.body?.message;
+                const error2 = result2.status === 'rejected' ? result2.reason : result2.value.body?.message;
+                console.error('Both Web3Forms submissions failed:', { error1, error2 });
+                throw new Error(`Both Web3Forms submissions failed. Error 1: ${error1}, Error 2: ${error2}`);
             }
 
-            console.log('Web3Forms notification sent successfully:', result.body?.message);
-            return result;
+            if (!success1) {
+                const error1 = result1.status === 'rejected' ? result1.reason : result1.value.body?.message;
+                console.warn('First Web3Forms submission failed:', error1);
+            }
+
+            if (!success2) {
+                const error2 = result2.status === 'rejected' ? result2.reason : result2.value.body?.message;
+                console.warn('Second Web3Forms submission failed:', error2);
+            }
+
+            const successfulResult = success1 ? (result1 as PromiseFulfilledResult<Web3FormsResponse>).value : (result2 as PromiseFulfilledResult<Web3FormsResponse>).value;
+            console.log(`Web3Forms notification sent successfully to ${success1 && success2 ? 'both' : 'one'} access key(s):`, successfulResult.body?.message);
+
+            return successfulResult;
 
         } catch (error) {
             console.error('Error sending Web3Forms notification:', error);
             throw error;
         }
+    }
+
+    /**
+     * Send form data to a specific access key
+     */
+    private async sendToAccessKey(submissionData: Web3FormsSubmissionData): Promise<Web3FormsResponse> {
+        const response = await fetch(this.apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(submissionData)
+        });
+
+        const result: Web3FormsResponse = await response.json();
+
+        if (!result.success) {
+            console.error('Web3Forms API error for access key:', submissionData.access_key, result);
+            throw new Error(`Web3Forms API error: ${result.body?.message || 'Unknown error'}`);
+        }
+
+        return result;
     }
 
     /**

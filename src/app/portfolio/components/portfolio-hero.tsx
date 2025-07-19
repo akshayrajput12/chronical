@@ -44,7 +44,7 @@ const PortfolioHero: React.FC<PortfolioHeroProps> = ({ heroData }) => {
 
     return (
         <section
-            className={`relative h-[59vh] 2xl:h-[49vh] flex items-center justify-center overflow-hidden`}
+            className={`relative h-[75vh] 2xl:h-[60vh] flex items-center justify-center overflow-hidden`}
         >
             {/* Background Image */}
             <div

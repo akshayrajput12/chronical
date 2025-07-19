@@ -181,7 +181,7 @@ const KioskManufacturers = () => {
                     </motion.div>
 
                     {/* Content Sections */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 mb-8 md:mb-16">
                         {/* Left Column - Text */}
                         <motion.div
                             className="flex flex-col justify-center"
@@ -204,7 +204,7 @@ const KioskManufacturers = () => {
 
                         {/* Right Column - Image */}
                         <motion.div
-                            className="relative h-[400px] rounded-md overflow-hidden"
+                            className="relative h-[250px] sm:h-[300px] md:h-[400px] rounded-md overflow-hidden"
                             initial={{ opacity: 0, x: 20 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}

@@ -27,7 +27,7 @@ async function PortfolioPage() {
     const portfolioData = await getPortfolioPageData();
 
     return (
-        <div className="flex flex-col relative mt-16 md:mt-20 lg:mt-24">
+        <div className="flex flex-col relative">
             <PortfolioHero heroData={portfolioData.hero} />
             <PortfolioGallery portfolioItems={portfolioData.portfolioItems} />
             <BoothRequirements />

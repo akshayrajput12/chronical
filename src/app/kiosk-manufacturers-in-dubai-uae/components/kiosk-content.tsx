@@ -202,8 +202,9 @@ const KioskContent = () => {
             </section>
             {/* Second Section - Dynamic Content */}
             <section className="bg-gray-100 w-full py-8 md:py-12 lg:py-16">
-                {/* Section Title */}
-                <div className="max-w-6xl mx-auto">
+                <div className="container mx-auto px-4">
+                    {/* Section Title */}
+                    <div className="max-w-6xl mx-auto">
                     <motion.div
                         className=""
                         initial={{ opacity: 0, y: 20 }}
@@ -211,16 +212,16 @@ const KioskContent = () => {
                         viewport={{ once: true }}
                         transition={{ duration: 0.5 }}
                     >
-                        <h2 className="text-3xl md:text-4xl font-rubik w-max font-bold mb-2">
+                        <h2 className="text-2xl sm:text-3xl md:text-4xl font-rubik font-bold mb-2 text-center md:text-left">
                             {contentData.second_section_heading}
-                            <div className="flex justify-center">
-                                <div className="h-1 bg-[#a5cd39] w-16 mt-2 mb-6"></div>
-                            </div>
                         </h2>
+                        <div className="flex justify-center md:justify-start">
+                            <div className="h-1 bg-[#a5cd39] w-16 mt-2 mb-6"></div>
+                        </div>
                     </motion.div>
 
                     {/* Content Sections */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
                         {/* Left Column - Text */}
                         <motion.div
                             className="flex flex-col justify-start"
@@ -229,20 +230,20 @@ const KioskContent = () => {
                             viewport={{ once: true }}
                             transition={{ duration: 0.5 }}
                         >
-                            <p className="text-gray-700 mb-6">
+                            <p className="text-gray-700 mb-4 sm:mb-6 text-sm sm:text-base leading-relaxed">
                                 {contentData.second_section_paragraph_1}
                             </p>
-                            <p className="text-gray-700">
+                            <p className="text-gray-700 text-sm sm:text-base leading-relaxed">
                                 {contentData.second_section_paragraph_2}
                             </p>
-                            <button className="bg-[#a5cd39] mt-6 text-white px-6 py-2 rounded-md font-medium hover:bg-[#94b933] transition-colors duration-300 w-max font-noto-kufi-arabic text-sm">
+                            <button className="bg-[#a5cd39] mt-4 sm:mt-6 text-white px-4 sm:px-6 py-2 rounded-md font-medium hover:bg-[#94b933] transition-colors duration-300 w-max font-noto-kufi-arabic text-xs sm:text-sm">
                                 Request Quotation
                             </button>
                         </motion.div>
 
                         {/* Right Column - Image */}
                         <motion.div
-                            className="relative h-[400px] rounded-md overflow-hidden"
+                            className="relative h-[250px] sm:h-[300px] md:h-[400px] rounded-md overflow-hidden"
                             initial={{ opacity: 0, x: 20 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
@@ -269,6 +270,7 @@ const KioskContent = () => {
                                 </div>
                             )}
                         </motion.div>
+                    </div>
                     </div>
                 </div>
             </section>

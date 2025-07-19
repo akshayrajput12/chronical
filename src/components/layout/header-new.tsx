@@ -321,6 +321,7 @@ const Header = () => {
                                         <Logo
                                             isScrolled={false}
                                             forceLight={true}
+                                            isMobile={true}
                                         />
                                         <div className="flex items-center space-x-3 md:space-x-4 flex-shrink-0">
                                             {/* Mobile/Tablet WhatsApp Button */}
@@ -537,7 +538,7 @@ const Header = () => {
                                 <div className="flex justify-between items-center p-4 md:p-6 border-b border-gray-200 bg-white">
                                     <Logo
                                         isScrolled={false}
-                                        forceLight={true}
+                                        forceDark={true}
                                     />
                                     <button
                                         className="text-gray-800 p-1 md:p-2"

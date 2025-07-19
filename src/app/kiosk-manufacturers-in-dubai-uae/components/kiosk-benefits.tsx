@@ -192,11 +192,11 @@ const KioskBenefits = () => {
                     </motion.div>
 
                     {/* Benefits Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-8">
                         {benefitsData.benefit_items.map((benefit, index) => (
                             <motion.div
                                 key={benefit.id || index}
-                                className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 hover:border-[#a5cd39] transition-all duration-300"
+                                className="bg-white p-4 sm:p-6 rounded-lg shadow-sm border border-gray-100 hover:border-[#a5cd39] transition-all duration-300"
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}

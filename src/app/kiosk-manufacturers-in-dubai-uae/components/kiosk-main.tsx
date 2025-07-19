@@ -80,7 +80,7 @@ const KioskMain = () => {
     // Show loading state
     if (loading) {
         return (
-            <section className="relative w-full h-[60vh] sm:h-[65vh] md:h-[70vh] lg:h-[75vh] flex items-center justify-center overflow-hidden bg-gray-100">
+            <section className="relative w-full h-[75vh] 2xl:h-[60vh] flex items-center justify-center overflow-hidden bg-gray-100">
                 <div className="text-center">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#a5cd39] mx-auto mb-4"></div>
                     <p className="text-gray-600">Loading...</p>
@@ -92,7 +92,7 @@ const KioskMain = () => {
     // Show error state with fallback
     if (error && !heroData) {
         return (
-            <section className="relative w-full h-[60vh] sm:h-[65vh] md:h-[70vh] lg:h-[75vh] flex items-center justify-center overflow-hidden bg-gray-100">
+            <section className="relative w-full h-[75vh] 2xl:h-[60vh] flex items-center justify-center overflow-hidden bg-gray-100">
                 <div className="text-center">
                     <p className="text-red-600 mb-2">
                         Error loading hero section
@@ -109,7 +109,7 @@ const KioskMain = () => {
     }
 
     return (
-        <section className="relative w-full 2xl:h-[60vh] h-[75vh] flex items-center justify-center overflow-hidden">
+        <section className="relative w-full h-[75vh] 2xl:h-[60vh] flex items-center justify-center overflow-hidden">
             {/* Background Image */}
             <div className="absolute inset-0 z-0">
                 <div

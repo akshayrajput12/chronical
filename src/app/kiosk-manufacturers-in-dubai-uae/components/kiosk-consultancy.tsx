@@ -137,7 +137,7 @@ const KioskConsultancy = () => {
                     </motion.h2>
 
                     <motion.div
-                        className="flex flex-col md:flex-row items-center justify-center gap-4"
+                        className="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-4"
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}

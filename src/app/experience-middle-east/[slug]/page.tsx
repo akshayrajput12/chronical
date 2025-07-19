@@ -71,7 +71,7 @@ async function CityDetailPage({ params }: CityDetailPageProps) {
     }
 
     return (
-        <div className="min-h-screen bg-white mt-16 md:mt-20 lg:mt-24">
+        <div className="min-h-screen bg-white">
             <CityDetailHero city={city} />
             <ServicesGrid city={city} />
             <CityContentSection city={city} />

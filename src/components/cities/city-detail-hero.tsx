@@ -37,7 +37,7 @@ const CityDetailHero = ({ city }: CityDetailHeroProps) => {
     return (
         <section className="w-full bg-white">
             {/* Full width hero container with background image */}
-            <div className="relative w-full 2xl:h-[50vh] h-[65vh] overflow-hidden flex items-center justify-center">
+            <div className="relative w-full h-[75vh] 2xl:h-[60vh] overflow-hidden flex items-center justify-center">
                 {/* Background Image */}
                 <div className="absolute inset-0 z-0">
                     <Image
