@@ -12,12 +12,15 @@ import {
     SetupProcessDisplayData,
     SetupProcessStep,
 } from "@/types/setup-process";
+import { RequestQuotationDialog } from "@/components/ui/request-quotation-dialog";
 
 interface SetupProcessProps {
     setupData: SetupProcessDisplayData | null;
 }
 
-const SetupProcess: React.FC<SetupProcessProps> = ({ setupData: propSetupData }) => {
+const SetupProcess: React.FC<SetupProcessProps> = ({
+    setupData: propSetupData,
+}) => {
     const controls = useAnimation();
     const ref = useRef<HTMLDivElement>(null);
 
@@ -212,8 +215,6 @@ const SetupProcess: React.FC<SetupProcessProps> = ({ setupData: propSetupData })
         },
     };
 
-
-
     // Use setupData or fallback to defaultData
     const data = setupData || defaultData;
 
@@ -276,33 +277,90 @@ const SetupProcess: React.FC<SetupProcessProps> = ({ setupData: propSetupData })
                                     <div className="flex flex-row md:flex-row justify-center space-x-4 md:space-x-6 lg:space-x-10">
                                         {(data?.how_to_apply_steps || []).map(
                                             (step, index) => (
-                                                <motion.div
-                                                    key={step.id}
-                                                    className="flex flex-col items-center"
-                                                    custom={index}
-                                                    variants={stepVariants}
-                                                >
-                                                    <motion.div
-                                                        className="w-12 h-12  bg-[#a5cd39] flex items-center justify-center text-white font-medium text-xl md:text-2xl transform rotate-45 mb-5 shadow-md"
-                                                        custom={index}
-                                                        variants={
-                                                            diamondVariants
-                                                        }
-                                                        whileHover={"hover"}
-                                                    >
-                                                        <span
-                                                            style={{
-                                                                transform:
-                                                                    "rotate(-45deg)",
-                                                            }}
+                                                <>
+                                                    {index === 1 ||
+                                                    index === 0 ? (
+                                                        <RequestQuotationDialog
+                                                            trigger={
+                                                                <motion.div
+                                                                    key={
+                                                                        step.id
+                                                                    }
+                                                                    className="flex flex-col cursor-pointer items-center"
+                                                                    custom={
+                                                                        index
+                                                                    }
+                                                                    variants={
+                                                                        stepVariants
+                                                                    }
+                                                                >
+                                                                    <motion.div
+                                                                        className="w-12 h-12  bg-[#a5cd39] flex items-center justify-center text-white font-medium text-xl md:text-2xl transform rotate-45 mb-5 shadow-md"
+                                                                        custom={
+                                                                            index
+                                                                        }
+                                                                        variants={
+                                                                            diamondVariants
+                                                                        }
+                                                                        whileHover={
+                                                                            "hover"
+                                                                        }
+                                                                    >
+                                                                        <span
+                                                                            style={{
+                                                                                transform:
+                                                                                    "rotate(-45deg)",
+                                                                            }}
+                                                                        >
+                                                                            {
+                                                                                step.step_number
+                                                                            }
+                                                                        </span>
+                                                                    </motion.div>
+                                                                    <p className="text-xs md:text-sm font-noto-kufi-arabic max-w-[80px] md:max-w-[120px] text-center">
+                                                                        {
+                                                                            step.title
+                                                                        }
+                                                                    </p>
+                                                                </motion.div>
+                                                            }
+                                                        />
+                                                    ) : (
+                                                        <motion.div
+                                                            key={step.id}
+                                                            className="flex flex-col items-center"
+                                                            custom={index}
+                                                            variants={
+                                                                stepVariants
+                                                            }
                                                         >
-                                                            {step.step_number}
-                                                        </span>
-                                                    </motion.div>
-                                                    <p className="text-xs md:text-sm font-noto-kufi-arabic max-w-[80px] md:max-w-[120px] text-center">
-                                                        {step.title}
-                                                    </p>
-                                                </motion.div>
+                                                            <motion.div
+                                                                className="w-12 h-12  bg-[#a5cd39] flex items-center justify-center text-white font-medium text-xl md:text-2xl transform rotate-45 mb-5 shadow-md"
+                                                                custom={index}
+                                                                variants={
+                                                                    diamondVariants
+                                                                }
+                                                                whileHover={
+                                                                    "hover"
+                                                                }
+                                                            >
+                                                                <span
+                                                                    style={{
+                                                                        transform:
+                                                                            "rotate(-45deg)",
+                                                                    }}
+                                                                >
+                                                                    {
+                                                                        step.step_number
+                                                                    }
+                                                                </span>
+                                                            </motion.div>
+                                                            <p className="text-xs md:text-sm font-noto-kufi-arabic max-w-[80px] md:max-w-[120px] text-center">
+                                                                {step.title}
+                                                            </p>
+                                                        </motion.div>
+                                                    )}
+                                                </>
                                             ),
                                         )}
                                     </div>

@@ -13,6 +13,7 @@ import { Menu, X, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Logo from "./logo";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 // Create a context to share header state
 const HeaderContext = createContext<{
@@ -536,10 +537,18 @@ const Header = () => {
                         >
                             <div className="h-full overflow-y-auto">
                                 <div className="flex justify-between items-center p-4 md:p-6 border-b border-gray-200 bg-white">
-                                    <Logo
-                                        isScrolled={false}
-                                        forceDark={true}
-                                    />
+                                    <Link
+                                        href="/"
+                                        className="flex items-center"
+                                    >
+                                        <Image
+                                            src={"/logo-dark.png"}
+                                            alt="Chronicle Exhibits Logo"
+                                            width={150}
+                                            height={130}
+                                            priority
+                                        />
+                                    </Link>
                                     <button
                                         className="text-gray-800 p-1 md:p-2"
                                         onClick={closeMobileMenu}
@@ -746,11 +755,11 @@ const Header = () => {
                                                 onClick={closeMobileMenu}
                                             />
                                             <MobileNavItem
-                                                href="/industry-insights"
-                                                label="INDUSTRY INSIGHTS"
+                                                href="/top-trade-shows-in-uae-saudi-arabia-middle-east"
+                                                label="TOP EXHIBITIONS"
                                                 isActive={
                                                     pathname ===
-                                                    "/industry-insights"
+                                                    "/top-trade-shows-in-uae-saudi-arabia-middle-east"
                                                 }
                                                 onClick={closeMobileMenu}
                                             />
@@ -761,18 +770,6 @@ const Header = () => {
                                                     pathname === "/blog" ||
                                                     pathname.startsWith(
                                                         "/blog/",
-                                                    )
-                                                }
-                                                onClick={closeMobileMenu}
-                                            />
-                                            <MobileNavItem
-                                                href="/experience-middle-east"
-                                                label="CITIES"
-                                                isActive={
-                                                    pathname ===
-                                                        "/experience-middle-east" ||
-                                                    pathname.startsWith(
-                                                        "/experience-middle-east/",
                                                     )
                                                 }
                                                 onClick={closeMobileMenu}
