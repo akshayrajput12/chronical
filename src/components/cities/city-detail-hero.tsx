@@ -60,13 +60,13 @@ const CityDetailHero = ({ city }: CityDetailHeroProps) => {
                     <div className="absolute inset-0 bg-black/50"></div>
                 </div>
 
-                {/* Content - matching the reference image design */}
-                <div className="relative z-10 md:mt-6  mt-0 px-4 sm:px-6 md:px-8 lg:px-12 text-center text-white w-full">
-                    <div className="max-w-7xl mx-auto">
-                        <div className="max-w-5xl mx-auto">
-                            {/* Dynamic Main Heading from Admin */}
+                {/* Content - vertically centered with margin-top */}
+                <div className="relative z-10 flex items-center justify-center h-full px-4 text-center text-white w-full">
+                    <div className="max-w-6xl mx-auto mt-16 md:mt-20">
+                        <div className="max-w-4xl mx-auto">
+                            {/* Dynamic Main Heading from Admin - Reduced font size */}
                             <motion.h1
-                                className="text-3xl sm:text-4xl md:text-5xl font-rubik font-bold text-white mb-6 leading-tight tracking-wide"
+                                className="text-2xl sm:text-3xl md:text-4xl font-rubik font-bold text-white mb-4 sm:mb-6 leading-tight tracking-wide"
                                 initial={{ opacity: 0, y: 30 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8 }}
@@ -74,10 +74,10 @@ const CityDetailHero = ({ city }: CityDetailHeroProps) => {
                                 {heroTitle}
                             </motion.h1>
 
-                            {/* Dynamic Subtitle if available */}
+                            {/* Dynamic Subtitle if available - Reduced font size */}
                             {heroSubtitle && (
                                 <motion.h2
-                                    className="text-2xl sm:text-3xl md:text-4xl font-rubik font-normal text-white/95 mb-4 max-w-4xl mx-auto leading-relaxed"
+                                    className="text-lg sm:text-xl md:text-2xl font-rubik font-normal text-white/95 mb-4 max-w-3xl mx-auto leading-relaxed"
                                     initial={{ opacity: 0, y: 30 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ duration: 0.8, delay: 0.1 }}
@@ -86,9 +86,9 @@ const CityDetailHero = ({ city }: CityDetailHeroProps) => {
                                 </motion.h2>
                             )}
 
-                            {/* Dynamic Description Text from Admin */}
+                            {/* Dynamic Description Text from Admin - Reduced font size */}
                             <motion.h3
-                                className="text-lg sm:text-2xl font-markazi-text font-medium text-white/90 mb-4 max-w-4xl mx-auto leading-relaxed"
+                                className="text-base sm:text-lg font-markazi-text font-medium text-white/90 mb-4 max-w-3xl mx-auto leading-relaxed"
                                 initial={{ opacity: 0, y: 30 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8, delay: 0.2 }}
