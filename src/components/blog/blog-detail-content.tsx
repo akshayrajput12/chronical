@@ -18,67 +18,62 @@ const BlogDetailContent = ({
     return (
         <>
             {/* Main Content Section */}
-            <section className="lg:w-[68%] w-full bg-white">
-                <div className="container mx-auto px-4">
-                    <div className="max-w-6xl mx-auto">
-                        <div className="w-full">
-                            {/* Main Content */}
-                            <div className="lg:px-10 2xl:px-16">
-                                <BlogContent content={content} />
-                            </div>
-                            {/* Blog Images Gallery */}
-                            {images && images.length > 0 && (
-                                <motion.div
-                                    className="mt-12"
-                                    initial={{ opacity: 0, y: 30 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.8, delay: 0.4 }}
-                                >
-                                    <h3 className="text-xl font-semibold text-gray-900 mb-6">
-                                        Gallery
-                                    </h3>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                        {images.map((image, index) => (
-                                            <motion.div
-                                                key={image.id}
-                                                className="relative aspect-video overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow"
-                                                initial={{
-                                                    opacity: 0,
-                                                    scale: 0.9,
-                                                }}
-                                                animate={{
-                                                    opacity: 1,
-                                                    scale: 1,
-                                                }}
-                                                transition={{
-                                                    duration: 0.5,
-                                                    delay: index * 0.1,
-                                                }}
-                                            >
-                                                <img
-                                                    src={image.file_path}
-                                                    alt={
-                                                        image.alt_text ||
-                                                        image.caption ||
-                                                        "Blog image"
-                                                    }
-                                                    className="w-full h-full object-cover"
-                                                />
-                                                {image.caption && (
-                                                    <div className="absolute bottom-0 left-0 right-0 bg-black/70 text-white p-2">
-                                                        <p className="text-sm">
-                                                            {image.caption}
-                                                        </p>
-                                                    </div>
-                                                )}
-                                            </motion.div>
-                                        ))}
-                                    </div>
-                                </motion.div>
-                            )}
-                        </div>
-                    </div>
+            <div className="lg:w-[68%] w-full">
+                {/* Main Content */}
+                <div className="lg:pr-8">
+                    <BlogContent content={content} />
                 </div>
+
+                {/* Blog Images Gallery */}
+                {images && images.length > 0 && (
+                    <motion.div
+                        className="mt-12 lg:pr-8"
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.4 }}
+                    >
+                        <h3 className="text-xl font-semibold text-gray-900 mb-6">
+                            Gallery
+                        </h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {images.map((image, index) => (
+                                <motion.div
+                                    key={image.id}
+                                    className="relative aspect-video overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow"
+                                    initial={{
+                                        opacity: 0,
+                                        scale: 0.9,
+                                    }}
+                                    animate={{
+                                        opacity: 1,
+                                        scale: 1,
+                                    }}
+                                    transition={{
+                                        duration: 0.5,
+                                        delay: index * 0.1,
+                                    }}
+                                >
+                                    <img
+                                        src={image.file_path}
+                                        alt={
+                                            image.alt_text ||
+                                            image.caption ||
+                                            "Blog image"
+                                        }
+                                        className="w-full h-full object-cover"
+                                    />
+                                    {image.caption && (
+                                        <div className="absolute bottom-0 left-0 right-0 bg-black/70 text-white p-2">
+                                            <p className="text-sm">
+                                                {image.caption}
+                                            </p>
+                                        </div>
+                                    )}
+                                </motion.div>
+                            ))}
+                        </div>
+                    </motion.div>
+                )}
 
                 {/* Custom styles for blog content */}
                 <style jsx>{`
@@ -193,7 +188,7 @@ const BlogDetailContent = ({
                         font-weight: 600;
                     }
                 `}</style>
-            </section>
+            </div>
         </>
     );
 };

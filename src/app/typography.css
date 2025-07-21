@@ -1,8 +1,8 @@
-/* Global Typography Hierarchy - Applied to ALL pages EXCEPT Home Page and Footer */
-/* This file applies consistent font hierarchy across the entire website excluding the home page, footer component and header component */
+/* Global Typography Hierarchy - Applied to ALL pages EXCEPT Home Page, Footer, and Hero Sections */
+/* This file applies consistent font hierarchy across the entire website excluding the home page, footer component, header component, and all hero sections */
 /* Updated to match exact typography specifications */
 /*
-   TYPOGRAPHY SYSTEM (All pages except home, footer and header):
+   TYPOGRAPHY SYSTEM (All pages except home, footer, header, and hero sections):
    1. Hero Section Heading: Rubik 48px/60px, Weight 700
    2. Other Section Headings: Rubik 36px/40px, Weight 700
    3. Body Text/Paragraphs: Noto Kufi Arabic 14px/24px, Weight Regular
@@ -10,19 +10,20 @@
    - Home page retains its current custom styling
    - Footer component retains its own specific styling
    - Header component retains its own specific styling
+   - Hero sections retain their custom typography (excluded from global rules)
 */
 
 /* Import Google Fonts - Alternative method for reference */
 @import url("https://fonts.googleapis.com/css2?family=Markazi+Text:wght@400..700&family=Noto+Kufi+Arabic:wght@100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
 
 /* =============================================================================
-   GLOBAL TYPOGRAPHY HIERARCHY - EXCLUDING HOME PAGE, FOOTER AND HEADER
+   GLOBAL TYPOGRAPHY HIERARCHY - EXCLUDING HOME PAGE, FOOTER, HEADER, AND HERO SECTIONS
    ============================================================================= */
 
 /* 1. Hero Section Heading - H1 use Rubik 48px/60px, Weight 700 */
-/* Exclude home page routes: /, /home, footer component and header component */
+/* Exclude home page routes: /, /home, footer component, header component, and all hero sections */
 body:not(.home-page)
-    h1:not(footer h1):not(footer * h1):not(header h1):not(header * h1) {
+    h1:not(footer h1):not(footer * h1):not(header h1):not(header * h1):not([class*="hero"] h1):not([class*="hero"] * h1):not(section[class*="hero"] h1):not(section[class*="hero"] * h1) {
     font-family: var(--font-rubik), "Rubik", sans-serif !important;
     font-size: 48px !important; /* Hero section heading size */
     font-weight: 700 !important; /* Bold weight */
@@ -30,10 +31,9 @@ body:not(.home-page)
 }
 
 /* 2. Other Section Headings - H2 use Rubik 36px/40px, Weight 700 */
-/* Exclude home page routes: /, /home, footer component and header component */
+/* Exclude home page routes: /, /home, footer component, header component, and all hero sections */
 body:not(.home-page)
-    h2:not(footer h2):not(footer * h2):not(header h2):not(header * h2)
-    h2:not(.whatson-heading) {
+    h2:not(footer h2):not(footer * h2):not(header h2):not(header * h2):not([class*="hero"] h2):not([class*="hero"] * h2):not(section[class*="hero"] h2):not(section[class*="hero"] * h2):not(.whatson-heading) {
     font-family: var(--font-rubik), "Rubik", sans-serif !important;
     font-size: 36px !important; /* Other section headings size */
     font-weight: 700 !important; /* Bold weight */
@@ -41,15 +41,15 @@ body:not(.home-page)
 }
 
 /* 4. Section Subheadings - H3, H4, H5, H6 use Markazi Text 24px/32px, Weight 400 */
-/* Exclude home page routes: /, /home, footer component and header component */
+/* Exclude home page routes: /, /home, footer component, header component, and all hero sections */
 body:not(.home-page)
-    h3:not(footer h3):not(footer * h3):not(header h3):not(header * h3),
+    h3:not(footer h3):not(footer * h3):not(header h3):not(header * h3):not([class*="hero"] h3):not([class*="hero"] * h3):not(section[class*="hero"] h3):not(section[class*="hero"] * h3),
 body:not(.home-page)
-    h4:not(footer h4):not(footer * h4):not(header h4):not(header * h4),
+    h4:not(footer h4):not(footer * h4):not(header h4):not(header * h4):not([class*="hero"] h4):not([class*="hero"] * h4):not(section[class*="hero"] h4):not(section[class*="hero"] * h4),
 body:not(.home-page)
-    h5:not(footer h5):not(footer * h5):not(header h5):not(header * h5),
+    h5:not(footer h5):not(footer * h5):not(header h5):not(header * h5):not([class*="hero"] h5):not([class*="hero"] * h5):not(section[class*="hero"] h5):not(section[class*="hero"] * h5),
 body:not(.home-page)
-    h6:not(footer h6):not(footer * h6):not(header h6):not(header * h6) {
+    h6:not(footer h6):not(footer * h6):not(header h6):not(header * h6):not([class*="hero"] h6):not([class*="hero"] * h6):not(section[class*="hero"] h6):not(section[class*="hero"] * h6) {
     font-family: var(--font-markazi-text), "Markazi Text", serif !important;
     font-size: 24px !important; /* Section subheadings size */
     font-weight: 400 !important; /* Regular weight */
@@ -57,27 +57,23 @@ body:not(.home-page)
 }
 
 /* 3. Body Text/Paragraphs/General Text - use Noto Kufi Arabic 14px/24px, Weight Regular */
-/* Exclude home page routes: /, /home, footer component and header component */
+/* Exclude home page routes: /, /home, footer component, header component, and all hero sections */
 body:not(.home-page)
-    p:not(footer p):not(footer * p):not(header p):not(header * p),
+    p:not(footer p):not(footer * p):not(header p):not(header * p):not([class*="hero"] p):not([class*="hero"] * p):not(section[class*="hero"] p):not(section[class*="hero"] * p),
 body:not(.home-page)
-    span:not(footer span):not(footer * span):not(header span):not(
-        header * span
-    ),
+    span:not(footer span):not(footer * span):not(header span):not(header * span):not([class*="hero"] span):not([class*="hero"] * span):not(section[class*="hero"] span):not(section[class*="hero"] * span),
 body:not(.home-page)
-    div:not(footer div):not(footer * div):not(header div):not(header * div),
+    div:not(footer div):not(footer * div):not(header div):not(header * div):not([class*="hero"] div):not([class*="hero"] * div):not(section[class*="hero"] div):not(section[class*="hero"] * div),
 body:not(.home-page)
-    a:not(footer a):not(footer * a):not(header a):not(header * a),
+    a:not(footer a):not(footer * a):not(header a):not(header * a):not([class*="hero"] a):not([class*="hero"] * a):not(section[class*="hero"] a):not(section[class*="hero"] * a),
 body:not(.home-page)
-    li:not(footer li):not(footer * li):not(header li):not(header * li),
+    li:not(footer li):not(footer * li):not(header li):not(header * li):not([class*="hero"] li):not([class*="hero"] * li):not(section[class*="hero"] li):not(section[class*="hero"] * li),
 body:not(.home-page)
-    td:not(footer td):not(footer * td):not(header td):not(header * td),
+    td:not(footer td):not(footer * td):not(header td):not(header * td):not([class*="hero"] td):not([class*="hero"] * td):not(section[class*="hero"] td):not(section[class*="hero"] * td),
 body:not(.home-page)
-    th:not(footer th):not(footer * th):not(header th):not(header * th),
+    th:not(footer th):not(footer * th):not(header th):not(header * th):not([class*="hero"] th):not([class*="hero"] * th):not(section[class*="hero"] th):not(section[class*="hero"] * th),
 body:not(.home-page)
-    label:not(footer label):not(footer * label):not(header label):not(
-        header * label
-    ) {
+    label:not(footer label):not(footer * label):not(header label):not(header * label):not([class*="hero"] label):not([class*="hero"] * label):not(section[class*="hero"] label):not(section[class*="hero"] * label) {
     font-family: var(--font-noto-kufi-arabic), "Noto Kufi Arabic", sans-serif !important;
     font-size: 14px !important; /* Body text size */
     font-weight: 400 !important; /* Regular weight (default) */
@@ -85,19 +81,13 @@ body:not(.home-page)
 }
 
 /* Form Elements - Input, textarea, button use Noto Kufi Arabic 14px/24px */
-/* Exclude home page routes: /, /home, footer component and header component */
+/* Exclude home page routes: /, /home, footer component, header component, and all hero sections */
 body:not(.home-page)
-    input:not(footer input):not(footer * input):not(header input):not(
-        header * input
-    ),
+    input:not(footer input):not(footer * input):not(header input):not(header * input):not([class*="hero"] input):not([class*="hero"] * input):not(section[class*="hero"] input):not(section[class*="hero"] * input),
 body:not(.home-page)
-    textarea:not(footer textarea):not(footer * textarea):not(
-        header textarea
-    ):not(header * textarea),
+    textarea:not(footer textarea):not(footer * textarea):not(header textarea):not(header * textarea):not([class*="hero"] textarea):not([class*="hero"] * textarea):not(section[class*="hero"] textarea):not(section[class*="hero"] * textarea),
 body:not(.home-page)
-    button:not(footer button):not(footer * button):not(header button):not(
-        header * button
-    ) {
+    button:not(footer button):not(footer * button):not(header button):not(header * button):not([class*="hero"] button):not([class*="hero"] * button):not(section[class*="hero"] button):not(section[class*="hero"] * button) {
     font-family: var(--font-noto-kufi-arabic), "Noto Kufi Arabic", sans-serif !important;
     font-size: 14px !important; /* Body text size for form elements */
     font-weight: 400 !important; /* Regular weight for form elements */

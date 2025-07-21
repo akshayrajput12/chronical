@@ -120,7 +120,7 @@ const ConferenceHero = () => {
     }
 
     return (
-        <section className="relative w-full 2xl:h-[60vh] h-[75vh] flex items-center flex-col justify-center overflow-hidden">
+        <section className="hero relative w-full 2xl:h-[60vh] h-[75vh] flex items-center flex-col justify-center overflow-hidden">
             {/* Background Image */}
             <div className="absolute inset-0 z-0">
                 <div
@@ -133,19 +133,12 @@ const ConferenceHero = () => {
                         filter: "brightness(0.5)",
                     }}
                 />
-                {/* Debug info - remove in production */}
-                {process.env.NODE_ENV === "development" && (
-                    <div className="absolute top-2 left-2 bg-black/50 text-white text-xs p-2 rounded">
-                        Image URL:{" "}
-                        {heroData.background_image_url || "No image URL"}
-                    </div>
-                )}
             </div>
 
             {/* Main Content */}
             <div className="container flex flex-col md:mt-20 mt-0 justify-center mx-auto px-4 z-10 text-center">
                 <motion.h1
-                    className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold text-white mb-4 sm:mb-6 leading-tight"
+                    className="text-3xl sm:text-4xl md:text-5xl font-rubik font-bold text-white mb-4 sm:mb-6 leading-tight"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}

@@ -35,7 +35,7 @@ const CityDetailHero = ({ city }: CityDetailHeroProps) => {
         return null;
     }
     return (
-        <section className="w-full bg-white">
+        <section className="hero w-full bg-white">
             {/* Full width hero container with background image */}
             <div className="relative w-full h-[75vh] 2xl:h-[60vh] overflow-hidden flex items-center justify-center">
                 {/* Background Image */}
@@ -61,7 +61,7 @@ const CityDetailHero = ({ city }: CityDetailHeroProps) => {
                         <div className="max-w-5xl mx-auto">
                             {/* Dynamic Main Heading from Admin */}
                             <motion.h1
-                                className="text-xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-6 leading-tight tracking-wide"
+                                className="text-3xl sm:text-4xl md:text-5xl font-rubik font-bold text-white mb-6 leading-tight tracking-wide"
                                 initial={{ opacity: 0, y: 30 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8 }}
@@ -72,7 +72,7 @@ const CityDetailHero = ({ city }: CityDetailHeroProps) => {
                             {/* Dynamic Subtitle if available */}
                             {heroSubtitle && (
                                 <motion.h2
-                                    className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-white/95 mb-4 max-w-4xl mx-auto leading-relaxed font-markazi-text font-medium"
+                                    className="text-2xl sm:text-3xl md:text-4xl font-rubik font-normal text-white/95 mb-4 max-w-4xl mx-auto leading-relaxed"
                                     initial={{ opacity: 0, y: 30 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ duration: 0.8, delay: 0.1 }}
@@ -83,7 +83,7 @@ const CityDetailHero = ({ city }: CityDetailHeroProps) => {
 
                             {/* Dynamic Description Text from Admin */}
                             <motion.h3
-                                className="text-sm sm:text-base md:text-lg lg:text-xl text-white/90 mb-4 max-w-4xl mx-auto leading-relaxed font-markazi-text"
+                                className="text-lg sm:text-2xl font-markazi-text font-medium text-white/90 mb-4 max-w-4xl mx-auto leading-relaxed"
                                 initial={{ opacity: 0, y: 30 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8, delay: 0.2 }}

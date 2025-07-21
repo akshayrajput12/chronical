@@ -139,39 +139,46 @@ export default async function EventDetailPage({
     return (
         <div className="min-h-screen bg-gray-100">
             {/* Hero Section - Full Width */}
-            <section className="relative h-[75vh] 2xl:h-[60vh] flex flex-col items-center justify-center w-full overflow-hidden">
+            <section className="hero relative h-[75vh] 2xl:h-[60vh] flex items-center justify-center overflow-hidden">
                 {/* Background Image - Hero Image */}
-                <Image
-                    src={
-                        event.hero_image_url ||
-                        event.featured_image_url ||
-                        "/placeholder-event.jpg"
-                    }
-                    alt={event.title}
-                    fill
-                    className="object-cover"
-                    priority
-                />
+                <div className="absolute inset-0 z-0">
+                    <Image
+                        src={
+                            event.hero_image_url ||
+                            event.featured_image_url ||
+                            "/placeholder-event.jpg"
+                        }
+                        alt={event.title}
+                        fill
+                        className="object-cover"
+                        priority
+                    />
+                    {/* Dark Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/60"></div>
+                </div>
 
-                {/* Dark Overlay */}
-                <div className="absolute inset-0 bg-black/40 z-5"></div>
-
-                {/* Centered Title */}
-                <div className="relative z-20 md:mt-20 mt-0 flex flex-col items-center justify-center h-full text-center text-white px-4 sm:px-6 md:px-8 lg:px-12">
+                {/* Content */}
+                <div className="relative z-10 md:mt-20 text-center text-white px-4 max-w-4xl mx-auto">
                     <MotionDiv
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
-                        className="max-w-4xl"
                     >
-                        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold leading-tight mb-4 sm:mb-6">
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl font-rubik font-bold leading-tight mb-4 sm:mb-6">
                             {event.short_description}
                         </h1>
-                        <div className="mt-4 absolute bottom-0 left-[50%] sm:mt-8">
-                            <ChevronDown className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 mx-auto animate-bounce opacity-70" />
-                        </div>
                     </MotionDiv>
                 </div>
+
+                {/* Scroll Indicator */}
+                <MotionDiv
+                    className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white cursor-pointer"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.8, delay: 0.5 }}
+                >
+                    <ChevronDown className="w-8 h-8 animate-bounce hover:text-[#a5cd39] transition-colors" />
+                </MotionDiv>
 
                 {/* Image Credit */}
                 {event.hero_image_credit && (

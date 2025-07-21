@@ -130,7 +130,7 @@ const AboutUsMain = () => {
                         {/* Main content container */}
                         <div className="relative z-20 flex flex-wrap md:flex-nowrap gap-10 md:gap-16">
                             {/* Left side - Video with ESC INDIA text */}
-                            <div className="relative ml-0 sm:ml-[-40px] md:ml-[-60px] lg:ml-[-80px] w-full md:w-[500px] lg:w-[550px]">
+                            <div className="relative w-full md:w-[500px] lg:w-[550px]">
                                 {/* Top left colored box */}
                                 <div
                                     className="absolute -left-16 -top-16 w-[270px] h-[240px] z-0"

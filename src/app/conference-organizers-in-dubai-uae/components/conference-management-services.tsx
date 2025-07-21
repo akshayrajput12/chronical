@@ -100,7 +100,7 @@ const ConferenceManagementServices = () => {
     // Show loading state
     if (loading || !sectionData) {
         return (
-            <section className="py-8 md:py-12 lg:py-16 bg-gray-50">
+            <section className="py-8 px-4 md:py-12 lg:py-16 bg-gray-50">
                 <div className="container mx-auto px-4">
                     <div className="max-w-6xl mx-auto">
                         <div className="animate-pulse">

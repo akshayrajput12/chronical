@@ -1,6 +1,8 @@
 import React from "react";
 import { notFound } from "next/navigation";
 import Head from "next/head";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import BlogDetailHero from "@/components/blog/blog-detail-hero";
 import BlogDetailContent from "@/components/blog/blog-detail-content";
 import BlogRelatedPostsServer from "@/components/blog/blog-related-posts-server";
@@ -168,7 +170,7 @@ const BlogDetailPage = async ({ params }: BlogDetailPageProps) => {
                 />
             </Head>
 
-            <div className="bg-white mt-0 lg:mt-24">
+            <div className="bg-white">
                 <BlogDetailHero
                     title={blogPost.title}
                     subtitle={blogPost.excerpt || ""}
@@ -181,19 +183,44 @@ const BlogDetailPage = async ({ params }: BlogDetailPageProps) => {
                     viewCount={blogPost.view_count}
                     author={blogPost.author_id ? "Admin" : undefined}
                 />
-                <div className="relative lg:mx-12 md:mx-12 sm:mx-8 mx-4 flex lg:flex-row flex-col justify-between xl:gap-8 lg:gap-4 gap-6">
-                    <BlogDetailContent
-                        content={blogPost.content || ""}
-                        excerpt={blogPost.excerpt}
-                    />
-                    <div className="flex flex-col gap-6 w-full lg:w-[32%]">
-                        <BlogRelatedPostsServer
-                            relatedPosts={relatedPosts}
-                            currentPostSlug={blogPost.slug}
-                        />
-                        <EventsForm />
+
+                {/* Back to News Link */}
+                <section className="bg-white py-4 border-b border-gray-200">
+                    <div className="container mx-auto px-4">
+                        <div className="max-w-6xl mx-auto">
+                            <Link
+                                href="/blog"
+                                className="inline-flex items-center text-gray-600 hover:text-[#a5cd39] transition-colors duration-300"
+                            >
+                                <ArrowLeft className="w-4 h-4 mr-2" />
+                                <span className="text-sm font-medium tracking-wide">
+                                    BACK TO OUR NEWS
+                                </span>
+                            </Link>
+                        </div>
                     </div>
-                </div>
+                </section>
+
+                {/* Main Content Section */}
+                <section className="py-8 md:py-12 lg:py-16 bg-white">
+                    <div className="container mx-auto px-4">
+                        <div className="max-w-6xl mx-auto">
+                            <div className="flex lg:flex-row flex-col justify-between xl:gap-8 lg:gap-6 gap-8">
+                                <BlogDetailContent
+                                    content={blogPost.content || ""}
+                                    excerpt={blogPost.excerpt}
+                                />
+                                <div className="flex flex-col gap-6 w-full lg:w-[32%]">
+                                    <BlogRelatedPostsServer
+                                        relatedPosts={relatedPosts}
+                                        currentPostSlug={blogPost.slug}
+                                    />
+                                    <EventsForm />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </div>
         </>
     );

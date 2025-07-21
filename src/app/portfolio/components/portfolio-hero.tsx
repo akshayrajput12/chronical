@@ -44,7 +44,7 @@ const PortfolioHero: React.FC<PortfolioHeroProps> = ({ heroData }) => {
 
     return (
         <section
-            className={`relative h-[75vh] 2xl:h-[60vh] flex items-center justify-center overflow-hidden`}
+            className={`hero relative h-[75vh] 2xl:h-[60vh] flex items-center justify-center overflow-hidden`}
         >
             {/* Background Image */}
             <div
@@ -63,7 +63,7 @@ const PortfolioHero: React.FC<PortfolioHeroProps> = ({ heroData }) => {
                 style={{ color: displayData.text_color }}
             >
                 <motion.h1
-                    className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-rubik font-bold mb-4 sm:mb-6 leading-tight"
+                    className="text-3xl sm:text-4xl md:text-5xl font-rubik font-bold mb-4 sm:mb-6 leading-tight"
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.2 }}
@@ -72,7 +72,7 @@ const PortfolioHero: React.FC<PortfolioHeroProps> = ({ heroData }) => {
                 </motion.h1>
 
                 <motion.h3
-                    className="text-sm sm:text-base md:text-lg lg:text-xl font-markazi-text max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-3xl mx-auto leading-relaxed font-light tracking-wide opacity-90"
+                    className="text-lg sm:text-2xl font-markazi-text font-medium max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-3xl mx-auto leading-relaxed tracking-wide opacity-90"
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.4 }}
