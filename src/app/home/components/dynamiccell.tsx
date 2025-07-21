@@ -144,7 +144,10 @@ interface DynamicCellProps {
     businessData: BusinessSection | null;
 }
 
-const DynamicCell: React.FC<DynamicCellProps> = ({ dynamicCellData: propDynamicCellData, businessData: propBusinessData }) => {
+const DynamicCell: React.FC<DynamicCellProps> = ({
+    dynamicCellData: propDynamicCellData,
+    businessData: propBusinessData,
+}) => {
     const controls = useAnimation();
     const ref = useRef(null);
     const isInView = useInView(ref, { once: false, amount: 0.3 });
@@ -196,12 +199,9 @@ const DynamicCell: React.FC<DynamicCellProps> = ({ dynamicCellData: propDynamicC
         },
     };
 
-
-
-
     return (
         <section
-            className="relative bg-white overflow-hidden w-full min-h-[70vh] md:min-h-screen h-auto md:h-screen"
+            className="relative lg:pt-0 pt-24 bg-white overflow-hidden w-full min-h-[70vh] md:min-h-screen h-auto md:h-screen"
             id="dynamic-central"
             ref={ref}
         >
@@ -216,8 +216,9 @@ const DynamicCell: React.FC<DynamicCellProps> = ({ dynamicCellData: propDynamicC
                     src={
                         imageError
                             ? hardcodedFallbackImage.src
-                            : getImageUrlForBucket.dynamicCell(dynamicCellData?.background_image_url) ||
-                              defaultImage.src
+                            : getImageUrlForBucket.dynamicCell(
+                                  dynamicCellData?.background_image_url,
+                              ) || defaultImage.src
                     }
                     alt={
                         imageError
