@@ -28,7 +28,7 @@ const WhySection: React.FC<WhySectionProps> = ({ whyData: propWhyData }) => {
 
     return (
         <section
-            className="relative overflow-hidden w-full py-16 md:py-24 lg:py-40 -mt-48 md:-mt-74 lg:-mt-[400px] xl:-mt-[450px] 2xl:-mt-[550px] z-10"
+            className="relative overflow-hidden w-full py-16 md:py-24 lg:py-40 -mt-48 md:-mt-74 lg:-mt-[400px] xl:-mt-[420px] 2xl:-mt-[550px] z-10"
             id="why-section"
             ref={ref}
         >

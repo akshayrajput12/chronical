@@ -175,19 +175,41 @@ export function RequestQuotationDialog({
     return (
         <Dialog>
             <DialogTrigger asChild>{trigger}</DialogTrigger>
-            <DialogContent className="lg:max-w-xl w-full rounded-xl p-0 overflow-hidden">
-                <form className="bg-white p-6 space-y-4">
+            <DialogContent className=" w-full max-h-[600px] lg:max-h-screen overflow-y-auto rounded-xl p-0 bg-gradient-to-br from-[#f8fafc] via-[#f3f7ef] to-[#e9f5d8] shadow-xl border-0">
+                <form className="bg-white/95 w-full sm:p-6 p-4 rounded-xl shadow-md">
                     <DialogHeader>
-                        <DialogTitle className="text-2xl font-bold text-[#a5cd39]">
-                            Request a Quotation
-                        </DialogTitle>
+                        <div className="flex flex-col items-center justify-center mb-2 mt-2">
+                            <div className="bg-[#a5cd39]/20 rounded-full p-2 mb-1">
+                                <svg
+                                    className="w-7 h-7 text-[#a5cd39]"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                                    />
+                                </svg>
+                            </div>
+                            <DialogTitle className="text-lg sm:text-xl font-bold text-[#1a2c1a] tracking-tight text-center">
+                                Request a Quotation
+                            </DialogTitle>
+                            <p className="text-gray-600 text-xs mt-1 text-center max-w-xs">
+                                Fill out the form below and our team will get
+                                back to you with a customized quotation within
+                                24 hours.
+                            </p>
+                        </div>
                     </DialogHeader>
                     {isSubmitted ? (
-                        <div className="text-center py-12 px-6">
-                            <div className="mb-6">
-                                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <div className="text-center py-8 px-4">
+                            <div className="mb-4">
+                                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
                                     <svg
-                                        className="w-8 h-8 text-green-600"
+                                        className="w-6 h-6 text-green-600"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -200,15 +222,15 @@ export function RequestQuotationDialog({
                                         />
                                     </svg>
                                 </div>
-                                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                                <h3 className="text-lg font-bold text-gray-900 mb-1">
                                     Request Submitted Successfully!
                                 </h3>
-                                <p className="text-gray-600 mb-4">
+                                <p className="text-gray-600 text-sm mb-2">
                                     Thank you for your quotation request. Our
                                     team will review your requirements and get
                                     back to you within 24 hours.
                                 </p>
-                                <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-sm text-green-800">
+                                <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-xs text-green-800">
                                     <p className="font-medium mb-1">
                                         What happens next?
                                     </p>
@@ -229,7 +251,7 @@ export function RequestQuotationDialog({
                                 </div>
                                 <DialogClose asChild>
                                     <Button
-                                        className="mt-4 bg-[#a5cd39] hover:bg-[#8aaa30] text-white"
+                                        className="mt-3 bg-[#a5cd39] hover:bg-[#8aaa30] text-white text-sm px-4 py-2 rounded"
                                         onClick={() => {
                                             setIsSubmitted(false);
                                             setForm({
@@ -251,19 +273,26 @@ export function RequestQuotationDialog({
                     ) : (
                         <>
                             {submitError && (
-                                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md">
+                                <div className="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded-md mb-3 text-xs">
                                     {submitError}
                                 </div>
                             )}
-                            <div className="grid grid-cols-1 gap-3">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
                                 <div>
-                                    <Label htmlFor="name">Full Name*</Label>
+                                    <Label
+                                        htmlFor="name"
+                                        className="font-medium text-gray-800 text-sm"
+                                    >
+                                        Full Name*
+                                    </Label>
                                     <Input
                                         id="name"
                                         name="name"
                                         value={form.name}
-                                        className={`h-8 ${
-                                            errors.name ? "border-red-500" : ""
+                                        className={`h-8 mt-1 px-2 rounded border focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39]/20 text-sm ${
+                                            errors.name
+                                                ? "border-red-500"
+                                                : "border-gray-200"
                                         }`}
                                         onChange={handleChange}
                                         required
@@ -275,51 +304,10 @@ export function RequestQuotationDialog({
                                     )}
                                 </div>
                                 <div>
-                                    <Label htmlFor="exhibitionName">
-                                        Exhibition Name*
-                                    </Label>
-                                    <Input
-                                        id="exhibitionName"
-                                        name="exhibitionName"
-                                        value={form.exhibitionName}
-                                        className={`h-8 ${
-                                            errors.exhibitionName
-                                                ? "border-red-500"
-                                                : ""
-                                        }`}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                    {errors.exhibitionName && (
-                                        <p className="text-red-500 text-xs mt-1">
-                                            {errors.exhibitionName}
-                                        </p>
-                                    )}
-                                </div>
-                                <div>
-                                    <Label htmlFor="companyName">
-                                        Company Name*
-                                    </Label>
-                                    <Input
-                                        id="companyName"
-                                        name="companyName"
-                                        value={form.companyName}
-                                        className={`h-8 ${
-                                            errors.companyName
-                                                ? "border-red-500"
-                                                : ""
-                                        }`}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                    {errors.companyName && (
-                                        <p className="text-red-500 text-xs mt-1">
-                                            {errors.companyName}
-                                        </p>
-                                    )}
-                                </div>
-                                <div>
-                                    <Label htmlFor="email">
+                                    <Label
+                                        htmlFor="email"
+                                        className="font-medium text-gray-800 text-sm"
+                                    >
                                         Email Address*
                                     </Label>
                                     <Input
@@ -327,8 +315,10 @@ export function RequestQuotationDialog({
                                         name="email"
                                         type="email"
                                         value={form.email}
-                                        className={`h-8 ${
-                                            errors.email ? "border-red-500" : ""
+                                        className={`h-8 mt-1 px-2 rounded border focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39]/20 text-sm ${
+                                            errors.email
+                                                ? "border-red-500"
+                                                : "border-gray-200"
                                         }`}
                                         onChange={handleChange}
                                         required
@@ -340,7 +330,62 @@ export function RequestQuotationDialog({
                                     )}
                                 </div>
                                 <div>
-                                    <Label htmlFor="phone">Phone Number*</Label>
+                                    <Label
+                                        htmlFor="companyName"
+                                        className="font-medium text-gray-800 text-sm"
+                                    >
+                                        Company Name*
+                                    </Label>
+                                    <Input
+                                        id="companyName"
+                                        name="companyName"
+                                        value={form.companyName}
+                                        className={`h-8 mt-1 px-2 rounded border focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39]/20 text-sm ${
+                                            errors.companyName
+                                                ? "border-red-500"
+                                                : "border-gray-200"
+                                        }`}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                    {errors.companyName && (
+                                        <p className="text-red-500 text-xs mt-1">
+                                            {errors.companyName}
+                                        </p>
+                                    )}
+                                </div>
+                                <div>
+                                    <Label
+                                        htmlFor="exhibitionName"
+                                        className="font-medium text-gray-800 text-sm"
+                                    >
+                                        Exhibition Name*
+                                    </Label>
+                                    <Input
+                                        id="exhibitionName"
+                                        name="exhibitionName"
+                                        value={form.exhibitionName}
+                                        className={`h-8 mt-1 px-2 rounded border focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39]/20 text-sm ${
+                                            errors.exhibitionName
+                                                ? "border-red-500"
+                                                : "border-gray-200"
+                                        }`}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                    {errors.exhibitionName && (
+                                        <p className="text-red-500 text-xs mt-1">
+                                            {errors.exhibitionName}
+                                        </p>
+                                    )}
+                                </div>
+                                <div className="sm:col-span-2">
+                                    <Label
+                                        htmlFor="phone"
+                                        className="font-medium text-gray-800 text-sm"
+                                    >
+                                        Phone Number*
+                                    </Label>
                                     <PhoneInput
                                         value={form.phone}
                                         onChange={(value: string) => {
@@ -353,7 +398,7 @@ export function RequestQuotationDialog({
                                             }
                                         }}
                                         placeholder="Enter phone number"
-                                        className="w-full"
+                                        className="w-full h-8 rounded focus:ring-1 focus:ring-[#a5cd39]/20 text-sm"
                                         disabled={isSubmitting}
                                         error={!!errors.phone}
                                         name="phone"
@@ -365,29 +410,37 @@ export function RequestQuotationDialog({
                                         </p>
                                     )}
                                 </div>
-                                <div>
-                                    <Label htmlFor="budget">Budget</Label>
+                                <div className="sm:col-span-2">
+                                    <Label
+                                        htmlFor="budget"
+                                        className="font-medium text-gray-800 text-sm"
+                                    >
+                                        Budget
+                                    </Label>
                                     <Input
                                         id="budget"
                                         name="budget"
                                         value={form.budget}
-                                        className="h-8"
+                                        className="h-8 mt-1 px-2 rounded border border-gray-200 focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39]/20 text-sm"
                                         onChange={handleChange}
                                     />
                                 </div>
-                                <div>
-                                    <Label htmlFor="message">
+                                <div className="sm:col-span-2">
+                                    <Label
+                                        htmlFor="message"
+                                        className="font-medium text-gray-800 text-sm"
+                                    >
                                         Your Message*
                                     </Label>
                                     <Textarea
                                         id="message"
                                         name="message"
                                         value={form.message}
-                                        className={
+                                        className={`mt-1 px-2 py-1 rounded border focus:border-[#a5cd39] focus:ring-1 focus:ring-[#a5cd39]/20 min-h-[70px] text-sm ${
                                             errors.message
                                                 ? "border-red-500"
-                                                : ""
-                                        }
+                                                : "border-gray-200"
+                                        }`}
                                         onChange={handleChange}
                                         required
                                     />
@@ -398,15 +451,19 @@ export function RequestQuotationDialog({
                                     )}
                                 </div>
                             </div>
-                            <DialogFooter className="mt-4 flex justify-between items-center">
+                            <DialogFooter className="mt-4 flex flex-col sm:flex-row justify-between items-center gap-2">
                                 <DialogClose asChild>
-                                    <Button type="button" variant="outline">
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        className="w-full sm:w-auto text-sm px-4 py-2"
+                                    >
                                         Cancel
                                     </Button>
                                 </DialogClose>
                                 <Button
                                     type="submit"
-                                    className="bg-[#a5cd39] hover:bg-[#8aaa30] text-white"
+                                    className="bg-[#a5cd39] hover:bg-[#8aaa30] text-white w-full sm:w-auto font-semibold text-sm py-2 px-6 rounded shadow transition-all"
                                     disabled={isSubmitting}
                                     onClick={handleSubmit}
                                 >
