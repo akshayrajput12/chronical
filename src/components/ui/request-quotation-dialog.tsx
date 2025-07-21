@@ -277,7 +277,7 @@ export function RequestQuotationDialog({
                                     {submitError}
                                 </div>
                             )}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                            <div className="grid grid-cols-2 gap-x-3 gap-y-3 mb-3">
                                 <div>
                                     <Label
                                         htmlFor="name"
@@ -379,7 +379,7 @@ export function RequestQuotationDialog({
                                         </p>
                                     )}
                                 </div>
-                                <div className="sm:col-span-2">
+                                <div className="col-span-2">
                                     <Label
                                         htmlFor="phone"
                                         className="font-medium text-gray-800 text-sm"
@@ -398,7 +398,7 @@ export function RequestQuotationDialog({
                                             }
                                         }}
                                         placeholder="Enter phone number"
-                                        className="w-full h-8 rounded focus:ring-1 focus:ring-[#a5cd39]/20 text-sm"
+                                        className="w-full h-8 rounded focus:ring-1 focus:ring-[#a5cd39]/20 text-sm overflow-ellipsis"
                                         disabled={isSubmitting}
                                         error={!!errors.phone}
                                         name="phone"
@@ -410,7 +410,7 @@ export function RequestQuotationDialog({
                                         </p>
                                     )}
                                 </div>
-                                <div className="sm:col-span-2">
+                                <div className="col-span-2">
                                     <Label
                                         htmlFor="budget"
                                         className="font-medium text-gray-800 text-sm"
@@ -425,7 +425,7 @@ export function RequestQuotationDialog({
                                         onChange={handleChange}
                                     />
                                 </div>
-                                <div className="sm:col-span-2">
+                                <div className="col-span-2">
                                     <Label
                                         htmlFor="message"
                                         className="font-medium text-gray-800 text-sm"
