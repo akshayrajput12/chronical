@@ -933,7 +933,7 @@ export default function EventsPortfolioAdminPage() {
                 {filteredImages.map((image) => (
                   <div
                     key={image.id}
-                    className="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
+                    className="overflow-hidden hover:shadow-lg transition-shadow"
                   >
                     {/* Image */}
                     <div className="relative aspect-video bg-gray-100">

@@ -181,9 +181,12 @@ const Footer = () => {
                             <Button
                                 variant="outline"
                                 className="border-gray-600 text-black hover:bg-[#a5cd39] hover:text-black hover:border-[#a5cd39] w-full h-10 text-sm transition-all duration-300 mb-3"
+                                asChild
                             >
-                                <MessageSquare className="w-4 h-4 mr-2 text-black" />
-                                CHAT WITH US
+                                <Link href="https://wa.me/+971543474645">
+                                    <MessageSquare className="w-4 h-4 mr-2 text-black" />
+                                    CHAT WITH US
+                                </Link>
                             </Button>
 
                             <div className="flex justify-center space-x-3">

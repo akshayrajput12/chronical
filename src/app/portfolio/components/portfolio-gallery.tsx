@@ -51,8 +51,8 @@ const PortfolioGallery: React.FC<PortfolioGalleryProps> = ({ portfolioItems }) =
         <section className="py-8 md:py-12 lg:py-16 bg-white">
             <div className="mx-auto">
                 <div className="mx-auto px-4">
-                    {/* Gallery Grid - Masonry Style with Dynamic Sizes */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 lg:gap-4 auto-rows-[150px] sm:auto-rows-[180px] lg:auto-rows-[200px]">
+                    {/* Gallery Grid - Card Style Layout */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6 md:gap-8">
                         {portfolioItems.map(item => {
                             const imageUrl = getImageUrl(item);
                             const altText =
@@ -61,20 +61,26 @@ const PortfolioGallery: React.FC<PortfolioGalleryProps> = ({ portfolioItems }) =
                             return (
                                 <div
                                     key={item.id}
-                                    className={`group relative overflow-hidden ${item.grid_class}`}
+                                    className="group bg-white shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden"
                                 >
-                                    {imageUrl && (
-                                        <Image
-                                            src={imageUrl}
-                                            alt={altText}
-                                            fill
-                                            className="object-cover group-hover:scale-105 transition-transform duration-300"
-                                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                                        />
-                                    )}
+                                    <div className="relative aspect-square overflow-hidden">
+                                        {imageUrl && (
+                                            <Image
+                                                src={imageUrl}
+                                                alt={altText}
+                                                fill
+                                                className="object-cover group-hover:scale-105 transition-transform duration-300"
+                                                sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
+                                            />
+                                        )}
 
-                                    {/* VIEW CASE Full Overlay on Hover - Shows on ALL images */}
-                                    <div className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-100 group-hover:opacity-0 transition-opacity duration-300"></div>
+                                        {/* Hover Overlay */}
+                                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                            <div className="text-white text-center">
+                                                <div className="text-sm font-medium">View Project</div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             );
                         })}

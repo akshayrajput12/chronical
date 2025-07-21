@@ -210,49 +210,43 @@ const ConferenceEventsPortfolio: React.FC<ConferenceEventsPortfolioProps> = ({
           )}
         </motion.div>
 
-        {/* Portfolio Grid - Masonry Style similar to portfolio page */}
+        {/* Portfolio Grid - Card Style Layout matching portfolio page */}
         <motion.div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 lg:gap-4 auto-rows-[150px] sm:auto-rows-[180px] lg:auto-rows-[200px] mb-12"
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6 md:gap-8 mb-12"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
         >
           {currentImages.map((image, index) => {
-            // Assign grid classes similar to portfolio page
-            const gridClasses = [
-              'row-span-1', // normal height
-              'row-span-2', // tall
-              'row-span-1', // normal height
-              'row-span-2', // tall
-              'row-span-1', // normal height
-              'row-span-1', // normal height
-            ];
-            const gridClass = gridClasses[index % gridClasses.length];
-
             return (
               <motion.div
                 key={image.id}
-                className={`group relative overflow-hidden ${gridClass}`}
+                className="group bg-white shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden"
                 variants={itemVariants}
               >
-                <img
-                  src={getImageUrl(image)}
-                  alt={image.alt_text}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
+                <div className="relative aspect-square overflow-hidden">
+                  <img
+                    src={getImageUrl(image)}
+                    alt={image.alt_text}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
 
-                {/* Simple overlay similar to portfolio page */}
-                <div className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-100 group-hover:opacity-0 transition-opacity duration-300">
-                  {/* Featured badge only */}
+                  {/* Featured badge */}
                   {image.is_featured && (
                     <div className="absolute top-3 right-3">
                       <Badge className="bg-yellow-500 text-white">
-                        <Star className="w-3 h-3 mr-1" />
                         Featured
                       </Badge>
                     </div>
                   )}
+
+                  {/* Hover overlay */}
+                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="text-white text-center">
+                      <div className="text-sm font-medium">View Project</div>
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             );

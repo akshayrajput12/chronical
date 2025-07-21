@@ -30,21 +30,11 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
-
 import type {
     PortfolioItem,
     PortfolioItemInput,
     PortfolioNotification,
-    GridClass,
 } from "@/types/portfolio-gallery";
-import { GRID_CLASS_OPTIONS } from "@/types/portfolio-gallery";
 import { revalidatePathAction } from "@/services/revalidate.action";
 
 // Animation variants
@@ -655,39 +645,7 @@ const PortfolioGalleryEditor = () => {
                                             />
                                         </div>
 
-                                        {/* Grid Class */}
-                                        <div className="space-y-2">
-                                            <Label htmlFor="grid_class">
-                                                Size
-                                            </Label>
-                                            <Select
-                                                value={editingItem.grid_class}
-                                                onValueChange={(
-                                                    value: GridClass,
-                                                ) =>
-                                                    handleInputChange(
-                                                        "grid_class",
-                                                        value,
-                                                    )
-                                                }
-                                            >
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Select size" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    {Object.entries(
-                                                        GRID_CLASS_OPTIONS,
-                                                    ).map(([value, label]) => (
-                                                        <SelectItem
-                                                            key={value}
-                                                            value={value}
-                                                        >
-                                                            {label}
-                                                        </SelectItem>
-                                                    ))}
-                                                </SelectContent>
-                                            </Select>
-                                        </div>
+
                                     </div>
 
                                     {/* Description */}
@@ -868,26 +826,7 @@ const PortfolioGalleryEditor = () => {
                                         </div>
                                     </div>
 
-                                    {/* Display Order */}
-                                    <div className="space-y-2">
-                                        <Label htmlFor="display_order">
-                                            Display Order
-                                        </Label>
-                                        <Input
-                                            id="display_order"
-                                            type="number"
-                                            value={editingItem.display_order}
-                                            onChange={e =>
-                                                handleInputChange(
-                                                    "display_order",
-                                                    parseInt(e.target.value) ||
-                                                        0,
-                                                )
-                                            }
-                                            placeholder="Enter display order"
-                                            min="0"
-                                        />
-                                    </div>
+
 
                                     {/* Action Buttons */}
                                     <div className="flex items-center gap-2 pt-4">
@@ -945,7 +884,7 @@ const PortfolioGalleryEditor = () => {
                                             >
                                                 {/* Item Preview with Upload */}
                                                 <div
-                                                    className={`aspect-video bg-gray-100 rounded overflow-hidden relative group ${item.grid_class}`}
+                                                    className="aspect-square bg-gray-100 rounded overflow-hidden relative group"
                                                     onDragOver={handleDragOver}
                                                     onDragLeave={
                                                         handleDragLeave
@@ -1048,16 +987,7 @@ const PortfolioGalleryEditor = () => {
                                                             Order:{" "}
                                                             {item.display_order}
                                                         </span>
-                                                        <span>•</span>
-                                                        <span>
-                                                            {
-                                                                GRID_CLASS_OPTIONS[
-                                                                    item
-                                                                        .grid_class
-                                                                ]
-                                                            }
-                                                        </span>
-                                                        <span>•</span>
+
                                                         <span
                                                             className={
                                                                 item.is_active
@@ -1131,42 +1061,35 @@ const PortfolioGalleryEditor = () => {
                             <CardContent>
                                 {items.length > 0 ? (
                                     <div className="border rounded-lg p-6 bg-white">
-                                        {/* Preview Grid - Masonry Style */}
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 lg:gap-4 auto-rows-[150px] sm:auto-rows-[180px] lg:auto-rows-[200px]">
+                                        {/* Preview Grid - Card Style Layout */}
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6 md:gap-8">
                                             {items
                                                 .filter(item => item.is_active)
                                                 .map(item => (
                                                     <div
                                                         key={item.id}
-                                                        className={`group relative overflow-hidden ${item.grid_class}`}
+                                                        className="group bg-white shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden"
                                                     >
-                                                        {item.image_url && (
-                                                            <img
-                                                                src={
-                                                                    item.image_url
-                                                                }
-                                                                alt={
-                                                                    item.alt_text
-                                                                }
-                                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                                            />
-                                                        )}
+                                                        <div className="relative aspect-square overflow-hidden">
+                                                            {item.image_url && (
+                                                                <img
+                                                                    src={
+                                                                        item.image_url
+                                                                    }
+                                                                    alt={
+                                                                        item.alt_text
+                                                                    }
+                                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                                />
+                                                            )}
 
-                                                        {/* VIEW CASE Overlay */}
-                                                        <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                                            <span className="text-white text-sm sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-rubik font-bold tracking-wider">
-                                                                VIEW CASE
-                                                            </span>
-                                                        </div>
-
-                                                        {/* Optional title overlay */}
-                                                        {item.title && (
-                                                            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
-                                                                <h3 className="text-white text-sm font-medium">
-                                                                    {item.title}
-                                                                </h3>
+                                                            {/* Hover Overlay */}
+                                                            <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                                                <div className="text-white text-center">
+                                                                    <div className="text-sm font-medium">View Project</div>
+                                                                </div>
                                                             </div>
-                                                        )}
+                                                        </div>
                                                     </div>
                                                 ))}
                                         </div>

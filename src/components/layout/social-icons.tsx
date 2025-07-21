@@ -52,7 +52,7 @@ const SocialIcons: React.FC<SocialIconsProps> = ({
             </SocialIcon>
 
             <SocialIcon
-                href="https://wa.me/971554974645"
+                href="https://wa.me/+971543474645"
                 label="WhatsApp"
                 iconColor={iconColor}
                 iconSize={iconSize}
