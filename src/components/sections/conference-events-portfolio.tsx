@@ -253,7 +253,7 @@ const ConferenceEventsPortfolio: React.FC<ConferenceEventsPortfolioProps> = ({
           })}
         </motion.div>
 
-        {/* Pagination */}
+        {/* Pagination
         {totalPages > 1 && (
           <motion.div
             className="flex items-center justify-center space-x-4"
@@ -294,7 +294,7 @@ const ConferenceEventsPortfolio: React.FC<ConferenceEventsPortfolioProps> = ({
               <ChevronRight className="w-4 h-4 ml-2" />
             </Button>
           </motion.div>
-        )}
+        )} */}
 
 
       </div>

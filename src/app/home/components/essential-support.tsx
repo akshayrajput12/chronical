@@ -121,7 +121,7 @@ const EssentialSupport: React.FC<EssentialSupportProps> = ({ essentialSupportDat
                 </div>
 
                 {/* Top row with 4 cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:px-0 px-4 gap-4 md:gap-8 lg:gap-20 mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:px-0  gap-4 md:gap-8 lg:gap-20 mb-8">
                     {categories.slice(0, 3).map((category, index) => (
                         <div
                             key={`category-${index}-${category.title}`}
