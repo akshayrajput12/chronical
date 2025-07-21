@@ -160,7 +160,7 @@ const EventManagementServices = () => {
             </section>
             {/* Bottom Section - Two Column Layout */}
             <section className="py-20 bg-gray-100 overflow-hidden relative">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto lg:gap-12 items-center">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl lg:px-0 px-6 mx-auto lg:gap-12 items-center">
                     {/* Left Content */}
                     <motion.div
                         className="order-2 lg:order-1"

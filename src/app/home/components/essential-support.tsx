@@ -7,7 +7,9 @@ interface EssentialSupportProps {
     essentialSupportData: EssentialSupportSection | null;
 }
 
-const EssentialSupport: React.FC<EssentialSupportProps> = ({ essentialSupportData }) => {
+const EssentialSupport: React.FC<EssentialSupportProps> = ({
+    essentialSupportData,
+}) => {
     const ref = useRef<HTMLDivElement>(null);
 
     // Handle case where no data is provided
@@ -15,7 +17,9 @@ const EssentialSupport: React.FC<EssentialSupportProps> = ({ essentialSupportDat
         return (
             <div className="py-16 bg-gray-50">
                 <div className="container mx-auto px-4 text-center">
-                    <p className="text-gray-600">Essential support section data is not available.</p>
+                    <p className="text-gray-600">
+                        Essential support section data is not available.
+                    </p>
                 </div>
             </div>
         );
@@ -41,8 +45,6 @@ const EssentialSupport: React.FC<EssentialSupportProps> = ({ essentialSupportDat
             ></path>
         </svg>
     );
-
-
 
     // Render SVG icon from string
     const renderSvgIcon = (svgString: string) => {
@@ -91,8 +93,6 @@ const EssentialSupport: React.FC<EssentialSupportProps> = ({ essentialSupportDat
     };
 
     const categories = getSortedCategories();
-
-
 
     return (
         <section

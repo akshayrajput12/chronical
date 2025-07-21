@@ -54,24 +54,6 @@ const ContactInfo: React.FC<ContactInfoProps> = ({ groupCompanies }) => {
                                     <h3 className="text-xl font-bold text-gray-900 mb-2">
                                         {company.region}
                                     </h3>
-                                    {company.company_url &&
-                                        company.company_url.trim() !== "" &&
-                                        isValidUrl(company.company_url.trim()) && (
-                                            <div className="mb-3">
-                                                <Link
-                                                    href={company.company_url.trim()}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="inline-flex items-center gap-2 text-[#a5cd39] hover:text-[#8bb32f] transition-colors font-semibold text-sm"
-                                                    onClick={e =>
-                                                        e.stopPropagation()
-                                                    }
-                                                >
-                                                    <ExternalLink className="w-4 h-4" />
-                                                    {company.company_url.replace(/^https?:\/\//, '').replace(/\/$/, '')}
-                                                </Link>
-                                            </div>
-                                        )}
                                 </div>
 
                                 {/* Address */}
@@ -89,7 +71,9 @@ const ContactInfo: React.FC<ContactInfoProps> = ({ groupCompanies }) => {
                                                     company.phone,
                                                 )}`}
                                                 className="font-semibold hover:text-[#a5cd39] transition-colors"
-                                                onClick={e => e.stopPropagation()}
+                                                onClick={e =>
+                                                    e.stopPropagation()
+                                                }
                                             >
                                                 {company.phone}
                                             </Link>
@@ -101,12 +85,39 @@ const ContactInfo: React.FC<ContactInfoProps> = ({ groupCompanies }) => {
                                             <Link
                                                 href={`mailto:${company.email}`}
                                                 className="font-semibold hover:text-[#a5cd39] transition-colors"
-                                                onClick={e => e.stopPropagation()}
+                                                onClick={e =>
+                                                    e.stopPropagation()
+                                                }
                                             >
                                                 {company.email}
                                             </Link>
                                         </div>
                                     )}
+                                    {company.company_url &&
+                                        company.company_url.trim() !== "" &&
+                                        isValidUrl(
+                                            company.company_url.trim(),
+                                        ) && (
+                                            <div className="mb-3">
+                                                <Link
+                                                    href={company.company_url.trim()}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="inline-flex items-center gap-2 text-[#a5cd39] hover:text-[#8bb32f] transition-colors font-semibold text-sm"
+                                                    onClick={e =>
+                                                        e.stopPropagation()
+                                                    }
+                                                >
+                                                    <ExternalLink className="w-4 h-4" />
+                                                    {company.company_url
+                                                        .replace(
+                                                            /^https?:\/\//,
+                                                            "",
+                                                        )
+                                                        .replace(/\/$/, "")}
+                                                </Link>
+                                            </div>
+                                        )}
                                 </div>
                             </>
                         );

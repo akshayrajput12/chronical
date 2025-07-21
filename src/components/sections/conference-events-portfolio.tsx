@@ -25,8 +25,9 @@ const ConferenceEventsPortfolio: React.FC<ConferenceEventsPortfolioProps> = ({
     const [images, setImages] = useState<EventsPortfolioImage[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [currentPage, setCurrentPage] = useState(0);
-    const imagesPerPage = 6;
+    // Remove pagination state
+    // const [currentPage, setCurrentPage] = useState(0);
+    // const imagesPerPage = 6;
 
     // Animation variants
     const containerVariants = {
@@ -94,20 +95,20 @@ const ConferenceEventsPortfolio: React.FC<ConferenceEventsPortfolioProps> = ({
         fetchImages();
     }, [showFeaturedOnly, limit]);
 
-    // Pagination
-    const totalPages = Math.ceil(images.length / imagesPerPage);
-    const currentImages = images.slice(
-        currentPage * imagesPerPage,
-        (currentPage + 1) * imagesPerPage,
-    );
+    // Remove pagination logic
+    // const totalPages = Math.ceil(images.length / imagesPerPage);
+    // const currentImages = images.slice(
+    //     currentPage * imagesPerPage,
+    //     (currentPage + 1) * imagesPerPage,
+    // );
 
-    const nextPage = () => {
-        setCurrentPage(prev => (prev + 1) % totalPages);
-    };
+    // const nextPage = () => {
+    //     setCurrentPage(prev => (prev + 1) % totalPages);
+    // };
 
-    const prevPage = () => {
-        setCurrentPage(prev => (prev - 1 + totalPages) % totalPages);
-    };
+    // const prevPage = () => {
+    //     setCurrentPage(prev => (prev - 1 + totalPages) % totalPages);
+    // };
 
     const getImageUrl = (image: EventsPortfolioImage): string => {
         return `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/events-portfolio-images/${image.file_path}`;
@@ -231,7 +232,7 @@ const ConferenceEventsPortfolio: React.FC<ConferenceEventsPortfolioProps> = ({
                     whileInView="visible"
                     viewport={{ once: true }}
                 >
-                    {currentImages.map((image, index) => {
+                    {images.map((image, index) => {
                         return (
                             <motion.div
                                 key={image.id}
@@ -267,49 +268,6 @@ const ConferenceEventsPortfolio: React.FC<ConferenceEventsPortfolioProps> = ({
                         );
                     })}
                 </motion.div>
-
-                {/* Pagination
-        {totalPages > 1 && (
-          <motion.div
-            className="flex items-center justify-center space-x-4"
-            variants={itemVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
-            <Button
-              variant="outline"
-              onClick={prevPage}
-              disabled={currentPage === 0}
-              className="flex items-center"
-            >
-              <ChevronLeft className="w-4 h-4 mr-2" />
-              Previous
-            </Button>
-
-            <div className="flex items-center space-x-2">
-              {Array.from({ length: totalPages }, (_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setCurrentPage(i)}
-                  className={`w-3 h-3 rounded-full transition-colors ${
-                    i === currentPage ? 'bg-[#a5cd39]' : 'bg-gray-300'
-                  }`}
-                />
-              ))}
-            </div>
-
-            <Button
-              variant="outline"
-              onClick={nextPage}
-              disabled={currentPage === totalPages - 1}
-              className="flex items-center"
-            >
-              Next
-              <ChevronRight className="w-4 h-4 ml-2" />
-            </Button>
-          </motion.div>
-        )} */}
             </div>
         </section>
     );
