@@ -230,7 +230,7 @@ const SetupProcess: React.FC<SetupProcessProps> = ({
                 backgroundSize: "cover",
             }}
         >
-            <div className="container mx-auto px-4">
+            <div className="container mx-auto ">
                 <motion.div
                     className="text-center mb-12"
                     initial="hidden"

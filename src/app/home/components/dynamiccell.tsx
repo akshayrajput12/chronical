@@ -201,13 +201,13 @@ const DynamicCell: React.FC<DynamicCellProps> = ({ dynamicCellData: propDynamicC
 
     return (
         <section
-            className="relative bg-white overflow-hidden w-full min-h-screen h-auto md:h-screen"
+            className="relative bg-white overflow-hidden w-full min-h-[70vh] md:min-h-screen h-auto md:h-screen"
             id="dynamic-central"
             ref={ref}
         >
             {/* Background Image - Full width and height, positioned behind content */}
             <motion.div
-                className="absolute inset-0 w-full h-[90%] z-0"
+                className="absolute inset-0 w-full h-[50vh] md:h-[85%] lg:h-[90%] z-0"
                 variants={imageVariants}
                 initial="hidden"
                 animate={controls}
@@ -241,13 +241,13 @@ const DynamicCell: React.FC<DynamicCellProps> = ({ dynamicCellData: propDynamicC
             </motion.div>
             {/* Content overlay - Centered horizontally but at the top of the section */}
             <motion.div
-                className="relative z-10 h-full w-full flex flex-col items-center justify-center md:justify-start text-center px-4 py-8 md:pt-32 lg:pt-40"
+                className="relative z-10 h-full w-full flex flex-col items-center justify-center md:justify-start text-center px-0 md:px-4 py-4 md:py-8 md:pt-32 lg:pt-40"
                 variants={containerVariants}
                 initial="hidden"
                 animate={controls}
             >
                 {/* Stats */}
-                <div className="mt-4 md:mt-8 lg:mt-24 mx-4 sm:mx-8 md:mx-12 lg:mx-20 xl:mx-28 2xl:mx-36 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8 lg:gap-12 xl:gap-16 pt-4 sm:pt-6 md:pt-8 lg:pt-10">
+                <div className="mt-2 md:mt-8 lg:mt-24 mx-0 sm:mx-4 md:mx-12 lg:mx-20 xl:mx-28 2xl:mx-36 grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 md:gap-8 lg:gap-12 xl:gap-16 pt-2 sm:pt-4 md:pt-8 lg:pt-10">
                     {businessData?.stats.map(stat => (
                         <div
                             key={stat.id}

@@ -15,7 +15,7 @@ const WhySection: React.FC<WhySectionProps> = ({ whyData: propWhyData }) => {
     if (!propWhyData) {
         return (
             <div className="py-16 bg-gray-50">
-                <div className="container mx-auto px-4 text-center">
+                <div className="container mx-auto  text-center">
                     <p className="text-gray-600">Why section data is not available.</p>
                 </div>
             </div>
@@ -30,13 +30,13 @@ const WhySection: React.FC<WhySectionProps> = ({ whyData: propWhyData }) => {
 
     return (
         <section
-            className="relative overflow-hidden w-full py-16 md:py-24 lg:py-40 -mt-32 md:-mt-48 lg:-mt-[350px] 2xl:-mt-[500px] z-10"
+            className="relative overflow-hidden w-full py-16 md:py-24 lg:py-40 -mt-48 md:-mt-74 lg:-mt-[400px] xl:-mt-[450px] 2xl:-mt-[550px] z-10"
             id="why-section"
             ref={ref}
         >
-            <div className="container mx-auto px-4">
+            <div className="container mx-auto ">
                 {/* Main content container */}
-                <div className="max-w-7xl mx-auto bg-white shadow-xl p-10 md:p-20 lg:p-28 opacity-100 transition-opacity duration-500">
+                <div className="max-w-7xl mx-auto bg-white shadow-xl  sm: md: lg: opacity-100 transition-opacity duration-500">
                     {/* Heading */}
                     <div className="text-center mb-6 md:mb-8">
                         <h2 className="text-2xl md:text-3xl lg:text-4xl font-rubik font-bold text-[#222] mb-3 md:mb-4">
