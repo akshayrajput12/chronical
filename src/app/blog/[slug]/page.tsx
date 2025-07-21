@@ -168,7 +168,7 @@ const BlogDetailPage = async ({ params }: BlogDetailPageProps) => {
                 />
             </Head>
 
-            <div className="bg-white mt-16 md:mt-20 lg:mt-24">
+            <div className="bg-white mt-0 lg:mt-24">
                 <BlogDetailHero
                     title={blogPost.title}
                     subtitle={blogPost.excerpt || ""}
@@ -181,12 +181,12 @@ const BlogDetailPage = async ({ params }: BlogDetailPageProps) => {
                     viewCount={blogPost.view_count}
                     author={blogPost.author_id ? "Admin" : undefined}
                 />
-                <div className="relative lg:mx-12 md:mx-12 sm:mx-8 mx-4 flex row-col justify-between xl:gap-8 lg:gap-4 gap-6">
+                <div className="relative lg:mx-12 md:mx-12 sm:mx-8 mx-4 flex lg:flex-row flex-col justify-between xl:gap-8 lg:gap-4 gap-6">
                     <BlogDetailContent
                         content={blogPost.content || ""}
                         excerpt={blogPost.excerpt}
                     />
-                    <div className="flex flex-col gap-6 w-[32%]">
+                    <div className="flex flex-col gap-6 w-full lg:w-[32%]">
                         <BlogRelatedPostsServer
                             relatedPosts={relatedPosts}
                             currentPostSlug={blogPost.slug}

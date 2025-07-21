@@ -12,7 +12,10 @@ interface NewCompanyProps {
     newCompanyImages: Record<number, NewCompanyImage[]>;
 }
 
-const NewCompany: React.FC<NewCompanyProps> = ({ newCompanyData, newCompanyImages }) => {
+const NewCompany: React.FC<NewCompanyProps> = ({
+    newCompanyData,
+    newCompanyImages,
+}) => {
     const controls = useAnimation();
     const ref = useRef<HTMLDivElement>(null);
 
@@ -49,7 +52,9 @@ const NewCompany: React.FC<NewCompanyProps> = ({ newCompanyData, newCompanyImage
         return (
             <div className="py-16 bg-gray-50">
                 <div className="container mx-auto px-4 text-center">
-                    <p className="text-gray-600">New company section data is not available.</p>
+                    <p className="text-gray-600">
+                        New company section data is not available.
+                    </p>
                 </div>
             </div>
         );
@@ -223,10 +228,10 @@ const NewCompany: React.FC<NewCompanyProps> = ({ newCompanyData, newCompanyImage
             className="bg-white overflow-hidden"
             id="new-company"
         >
-            <div className="lg:pl-48 lg:px-0 px-6 w-full">
+            <div className="lg:pl-48 lg:px-0 px-0 w-full">
                 <div className="flex flex-col lg:flex-row w-full items-center justify-between">
                     <motion.div
-                        className="lg:w-[45%] lg:pr-12 mb-10 lg:mb-0"
+                        className="lg:w-[45%] lg:px-0 px-6 mt-4 lg:pr-12 mb-0"
                         initial="hidden"
                         animate={controls}
                         variants={containerVariants}

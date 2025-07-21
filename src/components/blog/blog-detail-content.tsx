@@ -18,7 +18,7 @@ const BlogDetailContent = ({
     return (
         <>
             {/* Main Content Section */}
-            <section className="w-[68%] bg-white">
+            <section className="lg:w-[68%] w-full bg-white">
                 <div className="container mx-auto px-4">
                     <div className="max-w-6xl mx-auto">
                         <div className="w-full">

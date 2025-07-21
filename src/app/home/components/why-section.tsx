@@ -16,7 +16,9 @@ const WhySection: React.FC<WhySectionProps> = ({ whyData: propWhyData }) => {
         return (
             <div className="py-16 bg-gray-50">
                 <div className="container mx-auto  text-center">
-                    <p className="text-gray-600">Why section data is not available.</p>
+                    <p className="text-gray-600">
+                        Why section data is not available.
+                    </p>
                 </div>
             </div>
         );
@@ -24,21 +26,17 @@ const WhySection: React.FC<WhySectionProps> = ({ whyData: propWhyData }) => {
 
     const whyData = propWhyData;
 
-
-
-
-
     return (
         <section
             className="relative overflow-hidden w-full py-16 md:py-24 lg:py-40 -mt-48 md:-mt-74 lg:-mt-[400px] xl:-mt-[450px] 2xl:-mt-[550px] z-10"
             id="why-section"
             ref={ref}
         >
-            <div className="container mx-auto ">
+            <div className="container mx-auto h-full">
                 {/* Main content container */}
-                <div className="max-w-7xl mx-auto bg-white shadow-xl  sm: md: lg: opacity-100 transition-opacity duration-500">
+                <div className="max-w-7xl mx-auto bg-white shadow-xl  sm: md: lg: opacity-100 transition-opacity duration-500 p-6">
                     {/* Heading */}
-                    <div className="text-center mb-6 md:mb-8">
+                    <div className="text-center mb-0 md:mb-8">
                         <h2 className="text-2xl md:text-3xl lg:text-4xl font-rubik font-bold text-[#222] mb-3 md:mb-4">
                             {whyData?.heading || "Why DWTC Free Zone"}
                         </h2>
@@ -65,7 +63,7 @@ const WhySection: React.FC<WhySectionProps> = ({ whyData: propWhyData }) => {
                     {/* Mobile: Single column layout, Desktop: Two-column layout */}
                     <div className="block lg:grid lg:grid-cols-2 lg:gap-16">
                         {/* Mobile: All text content stacked */}
-                        <div className="lg:hidden space-y-4 mb-6">
+                        <div className="lg:hidden space-y-4 mb-0">
                             <p className="text-[#444] font-noto-kufi-arabic text-sm leading-relaxed text-center">
                                 {whyData?.left_column_text_1 ||
                                     "DWTC Free Zone provides a unique and highly desirable proposition for businesses seeking a competitive and well-regulated ecosystem to operate in regional and global markets. Offering a range of benefits such as 100% foreign ownership, 0% taxes and customs duties, and streamlined procedures for visas and permits, the DWTC free zone is a future-focused ecosystem designed for transformative business growth."}

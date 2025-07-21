@@ -55,15 +55,27 @@ const ImageScrollGrid: React.FC<ImageScrollGridProps> = ({
 
     // Use database images if available, otherwise use default images
     const column1Images = columnImages[1]?.length
-        ? columnImages[1].map(img => getImageUrlForBucket.newCompany(img.image_url) || img.image_url)
+        ? columnImages[1].map(
+              img =>
+                  getImageUrlForBucket.newCompany(img.image_url) ||
+                  img.image_url,
+          )
         : defaultColumn1Images;
 
     const column2Images = columnImages[2]?.length
-        ? columnImages[2].map(img => getImageUrlForBucket.newCompany(img.image_url) || img.image_url)
+        ? columnImages[2].map(
+              img =>
+                  getImageUrlForBucket.newCompany(img.image_url) ||
+                  img.image_url,
+          )
         : defaultColumn2Images;
 
     const column3Images = columnImages[3]?.length
-        ? columnImages[3].map(img => getImageUrlForBucket.newCompany(img.image_url) || img.image_url)
+        ? columnImages[3].map(
+              img =>
+                  getImageUrlForBucket.newCompany(img.image_url) ||
+                  img.image_url,
+          )
         : defaultColumn3Images;
 
     // Get alt text for images
@@ -161,7 +173,7 @@ const ImageScrollGrid: React.FC<ImageScrollGridProps> = ({
 
     return (
         <div
-            className={`grid grid-cols-3 gap-6 h-[500px] overflow-hidden ${className}`}
+            className={`grid grid-cols-3 gap-4 md:gap-6 h-[500px] overflow-hidden ${className}`}
         >
             {/* Column 1 - Top to Bottom */}
             <div className="relative overflow-hidden h-full">
