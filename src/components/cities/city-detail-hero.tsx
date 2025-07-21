@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LegacyCity } from "@/types/cities";
+import { RequestQuotationDialog } from "@/components/ui/request-quotation-dialog";
 
 interface CityDetailHeroProps {
     city: LegacyCity;
@@ -24,10 +25,14 @@ const CityDetailHero = ({ city }: CityDetailHeroProps) => {
     }
 
     // Extract dynamic data from admin - replace [CITY] placeholder with actual city name
-    const heroTitle = heroSection.title.trim().replace(/\[CITY\]/g, city.name.toUpperCase());
+    const heroTitle = heroSection.title
+        .trim()
+        .replace(/\[CITY\]/g, city.name.toUpperCase());
     const heroSubtitle = heroSection.subtitle?.trim() || "";
-    const heroDescription = heroSection.content?.trim().replace(/\[CITY\]/g, city.name) || "";
-    const heroImage = heroSection.image_url?.trim() ||
+    const heroDescription =
+        heroSection.content?.trim().replace(/\[CITY\]/g, city.name) || "";
+    const heroImage =
+        heroSection.image_url?.trim() ||
         "https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80";
 
     // Don't render if no image is available
@@ -138,9 +143,13 @@ const CityDetailHero = ({ city }: CityDetailHeroProps) => {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8, delay: 0.4 }}
                             >
-                                <Button className="bg-[#a5cd39] text-white px-6 py-2 rounded-md font-medium hover:bg-[#94b933] transition-colors duration-300 font-noto-kufi-arabic text-sm">
-                                    Request For Quotation
-                                </Button>
+                                <RequestQuotationDialog
+                                    trigger={
+                                        <Button className="bg-[#a5cd39] text-white px-6 py-2 rounded-md font-medium hover:bg-[#94b933] transition-colors duration-300 font-noto-kufi-arabic text-sm">
+                                            Request For Quotation
+                                        </Button>
+                                    }
+                                />
                             </motion.div>
                         </div>
                     </div>

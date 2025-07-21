@@ -43,7 +43,7 @@ async function ConferencePage() {
             <ConferenceEventsPortfolio
                 title="Check Out Our Latest Conference Portfolio"
                 showFeaturedOnly={false}
-                limit={12}
+                limit={20}
                 className="bg-white"
             />
             <BoothRequirementsForm />

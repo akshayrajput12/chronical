@@ -29,8 +29,20 @@ const CityPortfolioSection = ({ city }: CityPortfolioSectionProps) => {
             const availableWidth = viewportWidth - totalGaps;
 
             // Set minimum and maximum card widths
-            const minCardWidth = 200;
-            const maxCardWidth = 400;
+            let minCardWidth = 260;
+            let maxCardWidth = 420;
+
+            // On mobile, use 90vw (almost full width)
+            if (viewportWidth < 640) {
+                minCardWidth = Math.max(
+                    minCardWidth,
+                    Math.floor(viewportWidth * 0.9),
+                );
+                maxCardWidth = Math.min(
+                    maxCardWidth,
+                    Math.floor(viewportWidth * 0.98),
+                );
+            }
 
             const calculatedCardWidth = Math.floor(availableWidth / 5);
             setCardWidth(
@@ -41,7 +53,7 @@ const CityPortfolioSection = ({ city }: CityPortfolioSectionProps) => {
             );
 
             // Set card height proportionally
-            setCardHeight(Math.floor(calculatedCardWidth * 1.2));
+            setCardHeight(Math.floor(cardWidth * 1.2));
         };
 
         handleResize();
@@ -54,20 +66,21 @@ const CityPortfolioSection = ({ city }: CityPortfolioSectionProps) => {
     const handleMouseLeave = () => setIsAutoPlaying(true);
 
     // Get portfolio items from admin - no static fallbacks
-    const portfolioItems = city.portfolioItems?.filter(item =>
-        item.image_url?.trim() &&
-        item.title?.trim()
-    ).sort((a, b) => a.sort_order - b.sort_order).map(item => ({
-        id: item.id,
-        src: item.image_url,
-        alt: item.alt_text || item.title,
-        title: item.title,
-        category: item.category || 'General',
-        description: item.description,
-        project_year: item.project_year,
-        client_name: item.client_name,
-        is_featured: item.is_featured
-    })) || [];
+    const portfolioItems =
+        city.portfolioItems
+            ?.filter(item => item.image_url?.trim() && item.title?.trim())
+            .sort((a, b) => a.sort_order - b.sort_order)
+            .map(item => ({
+                id: item.id,
+                src: item.image_url,
+                alt: item.alt_text || item.title,
+                title: item.title,
+                category: item.category || "General",
+                description: item.description,
+                project_year: item.project_year,
+                client_name: item.client_name,
+                is_featured: item.is_featured,
+            })) || [];
 
     // Auto-slide functionality
     useEffect(() => {
@@ -201,7 +214,11 @@ const CityPortfolioSection = ({ city }: CityPortfolioSectionProps) => {
                                     <motion.div
                                         key={item.id}
                                         className="flex-none"
-                                        style={{ width: `${cardWidth}px` }}
+                                        style={{
+                                            width: `${cardWidth}px`,
+                                            maxWidth: "98vw",
+                                            minHeight: "70px",
+                                        }}
                                         initial={{ opacity: 0, y: 20 }}
                                         whileInView={{ opacity: 1, y: 0 }}
                                         transition={{
