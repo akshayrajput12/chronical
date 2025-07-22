@@ -34,9 +34,9 @@ const WhySection: React.FC<WhySectionProps> = ({ whyData: propWhyData }) => {
         >
             <div className="container mx-auto h-full">
                 {/* Main content container */}
-                <div className="max-w-7xl mx-auto bg-white shadow-xl  sm: md: lg: opacity-100 transition-opacity duration-500 p-6">
+                <div className="max-w-7xl mx-auto bg-white shadow-xl  sm: md: lg: opacity-100 transition-opacity duration-500">
                     {/* Heading */}
-                    <div className="text-center mb-0 md:mb-8">
+                    <div className="text-center mb-0 md:mb-8 p-6 pb-0">
                         <h2 className="text-2xl md:text-3xl lg:text-4xl font-rubik font-bold text-[#222] mb-3 md:mb-4">
                             {whyData?.heading || "Why DWTC Free Zone"}
                         </h2>
@@ -63,7 +63,7 @@ const WhySection: React.FC<WhySectionProps> = ({ whyData: propWhyData }) => {
                     {/* Mobile: Single column layout, Desktop: Two-column layout */}
                     <div className="block lg:grid lg:grid-cols-2 lg:gap-16">
                         {/* Mobile: All text content stacked */}
-                        <div className="lg:hidden space-y-4 mb-0">
+                        <div className="lg:hidden space-y-4 mb-0 px-6 pb-6">
                             <p className="text-[#444] font-noto-kufi-arabic text-sm leading-relaxed text-center">
                                 {whyData?.left_column_text_1 ||
                                     "DWTC Free Zone provides a unique and highly desirable proposition for businesses seeking a competitive and well-regulated ecosystem to operate in regional and global markets. Offering a range of benefits such as 100% foreign ownership, 0% taxes and customs duties, and streamlined procedures for visas and permits, the DWTC free zone is a future-focused ecosystem designed for transformative business growth."}
@@ -81,7 +81,7 @@ const WhySection: React.FC<WhySectionProps> = ({ whyData: propWhyData }) => {
                         </div>
 
                         {/* Desktop: Left column */}
-                        <div className="hidden lg:block">
+                        <div className="hidden lg:block px-6 pb-6">
                             <p className="text-[#444] mb-6 font-noto-kufi-arabic text-sm leading-relaxed">
                                 {whyData?.left_column_text_1 ||
                                     "DWTC Free Zone provides a unique and highly desirable proposition for businesses seeking a competitive and well-regulated ecosystem to operate in regional and global markets. Offering a range of benefits such as 100% foreign ownership, 0% taxes and customs duties, and streamlined procedures for visas and permits, the DWTC free zone is a future-focused ecosystem designed for transformative business growth."}
@@ -100,7 +100,7 @@ const WhySection: React.FC<WhySectionProps> = ({ whyData: propWhyData }) => {
                                     "Spanning from the iconic Sheikh Rashid Tower to the neighboring One Central, DWTC Free Zone offers a diverse range of 1,200+ licensed business activities and is home to more than 1,800 small and medium businesses."}
                             </p>
                             {/* Desktop Media with text overlay */}
-                            <div className="absolute w-full max-w-[600px] h-[400px] md:h-[500px] lg:h-[600px]">
+                            <div className="absolute w-full max-w-[650px] h-[400px] md:h-[500px] lg:h-[600px]">
                                 <div className="relative w-full h-full overflow-hidden hover:scale-[1.02] transition-transform duration-300">
                                     {/* Check media type and display accordingly */}
                                     {whyData?.media_type === "video" &&

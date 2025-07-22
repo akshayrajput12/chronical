@@ -239,7 +239,7 @@ const ConferenceEventsPortfolio: React.FC<ConferenceEventsPortfolioProps> = ({
                                 className="group bg-white shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden"
                                 variants={itemVariants}
                             >
-                                <div className="relative aspect-square overflow-hidden">
+                                <div className="relative aspect-video overflow-hidden">
                                     <img
                                         src={getImageUrl(image)}
                                         alt={image.alt_text}

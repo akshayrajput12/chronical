@@ -65,7 +65,7 @@ const PortfolioGallery: React.FC<PortfolioGalleryProps> = ({
                                     key={item.id}
                                     className="group bg-white shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden"
                                 >
-                                    <div className="relative aspect-square overflow-hidden">
+                                    <div className="relative aspect-video overflow-hidden">
                                         {imageUrl && (
                                             <Image
                                                 src={imageUrl}
