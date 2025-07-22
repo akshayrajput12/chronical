@@ -30,17 +30,25 @@ async function CountryPavilionExpoBoothSolutionsPage() {
 
     return (
         <div className="flex flex-col relative">
-            <CountryPavilionHeroServer heroData={countryPavilionPageData.hero} />
-            <CountryPavilionIntroSectionServer introData={countryPavilionPageData.intro} />
+            <CountryPavilionHeroServer
+                heroData={countryPavilionPageData.hero}
+            />
+            <CountryPavilionIntroSectionServer
+                introData={countryPavilionPageData.intro}
+            />
             <ExceptionalDesignSectionServer
-                exceptionalDesignData={countryPavilionPageData.exceptionalDesign}
+                exceptionalDesignData={
+                    countryPavilionPageData.exceptionalDesign
+                }
                 designBenefitsData={countryPavilionPageData.designBenefits}
             />
             <PortfolioGridServer
                 portfolioSectionData={countryPavilionPageData.portfolioSection}
                 portfolioItemsData={countryPavilionPageData.portfolioItems}
             />
-            <ExpoPavilionParagraphSectionServer paragraphSectionData={countryPavilionPageData.paragraphSection} />
+            <ExpoPavilionParagraphSectionServer
+                paragraphSectionData={countryPavilionPageData.paragraphSection}
+            />
             <BoothRequirementsForm />
         </div>
     );

@@ -4,7 +4,10 @@ import React from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { ExpoPavilionExceptionalDesign, DesignBenefit } from "@/services/country-pavilion-page.service";
+import {
+    ExpoPavilionExceptionalDesign,
+    DesignBenefit,
+} from "@/services/country-pavilion-page.service";
 import { RequestQuotationDialog } from "@/components/ui/request-quotation-dialog";
 
 interface ExceptionalDesignSectionServerProps {
@@ -12,14 +15,15 @@ interface ExceptionalDesignSectionServerProps {
     designBenefitsData: DesignBenefit[];
 }
 
-const ExceptionalDesignSectionServer = ({ 
-    exceptionalDesignData, 
-    designBenefitsData 
+const ExceptionalDesignSectionServer = ({
+    exceptionalDesignData,
+    designBenefitsData,
 }: ExceptionalDesignSectionServerProps) => {
     // Don't render if no data exists
     if (!exceptionalDesignData) {
         return null;
     }
+    console.log(exceptionalDesignData);
 
     const buttonVariants = {
         hidden: {
@@ -60,7 +64,7 @@ const ExceptionalDesignSectionServer = ({
                         >
                             <div className="space-y-6">
                                 <h2 className="text-3xl md:text-4xl text-center font-rubik font-bold mb-2">
-                                    {exceptionalDesignData.title}
+                                    {exceptionalDesignData.heading}
                                 </h2>
                                 <div className="flex !mb-1 justify-center">
                                     <div className="h-1 bg-[#a5cd39] w-16 mt-2 mb-6"></div>
@@ -68,13 +72,17 @@ const ExceptionalDesignSectionServer = ({
                                 <div className="space-y-4 !mt-0 text-gray-700">
                                     <p className="text-base leading-relaxed text-justify">
                                         {exceptionalDesignData.paragraph_1
-                                            .split("Country Pavilion Expo Booth")
+                                            .split(
+                                                "Country Pavilion Expo Booth",
+                                            )
                                             .map((part, index, array) => (
                                                 <React.Fragment key={index}>
                                                     {part}
-                                                    {index < array.length - 1 && (
+                                                    {index <
+                                                        array.length - 1 && (
                                                         <span className="text-[#a5cd39] font-medium">
-                                                            Country Pavilion Expo Booth
+                                                            Country Pavilion
+                                                            Expo Booth
                                                         </span>
                                                     )}
                                                 </React.Fragment>
@@ -87,9 +95,11 @@ const ExceptionalDesignSectionServer = ({
                                             .map((part, index, array) => (
                                                 <React.Fragment key={index}>
                                                     {part}
-                                                    {index < array.length - 1 && (
+                                                    {index <
+                                                        array.length - 1 && (
                                                         <span className="text-[#a5cd39] font-medium">
-                                                            quickly look into its pros
+                                                            quickly look into
+                                                            its pros
                                                         </span>
                                                     )}
                                                 </React.Fragment>
@@ -98,14 +108,16 @@ const ExceptionalDesignSectionServer = ({
 
                                     <ul className="space-y-3 ml-6">
                                         {designBenefitsData.map(benefit => (
-                                            <li key={benefit.id} className="flex items-start">
-                                                <span className="text-[#a5cd39] mr-2 mt-1">•</span>
+                                            <li
+                                                key={benefit.id}
+                                                className="flex items-start"
+                                            >
+                                                <span className="text-[#a5cd39] mr-2 mt-1">
+                                                    •
+                                                </span>
                                                 <div>
                                                     <span className="font-medium text-gray-900">
-                                                        {benefit.title}:
-                                                    </span>
-                                                    <span className="text-gray-700 ml-1">
-                                                        {benefit.description}
+                                                        {benefit.benefit_text}:
                                                     </span>
                                                 </div>
                                             </li>
@@ -116,7 +128,11 @@ const ExceptionalDesignSectionServer = ({
                                         {exceptionalDesignData.paragraph_3}
                                     </p>
 
-                                    <Link href={exceptionalDesignData.cta_url || "#"}>
+                                    <Link
+                                        href={
+                                            exceptionalDesignData.cta_url || "#"
+                                        }
+                                    >
                                         <RequestQuotationDialog
                                             trigger={
                                                 <motion.button
@@ -129,7 +145,8 @@ const ExceptionalDesignSectionServer = ({
                                                     viewport={{ once: true }}
                                                     type="button"
                                                 >
-                                                    {exceptionalDesignData.cta_text || "Request Quotation"}
+                                                    {exceptionalDesignData.cta_text ||
+                                                        "Request Quotation"}
                                                 </motion.button>
                                             }
                                         />
@@ -150,7 +167,10 @@ const ExceptionalDesignSectionServer = ({
                                 <div className="relative h-80 md:h-96 lg:h-[500px] rounded-lg overflow-hidden shadow-lg">
                                     <Image
                                         src={exceptionalDesignData.image_url}
-                                        alt={exceptionalDesignData.image_alt || "Exceptional Design"}
+                                        alt={
+                                            exceptionalDesignData.image_alt ||
+                                            "Exceptional Design"
+                                        }
                                         fill
                                         className="object-cover"
                                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"

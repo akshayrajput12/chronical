@@ -14,24 +14,10 @@ import { EventsForm } from "./events-form";
 import EventContent from "@/components/events/event-content";
 import {
     incrementEventViews,
-    getAllEventSlugs,
     EventDetailPageData,
 } from "@/services/event-page.service";
 import RelatedEventsClient from "./related-events-client";
 import Head from "next/head";
-
-// Generate static params for all events
-export async function generateStaticParams() {
-    try {
-        const slugs = await getAllEventSlugs();
-        return slugs.map(slug => ({
-            slug,
-        }));
-    } catch (error) {
-        console.error("Error generating static params for events:", error);
-        return [];
-    }
-}
 
 export default async function EventDetailPage({
     eventData,

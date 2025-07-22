@@ -31,7 +31,7 @@ export async function generateStaticParams() {
     }
 }
 
-const Page = async ({ params }: { params: { slug: string } }) => {
+const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
     const resolvedParams = await params;
     const { slug } = resolvedParams;
 

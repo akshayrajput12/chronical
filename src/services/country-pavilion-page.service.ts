@@ -20,7 +20,7 @@ export interface ExpoPavilionIntro {
 
 export interface ExpoPavilionExceptionalDesign {
     id: string;
-    title: string;
+    heading: string;
     paragraph_1: string;
     paragraph_2: string;
     paragraph_3: string;
@@ -37,6 +37,7 @@ export interface DesignBenefit {
     title: string;
     description: string;
     icon_name: string;
+    benefit_text: string;
     display_order: number;
     is_active: boolean;
 }
@@ -81,7 +82,7 @@ export interface CountryPavilionPageData {
 export async function getCountryPavilionPageData(): Promise<CountryPavilionPageData> {
     try {
         const supabase = createServiceClient();
-        
+
         // Fetch all data in parallel for better performance
         const [
             heroResult,
@@ -89,7 +90,7 @@ export async function getCountryPavilionPageData(): Promise<CountryPavilionPageD
             exceptionalDesignResult,
             portfolioSectionResult,
             portfolioItemsResult,
-            paragraphSectionResult
+            paragraphSectionResult,
         ] = await Promise.all([
             supabase
                 .from("expo_pavilion_hero")
@@ -121,7 +122,7 @@ export async function getCountryPavilionPageData(): Promise<CountryPavilionPageD
                 .from("expo_pavilion_paragraph_section")
                 .select("*")
                 .eq("is_active", true)
-                .single()
+                .single(),
         ]);
 
         // Fetch design benefits if exceptional design exists
@@ -133,12 +134,15 @@ export async function getCountryPavilionPageData(): Promise<CountryPavilionPageD
                 .eq("design_section_id", exceptionalDesignResult.data.id)
                 .eq("is_active", true)
                 .order("display_order");
-            
+
             designBenefits = benefitsResult.data || [];
         }
-        
+
         // Debug logging
-        console.log('Country Pavilion Page Data - paragraphSectionResult:', paragraphSectionResult);
+        console.log(
+            "Country Pavilion Page Data - paragraphSectionResult:",
+            paragraphSectionResult,
+        );
 
         return {
             hero: heroResult.data || null,
@@ -147,7 +151,7 @@ export async function getCountryPavilionPageData(): Promise<CountryPavilionPageD
             designBenefits,
             portfolioSection: portfolioSectionResult.data || null,
             portfolioItems: portfolioItemsResult.data || [],
-            paragraphSection: paragraphSectionResult.data || null
+            paragraphSection: paragraphSectionResult.data || null,
         };
     } catch (error) {
         console.error("Error in getCountryPavilionPageData:", error);
@@ -158,7 +162,7 @@ export async function getCountryPavilionPageData(): Promise<CountryPavilionPageD
             designBenefits: [],
             portfolioSection: null,
             portfolioItems: [],
-            paragraphSection: null
+            paragraphSection: null,
         };
     }
 }
@@ -175,12 +179,12 @@ export async function getExpoPavilionHeroData(): Promise<ExpoPavilionHero | null
             .select("*")
             .eq("is_active", true)
             .single();
-        
+
         if (error) {
             console.error("Error fetching hero data:", error);
             return null;
         }
-        
+
         return data;
     } catch (error) {
         console.error("Error in getExpoPavilionHeroData:", error);
@@ -196,12 +200,12 @@ export async function getExpoPavilionIntroData(): Promise<ExpoPavilionIntro | nu
             .select("*")
             .eq("is_active", true)
             .single();
-        
+
         if (error) {
             console.error("Error fetching intro data:", error);
             return null;
         }
-        
+
         return data;
     } catch (error) {
         console.error("Error in getExpoPavilionIntroData:", error);
@@ -209,21 +213,27 @@ export async function getExpoPavilionIntroData(): Promise<ExpoPavilionIntro | nu
     }
 }
 
-export async function getExpoPavilionExceptionalDesignData(): Promise<{ design: ExpoPavilionExceptionalDesign | null; benefits: DesignBenefit[] }> {
+export async function getExpoPavilionExceptionalDesignData(): Promise<{
+    design: ExpoPavilionExceptionalDesign | null;
+    benefits: DesignBenefit[];
+}> {
     try {
         const supabase = createServiceClient();
-        
+
         const { data: designData, error: designError } = await supabase
             .from("expo_pavilion_exceptional_design")
             .select("*")
             .eq("is_active", true)
             .single();
-        
+
         if (designError) {
-            console.error("Error fetching exceptional design data:", designError);
+            console.error(
+                "Error fetching exceptional design data:",
+                designError,
+            );
             return { design: null, benefits: [] };
         }
-        
+
         // Fetch benefits for this design section
         const { data: benefitsData, error: benefitsError } = await supabase
             .from("expo_pavilion_design_benefits")
@@ -231,14 +241,14 @@ export async function getExpoPavilionExceptionalDesignData(): Promise<{ design: 
             .eq("design_section_id", designData.id)
             .eq("is_active", true)
             .order("display_order");
-        
+
         if (benefitsError) {
             console.error("Error fetching design benefits:", benefitsError);
         }
-        
+
         return {
             design: designData,
-            benefits: benefitsData || []
+            benefits: benefitsData || [],
         };
     } catch (error) {
         console.error("Error in getExpoPavilionExceptionalDesignData:", error);
@@ -246,10 +256,13 @@ export async function getExpoPavilionExceptionalDesignData(): Promise<{ design: 
     }
 }
 
-export async function getExpoPavilionPortfolioData(): Promise<{ section: ExpoPavilionPortfolioSection | null; items: ExpoPavilionPortfolioItem[] }> {
+export async function getExpoPavilionPortfolioData(): Promise<{
+    section: ExpoPavilionPortfolioSection | null;
+    items: ExpoPavilionPortfolioItem[];
+}> {
     try {
         const supabase = createServiceClient();
-        
+
         const [sectionResult, itemsResult] = await Promise.all([
             supabase
                 .from("expo_pavilion_portfolio_sections")
@@ -261,18 +274,18 @@ export async function getExpoPavilionPortfolioData(): Promise<{ section: ExpoPav
                 .select("*")
                 .eq("is_active", true)
                 .order("display_order")
-                .limit(6)
+                .limit(6),
         ]);
-        
+
         return {
             section: sectionResult.data || null,
-            items: itemsResult.data || []
+            items: itemsResult.data || [],
         };
     } catch (error) {
         console.error("Error in getExpoPavilionPortfolioData:", error);
         return {
             section: null,
-            items: []
+            items: [],
         };
     }
 }
