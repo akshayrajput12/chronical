@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
+import { motion } from "framer-motion";
 import { createClient } from "@/lib/supabase/client";
 import type { PortfolioItemWithImage } from "@/types/portfolio-gallery";
 
@@ -13,6 +13,17 @@ const PortfolioGallery: React.FC<PortfolioGalleryProps> = ({
     portfolioItems,
 }) => {
     const supabase = createClient();
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 30 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                duration: 0.6,
+            },
+        },
+    };
 
     // Get image URL (either from Supabase storage or external URL)
     const getImageUrl = (item: PortfolioItemWithImage): string => {
@@ -61,22 +72,19 @@ const PortfolioGallery: React.FC<PortfolioGalleryProps> = ({
                                 item.image_alt_text || item.alt_text;
 
                             return (
-                                <div
+                                <motion.div
                                     key={item.id}
                                     className="group bg-white shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden"
+                                    variants={itemVariants}
                                 >
                                     <div className="relative aspect-video overflow-hidden">
-                                        {imageUrl && (
-                                            <Image
-                                                src={imageUrl}
-                                                alt={altText}
-                                                fill
-                                                className="object-cover group-hover:scale-105 transition-transform duration-300"
-                                                sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
-                                            />
-                                        )}
+                                        <img
+                                            src={imageUrl}
+                                            alt={altText}
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                        />
 
-                                        {/* Hover Overlay */}
+                                        {/* Hover overlay */}
                                         <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                             <div className="text-white text-center">
                                                 <div className="text-sm font-medium">
@@ -85,7 +93,7 @@ const PortfolioGallery: React.FC<PortfolioGalleryProps> = ({
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </motion.div>
                             );
                         })}
                     </div>

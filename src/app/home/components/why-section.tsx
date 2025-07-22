@@ -100,7 +100,7 @@ const WhySection: React.FC<WhySectionProps> = ({ whyData: propWhyData }) => {
                                     "Spanning from the iconic Sheikh Rashid Tower to the neighboring One Central, DWTC Free Zone offers a diverse range of 1,200+ licensed business activities and is home to more than 1,800 small and medium businesses."}
                             </p>
                             {/* Desktop Media with text overlay */}
-                            <div className="absolute w-full max-w-[650px] h-[400px] md:h-[500px] lg:h-[600px]">
+                            <div className="absolute w-[48vw] h-[400px] md:h-[500px] lg:h-[600px]">
                                 <div className="relative w-full h-full overflow-hidden hover:scale-[1.02] transition-transform duration-300">
                                     {/* Check media type and display accordingly */}
                                     {whyData?.media_type === "video" &&
