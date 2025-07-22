@@ -221,7 +221,7 @@ const EventsGalleryServer = ({
                 {/* Title and View All Button Row */}
                 <div className="flex flex-col sm:flex-row items-center justify-between mb-8 sm:mb-10 lg:mb-12 gap-4">
                     <h2 className="font-rubik text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 text-center">
-                        Explore DWTC Events
+                        Upcoming Exhibitions in Middle East
                     </h2>
 
                     <Button
