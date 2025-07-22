@@ -62,11 +62,11 @@ const CityDetailHero = ({ city }: CityDetailHeroProps) => {
 
                 {/* Content - vertically centered with margin-top */}
                 <div className="relative z-10 flex items-center justify-center h-full px-4 text-center text-white w-full">
-                    <div className="max-w-6xl mx-auto mt-16 md:mt-20">
+                    <div className="max-w-6xl mx-auto mt-0 md:mt-20">
                         <div className="max-w-4xl mx-auto">
                             {/* Dynamic Main Heading from Admin - Reduced font size */}
                             <motion.h1
-                                className="text-2xl sm:text-3xl md:text-4xl font-rubik font-bold text-white mb-4 sm:mb-6 leading-tight tracking-wide"
+                                className="text-3xl sm:text-4xl md:text-5xl font-rubik font-bold mb-4 sm:mb-6 leading-tight"
                                 initial={{ opacity: 0, y: 30 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8 }}

@@ -15,7 +15,11 @@ const CityWhyBestSection = ({ city }: CityWhyBestSectionProps) => {
     );
 
     // Only render if we have dynamic content from admin
-    if (!whyBestSection || !whyBestSection.title?.trim() || !whyBestSection.content?.trim()) {
+    if (
+        !whyBestSection ||
+        !whyBestSection.title?.trim() ||
+        !whyBestSection.content?.trim()
+    ) {
         return null;
     }
 
@@ -24,7 +28,9 @@ const CityWhyBestSection = ({ city }: CityWhyBestSectionProps) => {
     const content = whyBestSection.content.trim();
 
     // Split content into paragraphs for better rendering
-    const contentParagraphs = content.split('\n\n').filter(paragraph => paragraph.trim().length > 0);
+    const contentParagraphs = content
+        .split("\n\n")
+        .filter(paragraph => paragraph.trim().length > 0);
 
     return (
         <section className="py-8 md:py-12 lg:py-16 bg-gray-100">
@@ -57,7 +63,7 @@ const CityWhyBestSection = ({ city }: CityWhyBestSectionProps) => {
                         {contentParagraphs.map((paragraph, index) => (
                             <p
                                 key={index}
-                                className="text-base md:text-lg leading-relaxed text-center max-w-5xl mx-auto"
+                                className="text-base md:text-lg text-justify leading-relaxed max-w-5xl mx-auto"
                             >
                                 {paragraph}
                             </p>

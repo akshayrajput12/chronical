@@ -21,45 +21,9 @@ const EventsGalleryServer = ({
     hasMore,
 }: EventsGalleryServerProps) => {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [cardsToShow, setCardsToShow] = useState(3);
-    const [cardWidth, setCardWidth] = useState(320);
     const router = useRouter();
     const [showAll, setShowAll] = useState(false);
     const carouselRef = useRef<HTMLDivElement>(null);
-
-    // Handle responsive cards display and card width - Always show 3 cards
-    useEffect(() => {
-        const handleResize = () => {
-            setCardsToShow(3); // Always show 3 cards
-
-            // Calculate card width to fit 3 cards with gaps
-            const containerPadding =
-                window.innerWidth < 640
-                    ? 16
-                    : window.innerWidth < 1024
-                    ? 32
-                    : 64;
-            const totalGaps = 2 * 16; // 2 gaps between 3 cards (16px each)
-            const availableWidth =
-                window.innerWidth - containerPadding * 2 - totalGaps;
-            const calculatedCardWidth = Math.floor(availableWidth / 3);
-
-            // Set minimum and maximum card widths
-            const minCardWidth = 250;
-            const maxCardWidth = 350;
-
-            setCardWidth(
-                Math.max(
-                    minCardWidth,
-                    Math.min(maxCardWidth, calculatedCardWidth),
-                ),
-            );
-        };
-
-        handleResize();
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, []);
 
     // Generate predefined filter options from May 2025 to February 2026
     const filterOptions = [
@@ -151,12 +115,13 @@ const EventsGalleryServer = ({
     const allEvents = events; // all events, unfiltered
     const filteredEvents = getFilteredEvents();
 
-    // Reset carousel index if number of all events or cardsToShow changes
+    // Reset carousel index when events change
     useEffect(() => {
         setCurrentIndex(0);
-    }, [allEvents.length, cardsToShow]);
+    }, [allEvents.length]);
 
     const carouselEvents = allEvents; // always use all events for carousel
+    const cardsToShow = 3;
     const carouselMaxIndex = Math.max(0, carouselEvents.length - cardsToShow);
 
     const nextSlide = () => {
@@ -179,16 +144,6 @@ const EventsGalleryServer = ({
         router.push(
             `/top-trade-shows-in-uae-saudi-arabia-middle-east/${eventSlug}`,
         );
-    };
-
-    const scrollByCard = (direction: "left" | "right") => {
-        if (carouselRef.current) {
-            const scrollAmount = cardWidth + 16; // card + gap
-            carouselRef.current.scrollBy({
-                left: direction === "left" ? -scrollAmount : scrollAmount,
-                behavior: "smooth",
-            });
-        }
     };
 
     // Empty state
@@ -237,61 +192,68 @@ const EventsGalleryServer = ({
                 {/* Show Carousel of all events */}
                 {!showAll && (
                     <>
-                        {/* Carousel (no month filter UI above) */}
-                        <div className="relative mx-2 sm:mx-4 md:mx-8 lg:mx-12 xl:mx-16 mb-8">
-                            {/* Navigation Buttons (always visible) */}
+                        {/* Carousel */}
+                        <div className="relative mb-8">
+                            {/* Navigation Buttons */}
                             {allEvents.length > cardsToShow && (
                                 <>
                                     <Button
                                         variant="ghost"
                                         size="icon"
-                                        onClick={() => scrollByCard("left")}
-                                        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-gray-100/80 hover:bg-gray-200/80 shadow-lg rounded-full w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 transition-all duration-300 text-gray-500 hover:text-gray-600"
+                                        onClick={prevSlide}
+                                        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white shadow-lg rounded-full w-10 h-10 md:w-12 md:h-12 transition-all duration-300 text-gray-600 hover:text-gray-900"
+                                        style={{
+                                            transform:
+                                                "translateY(-50%) translateX(-50%)",
+                                        }}
                                     >
-                                        <ChevronLeft className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />
+                                        <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" />
                                     </Button>
                                     <Button
                                         variant="ghost"
                                         size="icon"
-                                        onClick={() => scrollByCard("right")}
-                                        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-gray-100/80 hover:bg-gray-200/80 shadow-lg rounded-full w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 transition-all duration-300 text-gray-500 hover:text-gray-600"
+                                        onClick={nextSlide}
+                                        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white shadow-lg rounded-full w-10 h-10 md:w-12 md:h-12 transition-all duration-300 text-gray-600 hover:text-gray-900"
+                                        style={{
+                                            transform:
+                                                "translateY(-50%) translateX(50%)",
+                                        }}
                                     >
-                                        <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />
+                                        <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
                                     </Button>
                                 </>
                             )}
-                            {/* Horizontally scrollable carousel */}
-                            <div
-                                ref={carouselRef}
-                                className="overflow-x-auto w-full scrollbar-hide"
-                                style={{ WebkitOverflowScrolling: "touch" }}
-                            >
-                                <div className="flex gap-4 flex-nowrap">
+
+                            {/* Carousel Container */}
+                            <div className="overflow-hidden mx-8 md:mx-16">
+                                <motion.div
+                                    className="flex"
+                                    animate={{
+                                        x: `${
+                                            -currentIndex * (100 / cardsToShow)
+                                        }%`,
+                                    }}
+                                    transition={{
+                                        type: "spring",
+                                        stiffness: 300,
+                                        damping: 30,
+                                    }}
+                                >
                                     {allEvents.map((event, index) => (
                                         <div
                                             key={event.id}
-                                            className="flex-none min-w-[250px] max-w-[350px] w-[90vw] sm:w-[300px] md:w-[320px] lg:w-[340px] xl:w-[350px]"
+                                            className="flex-shrink-0 px-2"
                                             style={{
-                                                height: "auto",
+                                                width: `${100 / cardsToShow}%`,
                                             }}
                                         >
                                             <div
-                                                className="bg-white cursor-pointer mb-8 sm:mb-12 md:mb-16 lg:mb-20 transition-all duration-500 hover:shadow-lg rounded-lg"
+                                                className="bg-white cursor-pointer transition-all duration-500 hover:shadow-xl overflow-hidden h-full group relative"
                                                 onClick={() =>
                                                     handleEventClick(event.slug)
                                                 }
-                                                style={{
-                                                    width: "100%",
-                                                    height: "auto",
-                                                    border: "0px",
-                                                    backgroundColor:
-                                                        "rgb(255, 255, 255)",
-                                                    position: "relative",
-                                                    fontFamily:
-                                                        "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-                                                }}
                                             >
-                                                {/* Green accent bar - positioned at very top of card */}
+                                                {/* Green accent bar */}
                                                 <div
                                                     className="absolute top-0 left-0 w-8 sm:w-12 md:w-16 h-1"
                                                     style={{
@@ -301,8 +263,9 @@ const EventsGalleryServer = ({
                                                         zIndex: 10,
                                                     }}
                                                 ></div>
+
                                                 {/* Image */}
-                                                <div className="relative flex-1 overflow-hidden h-48 sm:h-56 md:h-64 lg:h-72">
+                                                <div className="relative overflow-hidden h-48 sm:h-56 md:h-64">
                                                     <Image
                                                         src={
                                                             event.featured_image_url ||
@@ -310,40 +273,26 @@ const EventsGalleryServer = ({
                                                         }
                                                         alt={event.title}
                                                         fill
-                                                        className="object-cover transition-transform duration-300 hover:scale-105"
+                                                        className="object-cover transition-transform duration-500 group-hover:scale-110"
                                                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                                                     />
                                                 </div>
-                                                {/* Card Header */}
-                                                <div
-                                                    className="relative px-3 sm:px-4 md:px-6 lg:px-8 pb-6 sm:pb-8 md:pb-10 lg:pb-12"
-                                                    style={{
-                                                        minHeight: "180px",
-                                                    }}
-                                                >
+
+                                                {/* Card Content */}
+                                                <div className="p-4 sm:p-5 md:p-6">
                                                     {/* Date */}
-                                                    <div
-                                                        className="text-xs sm:text-xs md:text-xs text-gray-700 mb-3 sm:mb-4 md:mb-5 mt-2 sm:mt-3 md:mt-4 font-medium"
-                                                        style={{
-                                                            letterSpacing:
-                                                                "1px",
-                                                        }}
-                                                    >
+                                                    <div className="text-xs text-gray-600 mb-3 font-medium tracking-wide uppercase">
                                                         {event.date_range ||
                                                             "Date TBD"}
                                                     </div>
+
                                                     {/* Title */}
-                                                    <h2 className="text-base whatson-heading font-rubik font-normal sm:text-lg md:text-xl text-gray-900 mb-3 sm:mb-4 md:mb-5 leading-tight">
+                                                    <h3 className="font-rubik text-lg sm:text-xl font-semibold text-gray-900 mb-3 leading-tight line-clamp-2 group-hover:text-gray-700 transition-colors">
                                                         {event.title}
-                                                    </h2>
+                                                    </h3>
+
                                                     {/* Category */}
-                                                    <p
-                                                        className="text-xs sm:text-xs md:text-xs text-gray-700 font-medium"
-                                                        style={{
-                                                            letterSpacing:
-                                                                "1px",
-                                                        }}
-                                                    >
+                                                    <p className="text-xs text-gray-600 font-medium tracking-wide uppercase">
                                                         {event.category_name ||
                                                             "Uncategorized"}
                                                     </p>
@@ -351,8 +300,30 @@ const EventsGalleryServer = ({
                                             </div>
                                         </div>
                                     ))}
-                                </div>
+                                </motion.div>
                             </div>
+
+                            {/* Dots Indicator */}
+                            {allEvents.length > cardsToShow && (
+                                <div className="flex justify-center mt-6 gap-2">
+                                    {Array.from(
+                                        { length: carouselMaxIndex + 1 },
+                                        (_, index) => (
+                                            <button
+                                                key={index}
+                                                onClick={() =>
+                                                    setCurrentIndex(index)
+                                                }
+                                                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                                                    index === currentIndex
+                                                        ? "bg-gray-800 w-6"
+                                                        : "bg-gray-300 hover:bg-gray-400"
+                                                }`}
+                                            />
+                                        ),
+                                    )}
+                                </div>
+                            )}
                         </div>
                     </>
                 )}
@@ -360,7 +331,7 @@ const EventsGalleryServer = ({
                 {/* Show Month Filter and Grid */}
                 {showAll && (
                     <>
-                        {/* Month Filter UI (arrows + month + event count) */}
+                        {/* Month Filter UI */}
                         <div
                             className="relative flex items-center justify-between mb-8"
                             style={{ minHeight: 80 }}
@@ -386,6 +357,7 @@ const EventsGalleryServer = ({
                                 </span>
                                 <ChevronLeft className="w-6 h-6" />
                             </button>
+
                             {/* Centered Current Month/Year */}
                             <div className="absolute left-1/2 top-0 -translate-x-1/2 flex flex-col items-center w-full pointer-events-none">
                                 <span className="text-3xl font-bold text-gray-900">
@@ -399,6 +371,7 @@ const EventsGalleryServer = ({
                                     )
                                 </span>
                             </div>
+
                             {/* Right Arrow & Next Month */}
                             <button
                                 onClick={() =>
@@ -428,20 +401,21 @@ const EventsGalleryServer = ({
                                 <ChevronRight className="w-6 h-6" />
                             </button>
                         </div>
+
                         {/* Responsive Grid of Events */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                             {filteredEvents.length > 0 ? (
                                 filteredEvents.map(event => (
                                     <div
                                         key={event.id}
-                                        className="bg-white rounded-lg shadow hover:shadow-lg transition cursor-pointer relative"
+                                        className="bg-white rounded-lg shadow hover:shadow-lg transition cursor-pointer overflow-hidden group"
                                         onClick={() =>
                                             handleEventClick(event.slug)
                                         }
                                     >
-                                        {/* Green accent bar - positioned at very top of card (not absolute in grid) */}
+                                        {/* Green accent bar */}
                                         <div
-                                            className="w-8 sm:w-12 md:w-16 h-1 rounded-t"
+                                            className="absolute top-0 left-0 w-8 sm:w-12 md:w-16 h-1"
                                             style={{
                                                 backgroundColor:
                                                     event.category_color ||
@@ -449,8 +423,9 @@ const EventsGalleryServer = ({
                                                 zIndex: 10,
                                             }}
                                         ></div>
+
                                         {/* Image */}
-                                        <div className="relative flex-1 overflow-hidden h-48 sm:h-56 md:h-64 lg:h-72">
+                                        <div className="relative overflow-hidden h-48 sm:h-56 md:h-64">
                                             <Image
                                                 src={
                                                     event.featured_image_url ||
@@ -458,31 +433,25 @@ const EventsGalleryServer = ({
                                                 }
                                                 alt={event.title}
                                                 fill
-                                                className="object-cover transition-transform duration-300 hover:scale-105"
+                                                className="object-cover transition-transform duration-300 group-hover:scale-105"
                                                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                                             />
                                         </div>
-                                        {/* Card Header */}
-                                        <div
-                                            className="relative px-3 sm:px-4 md:px-6 lg:px-8 pb-6 sm:pb-8 md:pb-10 lg:pb-12"
-                                            style={{ minHeight: "180px" }}
-                                        >
+
+                                        {/* Card Content */}
+                                        <div className="p-4 sm:p-5 md:p-6">
                                             {/* Date */}
-                                            <div
-                                                className="text-xs sm:text-xs md:text-xs text-gray-700 mb-3 sm:mb-4 md:mb-5 mt-2 sm:mt-3 md:mt-4 font-medium"
-                                                style={{ letterSpacing: "1px" }}
-                                            >
+                                            <div className="text-xs text-gray-600 mb-3 font-medium tracking-wide uppercase">
                                                 {event.date_range || "Date TBD"}
                                             </div>
+
                                             {/* Title */}
-                                            <h2 className="text-base whatson-heading font-rubik font-normal sm:text-lg md:text-xl text-gray-900 mb-3 sm:mb-4 md:mb-5 leading-tight">
+                                            <h3 className="font-rubik text-lg sm:text-xl font-semibold text-gray-900 mb-3 leading-tight">
                                                 {event.title}
-                                            </h2>
+                                            </h3>
+
                                             {/* Category */}
-                                            <p
-                                                className="text-xs sm:text-xs md:text-xs text-gray-700 font-medium"
-                                                style={{ letterSpacing: "1px" }}
-                                            >
+                                            <p className="text-xs text-gray-600 font-medium tracking-wide uppercase">
                                                 {event.category_name ||
                                                     "Uncategorized"}
                                             </p>
