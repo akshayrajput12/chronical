@@ -69,7 +69,7 @@ const EventsHero = () => {
     };
 
     return (
-        <section className="relative h-[75vh] 2xl:h-[60vh] flex flex-col items-center justify-center overflow-hidden">
+        <section className="hero relative h-[75vh] 2xl:h-[60vh] flex flex-col items-center justify-center overflow-hidden">
             {/* Background Image */}
             <div
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -81,11 +81,11 @@ const EventsHero = () => {
 
             {/* Content */}
             <div
-                className="relative z-10 mt-12 flex flex-col justify-center w-full px-4 sm:px-6 md:px-8 lg:px-12 text-center"
+                className="relative z-10 mt-12 flex flex-col justify-center w-full px-4 text-center"
                 style={{ color: "#ffffff" }}
             >
                 <motion.h1
-                    className="text-4xl md:text-5xl lg:text-6xl font-rubik font-bold leading-tight"
+                    className="text-3xl text-[30px] sm:text-4xl md:text-5xl font-rubik font-bold leading-tight tracking-tight"
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.2 }}
@@ -94,15 +94,15 @@ const EventsHero = () => {
                 </motion.h1>
 
                 {heroData.sub_heading && (
-                    <motion.h3
-                        className="text-base md:text-lg font-markazi-text opacity-90 max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-3xl mx-auto leading-relaxed font-light tracking-wide mt-4"
+                    <motion.p
+                        className="text-lg sm:text-2xl font-markazi-text font-medium opacity-90 max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-3xl mx-auto leading-relaxed mt-4"
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.4 }}
                         style={{ color: "#ffffff" }}
                     >
                         {heroData.sub_heading}
-                    </motion.h3>
+                    </motion.p>
                 )}
             </div>
 

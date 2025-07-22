@@ -780,6 +780,10 @@ const EditCityPage = () => {
                         .delete()
                         .eq("city_id", cityId),
                     supabase
+                        .from("city_portfolio_items")
+                        .delete()
+                        .eq("city_id", cityId),
+                    supabase
                         .from("city_statistics")
                         .delete()
                         .eq("city_id", cityId),
