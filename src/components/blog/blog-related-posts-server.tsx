@@ -18,7 +18,7 @@ const BlogRelatedPostsServer = ({
     const router = useRouter();
 
     const handlePostClick = (slug: string) => {
-        router.push(`/blog/${slug}`);
+        router.push(`/${slug}`);
     };
 
     // Filter out current post if it somehow appears in related posts

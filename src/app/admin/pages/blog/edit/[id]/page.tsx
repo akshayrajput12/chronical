@@ -164,7 +164,7 @@ const EditBlogPostPage = () => {
         if (postId) {
             fetchData();
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [postId]);
 
     // Upload image to Supabase storage
@@ -317,7 +317,7 @@ const EditBlogPostPage = () => {
         } finally {
             revalidatePathAction("/blog");
             if (formData.slug) {
-                revalidatePathAction(`/blog/${formData.slug}`);
+                revalidatePathAction(`/${formData.slug}`);
             }
             setLoading(false);
         }
@@ -469,7 +469,7 @@ const EditBlogPostPage = () => {
                         </Label>
                         <TiptapEditor
                             content={formData.content}
-                            onChange={(content) =>
+                            onChange={content =>
                                 setFormData(prev => ({
                                     ...prev,
                                     content,

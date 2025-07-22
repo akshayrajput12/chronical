@@ -86,7 +86,7 @@ const BlogAdminPage = () => {
 
     useEffect(() => {
         fetchPosts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [statusFilter, searchTerm]);
 
     // Delete post
@@ -396,7 +396,7 @@ const BlogAdminPage = () => {
                                                 {post.status ===
                                                     "published" && (
                                                     <Link
-                                                        href={`/blog/${post.slug}`}
+                                                        href={`/${post.slug}`}
                                                         target="_blank"
                                                     >
                                                         <Button

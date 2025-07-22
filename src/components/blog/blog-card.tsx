@@ -131,7 +131,7 @@ const BlogCard = ({
 
                 {/* Link overlay for navigation */}
                 <Link
-                    href={`/blog/${post.slug}`}
+                    href={`/${post.slug}`}
                     className="absolute inset-0 z-10"
                     aria-label={`Read more about ${post.title}`}
                 />

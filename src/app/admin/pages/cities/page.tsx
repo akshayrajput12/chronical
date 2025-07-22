@@ -25,7 +25,9 @@ const CitiesAdminPage = () => {
     const [cities, setCities] = useState<City[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
-    const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">("all");
+    const [statusFilter, setStatusFilter] = useState<
+        "all" | "active" | "inactive"
+    >("all");
     const [selectedCities, setSelectedCities] = useState<string[]>([]);
 
     // Fetch cities
@@ -64,7 +66,11 @@ const CitiesAdminPage = () => {
 
     // Delete city and associated images
     const handleDelete = async (cityId: string) => {
-        if (!confirm("Are you sure you want to delete this city? This action cannot be undone.")) {
+        if (
+            !confirm(
+                "Are you sure you want to delete this city? This action cannot be undone.",
+            )
+        ) {
             return;
         }
 
@@ -121,13 +127,15 @@ const CitiesAdminPage = () => {
             for (const imageUrl of imageUrls) {
                 try {
                     // Extract file path from URL
-                    const urlParts = imageUrl.split('/');
+                    const urlParts = imageUrl.split("/");
                     const fileName = urlParts[urlParts.length - 1];
                     const folderName = urlParts[urlParts.length - 2];
-                    const filePath = folderName ? `${folderName}/${fileName}` : fileName;
+                    const filePath = folderName
+                        ? `${folderName}/${fileName}`
+                        : fileName;
 
                     await supabase.storage
-                        .from('city-images')
+                        .from("city-images")
                         .remove([filePath]);
                 } catch (imageError) {
                     console.error("Error deleting image:", imageError);
@@ -169,7 +177,11 @@ const CitiesAdminPage = () => {
     const handleBulkDelete = async () => {
         if (selectedCities.length === 0) return;
 
-        if (!confirm(`Are you sure you want to delete ${selectedCities.length} cities? This action cannot be undone.`)) {
+        if (
+            !confirm(
+                `Are you sure you want to delete ${selectedCities.length} cities? This action cannot be undone.`,
+            )
+        ) {
             return;
         }
 
@@ -195,7 +207,8 @@ const CitiesAdminPage = () => {
 
                 if (contentSections) {
                     contentSections.forEach(section => {
-                        if (section.image_url) imageUrls.push(section.image_url);
+                        if (section.image_url)
+                            imageUrls.push(section.image_url);
                     });
                 }
 
@@ -207,7 +220,8 @@ const CitiesAdminPage = () => {
 
                 if (services) {
                     services.forEach(service => {
-                        if (service.image_url) imageUrls.push(service.image_url);
+                        if (service.image_url)
+                            imageUrls.push(service.image_url);
                     });
                 }
             }
@@ -227,13 +241,15 @@ const CitiesAdminPage = () => {
             // Delete associated images from storage
             for (const imageUrl of imageUrls) {
                 try {
-                    const urlParts = imageUrl.split('/');
+                    const urlParts = imageUrl.split("/");
                     const fileName = urlParts[urlParts.length - 1];
                     const folderName = urlParts[urlParts.length - 2];
-                    const filePath = folderName ? `${folderName}/${fileName}` : fileName;
+                    const filePath = folderName
+                        ? `${folderName}/${fileName}`
+                        : fileName;
 
                     await supabase.storage
-                        .from('city-images')
+                        .from("city-images")
                         .remove([filePath]);
                 } catch (imageError) {
                     console.error("Error deleting image:", imageError);
@@ -250,10 +266,10 @@ const CitiesAdminPage = () => {
 
     // Handle checkbox selection
     const handleSelectCity = (cityId: string) => {
-        setSelectedCities(prev => 
-            prev.includes(cityId) 
+        setSelectedCities(prev =>
+            prev.includes(cityId)
                 ? prev.filter(id => id !== cityId)
-                : [...prev, cityId]
+                : [...prev, cityId],
         );
     };
 
@@ -297,13 +313,17 @@ const CitiesAdminPage = () => {
                     <Input
                         placeholder="Search cities..."
                         value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onChange={e => setSearchTerm(e.target.value)}
                         className="pl-10"
                     />
                 </div>
                 <select
                     value={statusFilter}
-                    onChange={(e) => setStatusFilter(e.target.value as "all" | "active" | "inactive")}
+                    onChange={e =>
+                        setStatusFilter(
+                            e.target.value as "all" | "active" | "inactive",
+                        )
+                    }
                     className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#a5cd39] focus:border-transparent"
                 >
                     <option value="all">All Cities</option>
@@ -340,7 +360,9 @@ const CitiesAdminPage = () => {
                     <div className="p-8 text-center">
                         <p className="text-gray-600">No cities found</p>
                         <Button
-                            onClick={() => router.push("/admin/pages/cities/create")}
+                            onClick={() =>
+                                router.push("/admin/pages/cities/create")
+                            }
                             className="mt-4 bg-[#a5cd39] hover:bg-[#8fb82e] text-white"
                         >
                             Create your first city
@@ -354,7 +376,10 @@ const CitiesAdminPage = () => {
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         <input
                                             type="checkbox"
-                                            checked={selectedCities.length === cities.length}
+                                            checked={
+                                                selectedCities.length ===
+                                                cities.length
+                                            }
                                             onChange={handleSelectAll}
                                             className="rounded border-gray-300 text-[#a5cd39] focus:ring-[#a5cd39]"
                                         />
@@ -380,13 +405,20 @@ const CitiesAdminPage = () => {
                                 </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
-                                {cities.map((city) => (
-                                    <tr key={city.id} className="hover:bg-gray-50">
+                                {cities.map(city => (
+                                    <tr
+                                        key={city.id}
+                                        className="hover:bg-gray-50"
+                                    >
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <input
                                                 type="checkbox"
-                                                checked={selectedCities.includes(city.id)}
-                                                onChange={() => handleSelectCity(city.id)}
+                                                checked={selectedCities.includes(
+                                                    city.id,
+                                                )}
+                                                onChange={() =>
+                                                    handleSelectCity(city.id)
+                                                }
                                                 className="rounded border-gray-300 text-[#a5cd39] focus:ring-[#a5cd39]"
                                             />
                                         </td>
@@ -396,7 +428,9 @@ const CitiesAdminPage = () => {
                                                     {city.hero_image_url ? (
                                                         <img
                                                             className="h-10 w-10 rounded-full object-cover"
-                                                            src={city.hero_image_url}
+                                                            src={
+                                                                city.hero_image_url
+                                                            }
                                                             alt={city.name}
                                                         />
                                                     ) : (
@@ -425,46 +459,71 @@ const CitiesAdminPage = () => {
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <button
-                                                onClick={() => toggleCityStatus(city.id, city.is_active)}
+                                                onClick={() =>
+                                                    toggleCityStatus(
+                                                        city.id,
+                                                        city.is_active,
+                                                    )
+                                                }
                                                 className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                                                     city.is_active
                                                         ? "bg-green-100 text-green-800"
                                                         : "bg-red-100 text-red-800"
                                                 }`}
                                             >
-                                                {city.is_active ? "Active" : "Inactive"}
+                                                {city.is_active
+                                                    ? "Active"
+                                                    : "Inactive"}
                                             </button>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             <div className="flex items-center space-x-4">
                                                 <div className="flex items-center">
                                                     <Users className="h-4 w-4 mr-1" />
-                                                    {city.projects_completed || 0}
+                                                    {city.projects_completed ||
+                                                        0}
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             <div className="flex items-center">
                                                 <Calendar className="h-4 w-4 mr-2" />
-                                                {city.created_at ? new Date(city.created_at).toLocaleDateString() : "N/A"}
+                                                {city.created_at
+                                                    ? new Date(
+                                                          city.created_at,
+                                                      ).toLocaleDateString()
+                                                    : "N/A"}
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <div className="flex items-center space-x-2">
-                                                <Link href={`/cities/${city.slug}`} target="_blank">
-                                                    <Button variant="ghost" size="sm">
+                                                <Link
+                                                    href={`/exhibition-stand-builder-${city.slug}`}
+                                                    target="_blank"
+                                                >
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                    >
                                                         <Eye className="w-4 h-4" />
                                                     </Button>
                                                 </Link>
-                                                <Link href={`/admin/pages/cities/edit/${city.id}`}>
-                                                    <Button variant="ghost" size="sm">
+                                                <Link
+                                                    href={`/admin/pages/cities/edit/${city.id}`}
+                                                >
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                    >
                                                         <Edit className="w-4 h-4" />
                                                     </Button>
                                                 </Link>
                                                 <Button
                                                     variant="ghost"
                                                     size="sm"
-                                                    onClick={() => handleDelete(city.id)}
+                                                    onClick={() =>
+                                                        handleDelete(city.id)
+                                                    }
                                                     className="text-red-600 hover:text-red-900"
                                                 >
                                                     <Trash2 className="w-4 h-4" />

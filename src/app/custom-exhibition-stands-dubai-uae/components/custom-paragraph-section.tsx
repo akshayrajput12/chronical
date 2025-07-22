@@ -70,7 +70,6 @@ const CustomParagraphSection = () => {
                             <BlogContent
                                 content={data?.paragraph_content ?? ""}
                             />
-                            ;
                         </div>
                     </div>
                 </div>

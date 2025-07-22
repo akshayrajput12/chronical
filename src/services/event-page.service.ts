@@ -144,7 +144,7 @@ export async function getEventsPageData(
 }
 
 /**
- * Fetch data for event detail page (/top-trade-shows-in-uae-saudi-arabia-middle-east/[slug])
+ * Fetch data for event detail page (/[slug])
  */
 export async function getEventDetailPageData(
     slug: string,

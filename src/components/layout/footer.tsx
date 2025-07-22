@@ -13,7 +13,8 @@ const Footer = () => {
     const { cities, isLoading } = useCities({ limit: 10, is_active: true });
 
     // State for company profile document
-    const [companyProfile, setCompanyProfile] = useState<CompanyProfileDocument | null>(null);
+    const [companyProfile, setCompanyProfile] =
+        useState<CompanyProfileDocument | null>(null);
     const [profileLoading, setProfileLoading] = useState(false);
     const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 
@@ -22,7 +23,9 @@ const Footer = () => {
         const fetchCompanyProfile = async () => {
             try {
                 setProfileLoading(true);
-                const response = await fetch('/api/company-profile?current=true');
+                const response = await fetch(
+                    "/api/company-profile?current=true",
+                );
 
                 // Handle 404 response (no current document yet)
                 if (response.status === 404) {
@@ -41,7 +44,7 @@ const Footer = () => {
                     setDownloadUrl(null);
                 }
             } catch (error) {
-                console.error('Error fetching company profile:', error);
+                console.error("Error fetching company profile:", error);
                 setCompanyProfile(null);
                 setDownloadUrl(null);
             } finally {
@@ -56,9 +59,10 @@ const Footer = () => {
     const handleDownload = () => {
         if (downloadUrl && companyProfile) {
             // Create a temporary link element to trigger download
-            const link = document.createElement('a');
+            const link = document.createElement("a");
             link.href = downloadUrl;
-            link.download = companyProfile.original_filename || 'company-profile.pdf';
+            link.download =
+                companyProfile.original_filename || "company-profile.pdf";
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -119,7 +123,7 @@ const Footer = () => {
                                         {cities.slice(0, 6).map(city => (
                                             <FooterLink
                                                 key={city.id}
-                                                href={`/experience-middle-east/${city.slug}`}
+                                                href={`/exhibition-stand-builder-${city.slug}`}
                                                 label={city.name}
                                             />
                                         ))}
@@ -218,7 +222,11 @@ const Footer = () => {
                         <Button
                             variant="outline"
                             onClick={handleDownload}
-                            disabled={profileLoading || !companyProfile || !downloadUrl}
+                            disabled={
+                                profileLoading ||
+                                !companyProfile ||
+                                !downloadUrl
+                            }
                             className="border-white bg-white text-[#a5cd39] hover:bg-transparent hover:text-white hover:border-white w-full h-10 text-sm transition-all duration-300 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {profileLoading ? (

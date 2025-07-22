@@ -141,9 +141,7 @@ const EventsGalleryServer = ({
     };
 
     const handleEventClick = (eventSlug: string) => {
-        router.push(
-            `/top-trade-shows-in-uae-saudi-arabia-middle-east/${eventSlug}`,
-        );
+        router.push(`/${eventSlug}`);
     };
 
     // Empty state

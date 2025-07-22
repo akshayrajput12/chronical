@@ -53,7 +53,7 @@ const Header = () => {
             return { type: "right", key: "blog" };
         if (
             pathname === "/experience-middle-east" ||
-            pathname.startsWith("/experience-middle-east/")
+            pathname.startsWith("/experience-middle-east")
         )
             return { type: "right", key: "cities" };
         if (pathname === "/contact-us")

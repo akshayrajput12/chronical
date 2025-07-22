@@ -71,7 +71,6 @@ const DoubleDeckerParagraphSection = () => {
                             <BlogContent
                                 content={data?.paragraph_content ?? ""}
                             />
-                            ;
                         </div>
                     </div>
                 </div>

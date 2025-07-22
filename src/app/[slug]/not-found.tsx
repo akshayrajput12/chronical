@@ -5,9 +5,11 @@ export default function NotFound() {
         <div className="min-h-screen bg-white mt-16 md:mt-20 lg:mt-24 flex items-center justify-center">
             <div className="text-center">
                 <h1 className="text-6xl font-bold text-gray-900 mb-4">404</h1>
-                <h2 className="text-2xl font-semibold text-gray-700 mb-4">Blog Post Not Found</h2>
+                <h2 className="text-2xl font-semibold text-gray-700 mb-4">
+                    Post Not Found
+                </h2>
                 <p className="text-gray-600 mb-8">
-                    The blog post you're looking for doesn't exist or has been moved.
+                    The post you're looking for doesn't exist or has been moved.
                 </p>
                 <div className="space-x-4">
                     <Link

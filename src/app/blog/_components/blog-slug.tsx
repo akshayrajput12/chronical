@@ -1,52 +1,21 @@
 import React from "react";
-import { notFound } from "next/navigation";
 import Head from "next/head";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import BlogDetailHero from "@/components/blog/blog-detail-hero";
 import BlogDetailContent from "@/components/blog/blog-detail-content";
 import BlogRelatedPostsServer from "@/components/blog/blog-related-posts-server";
-import { BlogPostWithDetails } from "@/types/blog";
 import { EventsForm } from "@/app/top-trade-shows-in-uae-saudi-arabia-middle-east/components/events-form";
 import {
-    getBlogDetailPageData,
     incrementBlogPostViews,
-    getAllBlogSlugs,
+    BlogDetailPageData,
 } from "@/services/blog-page.service";
 
-interface BlogDetailPageProps {
-    params: Promise<{ slug: string }>;
-}
-
-// Enable ISR - revalidate every 1 hour (3600 seconds) for blog posts
-export const revalidate = 3600;
-
-// Generate static params for all blog posts
-export async function generateStaticParams() {
-    try {
-        const slugs = await getAllBlogSlugs();
-        return slugs.map(slug => ({
-            slug,
-        }));
-    } catch (error) {
-        console.error("Error generating static params for blog posts:", error);
-        return [];
-    }
-}
-
-const BlogDetailPage = async ({ params }: BlogDetailPageProps) => {
-    // Await params for Next.js 15 compatibility
-    const resolvedParams = await params;
-    const { slug } = resolvedParams;
-
-    // Fetch blog post data server-side
-    const blogDetailData = await getBlogDetailPageData(slug);
-
-    // If no blog post found, trigger 404
-    if (!blogDetailData || !blogDetailData.post) {
-        notFound();
-    }
-
+const BlogDetailPage = async ({
+    blogDetailData,
+}: {
+    blogDetailData: BlogDetailPageData;
+}) => {
     const { post: blogPost, relatedPosts } = blogDetailData;
 
     // Increment view count server-side (fire and forget)

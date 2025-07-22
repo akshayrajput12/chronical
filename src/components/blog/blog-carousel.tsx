@@ -69,7 +69,7 @@ const BlogCarousel = ({ posts }: BlogCarouselProps) => {
     };
 
     const handlePostClick = (slug: string) => {
-        router.push(`/blog/${slug}`);
+        router.push(`/${slug}`);
     };
 
     if (posts.length === 0) {

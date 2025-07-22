@@ -350,7 +350,7 @@ const EditEventPage = () => {
         if (activeTab === "gallery" && eventId) {
             loadGalleryImages();
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeTab, eventId]);
 
     // Generate slug from title
@@ -773,9 +773,11 @@ const EditEventPage = () => {
                     : "Failed to update event";
             alert(`Update failed: ${errorMessage}`);
         } finally {
-            revalidatePathAction("/top-trade-shows-in-uae-saudi-arabia-middle-east");
+            revalidatePathAction(
+                "/top-trade-shows-in-uae-saudi-arabia-middle-east",
+            );
             if (formData.slug) {
-                revalidatePathAction(`/top-trade-shows-in-uae-saudi-arabia-middle-east/${formData.slug}`);
+                revalidatePathAction(`/${formData.slug}`);
             }
             setSaving(false);
         }

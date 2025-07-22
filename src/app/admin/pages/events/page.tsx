@@ -438,7 +438,7 @@ const EventsAdminPage = () => {
                                                 {event.status ===
                                                     "published" && (
                                                     <Link
-                                                        href={`/top-trade-shows-in-uae-saudi-arabia-middle-east/${event.slug}`}
+                                                        href={`/${event.slug}`}
                                                     >
                                                         <Button
                                                             variant="ghost"
