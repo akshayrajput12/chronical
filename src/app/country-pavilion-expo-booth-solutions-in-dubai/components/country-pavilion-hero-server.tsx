@@ -16,7 +16,7 @@ const CountryPavilionHeroServer = ({ heroData }: CountryPavilionHeroServerProps)
     }
 
     return (
-        <section className="relative 2xl:h-[60vh] h-[75vh] overflow-hidden">
+        <section className="hero relative 2xl:h-[60vh] h-[75vh] overflow-hidden">
             {/* Background Image */}
             <div className="absolute inset-0">
                 <Image
@@ -40,12 +40,12 @@ const CountryPavilionHeroServer = ({ heroData }: CountryPavilionHeroServerProps)
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8 }}
                         >
-                            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-wide">
+                            <h1 className="text-3xl sm:text-4xl md:text-5xl font-rubik font-bold mb-4 sm:mb-6 leading-tight tracking-tight">
                                 {heroData.title}
                             </h1>
-                            <h3 className="text-sm sm:text-base lg:text-lg max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-3xl mx-auto leading-relaxed font-markazi-text tracking-wide">
+                            <p className="text-lg sm:text-2xl font-markazi-text font-medium max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-3xl mx-auto leading-relaxed">
                                 {heroData.subtitle}
-                            </h3>
+                            </p>
                         </motion.div>
                     </div>
                 </div>

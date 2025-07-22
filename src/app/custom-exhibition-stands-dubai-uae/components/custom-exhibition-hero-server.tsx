@@ -16,7 +16,7 @@ const CustomExhibitionHeroServer = ({ heroData }: CustomExhibitionHeroServerProp
     }
 
     return (
-        <section className="relative 2xl:h-[60vh] h-[75vh] overflow-hidden">
+        <section className="hero relative 2xl:h-[60vh] h-[75vh] overflow-hidden">
             {/* Background Image */}
             <div className="absolute inset-0">
                 <Image
@@ -43,10 +43,10 @@ const CustomExhibitionHeroServer = ({ heroData }: CustomExhibitionHeroServerProp
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8 }}
                         >
-                            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold mb-4 sm:mb-6 tracking-wide leading-tight">
+                            <h1 className="text-3xl sm:text-4xl md:text-5xl font-rubik font-bold mb-4 sm:mb-6 leading-tight tracking-tight">
                                 {heroData?.title}
                             </h1>
-                            <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-light opacity-90 max-w-4xl mx-auto leading-relaxed">
+                            <p className="text-lg sm:text-2xl font-markazi-text font-medium opacity-90 max-w-4xl mx-auto leading-relaxed">
                                 {heroData?.subtitle}
                             </p>
                         </motion.div>

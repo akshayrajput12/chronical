@@ -66,7 +66,7 @@ const CityDetailHero = ({ city }: CityDetailHeroProps) => {
                         <div className="max-w-4xl mx-auto">
                             {/* Dynamic Main Heading from Admin - Reduced font size */}
                             <motion.h1
-                                className="text-3xl sm:text-4xl md:text-5xl font-rubik font-bold mb-4 sm:mb-6 leading-tight"
+                                className="text-2xl sm:text-3xl md:text-4xl font-rubik font-bold text-white mb-4 sm:mb-6 leading-tight tracking-wide"
                                 initial={{ opacity: 0, y: 30 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8 }}
