@@ -122,6 +122,7 @@ const AdminSidebar = ({
         expoPavilionStand: pathname.includes(
             "/admin/pages/expo-pavilion-stand",
         ),
+        seo: pathname.includes("/admin/pages/seo"),
     });
 
     const toggleSection = (section: string) => {
@@ -628,21 +629,24 @@ const AdminSidebar = ({
                                         href="/admin/pages/events/create"
                                         label="Create Event"
                                         isActive={
-                                            pathname === "/admin/pages/events/create"
+                                            pathname ===
+                                            "/admin/pages/events/create"
                                         }
                                     />
                                     <SubNavItem
                                         href="/admin/pages/events/categories"
                                         label="Categories"
                                         isActive={
-                                            pathname === "/admin/pages/events/categories"
+                                            pathname ===
+                                            "/admin/pages/events/categories"
                                         }
                                     />
                                     <SubNavItem
                                         href="/admin/pages/events/hero"
                                         label="Hero Section"
                                         isActive={
-                                            pathname === "/admin/pages/events/hero"
+                                            pathname ===
+                                            "/admin/pages/events/hero"
                                         }
                                     />
                                 </div>
@@ -913,6 +917,129 @@ const AdminSidebar = ({
                     <p className="px-4 text-xs font-medium text-sidebar-foreground/60 uppercase tracking-wider">
                         Site Settings
                     </p>
+                </div>
+
+                {/* Seo Data Section */}
+                <div>
+                    <NavItem
+                        href="/admin/pages/seo"
+                        label="Seo"
+                        icon={<Layout size={18} />}
+                        isActive={pathname.includes("/admin/pages/seo")}
+                        hasChildren={true}
+                        isOpen={openSections.seo}
+                        onClick={() => toggleSection("seo")}
+                    />
+
+                    <AnimatePresence>
+                        {openSections.seo && (
+                            <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: "auto", opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.2 }}
+                                className="overflow-hidden"
+                            >
+                                <div className="py-1 space-y-1">
+                                    <SubNavItem
+                                        href="/admin/pages/seo/home"
+                                        label="Home Page"
+                                        isActive={
+                                            pathname === "/admin/pages/seo/hero"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/seo/portfolio"
+                                        label="Portfolio Page"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/seo/portfolio"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/seo/about-us"
+                                        label="About Us Page"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/seo/abuot-us"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/seo/contact-us"
+                                        label="Contact Us Page"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/seo/contact-us"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/seo/cities"
+                                        label="Cities Page"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/seo/cities"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/seo/blog"
+                                        label="Blog page"
+                                        isActive={
+                                            pathname === "/admin/pages/seo/blog"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/seo/events"
+                                        label="Events Page"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/seo/events"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/seo/kiosk"
+                                        label="Kiosk Page"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/seo/kiosk"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/seo/conference"
+                                        label="Conference Page"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/seo/conference"
+                                        }
+                                    />
+
+                                    <SubNavItem
+                                        href="/admin/pages/seo/custom-stands"
+                                        label="Custom Stands Page"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/seo/custom-stands"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/seo/expo-pavilion-stands"
+                                        label="Expo Pavilion Page"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/seo/expo-pavilion-stands"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/seo/double-decker-stands"
+                                        label="Double Decker Page"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/seo/double-decker-stands"
+                                        }
+                                    />
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                 </div>
 
                 <NavItem

@@ -5,6 +5,9 @@ import BlogSubscription from "@/components/blog/blog-subscription";
 import { BlogPostSummary } from "@/types/blog";
 import BoothRequirements from "../portfolio/components/booth-requirements";
 import { getBlogPageData } from "@/services/blog-page.service";
+import { createClient } from "@/lib/supabase/client";
+import { PageName } from "../admin/constants/pages";
+import { Metadata } from "next";
 
 // Enable ISR - revalidate every 30 minutes (1800 seconds) for fresh blog content
 export const revalidate = 1800;
@@ -18,6 +21,65 @@ interface BlogPageProps {
     }>;
 }
 
+export async function generateMetadata(): Promise<Metadata> {
+    try {
+        const supabase = createClient();
+
+        const { data, error } = await supabase
+            .from("static_page_seo_data")
+            .select("*")
+            .eq("page_name", PageName.BLOGS);
+        if (error) {
+            console.error("Error fetching seo data:", error);
+            return {
+                title: "Blog | Chronicle Exhibits - Exhibition Stand Design Dubai",
+                description:
+                    "Chronicle Exhibits is a leading provider of exhibition stand design and construction services in Dubai. Our team of experts has years of experience in the industry and can help you create a stunning exhibition stand that will leave a lasting impression on your visitors.",
+                keywords:
+                    "blog, chronicle exhibits, exhibition stand design, trade show services, exhibition company dubai, dubai exhibition stands, dubai trade shows, dubai exhibitions, dubai trade show design, dubai trade show services",
+                openGraph: {
+                    title: "Blog | Chronicle Exhibits",
+                    description:
+                        "Chronicle Exhibits is a leading provider of exhibition stand design and construction services in Dubai.",
+                    type: "website",
+                },
+            };
+        }
+        return {
+            title:
+                data[0].meta_title ||
+                "Blog | Chronicle Exhibits - Exhibition Stand Design Dubai",
+            description:
+                data[0].meta_description ||
+                "Chronicle Exhibits is a leading provider of exhibition stand design and construction services in Dubai. Our team of experts has years of experience in the industry and can help you create a stunning exhibition stand that will leave a lasting impression on your visitors.",
+            keywords:
+                data[0].meta_keywords ||
+                "blog, chronicle exhibits, exhibition stand design, trade show services, exhibition company dubai, dubai exhibition stands, dubai trade shows, dubai exhibitions, dubai trade show design, dubai trade show services",
+            openGraph: {
+                title: data[0].meta_title || "Blog | Chronicle Exhibits",
+                description:
+                    data[0].meta_description ||
+                    "Chronicle Exhibits is a leading provider of exhibition stand design and construction services in Dubai.",
+                type: "website",
+            },
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            title: "Blog | Chronicle Exhibits - Exhibition Stand Design Dubai",
+            description:
+                "Chronicle Exhibits is a leading provider of exhibition stand design and construction services in Dubai. Our team of experts has years of experience in the industry and can help you create a stunning exhibition stand that will leave a lasting impression on your visitors.",
+            keywords:
+                "blog, chronicle exhibits, exhibition stand design, trade show services, exhibition company dubai, dubai exhibition stands, dubai trade shows, dubai exhibitions, dubai trade show design, dubai trade show services",
+            openGraph: {
+                title: "Blog | Chronicle Exhibits",
+                description:
+                    "Chronicle Exhibits is a leading provider of exhibition stand design and construction services in Dubai.",
+                type: "website",
+            },
+        };
+    }
+}
 const BlogPage = async ({ searchParams }: BlogPageProps) => {
     // Await searchParams for Next.js 15 compatibility
     const resolvedSearchParams = await searchParams;

@@ -18,6 +18,7 @@ interface CityFormData {
     description: string;
     meta_title: string;
     meta_description: string;
+    meta_keywords: string;
     projects_completed: number;
     years_of_operation: number;
     clients_satisfied: number;
@@ -106,6 +107,7 @@ const EditCityPage = () => {
         description: "",
         meta_title: "",
         meta_description: "",
+        meta_keywords: "",
         projects_completed: 0,
         years_of_operation: 0,
         clients_satisfied: 0,
@@ -156,6 +158,7 @@ const EditCityPage = () => {
                     description: city.description || "",
                     meta_title: city.meta_title || "",
                     meta_description: city.meta_description || "",
+                    meta_keywords: city.meta_keywords || "",
                     projects_completed: city.projects_completed || 0,
                     years_of_operation: city.years_of_operation || 0,
                     clients_satisfied: city.clients_satisfied || 0,
@@ -744,6 +747,8 @@ const EditCityPage = () => {
                 updateData.meta_title = cityData.meta_title.trim();
             if (cityData.meta_description.trim())
                 updateData.meta_description = cityData.meta_description.trim();
+            if (cityData.meta_keywords.trim())
+                updateData.meta_keywords = cityData.meta_keywords.trim();
             if (cityData.projects_completed > 0)
                 updateData.projects_completed = cityData.projects_completed;
             if (cityData.years_of_operation > 0)
@@ -991,9 +996,7 @@ const EditCityPage = () => {
                 revalidatePathAction(
                     `/experience-middle-east/${cityData.slug}`,
                 );
-                revalidatePathAction(
-                    `/exhibition-stand-builder-${cityData.slug}`,
-                );
+                revalidatePathAction(`/exhibition-stand-${cityData.slug}`);
             }
             setSaving(false);
         }
@@ -1246,6 +1249,20 @@ const BasicInfoTab = ({
                     placeholder="SEO description"
                 />
             </div>
+        </div>
+        <div>
+            <Label htmlFor="meta_keywords">Meta Keywords</Label>
+            <Input
+                id="meta_keywords"
+                value={cityData.meta_keywords || ""}
+                onChange={e =>
+                    setCityData(prev => ({
+                        ...prev,
+                        meta_keywords: e.target.value,
+                    }))
+                }
+                placeholder="exhibition, stands, dubai, trade show"
+            />
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">

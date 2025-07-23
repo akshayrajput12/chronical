@@ -51,7 +51,7 @@ const CityCard = ({ city, index }: CityCardProps) => {
 
             {/* View More Button */}
             <div className="relative z-10">
-                <Link href={`/exhibition-stand-builder-${city.slug}`}>
+                <Link href={`/exhibition-stand-${city.slug}`}>
                     <Button className="bg-[#a5cd39] hover:bg-[#8fb82e] text-white px-8 py-3 text-sm font-semibold rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg border-0 min-w-[120px] tracking-wide">
                         View More
                     </Button>

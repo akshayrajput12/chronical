@@ -679,9 +679,7 @@ const CreateCityPage = () => {
         } finally {
             revalidatePathAction("/experience-middle-east");
             if (cityData.slug) {
-                revalidatePathAction(
-                    `/exhibition-stand-builder-${cityData.slug}`,
-                );
+                revalidatePathAction(`/exhibition-stand-${cityData.slug}`);
             }
             setLoading(false);
         }

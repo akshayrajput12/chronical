@@ -123,7 +123,7 @@ const Footer = () => {
                                         {cities.slice(0, 6).map(city => (
                                             <FooterLink
                                                 key={city.id}
-                                                href={`/exhibition-stand-builder-${city.slug}`}
+                                                href={`/exhibition-stand-${city.slug}`}
                                                 label={city.name}
                                             />
                                         ))}

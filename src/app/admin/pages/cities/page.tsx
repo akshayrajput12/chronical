@@ -498,7 +498,7 @@ const CitiesAdminPage = () => {
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <div className="flex items-center space-x-2">
                                                 <Link
-                                                    href={`/exhibition-stand-builder-${city.slug}`}
+                                                    href={`/exhibition-stand-${city.slug}`}
                                                     target="_blank"
                                                 >
                                                     <Button

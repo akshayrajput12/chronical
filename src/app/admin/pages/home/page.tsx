@@ -14,6 +14,7 @@ import {
     Briefcase,
     Settings,
     Image as ImageIcon,
+    Globe,
 } from "lucide-react";
 
 const HomePage = () => {

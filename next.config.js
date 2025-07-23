@@ -116,7 +116,7 @@ const nextConfig = {
     rewrites: async () => {
         return [
             {
-                source: "/exhibition-stand-builder-:city",
+                source: "/exhibition-stand-:city",
                 destination: "/experience-middle-east/:city",
             },
         ];
