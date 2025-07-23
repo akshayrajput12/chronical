@@ -21,6 +21,7 @@ const EventsGalleryServer = ({
     hasMore,
 }: EventsGalleryServerProps) => {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [cardsToShow, setCardsToShow] = useState(3);
     const router = useRouter();
     const [showAll, setShowAll] = useState(false);
     const carouselRef = useRef<HTMLDivElement>(null);
@@ -120,8 +121,28 @@ const EventsGalleryServer = ({
         setCurrentIndex(0);
     }, [allEvents.length]);
 
-    const carouselEvents = allEvents; // always use all events for carousel
-    const cardsToShow = 3;
+    // Handle responsive cards display
+    useEffect(() => {
+        const handleResize = () => {
+            const width = window.innerWidth;
+            if (width < 640) {
+                // Mobile - show 1 card
+                setCardsToShow(1);
+            } else if (width < 1024) {
+                // Tablet - show 2 cards
+                setCardsToShow(2);
+            } else {
+                // Desktop - show 3 cards
+                setCardsToShow(3);
+            }
+        };
+
+        handleResize();
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
+    const carouselEvents = allEvents;
     const carouselMaxIndex = Math.max(0, carouselEvents.length - cardsToShow);
 
     const nextSlide = () => {
