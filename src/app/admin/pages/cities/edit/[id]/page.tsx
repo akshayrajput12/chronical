@@ -13,7 +13,6 @@ import { revalidatePathAction } from "@/services/revalidate.action";
 interface CityFormData {
     name: string;
     slug: string;
-    country: string;
     country_code: string;
     description: string;
     meta_title: string;
@@ -102,7 +101,6 @@ const EditCityPage = () => {
     const [cityData, setCityData] = useState<CityFormData>({
         name: "",
         slug: "",
-        country: "",
         country_code: "",
         description: "",
         meta_title: "",
@@ -153,7 +151,6 @@ const EditCityPage = () => {
                 setCityData({
                     name: city.name || "",
                     slug: city.slug || "",
-                    country: city.country || "",
                     country_code: city.country_code || "",
                     description: city.description || "",
                     meta_title: city.meta_title || "",
@@ -737,8 +734,6 @@ const EditCityPage = () => {
 
             // Only include fields that have values
             if (cityData.slug.trim()) updateData.slug = cityData.slug.trim();
-            if (cityData.country.trim())
-                updateData.country = cityData.country.trim();
             if (cityData.country_code.trim())
                 updateData.country_code = cityData.country_code.trim();
             if (cityData.description.trim())
@@ -1174,20 +1169,6 @@ const BasicInfoTab = ({
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-                <Label htmlFor="country">Country</Label>
-                <Input
-                    id="country"
-                    value={cityData.country}
-                    onChange={e =>
-                        setCityData(prev => ({
-                            ...prev,
-                            country: e.target.value,
-                        }))
-                    }
-                    placeholder="United Arab Emirates"
-                />
-            </div>
             <div>
                 <Label htmlFor="country_code">Country Code</Label>
                 <Input

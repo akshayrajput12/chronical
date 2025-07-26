@@ -357,9 +357,10 @@ const CreateEventPage = () => {
 
             const eventData = {
                 ...formData,
+                description: detailedDescription, // Use existing description column for rich content
                 published_at: publish
                     ? new Date().toISOString()
-                    : formData.published_at,
+                    : null, // Set to null for drafts
             };
 
             const response = await fetch("/api/events", {

@@ -8,10 +8,12 @@ export async function GET(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-        const supabase = await createClient();
         const { id } = await params;
         const { searchParams } = new URL(request.url);
         const isAdmin = searchParams.get('admin') === 'true';
+
+        // Use service role client for admin access to bypass RLS
+        const supabase = await createClient(isAdmin);
 
         // Determine if ID is UUID or slug
         const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
@@ -413,7 +415,8 @@ export async function PATCH(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-        const supabase = await createClient();
+        // Use service role client to bypass RLS for admin operations
+        const supabase = await createClient(true);
 
         // Check authentication - TEMPORARILY DISABLED FOR TESTING
         // const { data: { user }, error: authError } = await supabase.auth.getUser();

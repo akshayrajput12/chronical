@@ -9,7 +9,6 @@ import {
     Upload,
     X,
     Calendar,
-    Eye,
     Settings,
     Image as ImageIcon,
     FileText,
@@ -118,6 +117,8 @@ const EditEventPage = () => {
             alreadyInDatabase?: boolean;
         }>
     >([]);
+    const [isDraft, setIsDraft] = useState(false);
+    const [detailedDescription, setDetailedDescription] = useState("");
 
     // Deferred image uploads (like blog admin)
     const [featuredImage, setFeaturedImage] = useState<DeferredImageData>(
@@ -294,6 +295,12 @@ const EditEventPage = () => {
                         published_at: event.published_at || "",
                     });
 
+                    // Determine if this is a draft event
+                    setIsDraft(!event.published_at);
+
+                    // Initialize detailed description from existing description field
+                    setDetailedDescription(event.description || "");
+
                     // Initialize deferred image states with existing URLs
                     if (event.featured_image_url) {
                         setFeaturedImage({
@@ -443,78 +450,7 @@ const EditEventPage = () => {
         }
     };
 
-    // Handle image upload
-    const handleImageUpload = async (field: string, file: File) => {
-        setUploadingImage(field);
-        try {
-            // Validate file
-            if (!file) {
-                throw new Error("No file selected");
-            }
 
-            // Check file size (50MB limit)
-            const maxSize = 50 * 1024 * 1024;
-            if (file.size > maxSize) {
-                throw new Error("File size too large. Maximum size is 50MB.");
-            }
-
-            // Check file type
-            const allowedTypes = [
-                "image/jpeg",
-                "image/png",
-                "image/webp",
-                "image/gif",
-            ];
-            if (!allowedTypes.includes(file.type)) {
-                throw new Error(
-                    "Invalid file type. Only JPEG, PNG, WebP, and GIF are allowed.",
-                );
-            }
-
-            const formData = new FormData();
-            formData.append("file", file);
-            formData.append("category", "events");
-            formData.append("bucket", "event-images");
-            if (eventId) {
-                formData.append("event_id", eventId);
-            }
-
-            console.log("Sending upload request...");
-            const response = await fetch("/api/images", {
-                method: "POST",
-                body: formData,
-            });
-
-            console.log("Upload response status:", response.status);
-            const data = await response.json();
-            console.log("Upload response data:", data);
-
-            if (response.ok && data.success && data.image) {
-                handleInputChange(
-                    field as keyof EventInput,
-                    data.image.file_path,
-                );
-                console.log(
-                    "Image uploaded successfully:",
-                    data.image.file_path,
-                );
-            } else {
-                throw new Error(
-                    data.error ||
-                        `Upload failed with status ${response.status}`,
-                );
-            }
-        } catch (error) {
-            console.error("Upload error:", error);
-            const errorMessage =
-                error instanceof Error
-                    ? error.message
-                    : "Failed to upload image";
-            alert(`Image upload failed: ${errorMessage}`);
-        } finally {
-            setUploadingImage(null);
-        }
-    };
 
     // Handle gallery image upload
     const handleGalleryImageUpload = async (file: File) => {
@@ -640,7 +576,7 @@ const EditEventPage = () => {
     const handleSave = async (publish: boolean = false) => {
         setSaving(true);
         try {
-            console.log("Starting event update...", { eventId, publish });
+            console.log("Starting event update...", { eventId });
 
             // Validate required fields
             if (!formData.title?.trim()) {
@@ -693,7 +629,7 @@ const EditEventPage = () => {
                         : null,
 
                 // Clean optional text fields
-                description: formData.description?.trim() || null,
+                description: detailedDescription?.trim() || null, // Use existing description column for rich content
                 short_description: formData.short_description?.trim() || null,
                 organizer: formData.organizer?.trim() || null,
                 organized_by: formData.organized_by?.trim() || null,
@@ -716,12 +652,12 @@ const EditEventPage = () => {
                 meta_description: formData.meta_description?.trim() || null,
                 meta_keywords: formData.meta_keywords?.trim() || null,
 
-                // Handle dates
-                start_date: formData.start_date || null,
-                end_date: formData.end_date || null,
+                // Handle dates - convert empty strings to null
+                start_date: formData.start_date?.trim() !== "" ? formData.start_date : null,
+                end_date: formData.end_date?.trim() !== "" ? formData.end_date : null,
                 published_at: publish
                     ? new Date().toISOString()
-                    : formData.published_at,
+                    : (formData.published_at?.trim() !== "" ? formData.published_at : null),
 
                 // Ensure boolean fields are proper booleans
                 is_active: Boolean(formData.is_active),
@@ -753,11 +689,7 @@ const EditEventPage = () => {
                     await saveGalleryImages();
                 }
 
-                alert(
-                    publish
-                        ? "Event published successfully!"
-                        : "Event updated successfully!",
-                );
+                alert(publish ? "Event published successfully!" : "Event updated successfully!");
                 router.push("/admin/pages/events");
             } else {
                 throw new Error(
@@ -923,39 +855,62 @@ const EditEventPage = () => {
                     </Link>
                     <div>
                         <h1 className="text-3xl font-bold text-gray-900">
-                            Edit Event
+                            Edit Event {isDraft && <span className="text-orange-600 text-lg">(Draft)</span>}
                         </h1>
                         <p className="text-gray-600 mt-1">
-                            Update event information and settings
+                            {isDraft
+                                ? "Update draft event information or publish to make it live"
+                                : "Update event information and settings"
+                            }
                         </p>
                     </div>
                 </div>
 
                 <div className="flex items-center space-x-2">
-                    <Button
-                        variant="outline"
-                        onClick={() => handleSave(false)}
-                        disabled={saving}
-                    >
-                        {saving ? (
-                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-900 mr-2"></div>
-                        ) : (
-                            <Save className="w-4 h-4 mr-2" />
-                        )}
-                        Save Draft
-                    </Button>
-                    <Button
-                        onClick={() => handleSave(true)}
-                        disabled={saving}
-                        className="bg-[#a5cd39] hover:bg-[#8fb82e] text-white"
-                    >
-                        {saving ? (
-                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                        ) : (
-                            <Eye className="w-4 h-4 mr-2" />
-                        )}
-                        Update Event
-                    </Button>
+                    {isDraft ? (
+                        <>
+                            {/* Draft events: Show both Update and Publish buttons */}
+                            <Button
+                                onClick={() => handleSave(false)}
+                                disabled={saving}
+                                variant="outline"
+                                className="border-gray-300 text-gray-700 hover:bg-gray-50"
+                            >
+                                {saving ? (
+                                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-600 mr-2"></div>
+                                ) : (
+                                    <Save className="w-4 h-4 mr-2" />
+                                )}
+                                Update Draft
+                            </Button>
+                            <Button
+                                onClick={() => handleSave(true)}
+                                disabled={saving}
+                                className="bg-[#a5cd39] hover:bg-[#8fb82e] text-white"
+                            >
+                                {saving ? (
+                                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                ) : (
+                                    <Save className="w-4 h-4 mr-2" />
+                                )}
+                                Publish Event
+                            </Button>
+                        </>
+                    ) : (
+                        /* Published events: Show only Update button */
+                        <Button
+                            onClick={() => handleSave(false)}
+                            disabled={saving}
+                            className="bg-[#a5cd39] hover:bg-[#8fb82e] text-white"
+                        >
+                            {saving ? (
+                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                            ) : (
+                                <Save className="w-4 h-4 mr-2" />
+                            )}
+                            Update Event
+                        </Button>
+                    )}
                 </div>
             </motion.div>
 
@@ -1278,13 +1233,8 @@ const EditEventPage = () => {
                                             alongside the event information.
                                         </p>
                                         <TiptapEditor
-                                            content={formData.description || ""}
-                                            onChange={content =>
-                                                handleInputChange(
-                                                    "description",
-                                                    content,
-                                                )
-                                            }
+                                            content={detailedDescription}
+                                            onChange={setDetailedDescription}
                                             placeholder="Write a detailed description of your event..."
                                             className="min-h-[400px]"
                                         />
