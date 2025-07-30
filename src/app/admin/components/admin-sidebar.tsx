@@ -306,14 +306,6 @@ const AdminSidebar = ({
                                         }
                                     />
                                     <SubNavItem
-                                        href="/admin/pages/about/dedication"
-                                        label="Dedication Section"
-                                        isActive={
-                                            pathname ===
-                                            "/admin/pages/about/dedication"
-                                        }
-                                    />
-                                    <SubNavItem
                                         href="/admin/pages/about/main"
                                         label="About Us Main"
                                         isActive={
@@ -327,6 +319,14 @@ const AdminSidebar = ({
                                         isActive={
                                             pathname ===
                                             "/admin/pages/about/description"
+                                        }
+                                    />
+                                    <SubNavItem
+                                        href="/admin/pages/about/dedication"
+                                        label="Dedication Section"
+                                        isActive={
+                                            pathname ===
+                                            "/admin/pages/about/dedication"
                                         }
                                     />
                                 </div>
@@ -704,14 +704,6 @@ const AdminSidebar = ({
                                         }
                                     />
                                     <SubNavItem
-                                        href="/admin/pages/custom-stand/striking-customized"
-                                        label="Striking Customized"
-                                        isActive={
-                                            pathname ===
-                                            "/admin/pages/custom-stand/striking-customized"
-                                        }
-                                    />
-                                    <SubNavItem
                                         href="/admin/pages/custom-stand/reasons-to-choose"
                                         label="Reasons to Choose"
                                         isActive={
@@ -725,14 +717,6 @@ const AdminSidebar = ({
                                         isActive={
                                             pathname ===
                                             "/admin/pages/custom-stand/faq"
-                                        }
-                                    />
-                                    <SubNavItem
-                                        href="/admin/pages/custom-stand/looking-for-stands"
-                                        label="Looking for Stands"
-                                        isActive={
-                                            pathname ===
-                                            "/admin/pages/custom-stand/looking-for-stands"
                                         }
                                     />
                                     <SubNavItem

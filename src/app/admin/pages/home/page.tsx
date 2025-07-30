@@ -38,7 +38,7 @@ const HomePage = () => {
         },
     };
 
-    // Home page sections
+    // Home page sections - ordered to match frontend display order
     const sections = [
         {
             id: "hero",
@@ -46,6 +46,14 @@ const HomePage = () => {
             description: "Main banner with video background and headline",
             icon: <LayoutDashboard size={24} className="text-blue-500" />,
             lastUpdated: "2 hours ago",
+            status: "Active",
+        },
+        {
+            id: "essential-support",
+            title: "Essential Support",
+            description: "Essential support services section",
+            icon: <Briefcase size={24} className="text-purple-500" />,
+            lastUpdated: "Recently updated",
             status: "Active",
         },
         {
@@ -73,28 +81,19 @@ const HomePage = () => {
             status: "Active",
         },
         {
-            id: "new-company",
-            title: "New Company",
-            description: "New company formation information",
-            icon: <Building size={24} className="text-cyan-500" />,
-            lastUpdated: "3 weeks ago",
-            status: "Active",
-        },
-        {
-            id: "essential-support",
-            title: "Essential Support",
-            description: "Essential support services section",
-            icon: <Briefcase size={24} className="text-purple-500" />,
-            lastUpdated: "Recently updated",
-            status: "Active",
-        },
-
-        {
             id: "setup-process",
             title: "Setup Process",
             description: "Business setup process steps",
             icon: <Settings size={24} className="text-indigo-500" />,
             lastUpdated: "Recently updated",
+            status: "Active",
+        },
+        {
+            id: "new-company",
+            title: "New Company",
+            description: "New company formation information",
+            icon: <Building size={24} className="text-cyan-500" />,
+            lastUpdated: "3 weeks ago",
             status: "Active",
         },
         {

@@ -391,7 +391,7 @@ export interface EventFormProps {
 // UTILITY TYPES
 // ============================================================================
 
-export type EventStatus = 'draft' | 'published' | 'archived';
+export type EventStatus = 'draft' | 'published';
 export type EventImageType = 'gallery' | 'featured' | 'hero' | 'logo';
 export type FormSubmissionStatus = 'new' | 'read' | 'replied' | 'archived';
 export type SortOrder = 'asc' | 'desc';

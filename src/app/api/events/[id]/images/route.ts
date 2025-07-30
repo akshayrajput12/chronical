@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { revalidatePath } from 'next/cache';
 
 // GET /api/events/[id]/images - Get all images for an event
 export async function GET(
@@ -245,6 +246,28 @@ export async function POST(
             );
         }
 
+        // Revalidate relevant paths after adding image to event
+        try {
+            // Revalidate the main events page
+            revalidatePath('/top-trade-shows-in-uae-saudi-arabia-middle-east');
+
+            // Get the event slug to revalidate the specific event page
+            const { data: eventData } = await supabase
+                .from('events')
+                .select('slug')
+                .eq('id', eventId)
+                .single();
+
+            if (eventData?.slug) {
+                revalidatePath(`/top-trade-shows-in-uae-saudi-arabia-middle-east/${eventData.slug}`);
+            }
+
+            console.log('Revalidated paths after adding image to event:', eventId);
+        } catch (revalidateError) {
+            console.error('Error during revalidation:', revalidateError);
+            // Don't fail the request if revalidation fails
+        }
+
         return NextResponse.json({
             success: true,
             message: 'Image added to event successfully',
@@ -303,6 +326,28 @@ export async function PUT(
         });
 
         await Promise.all(updatePromises);
+
+        // Revalidate relevant paths after updating images
+        try {
+            // Revalidate the main events page
+            revalidatePath('/top-trade-shows-in-uae-saudi-arabia-middle-east');
+
+            // Get the event slug to revalidate the specific event page
+            const { data: eventData } = await supabase
+                .from('events')
+                .select('slug')
+                .eq('id', eventId)
+                .single();
+
+            if (eventData?.slug) {
+                revalidatePath(`/top-trade-shows-in-uae-saudi-arabia-middle-east/${eventData.slug}`);
+            }
+
+            console.log('Revalidated paths after updating images for event:', eventId);
+        } catch (revalidateError) {
+            console.error('Error during revalidation:', revalidateError);
+            // Don't fail the request if revalidation fails
+        }
 
         return NextResponse.json({
             success: true,
@@ -399,6 +444,28 @@ export async function DELETE(
                 console.error('Error deleting files from storage:', storageError);
                 // Don't fail the request - database cleanup was successful
             }
+        }
+
+        // Revalidate relevant paths after deleting images from event
+        try {
+            // Revalidate the main events page
+            revalidatePath('/top-trade-shows-in-uae-saudi-arabia-middle-east');
+
+            // Get the event slug to revalidate the specific event page
+            const { data: eventData } = await supabase
+                .from('events')
+                .select('slug')
+                .eq('id', eventId)
+                .single();
+
+            if (eventData?.slug) {
+                revalidatePath(`/top-trade-shows-in-uae-saudi-arabia-middle-east/${eventData.slug}`);
+            }
+
+            console.log('Revalidated paths after deleting images from event:', eventId);
+        } catch (revalidateError) {
+            console.error('Error during revalidation:', revalidateError);
+            // Don't fail the request if revalidation fails
         }
 
         return NextResponse.json({

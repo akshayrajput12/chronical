@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 
 const CustomStandAdminPage = () => {
+    // Custom stand page sections - ordered to match frontend section display
     const sections = [
         {
             id: "hero",
@@ -47,14 +48,6 @@ const CustomStandAdminPage = () => {
             color: "bg-purple-500",
         },
         {
-            id: "striking-customized",
-            title: "Striking Customized",
-            description: "Section about striking customized exhibition stands",
-            icon: <Sparkles className="w-6 h-6" />,
-            href: "/admin/pages/custom-stand/striking-customized",
-            color: "bg-orange-500",
-        },
-        {
             id: "reasons-to-choose",
             title: "Reasons to Choose",
             description: "Section explaining reasons to choose the services",
@@ -71,15 +64,6 @@ const CustomStandAdminPage = () => {
             color: "bg-indigo-500",
         },
         {
-            id: "looking-for-stands",
-            title: "Looking for Stands",
-            description:
-                "Call-to-action section with phone number and contact info",
-            icon: <Phone className="w-6 h-6" />,
-            href: "/admin/pages/custom-stand/looking-for-stands",
-            color: "bg-red-500",
-        },
-        {
             id: "portfolio",
             title: "Portfolio Section",
             description: "Manage portfolio showcase and project gallery",
@@ -89,7 +73,7 @@ const CustomStandAdminPage = () => {
         },
         {
             id: "paragraph-section",
-            title: "Paragraph Section",
+            title: "Portfolio Content Section",
             description: "Manage the paragraph content section",
             icon: <MessageSquare className="w-6 h-6" />,
             href: "/admin/pages/custom-stand/paragraph-section",

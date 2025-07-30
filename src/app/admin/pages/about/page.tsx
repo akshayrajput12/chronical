@@ -26,8 +26,16 @@ const AboutPage = () => {
         },
     };
 
-    // About page sections
+    // About page sections - ordered to match frontend section display
     const sections = [
+        {
+            id: "hero",
+            title: "Hero Section",
+            description: "Main banner with background image and headline",
+            icon: <Info size={24} className="text-blue-500" />,
+            lastUpdated: "Recently updated",
+            status: "Active",
+        },
         {
             id: "main",
             title: "About Us Main",
@@ -43,6 +51,14 @@ const AboutPage = () => {
             description: "Detailed company description and services",
             icon: <FileText size={24} className="text-green-500" />,
             lastUpdated: "2 weeks ago",
+            status: "Active",
+        },
+        {
+            id: "dedication",
+            title: "Dedication Section",
+            description: "Company dedication and commitment section",
+            icon: <FileText size={24} className="text-purple-500" />,
+            lastUpdated: "Recently updated",
             status: "Active",
         },
     ];

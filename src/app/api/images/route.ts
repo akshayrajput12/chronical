@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { revalidatePath } from 'next/cache';
 
 // GET /api/images - Browse storage buckets for images
 export async function GET(request: NextRequest) {
@@ -264,6 +265,30 @@ export async function POST(request: NextRequest) {
             database_id: dbImageRecord?.id, // Include database ID if saved
         };
 
+        // Revalidate relevant paths when event images are uploaded
+        if (bucket === 'event-images' && eventId) {
+            try {
+                // Revalidate the main events page
+                revalidatePath('/top-trade-shows-in-uae-saudi-arabia-middle-east');
+
+                // Get the event slug to revalidate the specific event page
+                const { data: event } = await supabase
+                    .from('events')
+                    .select('slug')
+                    .eq('id', eventId)
+                    .single();
+
+                if (event?.slug) {
+                    revalidatePath(`/top-trade-shows-in-uae-saudi-arabia-middle-east/${event.slug}`);
+                }
+
+                console.log('Revalidated paths after image upload for event:', eventId);
+            } catch (revalidateError) {
+                console.error('Error during revalidation:', revalidateError);
+                // Don't fail the upload if revalidation fails
+            }
+        }
+
         return NextResponse.json({
             success: true,
             image: imageRecord,
@@ -384,6 +409,19 @@ export async function DELETE(request: NextRequest) {
                 // Continue - storage deletion was successful
             } else {
                 console.log('Successfully deleted from database:', deletedRows);
+            }
+        }
+
+        // Revalidate relevant paths when event images are deleted
+        if (bucketName === 'event-images') {
+            try {
+                // Revalidate the main events page
+                revalidatePath('/top-trade-shows-in-uae-saudi-arabia-middle-east');
+
+                console.log('Revalidated paths after deleting event images');
+            } catch (revalidateError) {
+                console.error('Error during revalidation:', revalidateError);
+                // Don't fail the deletion if revalidation fails
             }
         }
 

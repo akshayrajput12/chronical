@@ -20,7 +20,7 @@ import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 
 // Event status type (similar to BlogPostStatus)
-type EventStatus = "draft" | "published" | "archived";
+type EventStatus = "draft" | "published";
 
 interface EventWithCategory {
     id: string;
@@ -79,8 +79,6 @@ const EventsAdminPage = () => {
                     .not("published_at", "is", null);
             } else if (statusFilter === "draft") {
                 query = query.is("published_at", null);
-            } else if (statusFilter === "archived") {
-                query = query.eq("is_active", false);
             }
 
             if (searchTerm) {
@@ -159,10 +157,6 @@ const EventsAdminPage = () => {
                 case "draft":
                     action = "unpublish";
                     break;
-                case "archived":
-                    action = "set_active";
-                    value = false;
-                    break;
             }
 
             const response = await fetch(`/api/events/${eventId}`, {
@@ -213,7 +207,6 @@ const EventsAdminPage = () => {
         const styles = {
             draft: "bg-gray-100 text-gray-800",
             published: "bg-green-100 text-green-800",
-            archived: "bg-red-100 text-red-800",
         };
 
         return (
@@ -276,7 +269,6 @@ const EventsAdminPage = () => {
                             <option value="all">All Status</option>
                             <option value="draft">Draft</option>
                             <option value="published">Published</option>
-                            <option value="archived">Archived</option>
                         </select>
                         {selectedEvents.length > 0 && (
                             <Button
@@ -494,20 +486,6 @@ const EventsAdminPage = () => {
                                                                 >
                                                                     Move to
                                                                     Draft
-                                                                </button>
-                                                            )}
-                                                            {event.status !==
-                                                                "archived" && (
-                                                                <button
-                                                                    onClick={() =>
-                                                                        handleStatusChange(
-                                                                            event.id,
-                                                                            "archived",
-                                                                        )
-                                                                    }
-                                                                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                                                >
-                                                                    Archive
                                                                 </button>
                                                             )}
                                                             <button
