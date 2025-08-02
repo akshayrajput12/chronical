@@ -81,15 +81,20 @@ CREATE POLICY "Public can read active privacy policy" ON privacy_policy
 
 -- Policy for authenticated users to read all privacy policies
 CREATE POLICY "Authenticated users can read all privacy policies" ON privacy_policy
-  FOR SELECT USING (auth.role() = 'authenticated');
+  FOR SELECT USING (auth.uid() IS NOT NULL);
 
 -- Policy for authenticated users to insert privacy policies
 CREATE POLICY "Authenticated users can insert privacy policies" ON privacy_policy
-  FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+  FOR INSERT WITH CHECK (auth.uid() IS NOT NULL);
 
 -- Policy for authenticated users to update privacy policies
 CREATE POLICY "Authenticated users can update privacy policies" ON privacy_policy
-  FOR UPDATE USING (auth.role() = 'authenticated');
+  FOR UPDATE USING (auth.uid() IS NOT NULL)
+  WITH CHECK (auth.uid() IS NOT NULL);
+
+-- Policy for authenticated users to delete privacy policies (if needed)
+CREATE POLICY "Authenticated users can delete privacy policies" ON privacy_policy
+  FOR DELETE USING (auth.uid() IS NOT NULL);
 
 -- ============================================================================
 -- STORAGE POLICIES
