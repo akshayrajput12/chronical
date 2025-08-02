@@ -23,6 +23,7 @@ import {
     Building2,
     MapPin,
     Download,
+    Shield,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import Logo from "@/components/layout/logo";
@@ -1031,6 +1032,13 @@ const AdminSidebar = ({
                     label="Company Profile"
                     icon={<Download size={18} />}
                     isActive={pathname.includes("/admin/company-profile")}
+                />
+
+                <NavItem
+                    href="/admin/pages/privacy-policy"
+                    label="Privacy Policy"
+                    icon={<Shield size={18} />}
+                    isActive={pathname.includes("/admin/pages/privacy-policy")}
                 />
 
                 {/* Logout */}
