@@ -1,4 +1,5 @@
-import { createClient } from '@/lib/supabase/server';
+import { createServiceClient } from '@/lib/supabase/service';
+import { createStaticClient } from '@/lib/supabase/server';
 import { PrivacyPolicy, UpdatePrivacyPolicyRequest } from '@/types/privacy-policy';
 
 /**
@@ -6,7 +7,7 @@ import { PrivacyPolicy, UpdatePrivacyPolicyRequest } from '@/types/privacy-polic
  */
 export async function getActivePrivacyPolicy(): Promise<PrivacyPolicy | null> {
     try {
-        const supabase = await createClient();
+        const supabase = createStaticClient();
 
         const { data, error } = await supabase
             .from('privacy_policy')
@@ -37,7 +38,7 @@ export async function getActivePrivacyPolicy(): Promise<PrivacyPolicy | null> {
  */
 export async function getAllPrivacyPolicies(): Promise<PrivacyPolicy[]> {
     try {
-        const supabase = await createClient();
+        const supabase = createServiceClient();
 
         const { data, error } = await supabase
             .from('privacy_policy')
@@ -64,7 +65,7 @@ export async function updatePrivacyPolicy(
     userId: string
 ): Promise<PrivacyPolicy> {
     try {
-        const supabase = await createClient();
+        const supabase = createServiceClient();
 
         // Get current active privacy policy
         const { data: currentPolicy } = await supabase
@@ -120,7 +121,7 @@ export async function updatePrivacyPolicy(
  */
 export async function getPrivacyPolicyById(id: string): Promise<PrivacyPolicy | null> {
     try {
-        const supabase = await createClient();
+        const supabase = createServiceClient();
 
         const { data, error } = await supabase
             .from('privacy_policy')

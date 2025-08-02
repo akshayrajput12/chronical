@@ -148,7 +148,7 @@ const EventsAdminPage = () => {
     ) => {
         try {
             let action = "";
-            let value = null;
+            const value = null;
 
             switch (newStatus) {
                 case "published":
